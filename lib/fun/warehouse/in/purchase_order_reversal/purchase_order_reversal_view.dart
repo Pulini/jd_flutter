@@ -70,13 +70,84 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
     );
   }
 
-  Widget _item(PurchaseOrderReversalInfo data) {
+  @override
+  Widget build(BuildContext context) {
+    return pageBodyWithDrawer(
+      actions: [
+        Obx(
+          () => CheckBox(
+            onChanged: (c) {
+              for (var v in state.orderList) {
+                v.isSelect.value = c;
+              }
+            },
+            name: 'purchase_order_reversal_select_all'.tr,
+            value: state.orderList.every((v) => v.isSelect.value),
+          ),
+        ),
+        Obx(() => CombinationButton(
+              text: 'purchase_order_reversal_reversal'.tr,
+              isEnabled: state.orderList.any((v) => v.isSelect.value),
+              click: () => logic.reversal(
+                (msg) => successDialog(content: msg, back: _query),
+              ),
+            ))
+      ],
+      queryWidgets: [
+        EditText(
+          hint: 'purchase_order_reversal_material_voucher'.tr,
+          controller: tecMaterialVoucher,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_type_body'.tr,
+          controller: tecTypeBody,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_sales_order_no'.tr,
+          controller: tecSalesOrderNo,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_purchase_order_no'.tr,
+          controller: tecPurchaseOrder,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_material_code'.tr,
+          controller: tecMaterielCode,
+        ),
+        OptionsPicker(pickerController: opcSupplier),
+        LinkOptionsPicker(pickerController: factoryWarehouseController),
+        DatePicker(pickerController: dpcStartDate),
+        DatePicker(pickerController: dpcEndDate),
+      ],
+      query: _query,
+      body: Obx(() => ListView.builder(
+            padding: const EdgeInsets.all(10),
+            itemCount: state.orderList.length,
+            itemBuilder: (c, i) =>
+                _PurchaseOrderReversalItem(data: state.orderList[i]),
+          )),
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<PurchaseOrderReversalLogic>();
+    super.dispose();
+  }
+}
+
+class _PurchaseOrderReversalItem extends StatelessWidget {
+  final PurchaseOrderReversalInfo data;
+  const _PurchaseOrderReversalItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey,width: 2),
+        border: Border.all(color: Colors.grey, width: 2),
         gradient: LinearGradient(
           colors: [Colors.blue.shade50, Colors.white],
           begin: Alignment.topCenter,
@@ -154,69 +225,5 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
-      actions: [
-        Obx(
-          () => CheckBox(
-            onChanged: (c) {
-              for (var v in state.orderList) {
-                v.isSelect.value = c;
-              }
-            },
-            name: 'purchase_order_reversal_select_all'.tr,
-            value: state.orderList.every((v) => v.isSelect.value),
-          ),
-        ),
-        Obx(() => CombinationButton(
-              text: 'purchase_order_reversal_reversal'.tr,
-              isEnabled: state.orderList.any((v) => v.isSelect.value),
-              click: () => logic.reversal(
-                (msg) => successDialog(content: msg, back: _query),
-              ),
-            ))
-      ],
-      queryWidgets: [
-        EditText(
-          hint: 'purchase_order_reversal_material_voucher'.tr,
-          controller: tecMaterialVoucher,
-        ),
-        EditText(
-          hint: 'purchase_order_reversal_type_body'.tr,
-          controller: tecTypeBody,
-        ),
-        EditText(
-          hint: 'purchase_order_reversal_sales_order_no'.tr,
-          controller: tecSalesOrderNo,
-        ),
-        EditText(
-          hint: 'purchase_order_reversal_purchase_order_no'.tr,
-          controller: tecPurchaseOrder,
-        ),
-        EditText(
-          hint: 'purchase_order_reversal_material_code'.tr,
-          controller: tecMaterielCode,
-        ),
-        OptionsPicker(pickerController: opcSupplier),
-        LinkOptionsPicker(pickerController: factoryWarehouseController),
-        DatePicker(pickerController: dpcStartDate),
-        DatePicker(pickerController: dpcEndDate),
-      ],
-      query: _query,
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: state.orderList.length,
-            itemBuilder: (c, i) => _item(state.orderList[i]),
-          )),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<PurchaseOrderReversalLogic>();
-    super.dispose();
   }
 }

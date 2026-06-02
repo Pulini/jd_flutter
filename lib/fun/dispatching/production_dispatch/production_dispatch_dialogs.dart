@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -255,8 +256,8 @@ void addWorkerDialog(
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(7),
-                                  child: Image.network(
-                                    item.picUrl ?? '',
+                                  child: CachedNetworkImage(
+                                    imageUrl: item.picUrl ?? '',
                                   ),
                                 ),
                         ),

@@ -20,7 +20,52 @@ class _QualityInspectionDetailAbnormalListPageState
   final QualityInspectionLogic logic = Get.find<QualityInspectionLogic>();
   final QualityInspectionState state = Get.find<QualityInspectionLogic>().state;
 
-  Widget _item(List<QualityInspectionAbnormalRecordInfo> group) {
+  @override
+  void initState() {
+    for (var v in state.qiDetailAbnormalRecords) {
+      v.isSelect.value = false;
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'product_quality_inspection_detail_abnormal_inspection_exception_record'.tr,
+      body: Obx(() {
+        var group = groupBy(
+          state.qiDetailAbnormalRecords,
+          (v) => '${v.abnormalItemId}',
+        ).values.toList();
+        return GridView.builder(
+          itemCount: group.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 3 / 2,
+          ),
+          itemBuilder: (c, i) => _QiDetailAbnormalItem(
+            group: group[i],
+            state: state,
+            logic: logic,
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _QiDetailAbnormalItem extends StatelessWidget {
+  final List<QualityInspectionAbnormalRecordInfo> group;
+  final QualityInspectionState state;
+  final QualityInspectionLogic logic;
+  const _QiDetailAbnormalItem({
+    required this.group,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     var abnormalItem = state.qiDetailAbnormalItems.firstWhere(
       (v) => v.abnormalItemId == group[0].abnormalItemId,
     );
@@ -75,7 +120,10 @@ class _QualityInspectionDetailAbnormalListPageState
                 crossAxisCount: 2,
                 childAspectRatio: 5 / 1,
               ),
-              itemBuilder: (c, i) => _subItem(group, i),
+              itemBuilder: (c, i) => _QiDetailAbnormalSubItem(
+                group: group,
+                index: i,
+              ),
             ),
           ),
           Obx(() => group.any((v) => v.isSelect.value)
@@ -172,12 +220,19 @@ class _QualityInspectionDetailAbnormalListPageState
       ),
     );
   }
+}
 
-  Widget _subItem(List<QualityInspectionAbnormalRecordInfo> group, int index) {
+class _QiDetailAbnormalSubItem extends StatelessWidget {
+  final List<QualityInspectionAbnormalRecordInfo> group;
+  final int index;
+  const _QiDetailAbnormalSubItem({required this.group, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
     var data = group[index];
     return GestureDetector(
       onTap: () {
-        if (data.abnormalStatus != 2&&
+        if (data.abnormalStatus != 2 &&
             data.abnormalStatus != 3) {
           if (!data.isSelect.value) {
             group.where((v) => v.isSelect.value).forEach((v) {
@@ -223,35 +278,6 @@ class _QualityInspectionDetailAbnormalListPageState
               ),
             ),
           )),
-    );
-  }
-
-  @override
-  void initState() {
-    for (var v in state.qiDetailAbnormalRecords) {
-      v.isSelect.value = false;
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'product_quality_inspection_detail_abnormal_inspection_exception_record'.tr,
-      body: Obx(() {
-        var group = groupBy(
-          state.qiDetailAbnormalRecords,
-          (v) => '${v.abnormalItemId}',
-        ).values.toList();
-        return GridView.builder(
-          itemCount: group.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 3 / 2,
-          ),
-          itemBuilder: (c, i) => _item(group[i]),
-        );
-      }),
     );
   }
 }

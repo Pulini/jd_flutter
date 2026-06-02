@@ -40,7 +40,7 @@ void checkBarCodeProcessDialog({
                       init: spGet(spSaveScanPickingMaterial),
                       onChanged: (v) => worker = v,
                     ),
-                    selectView(
+                    SelectView(
                       list: processList,
                       controller: processController,
                       errorMsg: '',

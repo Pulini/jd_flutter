@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
@@ -138,7 +139,7 @@ void selectInstructionsDialog({
       child: Column(
         children: [
           Row(children: [
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_instruction'.tr,
               borderColor: bkgColor,
@@ -147,20 +148,20 @@ void selectInstructionsDialog({
             ),
             SizedBox(
               width: 60,
-              child: frameText(
+              child: FrameText(
                 alignment: Alignment.center,
                 text: 'part_dispatch_select_instruction_dialog_part_qty'.tr,
                 borderColor: bkgColor,
                 backgroundColor: Colors.orange.shade100,
               ),
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_dispatch_qty'.tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_total_dispatch_qty'.tr,
               borderColor: bkgColor,
@@ -179,25 +180,25 @@ void selectInstructionsDialog({
           ]),
           for (int i = 0; i < list.length; i++)
             Row(children: [
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].dataList.first.seOrderNo ?? '',
                 borderColor: bkgColor,
                 flex: 2,
               ),
               SizedBox(
                 width: 60,
-                child: frameText(
+                child: FrameText(
                   alignment: Alignment.center,
                   text: list[i].dataList.length.toString(),
                   borderColor: bkgColor,
                 ),
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].dataList.first.workCardQty.toShowString(),
                 borderColor: bkgColor,
                 alignment: Alignment.centerRight,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].totalQty.toShowString(),
                 borderColor: bkgColor,
                 alignment: Alignment.centerRight,
@@ -429,7 +430,7 @@ void createLabelDialog({
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: avatar.isNotEmpty
-                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                           : Icon(
                               Icons.account_circle,
                               size: 150,

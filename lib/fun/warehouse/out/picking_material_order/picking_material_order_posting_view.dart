@@ -28,120 +28,8 @@ class _PickingMaterialOrderPostingPageState
       Get.find<PickingMaterialOrderLogic>().state;
   int index = Get.arguments['index'];
 
-  Widget _item(PickingMaterialOrderMaterialInfo data) {
-    var basicPickingQty = data.basicPickingQty();
-    var canBasicPickingQty = data.canBasicPickingQty();
-    var canCommonPickingQty = data.canCommonPickingQty();
-    var commonPickingQty = data.commonPickingQty();
-    var material = expandedTextSpan(
-      hint: 'picking_material_order_material_tips'.tr,
-      hintColor: canBasicPickingQty==0?Colors.grey:Colors.black87,
-      text: '(${data.materialCode}) ${data.materialName}',
-      textColor: data.pickingStatusColor(),
-    );
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [canBasicPickingQty==0?Colors.grey.shade200:Colors.blue.shade100, Colors.green.shade50],
-        ),
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: Column(
-        children: [
-          canBasicPickingQty > 0
-              ? Row(children: [
-                  material,
-                  Text('picking_material_order_posting_qty'.tr),
-                  SizedBox(
-                    width: 150,
-                    child: data.isBasicUnit
-                        ? data.colorFlg == 'X'
-                            ? CheckBox(
-                                needSave: false,
-                                onChanged: (c) {
-                                  setState(() => data.setLinesBasicPickingQty(
-                                      c ? canBasicPickingQty : 0));
-                                },
-                                name: canBasicPickingQty.toShowString(),
-                                value: canBasicPickingQty > 0 &&
-                                    canBasicPickingQty == basicPickingQty,
-                              )
-                            : NumberDecimalEditText(
-                                max: canBasicPickingQty,
-                                initQty: basicPickingQty.toFixed(3),
-                                onChanged: (v) {
-                                  setState(
-                                      () => data.setLinesBasicPickingQty(v));
-                                },
-                              )
-                        : data.colorFlg == 'X'
-                            ? CheckBox(
-                                needSave: false,
-                                onChanged: (c) {
-                                  setState(() => data.setLinesCommonPickingQty(
-                                      c ? canCommonPickingQty : 0));
-                                },
-                                name: canCommonPickingQty.toShowString(),
-                                value: canCommonPickingQty > 0 &&
-                                    canCommonPickingQty == commonPickingQty,
-                              )
-                            : NumberDecimalEditText(
-                                max: canCommonPickingQty,
-                                initQty: commonPickingQty.toFixed(3),
-                                onChanged: (v) {
-                                  setState(
-                                      () => data.setLinesCommonPickingQty(v));
-                                },
-                              ),
-                  ),
-                  data.isOnlyOneUnit()
-                      ? Text(data.basicUnit ?? '')
-                      : GestureDetector(
-                          onTap: () => setState(() {
-                            data.isBasicUnit = !data.isBasicUnit;
-                          }),
-                          child: Container(
-                            padding: const EdgeInsets.only(
-                                left: 7, top: 3, right: 7, bottom: 3),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              data.isBasicUnit
-                                  ? data.basicUnit ?? ''
-                                  : data.commonUnit ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                  const SizedBox(width: 10),
-                ])
-              : Row(
-                  children: [
-                    material,
-                    Text(
-                      'picking_material_order_delivered'.tr,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-        ],
-      ),
-    );
-  }
+  Widget _item(PickingMaterialOrderMaterialInfo data) =>
+      _PickingMaterialOrderPostingItem(data: data, setStateFn: setState);
 
   void _posting(PickingMaterialOrderInfo data) {
     // if (userInfo?.picUrl == null || userInfo?.picUrl?.isEmpty == true) {
@@ -209,6 +97,140 @@ class _PickingMaterialOrderPostingPageState
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PickingMaterialOrderPostingItem extends StatelessWidget {
+  final PickingMaterialOrderMaterialInfo data;
+  final void Function(VoidCallback fn) setStateFn;
+
+  const _PickingMaterialOrderPostingItem({
+    required this.data,
+    required this.setStateFn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var basicPickingQty = data.basicPickingQty();
+    var canBasicPickingQty = data.canBasicPickingQty();
+    var canCommonPickingQty = data.canCommonPickingQty();
+    var commonPickingQty = data.commonPickingQty();
+    var material = expandedTextSpan(
+      hint: 'picking_material_order_material_tips'.tr,
+      hintColor: canBasicPickingQty == 0 ? Colors.grey : Colors.black87,
+      text: '(${data.materialCode}) ${data.materialName}',
+      textColor: data.pickingStatusColor(),
+    );
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            canBasicPickingQty == 0
+                ? Colors.grey.shade200
+                : Colors.blue.shade100,
+            Colors.green.shade50
+          ],
+        ),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        children: [
+          canBasicPickingQty > 0
+              ? Row(children: [
+                  material,
+                  Text('picking_material_order_posting_qty'.tr),
+                  SizedBox(
+                    width: 150,
+                    child: data.isBasicUnit
+                        ? data.colorFlg == 'X'
+                            ? CheckBox(
+                                needSave: false,
+                                onChanged: (c) {
+                                  setStateFn(() =>
+                                      data.setLinesBasicPickingQty(
+                                          c ? canBasicPickingQty : 0));
+                                },
+                                name: canBasicPickingQty.toShowString(),
+                                value: canBasicPickingQty > 0 &&
+                                    canBasicPickingQty == basicPickingQty,
+                              )
+                            : NumberDecimalEditText(
+                                max: canBasicPickingQty,
+                                initQty: basicPickingQty.toFixed(3),
+                                onChanged: (v) {
+                                  setStateFn(
+                                      () => data.setLinesBasicPickingQty(v));
+                                },
+                              )
+                        : data.colorFlg == 'X'
+                            ? CheckBox(
+                                needSave: false,
+                                onChanged: (c) {
+                                  setStateFn(() =>
+                                      data.setLinesCommonPickingQty(
+                                          c ? canCommonPickingQty : 0));
+                                },
+                                name: canCommonPickingQty.toShowString(),
+                                value: canCommonPickingQty > 0 &&
+                                    canCommonPickingQty == commonPickingQty,
+                              )
+                            : NumberDecimalEditText(
+                                max: canCommonPickingQty,
+                                initQty: commonPickingQty.toFixed(3),
+                                onChanged: (v) {
+                                  setStateFn(
+                                      () => data.setLinesCommonPickingQty(v));
+                                },
+                              ),
+                  ),
+                  data.isOnlyOneUnit()
+                      ? Text(data.basicUnit ?? '')
+                      : GestureDetector(
+                          onTap: () => setStateFn(() {
+                            data.isBasicUnit = !data.isBasicUnit;
+                          }),
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 7, top: 3, right: 7, bottom: 3),
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              data.isBasicUnit
+                                  ? data.basicUnit ?? ''
+                                  : data.commonUnit ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ),
+                  const SizedBox(width: 10),
+                ])
+              : Row(
+                  children: [
+                    material,
+                    Text(
+                      'picking_material_order_delivered'.tr,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+        ],
       ),
     );
   }

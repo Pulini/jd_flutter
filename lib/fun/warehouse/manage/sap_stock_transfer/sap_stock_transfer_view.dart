@@ -30,46 +30,6 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
         '${RouteConfig.sapStockTransfer.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  GestureDetector _item(PalletDetailItem1Info label) {
-    return GestureDetector(
-      onTap: () => setState(() => label.select = !label.select),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: label.select ? Colors.blue.shade100 : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: label.select
-              ? Border.all(color: Colors.green, width: 2)
-              : Border.all(color: Colors.white, width: 2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AutoSizeText(
-              label.sizeMaterialName ?? '',
-              style: const TextStyle(color: Colors.red),
-              maxLines: 2,
-              minFontSize: 8,
-              maxFontSize: 18,
-            ),
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'sap_stock_transfer_label'.tr,
-                  text: label.labelNumber ?? '',
-                  isBold: false,
-                  textColor: Colors.grey,
-                ),
-                Text('${label.quantity.toShowString()}${label.unit}'),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     pdaScanner(
@@ -115,7 +75,13 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
               () => ListView.builder(
                 padding: const EdgeInsets.all(10),
                 itemCount: state.labelList.length,
-                itemBuilder: (c, i) => _item(state.labelList[i]),
+                itemBuilder: (c, i) => _StockTransferLabelItem(
+                  label: state.labelList[i],
+                  onTap: () => setState(
+                    () => state.labelList[i].select =
+                        !state.labelList[i].select,
+                  ),
+                ),
               ),
             ),
           ),
@@ -137,5 +103,53 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
   void dispose() {
     Get.delete<SapStockTransferLogic>();
     super.dispose();
+  }
+}
+
+class _StockTransferLabelItem extends StatelessWidget {
+  final PalletDetailItem1Info label;
+  final VoidCallback onTap;
+
+  const _StockTransferLabelItem({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: label.select ? Colors.blue.shade100 : Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: label.select
+              ? Border.all(color: Colors.green, width: 2)
+              : Border.all(color: Colors.white, width: 2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AutoSizeText(
+              label.sizeMaterialName ?? '',
+              style: const TextStyle(color: Colors.red),
+              maxLines: 2,
+              minFontSize: 8,
+              maxFontSize: 18,
+            ),
+            Row(
+              children: [
+                expandedTextSpan(
+                  hint: 'sap_stock_transfer_label'.tr,
+                  text: label.labelNumber ?? '',
+                  isBold: false,
+                  textColor: Colors.grey,
+                ),
+                Text('${label.quantity.toShowString()}${label.unit}'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

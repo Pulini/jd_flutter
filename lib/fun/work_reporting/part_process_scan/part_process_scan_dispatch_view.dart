@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
@@ -51,10 +52,10 @@ Obx addWorkerItem(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(7),
                     child: picUrl.isNotEmpty
-                        ? Image.network(
+                        ? CachedNetworkImage(
+                            imageUrl: picUrl.value,
                             fit: BoxFit.fill,
-                            picUrl.value,
-                            errorBuilder: (ctx, err, stackTrace) => icon,
+                            errorWidget: (ctx, err, stackTrace) => icon,
                           )
                         : icon,
                   ),

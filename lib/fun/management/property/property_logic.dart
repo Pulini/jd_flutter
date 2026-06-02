@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,7 @@ class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
   final WiFiManager wifiManager = WiFiManager();
+  StreamSubscription<dynamic>? _socketSubscription;
 
   Future<void> connectToNetwork({
     required String ssid,
@@ -49,7 +51,7 @@ class PropertyLogic extends GetxController {
           timeout: Duration(seconds: 10));
 
       // 监听数据响应
-      socket.listen((data) {
+      _socketSubscription = socket.listen((data) {
         wifiManager.disconnectFromWiFi();
       });
 
@@ -410,5 +412,11 @@ class PropertyLogic extends GetxController {
     } else {
       return 0;
     }
+  }
+
+  @override
+  void onClose() {
+    _socketSubscription?.cancel();
+    super.onClose();
   }
 }

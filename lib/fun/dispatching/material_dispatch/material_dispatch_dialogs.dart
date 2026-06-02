@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
@@ -650,8 +651,9 @@ Future<dynamic> showAreaPhoto(BuildContext context) => Get.dialog(
         canPop: false,
         child: AlertDialog(
           title: Text('material_dispatch_dialog_map'.tr),
-          content: Image.network(
-            'https://geapp.goldemperor.com:8084/PDF/贴合区域规划图.png',
+          content: CachedNetworkImage(
+            imageUrl:
+                'https://geapp.goldemperor.com:8084/PDF/贴合区域规划图.png',
           ),
           actions: [
             TextButton(

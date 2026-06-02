@@ -18,7 +18,24 @@ class _QualityInspectionReportPageState
   final QualityInspectionLogic logic = Get.find<QualityInspectionLogic>();
   final QualityInspectionState state = Get.find<QualityInspectionLogic>().state;
 
-  Widget _item(QualityInspectionReportInfo data) {
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'product_quality_inspection_report_inspection_summary'.tr,
+      body: ListView.builder(
+        itemCount: state.report.length,
+        itemBuilder: (c, i) => _InspectionReportItem(data: state.report[i]),
+      ),
+    );
+  }
+}
+
+class _InspectionReportItem extends StatelessWidget {
+  final QualityInspectionReportInfo data;
+  const _InspectionReportItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -87,39 +104,39 @@ class _QualityInspectionReportPageState
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      expandedFrameText(
+                      ExpandedFrameText(
                         flex: 5,
                         text: 'product_quality_inspection_report_abnormal_description'.tr,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: 'product_quality_inspection_report_inspector'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         flex: 2,
                         text: 'product_quality_inspection_report_inspection_time'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: 'product_quality_inspection_report_reinspector'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         flex: 2,
                         text: 'product_quality_inspection_report_reinspection_time'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: 'product_quality_inspection_report_state'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
@@ -128,7 +145,8 @@ class _QualityInspectionReportPageState
                     ],
                   ),
                   for (var i = 0; i < order.abnormalRecordsDetail!.length; ++i)
-                    _tableLine(order.abnormalRecordsDetail!, i)
+                    _InspectionReportTableLine(
+                        list: order.abnormalRecordsDetail!, index: i)
                 ],
               ),
             )
@@ -136,44 +154,51 @@ class _QualityInspectionReportPageState
       ),
     );
   }
+}
 
-  Row _tableLine(List<ReportAbnormalRecordsDetailInfo> list, int index) {
+class _InspectionReportTableLine extends StatelessWidget {
+  final List<ReportAbnormalRecordsDetailInfo> list;
+  final int index;
+  const _InspectionReportTableLine({required this.list, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
     var records = list[index];
     return Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 5,
           text: '${records.abnormalDescription}',
           borderColor: Colors.black87,
           backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           alignment: Alignment.center,
           text: '${records.firstInspector}',
           borderColor: Colors.black87,
           backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 2,
           alignment: Alignment.center,
           text: '${records.firstInspectionDate}',
           borderColor: Colors.black87,
           backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           alignment: Alignment.center,
           text: '${records.lastInspector}',
           borderColor: Colors.black87,
           backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 2,
           alignment: Alignment.center,
           text: '${records.lastInspectionDate}',
           borderColor: Colors.black87,
           backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: records.getAbnormalStatusText(),
           alignment: Alignment.center,
           borderColor: Colors.black87,
@@ -181,17 +206,6 @@ class _QualityInspectionReportPageState
           textColor: records.getAbnormalStatusColor(),
         ),
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'product_quality_inspection_report_inspection_summary'.tr,
-      body: ListView.builder(
-        itemCount: state.report.length,
-        itemBuilder: (c, i) => _item(state.report[i]),
-      ),
     );
   }
 }

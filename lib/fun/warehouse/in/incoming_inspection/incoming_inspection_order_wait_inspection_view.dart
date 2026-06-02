@@ -24,67 +24,9 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
   final IncomingInspectionState state =
       Get.find<IncomingInspectionLogic>().state;
 
-  Widget _photoItem(File f) => Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Get.to(() => ViewFilePhoto(
-                    photos: state.inspectionPhotoList,
-                  ));
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(7),
-              child: AspectRatio(
-                aspectRatio: 1 / 1,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(7),
-                  child: Hero(tag: f.path, child: Image.file(f)),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: IconButton(
-              onPressed: () => logic.deleteInspectionPhoto(f),
-              icon: const Icon(
-                Icons.cancel_outlined,
-                color: Colors.red,
-                size: 35,
-              ),
-            ),
-          )
-        ],
-      );
+  Widget _photoItem(File f) => _IncomingInspectionPhotoItem(f: f, state: state, logic: logic);
 
-  Widget _addPhoto() => Padding(
-        padding: const EdgeInsets.all(7),
-        child: AspectRatio(
-          aspectRatio: 1 / 1,
-          child: GestureDetector(
-            onTap: () => takePhoto(
-              callback: (f) => state.inspectionPhotoList.add(f),
-              title: 'incoming_inspection_order_inspection_site_photos'.tr,
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.blue.shade100, Colors.green.shade100],
-                ),
-              ),
-              child: const Icon(
-                Icons.add_a_photo_outlined,
-                color: Colors.blue,
-                size: 80,
-              ),
-            ),
-          ),
-        ),
-      );
+  Widget _addPhoto() => _IncomingInspectionAddPhoto(state: state);
 
   Container _materialItem(InspectionMaterielInfo item) => Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -223,5 +165,91 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
   void dispose() {
     state.inspectionPhotoList.clear();
     super.dispose();
+  }
+}
+
+class _IncomingInspectionPhotoItem extends StatelessWidget {
+  final File f;
+  final IncomingInspectionState state;
+  final IncomingInspectionLogic logic;
+
+  const _IncomingInspectionPhotoItem({
+    required this.f,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Get.to(() => ViewFilePhoto(
+                  photos: state.inspectionPhotoList,
+                ));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(7),
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: Hero(tag: f.path, child: Image.file(f)),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: IconButton(
+            onPressed: () => logic.deleteInspectionPhoto(f),
+            icon: const Icon(
+              Icons.cancel_outlined,
+              color: Colors.red,
+              size: 35,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _IncomingInspectionAddPhoto extends StatelessWidget {
+  final IncomingInspectionState state;
+
+  const _IncomingInspectionAddPhoto({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(7),
+      child: AspectRatio(
+        aspectRatio: 1 / 1,
+        child: GestureDetector(
+          onTap: () => takePhoto(
+            callback: (f) => state.inspectionPhotoList.add(f),
+            title: 'incoming_inspection_order_inspection_site_photos'.tr,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.blue.shade100, Colors.green.shade100],
+              ),
+            ),
+            child: const Icon(
+              Icons.add_a_photo_outlined,
+              color: Colors.blue,
+              size: 80,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -26,7 +26,72 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
       Get.find<SapCartonLabelBindingLogic>().state;
   PrintUtil pu = PrintUtil();
 
-  Widget _item(List<SapLabelBindingInfo> labelList) {
+  @override
+  void initState() {
+    pdaScanner(scan: (code) => logic.scanLabel(code));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      actions: [
+        Obx(() => state.newBoxLabelID.value.isEmpty
+            ? Container()
+            : CombinationButton(
+                combination: Combination.left,
+                text: 'carton_label_binding_print_out_box_label'.tr,
+                click: () => logic.printNewBoxLabel(),
+              )),
+        Obx(() => state.operationTypeText.value ==
+                getOperationTypeText(ScanLabelOperationType.unKnown)
+            ? Container()
+            : CombinationButton(
+                combination: state.newBoxLabelID.value.isNotEmpty
+                    ? Combination.right
+                    : Combination.intact,
+                text: state.operationTypeText.value,
+                click: () => modifyBoxInfo(
+                  operationType: state.operationType,
+                  targetBoxLabel: logic.getTargetBoxLabel(),
+                  modify: (long, width, height, outWeight) =>
+                      logic.operationSubmit(
+                    long: long,
+                    width: width,
+                    height: height,
+                    outWeight: outWeight,
+                  ),
+                ),
+              )),
+      ],
+      body: Obx(() {
+        var list = logic.getLabelList();
+        return ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: list.length,
+          itemBuilder: (c, i) => _CartonLabelItem(
+            labelList: list[i],
+            logic: logic,
+          ),
+        );
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<SapCartonLabelBindingLogic>();
+    super.dispose();
+  }
+}
+
+class _CartonLabelItem extends StatelessWidget {
+  final List<SapLabelBindingInfo> labelList;
+  final SapCartonLabelBindingLogic logic;
+  const _CartonLabelItem({required this.labelList, required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
     SapLabelBindingInfo? boxLabel;
     try {
       boxLabel = labelList.firstWhere((v) => v.isBoxLabel);
@@ -118,60 +183,5 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
         ),
       );
     }
-  }
-
-  @override
-  void initState() {
-    pdaScanner(scan: (code) => logic.scanLabel(code));
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      actions: [
-        Obx(() => state.newBoxLabelID.value.isEmpty
-            ? Container()
-            : CombinationButton(
-                combination: Combination.left,
-                text: 'carton_label_binding_print_out_box_label'.tr,
-                click: () => logic.printNewBoxLabel(),
-              )),
-        Obx(() => state.operationTypeText.value ==
-                getOperationTypeText(ScanLabelOperationType.unKnown)
-            ? Container()
-            : CombinationButton(
-                combination: state.newBoxLabelID.value.isNotEmpty
-                    ? Combination.right
-                    : Combination.intact,
-                text: state.operationTypeText.value,
-                click: () => modifyBoxInfo(
-                  operationType: state.operationType,
-                  targetBoxLabel: logic.getTargetBoxLabel(),
-                  modify: (long, width, height, outWeight) =>
-                      logic.operationSubmit(
-                    long: long,
-                    width: width,
-                    height: height,
-                    outWeight: outWeight,
-                  ),
-                ),
-              )),
-      ],
-      body: Obx(() {
-        var list = logic.getLabelList();
-        return ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: list.length,
-          itemBuilder: (c, i) => _item(list[i]),
-        );
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<SapCartonLabelBindingLogic>();
-    super.dispose();
   }
 }

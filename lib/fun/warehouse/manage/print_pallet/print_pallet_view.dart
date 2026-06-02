@@ -22,102 +22,6 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   final PrintPalletState state = Get.find<PrintPalletLogic>().state;
   var controller = TextEditingController();
 
-  Container _item(int index) {
-    var pallet = state.palletList[index];
-    var isSelected = state.selectedList[index];
-    var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
-    return Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey.shade200, Colors.blue.shade200],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Obx(() => Checkbox(
-                      value: isSelected.value,
-                      onChanged: (v) => isSelected.value = v!,
-                    )),
-                expandedTextSpan(
-                  hint: '托盘号：',
-                  text: pallet.first.palletNumber ?? '',
-                ),
-                IconButton(
-                  onPressed: () => askDialog(
-                      content: '确定要删除该托盘码？',
-                      confirm: () => logic.deletePallet(index)),
-                  icon: const Icon(
-                    Icons.delete_forever,
-                    color: Colors.red,
-                  ),
-                ),
-                Obx(() => Checkbox(
-                      value: logic.isSelectedAllItem(index),
-                      onChanged: (v) => logic.selectAllSubItem(index, v!),
-                    ))
-              ],
-            ),
-            for (var item in materialList) _materialItem(item)
-          ],
-        ));
-  }
-
-  Container _materialItem(List<SapPalletDetailInfo> material) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.blue,
-          width: 2,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(7)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              expandedTextSpan(
-                hint: '物料：',
-                maxLines: 3,
-                text:
-                    '(${material.first.materialCode})${material.first.materialName}',
-                textColor: Colors.green.shade700,
-              ),
-              textSpan(
-                hint: '总数：',
-                text:
-                    '${material.map((v) => v.quantity ?? 0).reduce((a, b) => a.add(b)).toShowString()} ${material.first.unit}',
-                textColor: Colors.green.shade700,
-              ),
-            ],
-          ),
-          for (var item in material) ...[
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('件号：${item.pieceNo}'),
-                Text('数量：${item.quantity.toShowString()} ${item.unit}'),
-                Obx(() => Checkbox(
-                    value: item.isSelect.value,
-                    onChanged: (v) => item.isSelect.value = v!))
-              ],
-            )
-          ]
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
     pdaScanner(scan: (code) => logic.scanPallet(code));
@@ -131,7 +35,6 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
                 onPressed: () => logic.printPalletSizeMaterial(),
-                // onPressed: () => logic.printPallet(),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
@@ -208,7 +111,11 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
             child: Obx(() => ListView.builder(
                   padding: const EdgeInsets.all(10),
                   itemCount: state.palletList.length,
-                  itemBuilder: (c, i) => _item(i),
+                  itemBuilder: (c, i) => _PalletItem(
+                    index: i,
+                    state: state,
+                    logic: logic,
+                  ),
                 )),
           )
         ],
@@ -220,5 +127,119 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   void dispose() {
     Get.delete<PrintPalletLogic>();
     super.dispose();
+  }
+}
+
+class _PalletItem extends StatelessWidget {
+  final int index;
+  final PrintPalletState state;
+  final PrintPalletLogic logic;
+  const _PalletItem({
+    required this.index,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var pallet = state.palletList[index];
+    var isSelected = state.selectedList[index];
+    var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
+    return Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.grey.shade200, Colors.blue.shade200],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Obx(() => Checkbox(
+                      value: isSelected.value,
+                      onChanged: (v) => isSelected.value = v!,
+                    )),
+                expandedTextSpan(
+                  hint: '托盘号：',
+                  text: pallet.first.palletNumber ?? '',
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                      content: '确定要删除该托盘码？',
+                      confirm: () => logic.deletePallet(index)),
+                  icon: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.red,
+                  ),
+                ),
+                Obx(() => Checkbox(
+                      value: logic.isSelectedAllItem(index),
+                      onChanged: (v) => logic.selectAllSubItem(index, v!),
+                    ))
+              ],
+            ),
+            for (var item in materialList) _PalletMaterialItem(material: item)
+          ],
+        ));
+  }
+}
+
+class _PalletMaterialItem extends StatelessWidget {
+  final List<SapPalletDetailInfo> material;
+  const _PalletMaterialItem({required this.material});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.blue,
+          width: 2,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(7)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              expandedTextSpan(
+                hint: '物料：',
+                maxLines: 3,
+                text:
+                    '(${material.first.materialCode})${material.first.materialName}',
+                textColor: Colors.green.shade700,
+              ),
+              textSpan(
+                hint: '总数：',
+                text:
+                    '${material.map((v) => v.quantity ?? 0).reduce((a, b) => a.add(b)).toShowString()} ${material.first.unit}',
+                textColor: Colors.green.shade700,
+              ),
+            ],
+          ),
+          for (var item in material) ...[
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('件号：${item.pieceNo}'),
+                Text('数量：${item.quantity.toShowString()} ${item.unit}'),
+                Obx(() => Checkbox(
+                    value: item.isSelect.value,
+                    onChanged: (v) => item.isSelect.value = v!))
+              ],
+            )
+          ]
+        ],
+      ),
+    );
   }
 }

@@ -18,7 +18,7 @@ class HomeState {
   var departmentName = ''.obs;
   var language = ''.obs;
   String search = '';
-  var nBarIndex = 0;
+  var nBarIndex = 0.obs;
   var buttons = <ButtonItem>[].obs;
   var selectedItemColor = Colors.white;
   var navigationBar = <HomeFunctions>[].obs;

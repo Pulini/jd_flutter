@@ -29,74 +29,162 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
   var controller = TextEditingController();
   var fn = FocusNode();
 
-  Container _newLabelItem(SapPrintLabelInfo label) => Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.blue.shade50,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.green.shade100, width: 2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+  @override
+  void initState() {
+    pdaScanner(scan: (code) {
+      hidKeyboard();
+      logic.scanCode(code: code, refresh: () => setState(() {}));
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      actions: [
+        Obx(() => logic.canSubmit()
+            ? CombinationButton(
+                text: 'inner_box_label_split_submit_split'.tr,
+                click: () => askDialog(
+                  content: 'inner_box_label_split_submit_split_tips'.tr,
+                  confirm: () => logic.submitPreSplit(),
+                ),
+              )
+            : Container()),
+        Obx(() => state.newLabelList.isNotEmpty &&
+                state.newLabelList.any((v) => v.isSelected.value)
+            ? CombinationButton(
+                text: 'inner_box_label_split_print'.tr,
+                click: () {
+                  if (logic.isMyanmarLabel()) {
+                    askDialog(
+                      title: 'inner_box_label_split_print_label'.tr,
+                      content: 'inner_box_label_split_print_notes'.tr,
+                      confirmText: 'inner_box_label_split_yes'.tr,
+                      confirmColor: Colors.blue,
+                      confirm: () => logic.printLabel(hasNotes: true),
+                      cancelText: 'inner_box_label_split_no'.tr,
+                      cancelColor: Colors.blue,
+                      cancel: () => logic.printLabel(hasNotes: false),
+                    );
+                  } else {
+                    logic.printLabel();
+                  }
+                })
+            : Container())
+      ],
+      popTitle: 'inner_box_label_split_exit_split_tips'.tr,
+      body: Obx(() => ListView(
+            children: [
+              if (state.originalLabel != null)
+                _SplitNewLabelItem(
+                  state: state,
+                  logic: logic,
+                ),
+              for (var sLabel in state.splitLabelList)
+                _SplitLabelSubItem(
+                  newLabel: sLabel,
+                  onDelete: (l) => logic.deletePreSplit(l),
+                ),
+              for (var nLabel in state.newLabelList)
+                _SplitOriginalItem(label: nLabel),
+            ],
+          )),
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    fn.dispose();
+    Get.delete<SapInnerBoxLabelSplitLogic>();
+    super.dispose();
+  }
+}
+
+class _SplitOriginalItem extends StatelessWidget {
+  final SapPrintLabelInfo label;
+  const _SplitOriginalItem({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.green.shade100, width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    textSpan(
+                        hint: 'inner_box_label_split_consignee'.tr,
+                        text: label.shipToParty ?? '',
+                        textColor: Colors.green.shade800),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textSpan(
+                          hint: 'inner_box_label_split_piece_id'.tr,
+                          text: label.pieceID ?? '',
+                        ),
+                        textSpan(
+                          hint: 'inner_box_label_split_supplier'.tr,
+                          text: label.supplierNumber ?? '',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Obx(() => Checkbox(
+                    value: label.isSelected.value,
+                    onChanged: (v) => label.isSelected.value = v!,
+                  ))
+            ],
+          ),
+          const Divider(),
+          for (SapPrintLabelSubInfo sub in label.subLabel!) ...[
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      textSpan(
-                          hint: 'inner_box_label_split_consignee'.tr,
-                          text: label.shipToParty ?? '',
-                          textColor: Colors.green.shade800),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          textSpan(
-                            hint: 'inner_box_label_split_piece_id'.tr,
-                            text: label.pieceID ?? '',
-                          ),
-                          textSpan(
-                            hint: 'inner_box_label_split_supplier'.tr,
-                            text: label.supplierNumber ?? '',
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: Text(
+                    '(${sub.materialNumber})${sub.materialName}',
+                    maxLines: 2,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                Obx(() => Checkbox(
-                      value: label.isSelected.value,
-                      onChanged: (v) => label.isSelected.value = v!,
-                    ))
+                const SizedBox(width: 10),
+                textSpan(
+                  hint: 'inner_box_label_split_qty'.tr,
+                  text: '${sub.inBoxQty.toShowString()}${sub.unit}',
+                )
               ],
             ),
             const Divider(),
-            for (SapPrintLabelSubInfo sub in label.subLabel!) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '(${sub.materialNumber})${sub.materialName}',
-                      maxLines: 2,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  textSpan(
-                    hint: 'inner_box_label_split_qty'.tr,
-                    text: '${sub.inBoxQty.toShowString()}${sub.unit}',
-                  )
-                ],
-              ),
-              const Divider(),
-            ],
           ],
-        ),
-      );
+        ],
+      ),
+    );
+  }
+}
 
-  Container _splitLabelItem(SapLabelSplitInfo newLabel) {
+class _SplitLabelSubItem extends StatelessWidget {
+  final SapLabelSplitInfo newLabel;
+  final void Function(SapLabelSplitInfo) onDelete;
+
+  const _SplitLabelSubItem({required this.newLabel, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
     var textBold = const TextStyle(fontWeight: FontWeight.bold);
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -121,7 +209,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                 ),
               ),
               IconButton(
-                onPressed: () => logic.deletePreSplit(newLabel),
+                onPressed: () => onDelete(newLabel),
                 icon: const Icon(Icons.delete_forever, color: Colors.red),
               )
             ],
@@ -179,8 +267,16 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
       ),
     );
   }
+}
 
-  Container _originalLabelItem() {
+class _SplitNewLabelItem extends StatelessWidget {
+  final SapInnerBoxLabelSplitState state;
+  final SapInnerBoxLabelSplitLogic logic;
+
+  const _SplitNewLabelItem({required this.state, required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
     var textBold = const TextStyle(fontWeight: FontWeight.bold);
     var oData = state.originalLabel!;
     return Container(
@@ -191,18 +287,20 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.blue.shade200, width: 2),
       ),
-      foregroundDecoration:oData.isTradeFactory? RotatedCornerDecoration.withColor(
-        color: Colors.green,
-        badgeCornerRadius: const Radius.circular(8),
-        badgeSize: const Size(45, 45),
-        textSpan: TextSpan(
-          text:  'inner_box_label_split_trade_tag'.tr,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.white,
-          ),
-        ),
-      ):null,
+      foregroundDecoration: oData.isTradeFactory
+          ? RotatedCornerDecoration.withColor(
+              color: Colors.green,
+              badgeCornerRadius: const Radius.circular(8),
+              badgeSize: const Size(45, 45),
+              textSpan: TextSpan(
+                text: 'inner_box_label_split_trade_tag'.tr,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -311,66 +409,5 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    pdaScanner(scan: (code) {
-      hidKeyboard();
-      logic.scanCode(code: code, refresh: () => setState(() {}));
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      actions: [
-        Obx(() => logic.canSubmit()
-            ? CombinationButton(
-                text: 'inner_box_label_split_submit_split'.tr,
-                click: () => askDialog(
-                  content: 'inner_box_label_split_submit_split_tips'.tr,
-                  confirm: () => logic.submitPreSplit(),
-                ),
-              )
-            : Container()),
-        Obx(() => state.newLabelList.isNotEmpty &&
-                state.newLabelList.any((v) => v.isSelected.value)
-            ? CombinationButton(
-                text: 'inner_box_label_split_print'.tr,
-                click: () {
-                  if (logic.isMyanmarLabel()) {
-                    askDialog(
-                      title: 'inner_box_label_split_print_label'.tr,
-                      content: 'inner_box_label_split_print_notes'.tr,
-                      confirmText: 'inner_box_label_split_yes'.tr,
-                      confirmColor: Colors.blue,
-                      confirm: () => logic.printLabel(hasNotes: true),
-                      cancelText: 'inner_box_label_split_no'.tr,
-                      cancelColor: Colors.blue,
-                      cancel: () => logic.printLabel(hasNotes: false),
-                    );
-                  } else {
-                    logic.printLabel();
-                  }
-                })
-            : Container())
-      ],
-      popTitle: 'inner_box_label_split_exit_split_tips'.tr,
-      body: Obx(() => ListView(
-            children: [
-              if (state.originalLabel != null) _originalLabelItem(),
-              for (var sLabel in state.splitLabelList) _splitLabelItem(sLabel),
-              for (var nLabel in state.newLabelList) _newLabelItem(nLabel),
-            ],
-          )),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<SapInnerBoxLabelSplitLogic>();
-    super.dispose();
   }
 }

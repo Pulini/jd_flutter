@@ -32,7 +32,7 @@ class _WorkshopPlanningSalaryCountPageState
 
   Row _processItemTitle() => Row(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             text: '尺码',
             borderColor: Colors.white,
             textColor: Colors.white,
@@ -40,7 +40,7 @@ class _WorkshopPlanningSalaryCountPageState
             backgroundColor: Colors.deepPurpleAccent.shade200,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: '订单数量',
             borderColor: Colors.white,
@@ -49,7 +49,7 @@ class _WorkshopPlanningSalaryCountPageState
             backgroundColor: Colors.deepPurpleAccent.shade200,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: '累计报工数',
             borderColor: Colors.white,
@@ -58,7 +58,7 @@ class _WorkshopPlanningSalaryCountPageState
             backgroundColor: Colors.deepPurpleAccent.shade200,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: '未报工数',
             borderColor: Colors.white,
@@ -67,7 +67,7 @@ class _WorkshopPlanningSalaryCountPageState
             backgroundColor: Colors.deepPurpleAccent.shade200,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: '本次报工数',
             borderColor: Colors.white,
@@ -79,194 +79,11 @@ class _WorkshopPlanningSalaryCountPageState
         ],
       );
 
-  Row _processItem(WorkshopPlanningSizeInfo item) {
-    var controller = TextEditingController(text: item.qty.toShowString());
-    return Row(
-      children: [
-        expandedFrameText(
-          text: item.size ?? '',
-          borderColor: Colors.white,
-          backgroundColor: Colors.deepPurple.shade700,
-          textColor: Colors.white,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          flex: 2,
-          text: item.processQty.toShowString(),
-          borderColor: Colors.white,
-          backgroundColor: Colors.deepPurple.shade700,
-          textColor: Colors.white,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          flex: 2,
-          text: item.finishQty.toShowString(),
-          borderColor: Colors.white,
-          backgroundColor: Colors.deepPurple.shade700,
-          textColor: Colors.white,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          flex: 2,
-          text: item.unFinishQty.toShowString(),
-          borderColor: Colors.white,
-          backgroundColor: Colors.deepPurple.shade700,
-          textColor: Colors.white,
-          alignment: Alignment.center,
-        ),
-        Expanded(
-          flex: 2,
-          child: Container(
-            height: 35,
-            padding: const EdgeInsets.all(3),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-              color: Colors.deepPurple.shade700,
-            ),
-            alignment: Alignment.center,
-            child: state.planInfo!.allowEdit == true
-                ? TextField(
-                    style: TextStyle(color: Colors.deepPurple.shade700),
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
-                    ],
-                    controller: controller,
-                    onChanged: (v) {
-                      if (!v.contains('.')) {
-                        controller.text = v.toDoubleTry().toShowString();
-                      }
-                      if (v.split('.').length > 2 && v.endsWith('.')) {
-                        controller.text = v.substring(0, v.length - 1);
-                      }
-                      if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
-                        controller.text = item.unFinishQty.toShowString();
-                      }
-                      item.qty = controller.text.toDoubleTry();
-                      logic.refreshWorkerMoney();
-                    },
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                        top: 0,
-                        bottom: 0,
-                        left: 10,
-                        right: 10,
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[300],
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.transparent),
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                    ),
-                  )
-                : Text(
-                    item.qty.toShowString(),
-                    style: const TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-          ),
-        )
-      ],
-    );
-  }
+  Widget _processItem(WorkshopPlanningSizeInfo item) =>
+      _SalaryCountProcessItem(item: item, state: state, logic: logic);
 
-  GestureDetector _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
-        onTap: () => logic.modifyWorker(data),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.green.shade100,
-                Colors.blue.shade100,
-              ],
-            ),
-            border: Border.all(
-              color: Colors.blue,
-              width: 2,
-            ),
-          ),
-          margin: const EdgeInsets.all(5),
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${data.name}(${data.number})<${data.typeOfWork}>',
-                              ),
-                            ),
-                            Text(
-                              data.attendanceStatus == true ? '已考勤' : '未考勤',
-                              style: TextStyle(
-                                color: data.attendanceStatus == true
-                                    ? Colors.green
-                                    : Colors.red,
-                              ),
-                            )
-                          ],
-                        ),
-                        Obx(() => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                textSpan(
-                                  isBold: false,
-                                  hint: '系数：',
-                                  text: data.base.toShowString(),
-                                ),
-                                textSpan(
-                                  isBold: false,
-                                  hint: '工时：',
-                                  text: data.dayWorkTime.toShowString(),
-                                ),
-                                textSpan(
-                                  isBold: false,
-                                  hint: '金额：',
-                                  text: data.money.value.toShowString(),
-                                ),
-                              ],
-                            ))
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 30,
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(7),
-                      bottomRight: Radius.circular(7),
-                    ),
-                  ),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => askDialog(
-                      content: '确定要删除该组员数据吗？',
-                      confirm: () => logic.deleteReportWorker(data),
-                    ),
-                    icon: const Icon(Icons.delete_forever, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+  Widget _workerItem(WorkshopPlanningWorkerInfo data) =>
+      _SalaryCountWorkerItem(data: data, logic: logic);
 
   GestureDetector addWorkerItem({required Function() click}) => GestureDetector(
         onTap: click,
@@ -483,6 +300,227 @@ class _WorkshopPlanningSalaryCountPageState
               ],
             )
           ],
+        ),
+      ),
+    );
+  }
+  @override
+  void dispose() {
+    tabController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+}
+
+class _SalaryCountProcessItem extends StatelessWidget {
+  final WorkshopPlanningSizeInfo item;
+  final WorkshopPlanningState state;
+  final WorkshopPlanningLogic logic;
+
+  const _SalaryCountProcessItem({
+    required this.item,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = TextEditingController(text: item.qty.toShowString());
+    return Row(
+      children: [
+        ExpandedFrameText(
+          text: item.size ?? '',
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          flex: 2,
+          text: item.processQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          flex: 2,
+          text: item.finishQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          flex: 2,
+          text: item.unFinishQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        Expanded(
+          flex: 2,
+          child: Container(
+            height: 35,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+              color: Colors.deepPurple.shade700,
+            ),
+            alignment: Alignment.center,
+            child: state.planInfo!.allowEdit == true
+                ? TextField(
+                    style: TextStyle(color: Colors.deepPurple.shade700),
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                    ],
+                    controller: controller,
+                    onChanged: (v) {
+                      if (!v.contains('.')) {
+                        controller.text = v.toDoubleTry().toShowString();
+                      }
+                      if (v.split('.').length > 2 && v.endsWith('.')) {
+                        controller.text = v.substring(0, v.length - 1);
+                      }
+                      if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
+                        controller.text = item.unFinishQty.toShowString();
+                      }
+                      item.qty = controller.text.toDoubleTry();
+                      logic.refreshWorkerMoney();
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 0,
+                        left: 10,
+                        right: 10,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[300],
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    ),
+                  )
+                : Text(
+                    item.qty.toShowString(),
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _SalaryCountWorkerItem extends StatelessWidget {
+  final WorkshopPlanningWorkerInfo data;
+  final WorkshopPlanningLogic logic;
+
+  const _SalaryCountWorkerItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => logic.modifyWorker(data),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.green.shade100,
+              Colors.blue.shade100,
+            ],
+          ),
+          border: Border.all(
+            color: Colors.blue,
+            width: 2,
+          ),
+        ),
+        margin: const EdgeInsets.all(5),
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${data.name}(${data.number})<${data.typeOfWork}>',
+                            ),
+                          ),
+                          Text(
+                            data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            style: TextStyle(
+                              color: data.attendanceStatus == true
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                      Obx(() => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textSpan(
+                                isBold: false,
+                                hint: '系数：',
+                                text: data.base.toShowString(),
+                              ),
+                              textSpan(
+                                isBold: false,
+                                hint: '工时：',
+                                text: data.dayWorkTime.toShowString(),
+                              ),
+                              textSpan(
+                                isBold: false,
+                                hint: '金额：',
+                                text: data.money.value.toShowString(),
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: 30,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(7),
+                    bottomRight: Radius.circular(7),
+                  ),
+                ),
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () => askDialog(
+                    content: '确定要删除该组员数据吗？',
+                    confirm: () => logic.deleteReportWorker(data),
+                  ),
+                  icon: const Icon(Icons.delete_forever, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

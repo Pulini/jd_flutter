@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,43 @@ BoxDecoration backgroundColor() => BoxDecoration(
         end: Alignment.topRight,
       ),
     );
+
+//带缓存的网络图片
+Widget cachedNetworkImage(
+  String? url, {
+  double? width,
+  double? height,
+  BoxFit? fit,
+  Color? color,
+  Widget? errorWidget,
+  Widget? loadingWidget,
+}) {
+  if (url.isNullOrEmpty()) {
+    return errorWidget ??
+        Image.asset(
+          'assets/images/ic_logo.png',
+          width: width,
+          height: height,
+          color: color ?? Colors.blue,
+        );
+  }
+  return CachedNetworkImage(
+    imageUrl: url!,
+    width: width,
+    height: height,
+    fit: fit,
+    color: color,
+    errorWidget: (ctx, err, st) =>
+        errorWidget ??
+        Image.asset(
+          'assets/images/ic_logo.png',
+          width: width,
+          height: height,
+          color: color ?? Colors.blue,
+        ),
+    placeholder: (ctx, url) => loadingWidget ?? const SizedBox.shrink(),
+  );
+}
 
 //页面简单框架
 Container pageBody({
@@ -410,6 +448,12 @@ Widget getLinkCupertinoPicker({
   required FixedExtentScrollController subController,
 }) {
   var subIndex = 0.obs;
+  final groupChildren =
+      groupItems.map((data) => Text(data)).toList(growable: false);
+  final subChildrenList = subItems
+      .map((items) =>
+          items.map((data) => Text(data)).toList(growable: false))
+      .toList(growable: false);
   return Obx(() => Row(
         children: [
           Expanded(
@@ -421,7 +465,7 @@ Widget getLinkCupertinoPicker({
               },
               itemExtent: 22,
               squeeze: 1.2,
-              children: groupItems.map((data) => Text(data)).toList(),
+              children: groupChildren,
             ),
           ),
           Expanded(
@@ -430,8 +474,7 @@ Widget getLinkCupertinoPicker({
               onSelectedItemChanged: (value) {},
               itemExtent: 22,
               squeeze: 1.2,
-              children:
-                  subItems[subIndex.value].map((data) => Text(data)).toList(),
+              children: subChildrenList[subIndex.value],
             ),
           ),
         ],
@@ -570,118 +613,230 @@ Text textSpan({
 }
 
 //进度条、百分比
-Widget percentIndicator({
-  required double max,
-  required double value,
-  double? height,
-  Color? color,
-  Color? backgroundColor,
-  Color? textColor,
-}) {
-  var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
-  return Stack(
-    children: [
-      Center(
-        child: LinearProgressIndicator(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
-          value: percent,
-          minHeight: height ?? 20,
-          backgroundColor: backgroundColor ?? Colors.grey.shade300,
-          color: color ?? Colors.green.shade400,
-        ),
-      ),
-      Center(
-        child: Text(
-          '${percent.mul(100).toShowString()}%',
-          style: TextStyle(
-            color: textColor ?? Colors.black87,
-            fontWeight: FontWeight.bold,
+class PercentIndicator extends StatelessWidget {
+  final double max;
+  final double value;
+  final double? height;
+  final Color? color;
+  final Color? backgroundColor;
+  final Color? textColor;
+
+  const PercentIndicator({
+    super.key,
+    required this.max,
+    required this.value,
+    this.height,
+    this.color,
+    this.backgroundColor,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+    return Stack(
+      children: [
+        Center(
+          child: LinearProgressIndicator(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            value: percent,
+            minHeight: height ?? 20,
+            backgroundColor: backgroundColor ?? Colors.grey.shade300,
+            color: color ?? Colors.green.shade400,
           ),
         ),
-      ),
-    ],
-  );
+        Center(
+          child: Text(
+            '${percent.mul(100).toShowString()}%',
+            style: TextStyle(
+              color: textColor ?? Colors.black87,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 //进度条、带文本
-Widget progressIndicator({
-  required double max,
-  required double value,
-  double? height,
-  Color? color,
-  Color? backgroundColor,
-  Color? textColor,
-}) {
-  var percent = 0.0;
-  if (value != 0 || max != 0) {
-    percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
-  }
+class CustomProgressIndicator extends StatelessWidget {
+  final double max;
+  final double value;
+  final double? height;
+  final Color? color;
+  final Color? backgroundColor;
+  final Color? textColor;
 
-  return Stack(
-    children: [
-      Center(
-        child: LinearProgressIndicator(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
-          value: percent,
-          minHeight: height ?? 20,
-          backgroundColor: backgroundColor ?? Colors.grey.shade300,
-          color: color ?? Colors.green.shade400,
-        ),
-      ),
-      Center(
-        child: Text(
-          '${value.toShowString()}/${max.toShowString()}',
-          style: TextStyle(
-            color: textColor ?? Colors.black87,
-            fontWeight: FontWeight.bold,
+  const CustomProgressIndicator({
+    super.key,
+    required this.max,
+    required this.value,
+    this.height,
+    this.color,
+    this.backgroundColor,
+    this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var percent = 0.0;
+    if (value != 0 || max != 0) {
+      percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+    }
+
+    return Stack(
+      children: [
+        Center(
+          child: LinearProgressIndicator(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            value: percent,
+            minHeight: height ?? 20,
+            backgroundColor: backgroundColor ?? Colors.grey.shade300,
+            color: color ?? Colors.green.shade400,
           ),
         ),
-      ),
-    ],
-  );
+        Center(
+          child: Text(
+            '${value.toShowString()}/${max.toShowString()}',
+            style: TextStyle(
+              color: textColor ?? Colors.black87,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 //带框、带点击事件带文本
-Widget expandedFrameText({
-  Function? click,
-  Color? borderColor,
-  Color? backgroundColor,
-  Color? textColor,
-  int? flex,
-  int? lineHeight,
-  EdgeInsets? padding,
-  AlignmentGeometry? alignment,
-  bool isBold = false,
-  required String text,
-  int? maxLines = 1,
-}) {
-  var widget = Container(
-    height: (maxLines! * (lineHeight ?? 35)).toDouble(),
-    padding: padding ?? const EdgeInsets.all(5),
-    decoration: BoxDecoration(
-      border: Border.all(color: borderColor ?? Colors.grey),
-      color: backgroundColor ?? Colors.transparent,
-    ),
-    alignment: alignment ?? Alignment.centerLeft,
-    child: Text(
-      maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
-      text,
-      strutStyle: const StrutStyle(
-        forceStrutHeight: true,
-        leading: 0.5,
+class ExpandedFrameText extends StatelessWidget {
+  final Function? click;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final int? flex;
+  final int? lineHeight;
+  final EdgeInsets? padding;
+  final AlignmentGeometry? alignment;
+  final bool isBold;
+  final String text;
+  final int? maxLines;
+
+  const ExpandedFrameText({
+    super.key,
+    this.click,
+    this.borderColor,
+    this.backgroundColor,
+    this.textColor,
+    this.flex,
+    this.lineHeight,
+    this.padding,
+    this.alignment,
+    this.isBold = false,
+    required this.text,
+    this.maxLines = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var maxLinesValue = maxLines!;
+    var widget = Container(
+      height: (maxLinesValue * (lineHeight ?? 35)).toDouble(),
+      padding: padding ?? const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor ?? Colors.grey),
+        color: backgroundColor ?? Colors.transparent,
       ),
-      style: TextStyle(
-        color: textColor ?? Colors.black87,
-        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text(
+        maxLines: maxLinesValue,
+        overflow: TextOverflow.ellipsis,
+        text,
+        strutStyle: const StrutStyle(
+          forceStrutHeight: true,
+          leading: 0.5,
+        ),
+        style: TextStyle(
+          color: textColor ?? Colors.black87,
+          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+        ),
       ),
-    ),
-  );
-  return Expanded(
-    flex: flex ?? 1,
-    child: text.isEmpty
+    );
+    return Expanded(
+      flex: flex ?? 1,
+      child: text.isEmpty
+          ? Container(
+              height: (maxLinesValue * 35).toDouble(),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor ?? Colors.grey),
+                color: backgroundColor ?? Colors.transparent,
+              ),
+            )
+          : click == null
+              ? widget
+              : GestureDetector(
+                  onTap: () => click!.call(),
+                  child: widget,
+                ),
+    );
+  }
+}
+
+//带框、带点击事件带文本
+class FrameText extends StatelessWidget {
+  final Function? click;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final EdgeInsets? padding;
+  final AlignmentGeometry? alignment;
+  final bool isBold;
+  final String text;
+  final int? maxLines;
+
+  const FrameText({
+    super.key,
+    this.click,
+    this.borderColor,
+    this.backgroundColor,
+    this.textColor,
+    this.padding,
+    this.alignment,
+    this.isBold = false,
+    required this.text,
+    this.maxLines = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var maxLinesValue = maxLines!;
+    var widget = Container(
+      height: (maxLinesValue * 35).toDouble(),
+      padding: padding ?? const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor ?? Colors.grey),
+        color: backgroundColor ?? Colors.transparent,
+      ),
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text(
+        maxLines: maxLinesValue,
+        overflow: TextOverflow.ellipsis,
+        text,
+        strutStyle: const StrutStyle(
+          forceStrutHeight: true,
+          leading: 0.5,
+        ),
+        style: TextStyle(
+          color: textColor ?? Colors.black87,
+          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+    );
+    return text.isEmpty
         ? Container(
-            height: (maxLines * 35).toDouble(),
+            height: (maxLinesValue * 35).toDouble(),
             decoration: BoxDecoration(
               border: Border.all(color: borderColor ?? Colors.grey),
               color: backgroundColor ?? Colors.transparent,
@@ -690,60 +845,10 @@ Widget expandedFrameText({
         : click == null
             ? widget
             : GestureDetector(
-                onTap: () => click.call(),
+                onTap: () => click!.call(),
                 child: widget,
-              ),
-  );
-}
-
-//带框、带点击事件带文本
-Widget frameText({
-  Function? click,
-  Color? borderColor,
-  Color? backgroundColor,
-  Color? textColor,
-  EdgeInsets? padding,
-  AlignmentGeometry? alignment,
-  bool isBold = false,
-  required String text,
-  int? maxLines = 1,
-}) {
-  var widget = Container(
-    height: (maxLines! * 35).toDouble(),
-    padding: padding ?? const EdgeInsets.all(5),
-    decoration: BoxDecoration(
-      border: Border.all(color: borderColor ?? Colors.grey),
-      color: backgroundColor ?? Colors.transparent,
-    ),
-    alignment: alignment ?? Alignment.centerLeft,
-    child: Text(
-      maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
-      text,
-      strutStyle: const StrutStyle(
-        forceStrutHeight: true,
-        leading: 0.5,
-      ),
-      style: TextStyle(
-        color: textColor ?? Colors.black87,
-        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-      ),
-    ),
-  );
-  return text.isEmpty
-      ? Container(
-          height: (maxLines * 35).toDouble(),
-          decoration: BoxDecoration(
-            border: Border.all(color: borderColor ?? Colors.grey),
-            color: backgroundColor ?? Colors.transparent,
-          ),
-        )
-      : click == null
-          ? widget
-          : GestureDetector(
-              onTap: () => click.call(),
-              child: widget,
-            );
+              );
+  }
 }
 
 //固定宽高1比1的头像
@@ -759,21 +864,18 @@ Widget avatarPhoto(String? url, {double? borderRadius}) {
             )
           : LayoutBuilder(
               builder: (context, constraints) {
-                return Image.network(
-                  url,
+                return CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.fill,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      color: Colors.grey.shade200,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.blue.shade300,
-                        size: constraints.maxWidth * 0.6,
-                      ),
-                    );
-                  },
-                  errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                  placeholder: (context, url) => Container(
+                    color: Colors.grey.shade200,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.blue.shade300,
+                      size: constraints.maxWidth * 0.6,
+                    ),
+                  ),
+                  errorWidget: (ctx, err, stackTrace) => Image.asset(
                     'assets/images/ic_logo.png',
                     color: Colors.blue,
                   ),
@@ -785,70 +887,84 @@ Widget avatarPhoto(String? url, {double? borderRadius}) {
 }
 
 //滚动选择器
-Widget selectView({
-  required List<dynamic> list,
-  FixedExtentScrollController? controller,
-  String errorMsg = '',
-  String hint = '',
-  Function(int)? select,
-}) {
-  var weights = [
-    Text(
-      hint,
-      style: const TextStyle(
-        color: Colors.black87,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    Expanded(
-        child: CupertinoPicker(
-      scrollController: controller,
-      magnification: 1.2,
-      useMagnifier: true,
-      itemExtent: 26,
-      onSelectedItemChanged: (v) => select?.call(v),
-      children: list
-          .map((v) => Center(
-                child: AutoSizeText(
-                  v.toString(),
-                  maxLines: 1,
-                  minFontSize: 8,
-                  maxFontSize: 16,
-                  style: const TextStyle(color: Colors.blue),
-                ),
-              ))
-          .toList(),
-    ))
-  ];
+class SelectView extends StatelessWidget {
+  final List<dynamic> list;
+  final FixedExtentScrollController? controller;
+  final String errorMsg;
+  final String hint;
+  final Function(int)? select;
 
-  return Container(
-    height: list.length > 1
-        ? 120
-        : errorMsg.length > 15
-            ? 50
-            : 35,
-    width: double.infinity,
-    margin: const EdgeInsets.all(5),
-    padding: const EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.grey.shade200,
-      borderRadius: BorderRadius.circular(list.length > 1 ? 10 : 25),
-    ),
-    child: list.length > 1
-        ? GetPlatform.isMobile
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start, children: weights)
-            : Row(children: weights)
-        : list.isEmpty
-            ? AutoSizeText(
-                errorMsg,
-                style: const TextStyle(color: Colors.red),
-                maxLines: 2,
-                minFontSize: 12,
+  const SelectView({
+    super.key,
+    required this.list,
+    this.controller,
+    this.errorMsg = '',
+    this.hint = '',
+    this.select,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pickerChildren = list
+        .map((v) => Center(
+              child: AutoSizeText(
+                v.toString(),
+                maxLines: 1,
+                minFontSize: 8,
                 maxFontSize: 16,
-              )
-            : textSpan(hint: hint, text: list[0].toString(), maxLines: 2),
-  );
+                style: const TextStyle(color: Colors.blue),
+              ),
+            ))
+        .toList(growable: false);
+    final weights = <Widget>[
+      Text(
+        hint,
+        style: const TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      Expanded(
+          child: CupertinoPicker(
+        scrollController: controller,
+        magnification: 1.2,
+        useMagnifier: true,
+        itemExtent: 26,
+        onSelectedItemChanged: (v) => select?.call(v),
+        children: pickerChildren,
+      ))
+    ];
+
+    return Container(
+      height: list.length > 1
+          ? 120
+          : errorMsg.length > 15
+              ? 50
+              : 35,
+      width: double.infinity,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(list.length > 1 ? 10 : 25),
+      ),
+      child: list.length > 1
+          ? GetPlatform.isMobile
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: weights)
+              : Row(children: weights)
+          : list.isEmpty
+              ? AutoSizeText(
+                  errorMsg,
+                  style: const TextStyle(color: Colors.red),
+                  maxLines: 2,
+                  minFontSize: 12,
+                  maxFontSize: 16,
+                )
+              : textSpan(hint: hint, text: list[0].toString(), maxLines: 2),
+    );
+  }
 }
 
 //是否深色
@@ -862,69 +978,78 @@ bool isDeepColor(Color color) {
 }
 
 //柱状图进度条
-Widget ratioBarChart({
-  double width = double.infinity,
-  required List<List<dynamic>> ratioList,
-}) {
-  var list = <Widget>[];
-  var radius = const Radius.circular(13);
-  for (var i = 0; i < ratioList.length; ++i) {
-    var percent = (ratioList[i][0] as double);
-    var colorName = (ratioList[i][1] as String);
-    var color = colorName.getColorByDescription();
-    var text = Center(
-        child: Text(
-      '${percent.toShowString()}% ${colorName.isEmpty ? '无色' : colorName}',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: isDeepColor(color) ? Colors.white : Colors.black,
-      ),
-    ));
-    list.add(
-      Expanded(
-        flex: percent.toInt(),
-        child: i == 0
-            ? Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: radius,
-                    bottomLeft: radius,
-                  ),
-                  color: color,
-                ),
-                child: text,
-              )
-            : i == ratioList.length - 1
-                ? Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: radius,
-                        bottomRight: radius,
-                      ),
-                      color: color,
+class RatioBarChart extends StatelessWidget {
+  final double width;
+  final List<List<dynamic>> ratioList;
+
+  const RatioBarChart({
+    super.key,
+    this.width = double.infinity,
+    required this.ratioList,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var list = <Widget>[];
+    var radius = const Radius.circular(13);
+    for (var i = 0; i < ratioList.length; ++i) {
+      var percent = (ratioList[i][0] as double);
+      var colorName = (ratioList[i][1] as String);
+      var color = colorName.getColorByDescription();
+      var text = Center(
+          child: Text(
+        '${percent.toShowString()}% ${colorName.isEmpty ? '无色' : colorName}',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: isDeepColor(color) ? Colors.white : Colors.black,
+        ),
+      ));
+      list.add(
+        Expanded(
+          flex: percent.toInt(),
+          child: i == 0
+              ? Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius:  BorderRadius.only(
+                      topLeft: radius,
+                      bottomLeft: radius,
                     ),
-                    child: text,
-                  )
-                : Container(height: 50, color: color, child: text),
+                    color: color,
+                  ),
+                  child: text,
+                )
+              : i == ratioList.length - 1
+                  ? Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius:  BorderRadius.only(
+                          topRight: radius,
+                          bottomRight: radius,
+                        ),
+                        color: color,
+                      ),
+                      child: text,
+                    )
+                  : Container(height: 50, color: color, child: text),
+        ),
+      );
+    }
+
+    return Container(
+      height: 50,
+      width: width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: Colors.blueAccent,
+          width: 2,
+        ),
       ),
+      child: Row(children: list),
     );
   }
-
-  return Container(
-    height: 50,
-    width: width,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(15),
-      border: Border.all(
-        color: Colors.blueAccent,
-        width: 2,
-      ),
-    ),
-    child: Row(children: list),
-  );
 }
 
 //切换语言
@@ -932,6 +1057,9 @@ void changeLanguagePopup({required Function() changed}) {
   var localeIndex =
       locales.indexWhere((v) => v.languageCode == Get.locale!.languageCode);
   var controller = FixedExtentScrollController(initialItem: localeIndex);
+  final languageLabels = languages
+      .map((s) => Center(child: Text(s)))
+      .toList(growable: false);
   String getCancel(int index) => locales[index] == localeChinese
       ? '取消'
       : locales[index] == localeIndonesian
@@ -989,7 +1117,7 @@ void changeLanguagePopup({required Function() changed}) {
           ),
           Expanded(
             child: getCupertinoPicker(
-              items: languages.map((s) => Center(child: Text(s))).toList(),
+              items: languageLabels,
               controller: controller,
               itemChanged: (index) {
                 cancelText.value = getCancel(index);

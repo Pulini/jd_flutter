@@ -78,7 +78,7 @@ class _SmartDeliveryMaterialListPageState
                   style: const TextStyle(color: Colors.black45),
                 ),
                 Expanded(
-                  child: progressIndicator(
+                  child: CustomProgressIndicator(
                     max: data.requireQty ?? 0,
                     value: data.sendQty ?? 0,
                   ),

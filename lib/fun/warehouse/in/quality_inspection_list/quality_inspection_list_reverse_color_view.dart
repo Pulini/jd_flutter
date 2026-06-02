@@ -38,16 +38,16 @@ class _QualityInspectionReverseColorPageState
     }
     return Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: list[position].name ?? '',
           backgroundColor: backColors,
           click: () => logic.selectColorSubItem(position),
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: list[position].code ?? '',
           backgroundColor: backColors,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: list[position].color ?? '',
           backgroundColor: backColors,
           click: () {
@@ -71,7 +71,7 @@ class _QualityInspectionReverseColorPageState
             }
           },
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: list[position].qty.toShowString(),
           backgroundColor: backColors,
           click: () {
@@ -101,22 +101,22 @@ class _QualityInspectionReverseColorPageState
         children: [
           Row(
             children: [
-              expandedFrameText(
+              ExpandedFrameText(
                 text: 'quality_inspection_material_name'.tr,
                 backgroundColor: Colors.blueAccent.shade100,
                 textColor: Colors.white,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: 'quality_inspection_material_code'.tr,
                 backgroundColor: Colors.blueAccent.shade100,
                 textColor: Colors.white,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: 'quality_inspection_color_title'.tr,
                 backgroundColor: Colors.blueAccent.shade100,
                 textColor: Colors.white,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: 'quality_inspection_quality_title'.tr,
                 backgroundColor: Colors.blueAccent.shade100,
                 textColor: Colors.white,

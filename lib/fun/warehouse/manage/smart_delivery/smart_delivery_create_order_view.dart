@@ -57,7 +57,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
             children: [
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     flex: 2,
                     text: 'smart_delivery_create_order_size'.tr,
                     backgroundColor: Colors.blueAccent,
@@ -66,14 +66,14 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     alignment: Alignment.center,
                   ),
                   for (PartsSizeList data in ddi.partsSizeList ?? [])
-                    expandedFrameText(
+                    ExpandedFrameText(
                       text: data.size ?? '',
                       backgroundColor: Colors.blueAccent,
                       textColor: Colors.white,
                       borderColor: Colors.black,
                       alignment: Alignment.center,
                     ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: 'smart_delivery_create_order_total'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
@@ -84,7 +84,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
               ),
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     flex: 2,
                     text: 'smart_delivery_create_order_shoe_tree_inventory'.tr,
                     backgroundColor: Colors.green,
@@ -94,14 +94,14 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                   ),
                   for (PartsSizeList data
                       in state.deliveryDetail!.partsSizeList ?? [])
-                    expandedFrameText(
+                    ExpandedFrameText(
                       text: data.shoeTreeQty.toString(),
                       backgroundColor: Colors.green,
                       textColor: Colors.white,
                       borderColor: Colors.black,
                       alignment: Alignment.centerRight,
                     ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: state.deliveryDetail!.getShoeTreeTotal().toString(),
                     backgroundColor: Colors.green,
                     textColor: Colors.white,
@@ -112,7 +112,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
               ),
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     flex: 2,
                     text: 'smart_delivery_create_order_order_qty'.tr,
                     backgroundColor: Colors.orange.shade100,
@@ -120,13 +120,13 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     alignment: Alignment.center,
                   ),
                   for (PartsSizeList data in ddi.partsSizeList ?? [])
-                    expandedFrameText(
+                    ExpandedFrameText(
                       text: data.qty.toString(),
                       backgroundColor: Colors.orange.shade100,
                       borderColor: Colors.black,
                       alignment: Alignment.centerRight,
                     ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: ddi.getOrderTotal().toString(),
                     backgroundColor: Colors.orange.shade100,
                     borderColor: Colors.black,
@@ -137,7 +137,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
               for (var i = 0; i < list.length; ++i)
                 Row(
                   children: [
-                    expandedFrameText(
+                    ExpandedFrameText(
                       click: () {
                         if (!ddi.workData.isNullOrEmpty()) {
                           if (list[i].sendType == 1) {
@@ -170,7 +170,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       alignment: Alignment.center,
                     ),
                     for (SizeInfo data in list[i].sendSizeList ?? [])
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: data.qty.toString(),
                         textColor: data.qty == 0 ? Colors.grey : Colors.black87,
                         backgroundColor: list[i].sendType == 1
@@ -181,7 +181,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                         borderColor: Colors.black,
                         alignment: Alignment.centerRight,
                       ),
-                    expandedFrameText(
+                    ExpandedFrameText(
                       text: list[i].getTotalQty().toString(),
                       backgroundColor: list[i].sendType == 1
                           ? Colors.green.shade300
@@ -210,7 +210,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
           children: [
             Row(
               children: [
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 2,
                   text: 'smart_delivery_create_order_size'.tr,
                   backgroundColor: Colors.blueAccent,
@@ -219,14 +219,14 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                   alignment: Alignment.center,
                 ),
                 for (PartsSizeList data in ddi.partsSizeList ?? [])
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: data.size ?? '',
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
-                expandedFrameText(
+                ExpandedFrameText(
                   text: 'smart_delivery_create_order_total'.tr,
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,
@@ -238,7 +238,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
             for (var i = 0; i < ddi.workData!.length; ++i)
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     click: () {
                       if (state.deliveryDetail!.partsID == ddi.partsID &&
                           state.deliveryDetail?.newWorkCardInterID !=
@@ -274,7 +274,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     alignment: Alignment.center,
                   ),
                   for (SizeInfo data in ddi.workData![i].sendSizeList ?? [])
-                    expandedFrameText(
+                    ExpandedFrameText(
                       text: data.qty.toString(),
                       textColor: data.qty == 0 ? Colors.grey : Colors.black87,
                       backgroundColor: ddi.workData![i].sendType == 1
@@ -285,7 +285,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       borderColor: Colors.black,
                       alignment: Alignment.centerRight,
                     ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: ddi.workData![i].getTotalQty().toString(),
                     backgroundColor: ddi.workData![i].sendType == 1
                         ? Colors.green.shade300

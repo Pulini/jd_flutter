@@ -25,153 +25,15 @@ class _MaintainLabelCreateCustomPageState
   var batchBoxCapacityController = TextEditingController();
   var batchCreateGoodsController = TextEditingController();
 
-  Widget _item(CreateCustomLabelsData data) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey, width: 2),
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textSpan(hint: '尺码：', text: data.size, textColor: Colors.red),
-                  textSpan(
-                    hint: '总货数：',
-                    text: data.goodsTotalValue,
-                    isBold: false,
-                  ),
-                  textSpan(
-                    hint: '剩余货数：',
-                    text: data.surplusGoodsValue,
-                    isBold: false,
-                  ),
-                  Row(
-                    children: [
-                      Text('箱容：'),
-                      Container(
-                        height: 35,
-                        width: 150,
-                        padding: EdgeInsets.only(
-                          left: 3,
-                          right: 3,
-                          bottom: 0,
-                        ),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          controller: data.capacityController,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 0, bottom: 15),
-                            filled: true,
-                            fillColor: Colors.transparent,
-                          ),
-                          onChanged: (v) {
-                            data.capacity.value = v.toDoubleTry();
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  textSpan(hint: '已生成贴标：', text: data.createdLabels.toString()),
-                  textSpan(
-                    hint: '已生成货数：',
-                    text: data.createdGoodsValue,
-                    isBold: false,
-                  ),
-                  Obx(() => textSpan(
-                        hint: '创建数：',
-                        text: data.createLabel().toString(),
-                        textColor: Colors.green,
-                      )),
-                  Row(
-                    children: [
-                      Text('本次生成货数：'),
-                      Container(
-                        height: 35,
-                        width: 150,
-                        padding: EdgeInsets.only(
-                          left: 3,
-                          right: 3,
-                          bottom: 0,
-                        ),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          controller: data.createGoodsController,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 0, bottom: 15),
-                            filled: true,
-                            fillColor: Colors.transparent,
-                          ),
-                          onChanged: (v) {
-                            data.createGoods.value = v.toDoubleTry();
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: Obx(() => Checkbox(
-                        value: data.isSelect.value,
-                        onChanged: (v) => data.isSelect.value = v!,
-                      )),
-                ),
-                GestureDetector(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue, width: 2),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      '最大值',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  onTap: () => data.setMax(),
-                )
-              ],
-            )
-          ],
-        ),
-      );
+  Widget _item(CreateCustomLabelsData data) =>
+      _MaintainLabelCreateCustomItem(data: data);
+
+  @override
+  void dispose() {
+    batchBoxCapacityController.dispose();
+    batchCreateGoodsController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -232,6 +94,164 @@ class _MaintainLabelCreateCustomPageState
                   itemBuilder: (c, i) => _item(state.createCustomLabelsData[i]),
                 )),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MaintainLabelCreateCustomItem extends StatelessWidget {
+  final CreateCustomLabelsData data;
+
+  const _MaintainLabelCreateCustomItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient:  LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textSpan(hint: '尺码：', text: data.size, textColor: Colors.red),
+                textSpan(
+                  hint: '总货数：',
+                  text: data.goodsTotalValue,
+                  isBold: false,
+                ),
+                textSpan(
+                  hint: '剩余货数：',
+                  text: data.surplusGoodsValue,
+                  isBold: false,
+                ),
+                Row(
+                  children: [
+                    const Text('箱容：'),
+                    Container(
+                      height: 35,
+                      width: 150,
+                      padding: const EdgeInsets.only(
+                        left: 3,
+                        right: 3,
+                        bottom: 0,
+                      ),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        controller: data.capacityController,
+                        decoration: const InputDecoration(
+                          contentPadding:
+                              EdgeInsets.only(top: 0, bottom: 15),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                        ),
+                        onChanged: (v) {
+                          data.capacity.value = v.toDoubleTry();
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textSpan(
+                    hint: '已生成贴标：', text: data.createdLabels.toString()),
+                textSpan(
+                  hint: '已生成货数：',
+                  text: data.createdGoodsValue,
+                  isBold: false,
+                ),
+                Obx(() => textSpan(
+                      hint: '创建数：',
+                      text: data.createLabel().toString(),
+                      textColor: Colors.green,
+                    )),
+                Row(
+                  children: [
+                    const Text('本次生成货数：'),
+                    Container(
+                      height: 35,
+                      width: 150,
+                      padding: const EdgeInsets.only(
+                        left: 3,
+                        right: 3,
+                        bottom: 0,
+                      ),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        controller: data.createGoodsController,
+                        decoration: const InputDecoration(
+                          contentPadding:
+                              EdgeInsets.only(top: 0, bottom: 15),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                        ),
+                        onChanged: (v) {
+                          data.createGoods.value = v.toDoubleTry();
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 40,
+                child: Obx(() => Checkbox(
+                      value: data.isSelect.value,
+                      onChanged: (v) => data.isSelect.value = v!,
+                    )),
+              ),
+              GestureDetector(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue, width: 2),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: const EdgeInsets.all(5),
+                  child: const Text(
+                    '最大值',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                onTap: () => data.setMax(),
+              )
+            ],
+          )
         ],
       ),
     );

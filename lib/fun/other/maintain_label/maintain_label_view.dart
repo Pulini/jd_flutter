@@ -93,7 +93,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   : Colors.white,
       child: Row(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 5,
             text: text1,
             textColor: type == 3
@@ -102,7 +102,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ? Colors.redAccent
                     : Colors.black,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: text2,
             textColor: type == 3
                 ? Colors.green.shade900
@@ -110,7 +110,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ? Colors.redAccent
                     : Colors.black,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: text3,
             textColor: type == 3
                 ? Colors.green.shade900
@@ -144,7 +144,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   : Colors.white,
       child: Row(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 3,
             text: text1,
             textColor: type == 3
@@ -153,7 +153,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ? Colors.redAccent
                     : Colors.black,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: text2,
             textColor: type == 3
@@ -162,7 +162,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ? Colors.redAccent
                     : Colors.black,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: text3,
             textColor: type == 3
                 ? Colors.green.shade900
@@ -170,7 +170,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ? Colors.redAccent
                     : Colors.black,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: text4,
             textColor: type == 3
                 ? Colors.green.shade900
@@ -365,6 +365,12 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       logic.refreshDataList();
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<MaintainLabelLogic>();
+    super.dispose();
   }
 
   @override

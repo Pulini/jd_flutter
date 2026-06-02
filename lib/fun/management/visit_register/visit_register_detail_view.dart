@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/photo_bean.dart';
 import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
@@ -59,13 +61,12 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    state.dataDetail.cardPic!,
-                    gaplessPlayback: true,
+                  child: CachedNetworkImage(
+                    imageUrl: state.dataDetail.cardPic!,
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                    errorWidget: (context, error, stackTrace) {
                       return const Icon(
                         Icons.person_outline,
                         color: Colors.black12,
@@ -83,13 +84,12 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    state.dataDetail.peoPic!,
-                    gaplessPlayback: true,
+                  child: CachedNetworkImage(
+                    imageUrl: state.dataDetail.peoPic!,
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                    errorWidget: (context, error, stackTrace) {
                       return const Icon(
                         Icons.person_outline,
                         color: Colors.black12,
@@ -155,59 +155,10 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  Container _comePhotoItem(String? photoUrl) {
-    return Container(
-        margin: const EdgeInsets.only(left: 20),
-        child: GestureDetector(
-          child: photoUrl!.isNotEmpty
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    photoUrl,
-                    gaplessPlayback: true,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 50,
-                      );
-                    },
-                  ),
-                )
-              : const Icon(
-                  Icons.error_outline_outlined,
-                  color: Colors.blueAccent,
-                  size: 50,
-                ),
-        ));
-  }
 
-  Widget _comeListView() {
-      if (state.dataDetail.visitPics!.isNotEmpty) {
-      return Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          height: 100,
-          width: 100,
-          decoration: BoxDecoration(
-            //背景
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-            //设置四边边框
-            border: Border.all(width: 1, color: Colors.blue),
-          ),
-          child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            scrollDirection: Axis.horizontal,
-            itemCount: state.dataDetail.visitPics?.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _comePhotoItem(state.dataDetail.visitPics?[index].photo!),
-          ));
-    } else {
-      return const SizedBox(height: 1);
-    }
-  }
+  Widget _comeListView() => _VisitRegisterPhotoList(
+        pics: state.dataDetail.visitPics,
+      );
 
   Container _leavePhotoItem(VisitPhotoBean data, int index) {
     return Container(
@@ -263,29 +214,9 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         )));
   }
 
-  Widget _showLeaveListView() {
-    if (state.dataDetail.leavePics!.isNotEmpty) {
-      return Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          height: 100,
-          width: 100,
-          decoration: BoxDecoration(
-            //背景
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-            //设置四边边框
-            border: Border.all(width: 1, color: Colors.blue),
-          ),
-          child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            scrollDirection: Axis.horizontal,
-            itemCount: state.dataDetail.leavePics?.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _comePhotoItem(state.dataDetail.leavePics?[index].photo!),
-          ));
-    } else {
-      return const SizedBox(height: 1);
-    }
-  }
+  Widget _showLeaveListView() => _VisitRegisterPhotoList(
+        pics: state.dataDetail.leavePics,
+      );
 
   Text _subTitle(String title) {
     return Text(
@@ -378,6 +309,73 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           state.dataDetail.leaveTime!.isEmpty ?  _leaveListView() : _showLeaveListView(),
           if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
         ],
+      ),
+    );
+  }
+}
+
+class _VisitRegisterPhotoList extends StatelessWidget {
+  final List<PhotoBean>? pics;
+
+  const _VisitRegisterPhotoList({required this.pics});
+
+  @override
+  Widget build(BuildContext context) {
+    if (pics != null && pics!.isNotEmpty) {
+      return Container(
+        margin: const EdgeInsets.only(left: 20, right: 20),
+        height: 100,
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+          border: Border.all(width: 1, color: Colors.blue),
+        ),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          scrollDirection: Axis.horizontal,
+          itemCount: pics!.length,
+          itemBuilder: (BuildContext context, int index) =>
+              _VisitRegisterComePhotoItem(photoUrl: pics![index].photo),
+        ),
+      );
+    } else {
+      return const SizedBox(height: 1);
+    }
+  }
+}
+
+class _VisitRegisterComePhotoItem extends StatelessWidget {
+  final String? photoUrl;
+
+  const _VisitRegisterComePhotoItem({required this.photoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20),
+      child: GestureDetector(
+        child: photoUrl != null && photoUrl!.isNotEmpty
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: photoUrl!,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 50,
+                    );
+                  },
+                ),
+              )
+            : const Icon(
+                Icons.error_outline_outlined,
+                color: Colors.blueAccent,
+                size: 50,
+              ),
       ),
     );
   }

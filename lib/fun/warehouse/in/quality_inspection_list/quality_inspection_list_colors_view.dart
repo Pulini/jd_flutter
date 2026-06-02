@@ -33,68 +33,6 @@ class _QualityInspectionColorListPageState
     buttonName: 'quality_inspection_store_location'.tr,
   );
 
-  Widget _item(int index) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey,width: 2),
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                          hint: 'quality_inspection_label_color'.tr,
-                          text: state.colorOrderList[index].batchNo ?? ''),
-                      textSpan(
-                        hint: 'quality_inspection_label_scanned'.tr,
-                        text: state.colorOrderList[index].bindingLabels.length
-                            .toString(),
-                      ),
-                    ],
-                  ),
-                  Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          'quality_inspection_label_scanned_material_qty'.tr,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Expanded(
-                          child: progressIndicator(
-                            max: state.colorOrderList[index].qty ?? 0,
-                            value: state.colorOrderList[index]
-                                .getMaterialTotalQty(),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          state.colorOrderList[index].unit ?? '',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed: () => logic.toColorLabelBinding(index),
-              icon: const Icon(Icons.chevron_right_outlined),
-            )
-          ],
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -122,9 +60,89 @@ class _QualityInspectionColorListPageState
                   padding:
                       const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                   itemCount: state.colorOrderList.length,
-                  itemBuilder: (c, i) => _item(i),
+                  itemBuilder: (c, i) => _ColorOrderItem(
+                    index: i,
+                    state: state,
+                    logic: logic,
+                  ),
                 )),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ColorOrderItem extends StatelessWidget {
+  final int index;
+  final QualityInspectionListState state;
+  final QualityInspectionListLogic logic;
+  const _ColorOrderItem({
+    required this.index,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    expandedTextSpan(
+                        hint: 'quality_inspection_label_color'.tr,
+                        text: state.colorOrderList[index].batchNo ?? ''),
+                    textSpan(
+                      hint: 'quality_inspection_label_scanned'.tr,
+                      text: state.colorOrderList[index].bindingLabels.length
+                          .toString(),
+                    ),
+                  ],
+                ),
+                Obx(
+                  () => Row(
+                    children: [
+                      Text(
+                        'quality_inspection_label_scanned_material_qty'.tr,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: CustomProgressIndicator(
+                          max: state.colorOrderList[index].qty ?? 0,
+                          value: state.colorOrderList[index]
+                              .getMaterialTotalQty(),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        state.colorOrderList[index].unit ?? '',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () => logic.toColorLabelBinding(index),
+            icon: const Icon(Icons.chevron_right_outlined),
+          )
         ],
       ),
     );

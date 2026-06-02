@@ -20,46 +20,8 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
   final SapPackingScanLogic logic = Get.find<SapPackingScanLogic>();
   final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
 
-  Widget _item(PieceMaterialInfo data) => Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 40,
-              child: Row(
-                children: [
-                  expandedTextSpan(
-                    hint: '件ID：',
-                    text: data.pieceId,
-                    textColor: Colors.blue.shade900,
-                  ),
-                  Obx(() => Checkbox(
-                        value: data.isSelected.value,
-                        onChanged: (v) => data.isSelected.value = v!,
-                      ))
-                ],
-              ),
-            ),
-            for (SapPackingScanMaterialInfo item in data.materials) ...{
-              const Divider(),
-              textSpan(
-                hint: '物料：',
-                hintColor: Colors.grey.shade700,
-                text: '(${item.materialNumber})${item.materialName}',
-                isBold: false,
-                textColor: Colors.grey,
-                maxLines: 2,
-              ),
-            }
-          ],
-        ),
-      );
+  Widget _item(PieceMaterialInfo data) =>
+      _SapPackingScanLabelItem(data: data);
 
   @override
   void initState() {
@@ -117,6 +79,56 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
                   itemBuilder: (c, i) => _item(state.pieceList[i]),
                 )),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SapPackingScanLabelItem extends StatelessWidget {
+  final PieceMaterialInfo data;
+
+  const _SapPackingScanLabelItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 40,
+            child: Row(
+              children: [
+                expandedTextSpan(
+                  hint: '件ID：',
+                  text: data.pieceId,
+                  textColor: Colors.blue.shade900,
+                ),
+                Obx(() => Checkbox(
+                      value: data.isSelected.value,
+                      onChanged: (v) => data.isSelected.value = v!,
+                    ))
+              ],
+            ),
+          ),
+          for (SapPackingScanMaterialInfo item in data.materials) ...{
+            const Divider(),
+            textSpan(
+              hint: '物料：',
+              hintColor: Colors.grey.shade700,
+              text: '(${item.materialNumber})${item.materialName}',
+              isBold: false,
+              textColor: Colors.grey,
+              maxLines: 2,
+            ),
+          }
         ],
       ),
     );

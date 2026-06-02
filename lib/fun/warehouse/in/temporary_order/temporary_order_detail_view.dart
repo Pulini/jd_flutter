@@ -30,131 +30,9 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
       const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
   var itemTextStyle = const TextStyle(color: Colors.black54);
 
-  Widget _item(TemporaryOrderDetailReceiptInfo data) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey,width: 2),
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade50, Colors.white],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    expandedTextSpan(
-                      flex: 4,
-                      hint: 'temporary_order_detail_material'.tr,
-                      text: '(${data.materialCode})${data.materialName}',
-                    ),
-                    expandedTextSpan(
-                      hint: 'temporary_order_detail_test_status'.tr,
-                      text: data.getTestStateText(),
-                      textColor: data.getTestStateColor(),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    _itemText('temporary_order_detail_type_body'.trArgs(
-                      ['${data.factoryModel}'],
-                    )),
-                    _itemText('temporary_order_detail_production_no'.trArgs(
-                      ['${data.productionNumber}'],
-                    )),
-                    _itemText('temporary_order_detail_size'.trArgs(
-                      ['${data.size}'],
-                    )),
-                    _itemText('temporary_order_detail_delivery_date'.trArgs(
-                      ['${data.deliveryDate}'],
-                    )),
-                    _itemText('temporary_order_detail_received_qty'.trArgs(
-                      ['${data.quantityTemporarilyReceived}'],
-                    )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    _itemText('temporary_order_detail_basic_qty'.trArgs(
-                      [data.basicQuantity.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_inspection_qty'.trArgs(
-                      [data.inspectionQuantity.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_qualified_qty'.trArgs(
-                      [data.qualifiedQuantity.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_unqualified_qty'.trArgs(
-                      [data.unqualifiedQuantity.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_missing_qty'.trArgs(
-                      [data.missingQuantity.toShowString()],
-                    )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    _itemText('temporary_order_detail_warehouse_in_qty'.trArgs(
-                      [data.enterWarehouseQuantity.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_common_unit'.trArgs(
-                      ['${data.commonUnits}'],
-                    )),
-                    _itemText('temporary_order_detail_coefficient'.trArgs(
-                      [data.coefficient.toShowString()],
-                    )),
-                    _itemText('temporary_order_detail_basic_unit'.trArgs(
-                      ['${data.basicUnits}'],
-                    )),
-                    _itemText('temporary_order_detail_specification'.trArgs(
-                      ['${data.specification}'],
-                    )),
-                  ],
-                ),
-                Row(
-                  children: [
-                    _itemText('temporary_order_detail_contract_no'.trArgs(
-                      ['${data.contractNo}'],
-                    )),
-                    _itemText(
-                        'temporary_order_detail_purchase_order_line_no'.trArgs(
-                      ['${data.purchaseOrderLineNumber}'],
-                    )),
-                    _itemText(
-                        'temporary_order_detail_delivery_order_line_no'.trArgs(
-                      ['${data.deliveryOrderLineNumber}'],
-                    )),
-                    _itemText('temporary_order_detail_purchase_type'.trArgs(
-                      ['${data.purchaseType}'],
-                    )),
-                    _itemText('temporary_order_detail_remark'.trArgs(
-                      ['${data.remarks}'],
-                    )),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Obx(() => (data.quantityTemporarilyReceived ?? 0) > 0
-              ? Checkbox(
-                  value: data.isSelected.value,
-                  onChanged: (v)=>logic.selectAllMaterial(data,v!),
-                )
-              : Container())
-        ],
-      ),
-    );
-  }
+  Widget _item(TemporaryOrderDetailReceiptInfo data) =>
+      _TemporaryOrderDetailItem(data: data, logic: logic, itemTextStyle: itemTextStyle);
 
-  Expanded _itemText(String text) => Expanded(child: Text(text, style: itemTextStyle));
 
   Expanded _titleText(String text) => Expanded(child: Text(text, style: titleTextStyle));
 
@@ -284,6 +162,204 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+Expanded _buildTemporaryOrderItemText(String text, TextStyle itemTextStyle) =>
+    Expanded(child: Text(text, style: itemTextStyle));
+
+class _TemporaryOrderDetailItem extends StatelessWidget {
+  final TemporaryOrderDetailReceiptInfo data;
+  final TemporaryOrderLogic logic;
+  final TextStyle itemTextStyle;
+
+  const _TemporaryOrderDetailItem({
+    required this.data,
+    required this.logic,
+    required this.itemTextStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      flex: 4,
+                      hint: 'temporary_order_detail_material'.tr,
+                      text: '(${data.materialCode})${data.materialName}',
+                    ),
+                    expandedTextSpan(
+                      hint: 'temporary_order_detail_test_status'.tr,
+                      text: data.getTestStateText(),
+                      textColor: data.getTestStateColor(),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_type_body'.trArgs(
+                        ['${data.factoryModel}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_production_no'.trArgs(
+                        ['${data.productionNumber}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_size'.trArgs(
+                        ['${data.size}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_delivery_date'.trArgs(
+                        ['${data.deliveryDate}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_received_qty'.trArgs(
+                        ['${data.quantityTemporarilyReceived}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_basic_qty'.trArgs(
+                        [data.basicQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_inspection_qty'.trArgs(
+                        [data.inspectionQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_qualified_qty'.trArgs(
+                        [data.qualifiedQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_unqualified_qty'.trArgs(
+                        [data.unqualifiedQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_missing_qty'.trArgs(
+                        [data.missingQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_warehouse_in_qty'.trArgs(
+                        [data.enterWarehouseQuantity.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_common_unit'.trArgs(
+                        ['${data.commonUnits}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_coefficient'.trArgs(
+                        [data.coefficient.toShowString()],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_basic_unit'.trArgs(
+                        ['${data.basicUnits}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_specification'.trArgs(
+                        ['${data.specification}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_contract_no'.trArgs(
+                        ['${data.contractNo}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_purchase_order_line_no'.trArgs(
+                        ['${data.purchaseOrderLineNumber}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_delivery_order_line_no'.trArgs(
+                        ['${data.deliveryOrderLineNumber}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_purchase_type'.trArgs(
+                        ['${data.purchaseType}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                    _buildTemporaryOrderItemText(
+                      'temporary_order_detail_remark'.trArgs(
+                        ['${data.remarks}'],
+                      ),
+                      itemTextStyle,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Obx(() => (data.quantityTemporarilyReceived ?? 0) > 0
+              ? Checkbox(
+                  value: data.isSelected.value,
+                  onChanged: (v) => logic.selectAllMaterial(data, v!),
+                )
+              : Container())
+        ],
       ),
     );
   }

@@ -30,7 +30,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
   Row _item(GtItem data) {
     return Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           maxLines: 1,
           text:
               '${data.salesDocument} ${data.originalOrderNumber} ${data.customerPO}',
@@ -38,7 +38,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
               data.isThis ? Colors.yellowAccent.shade100 : Colors.blue.shade50,
           flex: 3,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: '  ${data.sendBox}/${data.boxNumber}',
           backgroundColor:
               data.isThis ? Colors.yellowAccent.shade100 : Colors.blue.shade50,
@@ -62,12 +62,12 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
           ),
           Row(
             children: [
-              expandedFrameText(
+              ExpandedFrameText(
                 text: 'packing_shipment_order_no'.tr,
                 backgroundColor: Colors.blue.shade50,
                 flex: 3,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: '  ${'packing_shipment_issued'.tr}',
                 backgroundColor: Colors.blue.shade50,
                 flex: 1,
@@ -139,5 +139,12 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
       },
     );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    Get.delete<PackingScanLogic>();
+    super.dispose();
   }
 }

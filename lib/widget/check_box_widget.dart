@@ -31,11 +31,8 @@ class _CheckBoxState extends State<CheckBox> {
   void initState() {
     super.initState();
     if (widget.needSave == true) {
-      var initialValue =
+      isChecked =
           spGet('${Get.currentRoute}/${widget.name}') ?? widget.value ?? false;
-      if (isChecked != initialValue) {
-        setState(() => isChecked = initialValue);
-      }
     } else {
       isChecked = widget.value;
     }

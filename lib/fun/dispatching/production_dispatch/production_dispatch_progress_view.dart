@@ -17,200 +17,8 @@ class _ProductionDispatchProgressPageState
   final logic = Get.find<ProductionDispatchLogic>();
   final state = Get.find<ProductionDispatchLogic>().state;
 
-  Widget _item(OrderProgressShowInfo data) {
-    if (data.itemType == 1) {
-      return Row(
-        children: [
-          expandedFrameText(
-            backgroundColor: Colors.white,
-            textColor: Colors.red,
-            maxLines: 2,
-            isBold: true,
-            flex: 34,
-            text: data.material,
-          ),
-          expandedFrameText(
-            backgroundColor: Colors.white,
-            textColor: Colors.red,
-            maxLines: 2,
-            isBold: true,
-            flex: 16,
-            text: data.factoryType,
-          ),
-          expandedFrameText(
-            backgroundColor: Colors.white,
-            textColor: Colors.red,
-            maxLines: 2,
-            isBold: true,
-            flex: data.sizeMax * 6 + 2,
-            text: data.factory,
-          ),
-        ],
-      );
-    } else if (data.itemType == 2) {
-      return Row(
-        children: [
-          expandedFrameText(
-            backgroundColor: Colors.blue.shade50,
-            flex: 14,
-            text: data.mtoNo,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.blue.shade50,
-            flex: 6,
-            text: data.unit,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.blue.shade50,
-            flex: 8,
-            text: data.qty,
-          ),
-          for (var size in data.sizeData)
-            expandedFrameText(
-              alignment: Alignment.center,
-              backgroundColor: Colors.blue.shade50,
-              flex: 6,
-              text: size,
-            ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.blue.shade50,
-            flex: 8,
-            text: data.inStockQty,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.blue.shade50,
-            flex: 8,
-            text: data.reportedQty,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.blue.shade50,
-            flex: 8,
-            text: data.priority,
-          ),
-        ],
-      );
-    } else if (data.itemType == 3) {
-      return Row(
-        children: [
-          expandedFrameText(
-            backgroundColor: Colors.white,
-            flex: 14,
-            text: data.mtoNo,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.white,
-            flex: 6,
-            text: data.unit,
-          ),
-          expandedFrameText(
-            alignment: Alignment.centerRight,
-            backgroundColor: Colors.white,
-            flex: 8,
-            text: data.qty,
-          ),
-          for (var size in data.sizeData)
-            expandedFrameText(
-              alignment: Alignment.centerRight,
-              backgroundColor: Colors.white,
-              flex: 6,
-              text: size,
-            ),
-          expandedFrameText(
-            alignment: Alignment.centerRight,
-            backgroundColor: Colors.white,
-            flex: 8,
-            text: data.inStockQty,
-          ),
-          expandedFrameText(
-            alignment: Alignment.centerRight,
-            backgroundColor: Colors.white,
-            flex: 8,
-            text: data.reportedQty,
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.white,
-            flex: 8,
-            text: data.priority,
-          ),
-        ],
-      );
-    } else if (data.itemType == 4) {
-      return Row(
-        children: [
-          expandedFrameText(
-            backgroundColor: Colors.green.shade50,
-            flex: 14,
-            text: '',
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.green.shade50,
-            flex: 6,
-            text: '合计',
-          ),
-          expandedFrameText(
-            alignment: Alignment.centerRight,
-            backgroundColor: Colors.green.shade50,
-            flex: 8,
-            text: data.qty,
-          ),
-          for (var size in data.sizeData)
-            expandedFrameText(
-              alignment: Alignment.centerRight,
-              backgroundColor: Colors.green.shade50,
-              flex: 6,
-              text: size,
-            ),
-          expandedFrameText(
-            backgroundColor: Colors.green.shade50,
-            flex: 24,
-            text: '',
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          expandedFrameText(
-            backgroundColor: Colors.orange.shade50,
-            flex: 14,
-            text: '',
-          ),
-          expandedFrameText(
-            alignment: Alignment.center,
-            backgroundColor: Colors.orange.shade50,
-            flex: 6,
-            text: '预补1%',
-          ),
-          expandedFrameText(
-            alignment: Alignment.centerRight,
-            backgroundColor: Colors.orange.shade50,
-            flex: 8,
-            text: data.qty,
-          ),
-          for (var size in data.sizeData)
-            expandedFrameText(
-              alignment: Alignment.centerRight,
-              backgroundColor: Colors.orange.shade50,
-              flex: 6,
-              text: size,
-            ),
-          expandedFrameText(
-            backgroundColor: Colors.orange.shade50,
-            flex: 24,
-            text: '',
-          ),
-        ],
-      );
-    }
-  }
+  Widget _item(OrderProgressShowInfo data) =>
+      _ProductionDispatchProgressItem(data: data);
 
   @override
   Widget build(BuildContext context) {
@@ -237,5 +45,207 @@ class _ProductionDispatchProgressPageState
         ),
       ),
     );
+  }
+}
+
+class _ProductionDispatchProgressItem extends StatelessWidget {
+  final OrderProgressShowInfo data;
+
+  const _ProductionDispatchProgressItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    if (data.itemType == 1) {
+      return Row(
+        children: [
+          ExpandedFrameText(
+            backgroundColor: Colors.white,
+            textColor: Colors.red,
+            maxLines: 2,
+            isBold: true,
+            flex: 34,
+            text: data.material,
+          ),
+          ExpandedFrameText(
+            backgroundColor: Colors.white,
+            textColor: Colors.red,
+            maxLines: 2,
+            isBold: true,
+            flex: 16,
+            text: data.factoryType,
+          ),
+          ExpandedFrameText(
+            backgroundColor: Colors.white,
+            textColor: Colors.red,
+            maxLines: 2,
+            isBold: true,
+            flex: data.sizeMax * 6 + 2,
+            text: data.factory,
+          ),
+        ],
+      );
+    } else if (data.itemType == 2) {
+      return Row(
+        children: [
+          ExpandedFrameText(
+            backgroundColor: Colors.blue.shade50,
+            flex: 14,
+            text: data.mtoNo,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.blue.shade50,
+            flex: 6,
+            text: data.unit,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.blue.shade50,
+            flex: 8,
+            text: data.qty,
+          ),
+          for (var size in data.sizeData)
+            ExpandedFrameText(
+              alignment: Alignment.center,
+              backgroundColor: Colors.blue.shade50,
+              flex: 6,
+              text: size,
+            ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.blue.shade50,
+            flex: 8,
+            text: data.inStockQty,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.blue.shade50,
+            flex: 8,
+            text: data.reportedQty,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.blue.shade50,
+            flex: 8,
+            text: data.priority,
+          ),
+        ],
+      );
+    } else if (data.itemType == 3) {
+      return Row(
+        children: [
+          ExpandedFrameText(
+            backgroundColor: Colors.white,
+            flex: 14,
+            text: data.mtoNo,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.white,
+            flex: 6,
+            text: data.unit,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.centerRight,
+            backgroundColor: Colors.white,
+            flex: 8,
+            text: data.qty,
+          ),
+          for (var size in data.sizeData)
+            ExpandedFrameText(
+              alignment: Alignment.centerRight,
+              backgroundColor: Colors.white,
+              flex: 6,
+              text: size,
+            ),
+          ExpandedFrameText(
+            alignment: Alignment.centerRight,
+            backgroundColor: Colors.white,
+            flex: 8,
+            text: data.inStockQty,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.centerRight,
+            backgroundColor: Colors.white,
+            flex: 8,
+            text: data.reportedQty,
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.white,
+            flex: 8,
+            text: data.priority,
+          ),
+        ],
+      );
+    } else if (data.itemType == 4) {
+      return Row(
+        children: [
+          ExpandedFrameText(
+            backgroundColor: Colors.green.shade50,
+            flex: 14,
+            text: '',
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.green.shade50,
+            flex: 6,
+            text: '合计',
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.centerRight,
+            backgroundColor: Colors.green.shade50,
+            flex: 8,
+            text: data.qty,
+          ),
+          for (var size in data.sizeData)
+            ExpandedFrameText(
+              alignment: Alignment.centerRight,
+              backgroundColor: Colors.green.shade50,
+              flex: 6,
+              text: size,
+            ),
+          ExpandedFrameText(
+            backgroundColor: Colors.green.shade50,
+            flex: 24,
+            text: '',
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          ExpandedFrameText(
+            backgroundColor: Colors.orange.shade50,
+            flex: 14,
+            text: '',
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.center,
+            backgroundColor: Colors.orange.shade50,
+            flex: 6,
+            text: '预补1%',
+          ),
+          ExpandedFrameText(
+            alignment: Alignment.centerRight,
+            backgroundColor: Colors.orange.shade50,
+            flex: 8,
+            text: data.qty,
+          ),
+          for (var size in data.sizeData)
+            ExpandedFrameText(
+              alignment: Alignment.centerRight,
+              backgroundColor: Colors.orange.shade50,
+              flex: 6,
+              text: size,
+            ),
+          ExpandedFrameText(
+            backgroundColor: Colors.orange.shade50,
+            flex: 24,
+            text: '',
+          ),
+        ],
+      );
+    }
   }
 }

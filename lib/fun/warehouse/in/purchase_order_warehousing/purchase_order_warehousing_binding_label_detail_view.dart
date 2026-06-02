@@ -53,7 +53,7 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
             margin: const EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: [
-                expandedFrameText(
+                ExpandedFrameText(
                   text: '物料',
                   isBold: true,
                   textColor: Colors.white,
@@ -62,7 +62,7 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
                 ),
                 SizedBox(
                   width: 100,
-                  child: frameText(
+                  child: FrameText(
                     text: '数量',
                     isBold: true,
                     textColor: Colors.white,
@@ -86,17 +86,27 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
     );
   }
 
-  Widget _item(List<String> item, Color bkg) {
+  Widget _item(List<String> item, Color bkg) =>
+      _PurchaseOrderBindingLabelDetailItem(item: item);
+}
+
+class _PurchaseOrderBindingLabelDetailItem extends StatelessWidget {
+  final List<String> item;
+
+  const _PurchaseOrderBindingLabelDetailItem({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: item[0],
           borderColor: Colors.black,
           backgroundColor: Colors.white,
         ),
         SizedBox(
           width: 100,
-          child: frameText(
+          child: FrameText(
             text: item[1],
             borderColor: Colors.black,
             backgroundColor: Colors.white,

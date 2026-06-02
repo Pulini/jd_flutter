@@ -70,16 +70,8 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
     required String title,
     Color? backgroundColor,
     Color? textColor,
-  }) {
-    return expandedFrameText(
-      text: title,
-      textColor: Colors.white,
-      borderColor: Colors.black,
-      backgroundColor: Colors.blue,
-      alignment: Alignment.center,
-      flex: 1,
-    );
-  }
+  }) =>
+      _ProcessReportTitleText(title: title);
 
   @override
   Widget build(BuildContext context) {
@@ -156,5 +148,29 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       scan: (code) {logic.modifyAdd(code);},
     );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tecModifyCode.dispose();
+    super.dispose();
+  }
+}
+
+class _ProcessReportTitleText extends StatelessWidget {
+  final String title;
+
+  const _ProcessReportTitleText({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpandedFrameText(
+      text: title,
+      textColor: Colors.white,
+      borderColor: Colors.black,
+      backgroundColor: Colors.blue,
+      alignment: Alignment.center,
+      flex: 1,
+    );
   }
 }

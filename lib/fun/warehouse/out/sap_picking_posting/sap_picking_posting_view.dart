@@ -25,74 +25,8 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   var tecSemiFinishedProduct = TextEditingController();
   var tecFinishedProduct = TextEditingController();
 
-  Widget _itemSemiFinishedProduct(SapPickingPostingGroup data) => Container(
-        padding: EdgeInsets.only(left: 5),
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 35,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AutoSizeText(
-                      data.material(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      maxLines: 2,
-                      minFontSize: 8,
-                      maxFontSize: 16,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => askDialog(
-                      content: '确定要删除该物料吗？',
-                      confirm: () => logic.deleteSemiFinishedProductItem(data),
-                    ),
-                    icon: Icon(Icons.delete_forever, color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 35,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: textSpan(
-                      hint: '累积数：',
-                      hintColor: Colors.grey.shade700,
-                      text: data.cumulativeQty().toShowString(),
-                      isBold: false,
-                    ),
-                  ),
-                  Expanded(
-                    child: data.dataList.first.label.isNullOrEmpty()
-                        ? Text(
-                            '手动添加物料',
-                            style: TextStyle(color: Colors.green.shade700),
-                          )
-                        : textSpan(
-                            hint: '扫码次数：',
-                            hintColor: Colors.grey.shade700,
-                            text: data.scanCount().toString(),
-                            isBold: false,
-                          ),
-                  ),
-                  IconButton(
-                    onPressed: () => semiFinishedProductDetailsDialog(data),
-                    icon: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              indent: 5,
-              endIndent: 10,
-              height: 2,
-            ),
-          ],
-        ),
-      );
+  Widget _itemSemiFinishedProduct(SapPickingPostingGroup data) =>
+      _SapPickingPostingSemiFinishedItem(data: data, logic: logic);
 
   Widget productPageTitle({
     required String title,
@@ -416,5 +350,87 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   void dispose() {
     Get.delete<SapPickingPostingLogic>();
     super.dispose();
+  }
+}
+
+class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
+  final SapPickingPostingGroup data;
+  final SapPickingPostingLogic logic;
+
+  const _SapPickingPostingSemiFinishedItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5),
+      color: Colors.white,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 35,
+            child: Row(
+              children: [
+                Expanded(
+                  child: AutoSizeText(
+                    data.material(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    minFontSize: 8,
+                    maxFontSize: 16,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                    content: '确定要删除该物料吗？',
+                    confirm: () => logic.deleteSemiFinishedProductItem(data),
+                  ),
+                  icon: const Icon(Icons.delete_forever, color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 35,
+            child: Row(
+              children: [
+                Expanded(
+                  child: textSpan(
+                    hint: '累积数：',
+                    hintColor: Colors.grey.shade700,
+                    text: data.cumulativeQty().toShowString(),
+                    isBold: false,
+                  ),
+                ),
+                Expanded(
+                  child: data.dataList.first.label.isNullOrEmpty()
+                      ? Text(
+                          '手动添加物料',
+                          style: TextStyle(color: Colors.green.shade700),
+                        )
+                      : textSpan(
+                          hint: '扫码次数：',
+                          hintColor: Colors.grey.shade700,
+                          text: data.scanCount().toString(),
+                          isBold: false,
+                        ),
+                ),
+                IconButton(
+                  onPressed: () => semiFinishedProductDetailsDialog(data),
+                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+          const Divider(
+            indent: 5,
+            endIndent: 10,
+            height: 2,
+          ),
+        ],
+      ),
+    );
   }
 }

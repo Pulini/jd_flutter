@@ -25,142 +25,6 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
   var dpcDate = DatePickerController(PickerType.date,
       buttonName: 'product_patrol_inspection_inspection_date'.tr);
 
-  Widget _qualifiedItem() => GestureDetector(
-        onTap: () => logic.addPatrolInspectionAbnormalRecord(),
-        child: Container(
-          margin: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.green, width: 2),
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.green.shade300,
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            'product_patrol_inspection_qualified'.tr,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 100,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-
-  Widget _item(PatrolInspectionAbnormalItemInfo data) {
-    return Container(
-      margin: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueAccent, width: 2),
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                const SizedBox(width: 5),
-                GestureDetector(
-                  onTap: () => modifyTagKeyDialog(data: data),
-                  child: Obx(() => Text(
-                        data.tag.value,
-                        style: const TextStyle(
-                          fontSize: 70,
-                          height: 0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      expandedTextSpan(
-                        maxLines: 4,
-                        hint: 'product_patrol_inspection_defective_projects'.tr,
-                        text: data.abnormalDescription ?? '',
-                        textColor: Colors.black54,
-                      ),
-                      textSpan(
-                        hint:
-                            'product_patrol_inspection_monthly_defect_rate'.tr,
-                        text: data.getDefectRate(),
-                        textColor: Colors.red,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => logic.addPatrolInspectionAbnormalRecord(
-                      abnormalItem: data,
-                    ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8),
-                        ),
-                        color: Colors.orange,
-                      ),
-                      child: Obx(() {
-                        var slight = state.abnormalRecordList
-                            .where(
-                                (v) => v.abnormalItemId == data.abnormalItemId)
-                            .length;
-                        return Text(
-                          'product_patrol_inspection_record'.trArgs(
-                            [slight > 0 ? ' ($slight)' : ''],
-                          ),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 20),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _typeBodyItem(int index) => Obx(() => GestureDetector(
-        onTap: () => state.typeBodyIndex.value = index,
-        child: Container(
-          width: 200,
-          alignment: Alignment.center,
-          margin: const EdgeInsets.only(right: 5),
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: state.typeBodyIndex.value == index
-                ? Colors.green
-                : Colors.blue.shade400,
-          ),
-          child: Text(
-            state.typeBodyList[index].typeBody ?? '',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ));
-
   List<Widget> _getQueryWidgets() {
     var widgets = <Widget>[];
 
@@ -282,10 +146,16 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
                     childAspectRatio: 3 / 2.2,
                   ),
                   itemBuilder: (c, i) => i == 0
-                      ? _qualifiedItem()
+                      ? _PatrolQualifiedItem(logic: logic)
                       : state.abnormalItemList.isEmpty
                           ? Container()
-                          : _item(state.abnormalItemList[i - 1]),
+                          : _PatrolAbnormalGridItem(
+                              data: state.abnormalItemList[i - 1],
+                              state: state,
+                              logic: logic,
+                              onModifyTag: (data) =>
+                                  modifyTagKeyDialog(data: data),
+                            ),
                 )),
           ),
           Container(
@@ -300,7 +170,8 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
             child: Obx(() => ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: state.typeBodyList.length,
-                  itemBuilder: (c, i) => _typeBodyItem(i),
+                  itemBuilder: (c, i) =>
+                      _PatrolTypeBodyItem(index: i, state: state),
                 )),
           )
         ],
@@ -312,5 +183,172 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
   void dispose() {
     Get.delete<PatrolInspectionLogic>();
     super.dispose();
+  }
+}
+
+class _PatrolQualifiedItem extends StatelessWidget {
+  final PatrolInspectionLogic logic;
+  const _PatrolQualifiedItem({required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => logic.addPatrolInspectionAbnormalRecord(),
+      child: Container(
+        margin: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.green, width: 2),
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.green.shade300,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'product_patrol_inspection_qualified'.tr,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 100,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PatrolAbnormalGridItem extends StatelessWidget {
+  final PatrolInspectionAbnormalItemInfo data;
+  final PatrolInspectionState state;
+  final PatrolInspectionLogic logic;
+  final void Function(PatrolInspectionAbnormalItemInfo data) onModifyTag;
+  const _PatrolAbnormalGridItem({
+    required this.data,
+    required this.state,
+    required this.logic,
+    required this.onModifyTag,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.blueAccent, width: 2),
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                const SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () => onModifyTag(data),
+                  child: Obx(() => Text(
+                        data.tag.value,
+                        style: const TextStyle(
+                          fontSize: 70,
+                          height: 0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      expandedTextSpan(
+                        maxLines: 4,
+                        hint: 'product_patrol_inspection_defective_projects'.tr,
+                        text: data.abnormalDescription ?? '',
+                        textColor: Colors.black54,
+                      ),
+                      textSpan(
+                        hint:
+                            'product_patrol_inspection_monthly_defect_rate'.tr,
+                        text: data.getDefectRate(),
+                        textColor: Colors.red,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => logic.addPatrolInspectionAbnormalRecord(
+                      abnormalItem: data,
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                        color: Colors.orange,
+                      ),
+                      child: Obx(() {
+                        var slight = state.abnormalRecordList
+                            .where(
+                                (v) => v.abnormalItemId == data.abnormalItemId)
+                            .length;
+                        return Text(
+                          'product_patrol_inspection_record'.trArgs(
+                            [slight > 0 ? ' ($slight)' : ''],
+                          ),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20),
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PatrolTypeBodyItem extends StatelessWidget {
+  final int index;
+  final PatrolInspectionState state;
+  const _PatrolTypeBodyItem({required this.index, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => GestureDetector(
+          onTap: () => state.typeBodyIndex.value = index,
+          child: Container(
+            width: 200,
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(right: 5),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: state.typeBodyIndex.value == index
+                  ? Colors.green
+                  : Colors.blue.shade400,
+            ),
+            child: Text(
+              state.typeBodyList[index].typeBody ?? '',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ));
   }
 }

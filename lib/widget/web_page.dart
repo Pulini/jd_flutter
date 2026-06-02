@@ -333,7 +333,7 @@ class _WebPrinterState extends State<WebPrinter> {
   }
 }
 
-class PdfPrintReview extends StatefulWidget {
+class PdfPrintReview extends StatelessWidget {
   const PdfPrintReview({
     super.key,
     required this.paperList,
@@ -342,11 +342,6 @@ class PdfPrintReview extends StatefulWidget {
   final List<Widget> paperList;
 
   @override
-  State<PdfPrintReview> createState() => _PdfPrintReviewState();
-}
-
-class _PdfPrintReviewState extends State<PdfPrintReview> {
-  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor(),
@@ -354,14 +349,14 @@ class _PdfPrintReviewState extends State<PdfPrintReview> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text('A4打印预览'),
+          title: const Text('A4打印预览'),
         ),
         body: ListView.builder(
-          padding: EdgeInsets.all(10),
-          itemCount: widget.paperList.length,
+          padding: const EdgeInsets.all(10),
+          itemCount: paperList.length,
           itemBuilder: (c, i) => Padding(
-            padding: EdgeInsets.only(bottom: 20),
-            child: widget.paperList[i],
+            padding: const EdgeInsets.only(bottom: 20),
+            child: paperList[i],
           ),
         ),
       ),

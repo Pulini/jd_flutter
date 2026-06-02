@@ -198,12 +198,12 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  selectView(
+                  SelectView(
                     list: printerList,
                     hint: '部门：',
                     select: (i) => departmentIndex.value = i,
                   ),
-                  Obx(() => selectView(
+                  Obx(() => SelectView(
                         list: printerList[departmentIndex.value].devices!,
                         hint: '打印机：',
                         select: (i) => deviceIndex.value = i,
@@ -212,7 +212,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
                           .devices![deviceIndex.value]
                           .paperTypes!
                           .isNotEmpty
-                      ? selectView(
+                      ? SelectView(
                           list: printerList[departmentIndex.value]
                               .devices![deviceIndex.value]
                               .paperTypes!,

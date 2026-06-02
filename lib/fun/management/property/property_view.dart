@@ -250,6 +250,13 @@ class _PropertyPageState extends State<PropertyPage>
 
   @override
   void dispose() {
+    tabController.dispose();
+    tecPropertyNumber.dispose();
+    tecPropertyName.dispose();
+    tecSerialNumber.dispose();
+    tecInvoiceNumber.dispose();
+    tecName.dispose();
+    tecWorkerNumber.dispose();
     Get.delete<PropertyLogic>();
     super.dispose();
   }

@@ -11,6 +11,7 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
 
+import '../../../../bean/http/response/sap_scan_code_inventory_info.dart';
 import 'sap_factory_inventory_logic.dart';
 import 'sap_factory_inventory_state.dart';
 
@@ -32,90 +33,6 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
         '${RouteConfig.sapScanCodeInventory.name}${PickerType.sapFactoryWarehouse}',
   );
   var tecArea = TextEditingController();
-
-  Column _item(int index) {
-    var data = state.palletList[index];
-    var width = getScreenSize().width - 20;
-    bool isScannedAll = data.every((v) => v.isSelected.value);
-    int scanned = data.where((v) => v.isSelected.value).length;
-    return Column(
-      children: [
-        InkWell(
-          onTap: () => Get.to(
-            () => const SapScanCodeInventoryDetailPage(),
-            arguments: {'index': index},
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              ),
-            ),
-            child: Row(
-              children: [
-                expandedTextSpan(
-                  flex: 2,
-                  hint: 'sap_inventory_pallet'.tr,
-                  isBold: isScannedAll,
-                  text: data[0].palletNumber ?? '',
-                  textColor: Colors.green.shade700,
-                ),
-                expandedTextSpan(
-                  hint: 'sap_inventory_label_qty'.tr,
-                  isBold: isScannedAll,
-                  text: data.length.toString(),
-                  textColor: isScannedAll ? Colors.blue : Colors.black87,
-                ),
-                expandedTextSpan(
-                  hint: 'sap_inventory_inventory_qty'.tr,
-                  isBold: isScannedAll,
-                  text: scanned.toString(),
-                  textColor: isScannedAll ? Colors.blue : Colors.red,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            AnimatedContainer(
-              margin: const EdgeInsets.only(bottom: 10),
-              height: 5,
-              width: width * (scanned / data.length),
-              curve: Curves.easeInOut,
-              duration: const Duration(milliseconds: 200),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: const Radius.circular(5),
-                  bottomRight:
-                      isScannedAll ? const Radius.circular(5) : Radius.zero,
-                ),
-                color: Colors.blue,
-              ),
-            ),
-            AnimatedContainer(
-              margin: const EdgeInsets.only(bottom: 10),
-              height: 5,
-              width: width * ((data.length - scanned) / data.length),
-              curve: Curves.easeInOut,
-              duration: const Duration(milliseconds: 200),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft:
-                      scanned == 0 ? const Radius.circular(5) : Radius.zero,
-                  bottomRight: const Radius.circular(5),
-                ),
-                color: Colors.grey.shade400,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
   void _queryOrder() {
     logic.queryInventoryOrder(
@@ -175,7 +92,12 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
             child: Obx(() => ListView.builder(
                   itemCount: state.palletList.length,
                   padding: const EdgeInsets.all(10),
-                  itemBuilder: (c, i) => _item(i),
+                  itemBuilder: (c, i) =>
+                      _ScanCodePalletItem(
+                        data: state.palletList[i],
+                        index: i,
+                        screenWidth: getScreenSize().width - 20,
+                      ),
                 )),
           ),
           Obx(() => state.palletList
@@ -199,7 +121,6 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
                 ))
         ],
       ),
-      // body: AnimatedFlexExample()
     );
   }
 
@@ -207,5 +128,100 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
   void dispose() {
     Get.delete<SapScanCodeInventoryLogic>();
     super.dispose();
+  }
+}
+
+class _ScanCodePalletItem extends StatelessWidget {
+  final List<InventoryPalletInfo> data;
+  final int index;
+  final double screenWidth;
+
+  const _ScanCodePalletItem({
+    required this.data,
+    required this.index,
+    required this.screenWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    bool isScannedAll = data.every((v) => v.isSelected.value);
+    int scanned = data.where((v) => v.isSelected.value).length;
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => Get.to(
+            () => const SapScanCodeInventoryDetailPage(),
+            arguments: {'index': index},
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+            ),
+            child: Row(
+              children: [
+                expandedTextSpan(
+                  flex: 2,
+                  hint: 'sap_inventory_pallet'.tr,
+                  isBold: isScannedAll,
+                  text: data[0].palletNumber ?? '',
+                  textColor: Colors.green.shade700,
+                ),
+                expandedTextSpan(
+                  hint: 'sap_inventory_label_qty'.tr,
+                  isBold: isScannedAll,
+                  text: data.length.toString(),
+                  textColor: isScannedAll ? Colors.blue : Colors.black87,
+                ),
+                expandedTextSpan(
+                  hint: 'sap_inventory_inventory_qty'.tr,
+                  isBold: isScannedAll,
+                  text: scanned.toString(),
+                  textColor: isScannedAll ? Colors.blue : Colors.red,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            AnimatedContainer(
+              margin: const EdgeInsets.only(bottom: 10),
+              height: 5,
+              width: screenWidth * (scanned / data.length),
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: const Radius.circular(5),
+                  bottomRight:
+                      isScannedAll ? const Radius.circular(5) : Radius.zero,
+                ),
+                color: Colors.blue,
+              ),
+            ),
+            AnimatedContainer(
+              margin: const EdgeInsets.only(bottom: 10),
+              height: 5,
+              width: screenWidth * ((data.length - scanned) / data.length),
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft:
+                      scanned == 0 ? const Radius.circular(5) : Radius.zero,
+                  bottomRight: const Radius.circular(5),
+                ),
+                color: Colors.grey.shade400,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

@@ -24,7 +24,98 @@ class _QualityInspectionDetailPageState
   final QualityInspectionLogic logic = Get.find<QualityInspectionLogic>();
   final QualityInspectionState state = Get.find<QualityInspectionLogic>().state;
 
-  Widget _item(QualityInspectionAbnormalItemInfo data) {
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'product_quality_inspection_detail_quality_inspection'.tr,
+      actions: [
+        Obx(() => CombinationButton(
+              combination: Combination.left,
+              isEnabled: logic.allRecordsRechecked(),
+              text: 'product_quality_inspection_detail_inspection_completed'.tr,
+              click: () => askDialog(
+                  content:
+                      'product_quality_inspection_detail_inspection_completed_tips'
+                          .tr,
+                  confirm: () => logic.inspectionCompleted()),
+            )),
+        Obx(() => CombinationButton(
+              combination: Combination.right,
+              isEnabled: logic.hasInspectionAbnormalRecords(),
+              text: 'product_quality_inspection_detail_inspection_records'.tr,
+              click: () =>
+                  Get.to(() => const QualityInspectionDetailAbnormalListPage()),
+            )),
+      ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                textSpan(
+                  hint: 'product_quality_inspection_inspection_unit'.tr,
+                  text: state.qiDetailInspectionUnit.value,
+                ),
+                textSpan(
+                  hint: 'product_quality_inspection_instruction_no_tips'.tr,
+                  text: state.qiDetailInstructionNo.value,
+                ),
+                textSpan(
+                  hint: 'product_quality_inspection_type_body_tips'.tr,
+                  text: state.qiDetailTypeBody.value,
+                ),
+                textSpan(
+                  hint: 'product_quality_inspection_customer_po_tips'.tr,
+                  text: state.qiDetailCustomerPo.value,
+                ),
+                textSpan(
+                  hint: 'product_quality_inspection_detail_total'.tr,
+                  text: state.qiDetailTotalQuantity.value.toShowString(),
+                ),
+                textSpan(
+                  hint: 'product_quality_inspection_detail_inspector'.tr,
+                  text: userInfo?.name ?? '',
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Obx(() => GridView.builder(
+                  itemCount: state.qiDetailAbnormalItems.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    childAspectRatio: 3 / 2.2,
+                  ),
+                  itemBuilder: (c, i) => _QiDetailAbnormalGridItem(
+                    data: state.qiDetailAbnormalItems[i],
+                    state: state,
+                    logic: logic,
+                    onModifyTag: (data) => modifyTagKeyDialog(data: data),
+                  ),
+                )),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _QiDetailAbnormalGridItem extends StatelessWidget {
+  final QualityInspectionAbnormalItemInfo data;
+  final QualityInspectionState state;
+  final QualityInspectionLogic logic;
+  final void Function(QualityInspectionAbnormalItemInfo data) onModifyTag;
+  const _QiDetailAbnormalGridItem({
+    required this.data,
+    required this.state,
+    required this.logic,
+    required this.onModifyTag,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.all(3),
         decoration: BoxDecoration(
@@ -38,7 +129,7 @@ class _QualityInspectionDetailPageState
               children: [
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: () => modifyTagKeyDialog(data: data),
+                  onTap: () => onModifyTag(data),
                   child: Obx(() => Text(
                         data.tag.value,
                         style: const TextStyle(
@@ -109,77 +200,5 @@ class _QualityInspectionDetailPageState
             ),
           ),
         ]));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'product_quality_inspection_detail_quality_inspection'.tr,
-      actions: [
-        Obx(() => CombinationButton(
-              combination: Combination.left,
-              isEnabled: logic.allRecordsRechecked(),
-              text: 'product_quality_inspection_detail_inspection_completed'.tr,
-              click: () => askDialog(
-                  content:
-                      'product_quality_inspection_detail_inspection_completed_tips'
-                          .tr,
-                  confirm: () => logic.inspectionCompleted()),
-            )),
-        Obx(() => CombinationButton(
-              combination: Combination.right,
-              isEnabled: logic.hasInspectionAbnormalRecords(),
-              text: 'product_quality_inspection_detail_inspection_records'.tr,
-              click: () =>
-                  Get.to(() => const QualityInspectionDetailAbnormalListPage()),
-            )),
-      ],
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                textSpan(
-                  hint: 'product_quality_inspection_inspection_unit'.tr,
-                  text: state.qiDetailInspectionUnit.value,
-                ),
-                textSpan(
-                  hint: 'product_quality_inspection_instruction_no_tips'.tr,
-                  text: state.qiDetailInstructionNo.value,
-                ),
-                textSpan(
-                  hint: 'product_quality_inspection_type_body_tips'.tr,
-                  text: state.qiDetailTypeBody.value,
-                ),
-                textSpan(
-                  hint: 'product_quality_inspection_customer_po_tips'.tr,
-                  text: state.qiDetailCustomerPo.value,
-                ),
-                textSpan(
-                  hint: 'product_quality_inspection_detail_total'.tr,
-                  text: state.qiDetailTotalQuantity.value.toShowString(),
-                ),
-                textSpan(
-                  hint: 'product_quality_inspection_detail_inspector'.tr,
-                  text: userInfo?.name ?? '',
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Obx(() => GridView.builder(
-                  itemCount: state.qiDetailAbnormalItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    childAspectRatio: 3 / 2.2,
-                  ),
-                  itemBuilder: (c, i) => _item(state.qiDetailAbnormalItems[i]),
-                )),
-          ),
-        ],
-      ),
-    );
   }
 }

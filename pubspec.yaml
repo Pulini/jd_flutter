@@ -129,6 +129,8 @@ dependencies:
   wifi_iot: ^0.3.19+2
   #检查wifi连接状态
   connectivity_plus: ^7.0.0
+  #网络图片缓存
+  cached_network_image: ^3.4.1
 
 
 

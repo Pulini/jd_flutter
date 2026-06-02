@@ -134,6 +134,7 @@ class _SapInjectionMoldingStockInPageState
 
   @override
   void dispose() {
+    controller.dispose();
     Get.delete<SapInjectionMoldingStockInLogic>();
     super.dispose();
   }

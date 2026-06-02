@@ -65,9 +65,79 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return pageBodyWithDrawer(
+      popTitle: 'picking_material_order_exit_tips'.tr,
+      queryWidgets: [
+        EditText(
+          hint: 'picking_material_order_sales_order'.tr,
+          controller: tecInstruction,
+        ),
+        EditText(
+          hint: 'picking_material_order_picking_no'.tr,
+          controller: tecPickingMaterialOrder,
+        ),
+        DatePicker(pickerController: dpcStartDate),
+        DatePicker(pickerController: dpcEndDate),
+        OptionsPicker(pickerController: opcSupplier),
+        LinkOptionsPicker(pickerController: lopcFactoryWarehouse),
+        Row(
+          children: [
+            Obx(() => CheckBox(
+                  onChanged: (v) => state.isPosted.value = 0,
+                  name: 'picking_material_order_all'.tr,
+                  value: state.isPosted.value == 0,
+                )),
+            Obx(() => CheckBox(
+                  onChanged: (v) => state.isPosted.value = 1,
+                  name: 'picking_material_order_not_deliver'.tr,
+                  value: state.isPosted.value == 1,
+                )),
+            Obx(() => CheckBox(
+                  onChanged: (v) => state.isPosted.value = 2,
+                  name: 'picking_material_order_delivered'.tr,
+                  value: state.isPosted.value == 2,
+                )),
+          ],
+        )
+      ],
+      query: _query,
+      body: Obx(() => ListView.builder(
+            padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
+            itemCount: state.orderList.length,
+            itemBuilder: (c, i) => _PickingOrderItem(
+              index: i,
+              data: state.orderList[i],
+              logic: logic,
+              onQuery: _query,
+            ),
+          )),
+    );
+  }
 
-  Widget _item(int index) {
-    var data = state.orderList[index];
+  @override
+  void dispose() {
+    Get.delete<PickingMaterialOrderLogic>();
+    super.dispose();
+  }
+}
+
+class _PickingOrderItem extends StatelessWidget {
+  final int index;
+  final PickingMaterialOrderInfo data;
+  final PickingMaterialOrderLogic logic;
+  final VoidCallback onQuery;
+
+  const _PickingOrderItem({
+    required this.index,
+    required this.data,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     var printButton = CombinationButton(
       text: 'picking_material_order_print_material'.tr,
       combination: Combination.left,
@@ -81,7 +151,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
       click: () => logic.uploadOutTicket(
         isCreate: true,
         data: data,
-        refresh: () => _query(),
+        refresh: () => onQuery(),
       ),
     );
     var reverseOutTicketButton = CombinationButton(
@@ -90,7 +160,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
       click: () => logic.uploadOutTicket(
         isCreate: false,
         data: data,
-        refresh: () => _query(),
+        refresh: () => onQuery(),
       ),
     );
     return Container(
@@ -161,7 +231,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: [
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 12,
                   text: 'picking_material_order_material'.tr,
                   alignment: Alignment.center,
@@ -169,7 +239,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   textColor: Colors.white,
                   borderColor: Colors.black54,
                 ),
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 5,
                   text: 'picking_material_order_instruction'.tr,
                   alignment: Alignment.center,
@@ -177,7 +247,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   textColor: Colors.white,
                   borderColor: Colors.black54,
                 ),
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 5,
                   text: 'picking_material_order_demand_qty'.tr,
                   alignment: Alignment.center,
@@ -185,7 +255,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   textColor: Colors.white,
                   borderColor: Colors.black54,
                 ),
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 2,
                   text: 'picking_material_order_picking_status'.tr,
                   padding: const EdgeInsets.all(0),
@@ -194,7 +264,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   textColor: Colors.white,
                   borderColor: Colors.black54,
                 ),
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 2,
                   text: 'picking_material_order_color_info'.tr,
                   padding: const EdgeInsets.all(0),
@@ -203,7 +273,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   textColor: Colors.white,
                   borderColor: Colors.black54,
                 ),
-                expandedFrameText(
+                ExpandedFrameText(
                   flex: 3,
                   text: 'picking_material_order_out_ticket'.tr,
                   alignment: Alignment.center,
@@ -214,7 +284,8 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
               ],
             ),
           ),
-          for (var sub in data.materialList ?? []) _subItem(sub),
+          for (var sub in data.materialList ?? [])
+            _PickingSubItem(data: sub),
           data.pickedStatus() == 1
               ? Row(children: [
                   printButton,
@@ -234,7 +305,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                         () => const PickingMaterialOrderProgressPage(),
                         arguments: {'index': index},
                       )?.then((v) {
-                        if (v != null && v == true) _query();
+                        if (v != null && v == true) onQuery();
                       }),
                     ),
                     CombinationButton(
@@ -244,7 +315,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                         () => const PickingMaterialOrderPostingPage(),
                         arguments: {'index': index},
                       )?.then((v) {
-                        if (v != null && v == true) _query();
+                        if (v != null && v == true) onQuery();
                       }),
                     ),
                     if (outTicketStatus != 1) createOutTicketButton,
@@ -255,23 +326,29 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
       ),
     );
   }
+}
 
-  Container _subItem(PickingMaterialOrderMaterialInfo data) {
+class _PickingSubItem extends StatelessWidget {
+  final PickingMaterialOrderMaterialInfo data;
+  const _PickingSubItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
       child: Row(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 12,
             text: data.getMaterial(),
             borderColor: Colors.black54,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 5,
             text: data.instructionNo ?? '',
             borderColor: Colors.black54,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 5,
             text: data.isOnlyOneUnit()
                 ? data.getBasicDemandQtyText()
@@ -279,7 +356,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
             alignment: Alignment.centerRight,
             borderColor: Colors.black54,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: data.pickedStatusText(),
             alignment: Alignment.center,
@@ -290,7 +367,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                     : Colors.orange.shade700,
             borderColor: Colors.black54,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 2,
             text: data.colorFlg == 'X'
                 ? 'picking_material_order_have_color_system'.tr
@@ -301,7 +378,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                 : Colors.red.shade700,
             borderColor: Colors.black54,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             flex: 3,
             text: data.outTicketStatusText(),
             alignment: Alignment.center,
@@ -312,57 +389,5 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
-      popTitle: 'picking_material_order_exit_tips'.tr,
-      queryWidgets: [
-        EditText(
-          hint: 'picking_material_order_sales_order'.tr,
-          controller: tecInstruction,
-        ),
-        EditText(
-          hint: 'picking_material_order_picking_no'.tr,
-          controller: tecPickingMaterialOrder,
-        ),
-        DatePicker(pickerController: dpcStartDate),
-        DatePicker(pickerController: dpcEndDate),
-        OptionsPicker(pickerController: opcSupplier),
-        LinkOptionsPicker(pickerController: lopcFactoryWarehouse),
-        Row(
-          children: [
-            Obx(() => CheckBox(
-                  onChanged: (v) => state.isPosted.value = 0,
-                  name: 'picking_material_order_all'.tr,
-                  value: state.isPosted.value == 0,
-                )),
-            Obx(() => CheckBox(
-                  onChanged: (v) => state.isPosted.value = 1,
-                  name: 'picking_material_order_not_deliver'.tr,
-                  value: state.isPosted.value == 1,
-                )),
-            Obx(() => CheckBox(
-                  onChanged: (v) => state.isPosted.value = 2,
-                  name: 'picking_material_order_delivered'.tr,
-                  value: state.isPosted.value == 2,
-                )),
-          ],
-        )
-      ],
-      query: _query,
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
-            itemCount: state.orderList.length,
-            itemBuilder: (c, i) => _item(i),
-          )),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<PickingMaterialOrderLogic>();
-    super.dispose();
   }
 }

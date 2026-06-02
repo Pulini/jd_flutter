@@ -157,7 +157,7 @@ void addOrModifyMaterialDialog({
                   children: [
                     Expanded(
                       flex: 3,
-                      child: selectView(
+                      child: SelectView(
                         list: materialList,
                         select: (i) => dialogSetState(() {
                           materielName = materialList[i];

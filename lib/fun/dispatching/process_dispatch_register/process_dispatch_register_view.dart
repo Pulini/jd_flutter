@@ -36,35 +36,35 @@ class _ProcessDispatchRegisterPageState
     var totalQty = 0.0;
     listWidget.add(Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_sales_order_no'.tr,
           flex: 3,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.center,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_daily_dispatch_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_dispatched'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_quantity'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
@@ -80,31 +80,31 @@ class _ProcessDispatchRegisterPageState
         totalQty = totalQty.add(data.qty.sub(data.mustQty ?? 0));
         listWidget.add(Row(
           children: [
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.instructions ?? '',
               flex: 3,
               isBold: true,
               backgroundColor: Colors.white,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.size ?? '',
               isBold: true,
               alignment: Alignment.center,
               backgroundColor: Colors.white,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.dayMustQty.toShowString(),
               alignment: Alignment.centerRight,
               isBold: true,
               backgroundColor: Colors.white,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.mustQty.toShowString(),
               alignment: Alignment.centerRight,
               isBold: true,
               backgroundColor: Colors.white,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.qty.sub(data.mustQty ?? 0).toShowString(),
               alignment: Alignment.centerRight,
               textColor: Colors.blue,
@@ -122,28 +122,28 @@ class _ProcessDispatchRegisterPageState
     }
     listWidget.add(Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_total'.tr,
           flex: 4,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalDayMustQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalMustQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,
@@ -162,21 +162,21 @@ class _ProcessDispatchRegisterPageState
     var totalQty = 0.0;
     listWidget.add(Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_report'.tr,
           flex: 3,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.center,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           padding: const EdgeInsets.only(bottom: 5, top: 5),
           text: 'process_dispatch_register_daily_dispatch_qty'.tr,
           backgroundColor: Colors.blue,
@@ -184,14 +184,14 @@ class _ProcessDispatchRegisterPageState
           alignment: Alignment.centerRight,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_dispatched'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_quantity'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
@@ -214,32 +214,32 @@ class _ProcessDispatchRegisterPageState
       }
       listWidget.add(Row(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             text: salesOrderList.join(','),
             flex: 3,
             isBold: true,
             backgroundColor: Colors.white,
             click: () => showSalesOrderListDialog(salesOrderList),
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: list[0].size ?? '',
             isBold: true,
             alignment: Alignment.center,
             backgroundColor: Colors.white,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: dayMustQty.toShowString(),
             alignment: Alignment.centerRight,
             isBold: true,
             backgroundColor: Colors.white,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: mustQty.toShowString(),
             alignment: Alignment.centerRight,
             isBold: true,
             backgroundColor: Colors.white,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: qty.toShowString(),
             alignment: Alignment.centerRight,
             textColor: Colors.blue,
@@ -259,28 +259,28 @@ class _ProcessDispatchRegisterPageState
     }
     listWidget.add(Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: 'process_dispatch_register_total'.tr,
           flex: 4,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalDayMustQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalMustQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,
           textColor: Colors.blue,
           backgroundColor: Colors.blue.shade50,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           text: totalQty.toShowString(),
           alignment: Alignment.centerRight,
           isBold: true,

@@ -136,425 +136,14 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     );
   }
 
-  Widget _item1(MaterialDispatchInfo data, int index) {
-    var style = const TextStyle(
-      color: Colors.black87,
-      fontWeight: FontWeight.bold,
-    );
-    var itemTitleStyle = const TextStyle(
-      color: Colors.white,
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-    );
-    return Column(
-      children: [
-        Container(
-          height: 50,
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: data.billStyle == '0'
-                ? Colors.blue.shade900
-                : Colors.green.shade700,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-          ),
-          foregroundDecoration: data.children?[0].lastProcessNode == '1'
-              ? RotatedCornerDecoration.withColor(
-                  color: Colors.red,
-                  badgeCornerRadius: const Radius.circular(8),
-                  badgeSize: const Size(45, 45),
-                  textSpan: TextSpan(
-                    text: 'material_dispatch_last'.tr,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                )
-              : null,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 4,
-                child: AutoSizeText(
-                  'material_dispatch_material'.trArgs([
-                    data.materialNumber ?? '',
-                    data.materialName ?? '',
-                  ]),
-                  style: itemTitleStyle,
-                  maxLines: 2,
-                  minFontSize: 8,
-                  maxFontSize: 18,
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  'material_dispatch_type_body'
-                      .trArgs([data.productName ?? '']),
-                  style: itemTitleStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  data.billStyle == '0'
-                      ? 'material_dispatch_positive_list'.tr
-                      : 'material_dispatch_order_replenishment'.tr,
-                  style: itemTitleStyle,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
-          color: Colors.white,
-          child: Row(
-            children: [
-              expandedTextSpan(
-                hint: 'material_dispatch_position'.tr,
-                text: data.partName ?? '',
-                textColor: Colors.black54,
-              ),
-              expandedTextSpan(
-                hint: 'material_dispatch_progress_name'.tr,
-                text: data.processName ?? '',
-                textColor: Colors.black54,
-              ),
-              expandedTextSpan(
-                hint: 'material_dispatch_dispatch_date'.tr,
-                text: data.date ?? '',
-                textColor: Colors.black54,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
-          color: Colors.white,
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    if (!data.stuffNumber.isNullOrEmpty()) {
-                      msgDialog(content: data.stuffNumber);
-                    }
-                  },
-                  child: Text.rich(
-                    overflow: TextOverflow.ellipsis,
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'material_dispatch_material_code'.tr,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: data.stuffNumber,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              expandedTextSpan(
-                hint: 'material_dispatch_factory'.tr,
-                text: data.sourceFactoryName!.isNotEmpty
-                    ? data.sourceFactoryName!
-                    : data.sapDecideArea!,
-                textColor: Colors.redAccent,
-              ),
-              expandedTextSpan(
-                hint: 'material_dispatch_machine'.tr,
-                text: '${data.drillingCrewName}',
-                textColor: Colors.redAccent,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
-          color: Colors.white,
-          child: Row(
-            children: [
-              expandedFrameText(
-                text: 'material_dispatch_ins_number'.tr,
-                backgroundColor: Colors.blue.shade50,
-                flex: 3,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_quantity'.tr,
-                backgroundColor: Colors.blue.shade50,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_completed_qty'.tr,
-                backgroundColor: Colors.blue.shade50,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_progress_dispatch_order'.tr,
-                backgroundColor: Colors.blue.shade50,
-                flex: 2,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_printed_qty'.tr,
-                backgroundColor: Colors.blue.shade50,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_not_printed_qty'.tr,
-                backgroundColor: Colors.blue.shade50,
-              ),
-              expandedFrameText(
-                text: 'material_dispatch_color_batch'.tr,
-                backgroundColor: Colors.blue.shade50,
-              ),
-              Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    color: Colors.blue.shade50,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Visibility(
-                    visible: false,
-                    maintainAnimation: true,
-                    maintainSize: true,
-                    maintainState: true,
-                    child: Row(children: _subItemButton(data: data)),
-                  ))
-            ],
-          ),
-        ),
-        for (var i = 0; i < data.children!.length; ++i)
-          Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                expandedFrameText(
-                  click: () => showBillNoList(data.children?[i].billNo ?? ''),
-                  text: data.children?[i].billNo ?? '',
-                  textColor: Colors.blue.shade900,
-                  flex: 3,
-                ),
-                expandedFrameText(
-                  text: data.children![i].qty ?? '',
-                ),
-                expandedFrameText(
-                  text: data.children![i].finishQty ?? '',
-                ),
-                expandedFrameText(
-                  text: data.children?[i].workProcessNumber ?? '',
-                  flex: 2,
-                ),
-                expandedFrameText(
-                  text: data.children![i].codeQty ?? '',
-                ),
-                expandedFrameText(
-                  text: data.children![i].noCodeQty ?? '',
-                ),
-                expandedFrameText(
-                  text: data.children![i].sapColorBatch ?? '',
-                ),
-                Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    color: Colors.transparent,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children:
-                        _subItemButton(data: data, subData: data.children![i]),
-                  ),
-                )
-              ],
-            ),
-          ),
-        Container(
-          padding: const EdgeInsets.all(5),
-          height: 55,
-          margin: const EdgeInsets.only(bottom: 10),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'material_dispatch_completion_amount'
-                              .trArgs([data.unitName ?? '']),
-                          style: style,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: percentIndicator(
-                              max: data.qty.toDoubleTry(),
-                              value: data.finishQty.toDoubleTry(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Text(
-                            '${data.finishQty} / ${data.qty}',
-                            style: style,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 3),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'material_dispatch_label_generation_amount'
-                              .trArgs([data.unitName ?? '']),
-                          style: style,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: percentIndicator(
-                              max: data.qty.toDoubleTry(),
-                              value: data.codeQty.toDoubleTry(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Text(
-                            '${data.codeQty} / ${data.qty}',
-                            style: style,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              CombinationButton(
-                text: 'material_dispatch_material_list'.tr,
-                click: () => materialListDialog(context, data),
-                combination: Combination.left,
-              ),
-              // CombinationButton(
-              //   text: 'material_dispatch_progress_manual'.tr,
-              //   click: () => feishuViewWikiFiles(
-              //     query: data.productName ?? '',
-              //   ),
-              //   combination: Combination.middle,
-              // ),
-              CombinationButton(
-                //老版查看工艺说明书
-                text: 'material_dispatch_progress_manual'.tr,
-                click: () {
-                  if (checkUserPermission('1053501')) {
-                    getProcessManual(
-                        typeBody: data.productName ?? '',
-                        manualList: (List<ProcessSpecificationInfo> list) {
-                          showProcessManualDialog(list);
-                        },
-                        error: (String msg) {
-                          errorDialog(content: msg);
-                        });
-                  } else {
-                    showSnackBar(
-                      message:
-                          'material_dispatch_request_permission'.tr,
-                      isWarning: true,
-                    );
-                  }
-                },
-                combination: Combination.middle,
-              ),
-              CombinationButton(
-                text: 'material_dispatch_label_list'.tr,
-                click: () => labelListDialog( data,
-                    printCallback: (label) {
-                  var bill = '';
-                  // var batch = '';
-                  var labelDate = '';
-                  // if (info.children!.isNotEmpty) {
-                  //   bill = info.children![0].billNo!;
-                  //   batch = info.children![0].sapColorBatch!;
-                  // }
-                  if(label.sapColorBatch.isNullOrEmpty()){
-                    bill = data.children!.first.billNo!;
-                  }else {
-                    bill = data.children!.firstWhere((v) =>
-                    v.sapColorBatch == label.sapColorBatch).billNo!;
-                  }
-                  if (label.insertDateTime != '' &&
-                      label.insertDateTime!.length > 10) {
-                    labelDate = label.insertDateTime!.substring(0, 10);
-                  } else {
-                    labelDate = getDateYMD();
-                  }
-                  logic.printLabel(
-                      date: labelDate,
-                      context: context,
-                      data: data,
-                      billNo: bill,
-                      color: label.sapColorBatch??'',
-                      guid: label.guid!,
-                      pick: label.pickUpCode!,
-                      bill: <MaterialDispatchLabelDetail>[],
-                      qty: label.qty.toShowString(),
-                      specifications: label.length
-                          .div(100)
-                          .mul(label.width.div(100))
-                          .mul(label.height.div(100))
-                          .toShowString(),
-                      specificationSplit:
-                          '${label.length.toShowString()}x${label.width.toShowString()}x${label.height.toShowString()}',
-                      gw: label.gw.toShowString(),
-                      ew: label.nw.toShowString());
-                }, refreshCallBack: () {
-                  _query();
-                }),
-                combination: Combination.middle,
-              ),
-              CombinationButton(
-                text: 'material_dispatch_report'.tr,
-                click: () => askDialog(
-                  content: 'material_dispatch_report_tips'.tr,
-                  confirm: () => logic.itemReport(
-                    data: data,
-                    refresh: () => _query(),
-                  ),
-                ),
-                combination: Combination.middle,
-              ),
-              CombinationButton(
-                text: 'material_dispatch_cancel_report'.tr,
-                click: () => askDialog(
-                  content: 'material_dispatch_cancel_all_report_tips'.tr,
-                  confirm: () => logic.itemCancelReport(
-                    data: data,
-                    refresh: () => _query(),
-                  ),
-                ),
-                combination: Combination.right,
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  Widget _item1(MaterialDispatchInfo data, int index) => _MaterialDispatchItem(
+        data: data,
+        index: index,
+        logic: logic,
+        onQuery: _query,
+        subItemButtonBuilder: _subItemButton,
+        showDialog: (list) => showProcessManualDialog(list),
+      );
 
   List<Widget> _subItemButton({
     required MaterialDispatchInfo data,
@@ -810,13 +399,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               value: state.isBigLabel.value,
             )),
         Obx(() => CheckBox(
-          onChanged: (c) {
-            state.isSmallLabel.value = c;
-            saveMaterialSmallLabel(c);
-          },
-          name: 'material_dispatch_check_small_label'.tr,
-          value: state.isSmallLabel.value,
-        )),
+              onChanged: (c) {
+                state.isSmallLabel.value = c;
+                saveMaterialSmallLabel(c);
+              },
+              name: 'material_dispatch_check_small_label'.tr,
+              value: state.isSmallLabel.value,
+            )),
       ],
       query: () => _query(),
       body: Obx(() => ListView.builder(
@@ -832,5 +421,448 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   void dispose() {
     Get.delete<MaterialDispatchLogic>();
     super.dispose();
+  }
+}
+
+class _MaterialDispatchItem extends StatelessWidget {
+  final MaterialDispatchInfo data;
+  final int index;
+  final MaterialDispatchLogic logic;
+  final VoidCallback onQuery;
+  final List<Widget> Function({
+    required MaterialDispatchInfo data,
+    Children? subData,
+  }) subItemButtonBuilder;
+  final Function(List<ProcessSpecificationInfo>) showDialog;
+
+  const _MaterialDispatchItem({
+    required this.data,
+    required this.index,
+    required this.logic,
+    required this.onQuery,
+    required this.subItemButtonBuilder,
+    required this.showDialog,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var style = const TextStyle(
+      color: Colors.black87,
+      fontWeight: FontWeight.bold,
+    );
+    var itemTitleStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    );
+    return Column(
+      children: [
+        Container(
+          height: 50,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: data.billStyle == '0'
+                ? Colors.blue.shade900
+                : Colors.green.shade700,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+          foregroundDecoration: data.children?[0].lastProcessNode == '1'
+              ? RotatedCornerDecoration.withColor(
+                  color: Colors.red,
+                  badgeCornerRadius: const Radius.circular(8),
+                  badgeSize: const Size(45, 45),
+                  textSpan: TextSpan(
+                    text: 'material_dispatch_last'.tr,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                )
+              : null,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 4,
+                child: AutoSizeText(
+                  'material_dispatch_material'.trArgs([
+                    data.materialNumber ?? '',
+                    data.materialName ?? '',
+                  ]),
+                  style: itemTitleStyle,
+                  maxLines: 2,
+                  minFontSize: 8,
+                  maxFontSize: 18,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'material_dispatch_type_body'
+                      .trArgs([data.productName ?? '']),
+                  style: itemTitleStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  data.billStyle == '0'
+                      ? 'material_dispatch_positive_list'.tr
+                      : 'material_dispatch_order_replenishment'.tr,
+                  style: itemTitleStyle,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
+          color: Colors.white,
+          child: Row(
+            children: [
+              expandedTextSpan(
+                hint: 'material_dispatch_position'.tr,
+                text: data.partName ?? '',
+                textColor: Colors.black54,
+              ),
+              expandedTextSpan(
+                hint: 'material_dispatch_progress_name'.tr,
+                text: data.processName ?? '',
+                textColor: Colors.black54,
+              ),
+              expandedTextSpan(
+                hint: 'material_dispatch_dispatch_date'.tr,
+                text: data.date ?? '',
+                textColor: Colors.black54,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
+          color: Colors.white,
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    if (!data.stuffNumber.isNullOrEmpty()) {
+                      msgDialog(content: data.stuffNumber);
+                    }
+                  },
+                  child: Text.rich(
+                    overflow: TextOverflow.ellipsis,
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'material_dispatch_material_code'.tr,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: data.stuffNumber,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              expandedTextSpan(
+                hint: 'material_dispatch_factory'.tr,
+                text: data.sourceFactoryName!.isNotEmpty
+                    ? data.sourceFactoryName!
+                    : data.sapDecideArea!,
+                textColor: Colors.redAccent,
+              ),
+              expandedTextSpan(
+                hint: 'material_dispatch_machine'.tr,
+                text: '${data.drillingCrewName}',
+                textColor: Colors.redAccent,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
+          color: Colors.white,
+          child: Row(
+            children: [
+              ExpandedFrameText(
+                text: 'material_dispatch_ins_number'.tr,
+                backgroundColor: Colors.blue.shade50,
+                flex: 3,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_quantity'.tr,
+                backgroundColor: Colors.blue.shade50,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_completed_qty'.tr,
+                backgroundColor: Colors.blue.shade50,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_progress_dispatch_order'.tr,
+                backgroundColor: Colors.blue.shade50,
+                flex: 2,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_printed_qty'.tr,
+                backgroundColor: Colors.blue.shade50,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_not_printed_qty'.tr,
+                backgroundColor: Colors.blue.shade50,
+              ),
+              ExpandedFrameText(
+                text: 'material_dispatch_color_batch'.tr,
+                backgroundColor: Colors.blue.shade50,
+              ),
+              Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.blue.shade50,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  child: Visibility(
+                    visible: false,
+                    maintainAnimation: true,
+                    maintainSize: true,
+                    maintainState: true,
+                    child: Row(children: subItemButtonBuilder(data: data)),
+                  ))
+            ],
+          ),
+        ),
+        for (var i = 0; i < data.children!.length; ++i)
+          Container(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            color: Colors.white,
+            child: Row(
+              children: [
+                ExpandedFrameText(
+                  click: () => showBillNoList(data.children?[i].billNo ?? ''),
+                  text: data.children?[i].billNo ?? '',
+                  textColor: Colors.blue.shade900,
+                  flex: 3,
+                ),
+                ExpandedFrameText(
+                  text: data.children![i].qty ?? '',
+                ),
+                ExpandedFrameText(
+                  text: data.children![i].finishQty ?? '',
+                ),
+                ExpandedFrameText(
+                  text: data.children?[i].workProcessNumber ?? '',
+                  flex: 2,
+                ),
+                ExpandedFrameText(
+                  text: data.children![i].codeQty ?? '',
+                ),
+                ExpandedFrameText(
+                  text: data.children![i].noCodeQty ?? '',
+                ),
+                ExpandedFrameText(
+                  text: data.children![i].sapColorBatch ?? '',
+                ),
+                Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.transparent,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: subItemButtonBuilder(
+                        data: data, subData: data.children![i]),
+                  ),
+                )
+              ],
+            ),
+          ),
+        Container(
+          padding: const EdgeInsets.all(5),
+          height: 55,
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'material_dispatch_completion_amount'
+                              .trArgs([data.unitName ?? '']),
+                          style: style,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: PercentIndicator(
+                              max: data.qty.toDoubleTry(),
+                              value: data.finishQty.toDoubleTry(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            '${data.finishQty} / ${data.qty}',
+                            style: style,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'material_dispatch_label_generation_amount'
+                              .trArgs([data.unitName ?? '']),
+                          style: style,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: PercentIndicator(
+                              max: data.qty.toDoubleTry(),
+                              value: data.codeQty.toDoubleTry(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            '${data.codeQty} / ${data.qty}',
+                            style: style,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              CombinationButton(
+                text: 'material_dispatch_material_list'.tr,
+                click: () => materialListDialog(context, data),
+                combination: Combination.left,
+              ),
+              // CombinationButton(
+              //   text: 'material_dispatch_progress_manual'.tr,
+              //   click: () => feishuViewWikiFiles(
+              //     query: data.productName ?? '',
+              //   ),
+              //   combination: Combination.middle,
+              // ),
+              CombinationButton(
+                //老版查看工艺说明书
+                text: 'material_dispatch_progress_manual'.tr,
+                click: () {
+                  if (checkUserPermission('1053501')) {
+                    getProcessManual(
+                      typeBody: data.productName ?? '',
+                      manualList: (list) {
+                        showDialog.call(list);
+                      },
+                      error: (String msg) {
+                        errorDialog(content: msg);
+                      },
+                    );
+                  } else {
+                    showSnackBar(
+                      message: 'material_dispatch_request_permission'.tr,
+                      isWarning: true,
+                    );
+                  }
+                },
+                combination: Combination.middle,
+              ),
+              CombinationButton(
+                text: 'material_dispatch_label_list'.tr,
+                click: () => labelListDialog(data, printCallback: (label) {
+                  var bill = '';
+                  // var batch = '';
+                  var labelDate = '';
+                  // if (info.children!.isNotEmpty) {
+                  //   bill = info.children![0].billNo!;
+                  //   batch = info.children![0].sapColorBatch!;
+                  // }
+                  if (label.sapColorBatch.isNullOrEmpty()) {
+                    bill = data.children!.first.billNo!;
+                  } else {
+                    bill = data.children!
+                        .firstWhere(
+                            (v) => v.sapColorBatch == label.sapColorBatch)
+                        .billNo!;
+                  }
+                  if (label.insertDateTime != '' &&
+                      label.insertDateTime!.length > 10) {
+                    labelDate = label.insertDateTime!.substring(0, 10);
+                  } else {
+                    labelDate = getDateYMD();
+                  }
+                  logic.printLabel(
+                      date: labelDate,
+                      context: context,
+                      data: data,
+                      billNo: bill,
+                      color: label.sapColorBatch ?? '',
+                      guid: label.guid!,
+                      pick: label.pickUpCode!,
+                      bill: <MaterialDispatchLabelDetail>[],
+                      qty: label.qty.toShowString(),
+                      specifications: label.length
+                          .div(100)
+                          .mul(label.width.div(100))
+                          .mul(label.height.div(100))
+                          .toShowString(),
+                      specificationSplit:
+                          '${label.length.toShowString()}x${label.width.toShowString()}x${label.height.toShowString()}',
+                      gw: label.gw.toShowString(),
+                      ew: label.nw.toShowString());
+                }, refreshCallBack: () {
+                  onQuery();
+                }),
+                combination: Combination.middle,
+              ),
+              CombinationButton(
+                text: 'material_dispatch_report'.tr,
+                click: () => askDialog(
+                  content: 'material_dispatch_report_tips'.tr,
+                  confirm: () => logic.itemReport(
+                    data: data,
+                    refresh: () => onQuery(),
+                  ),
+                ),
+                combination: Combination.middle,
+              ),
+              CombinationButton(
+                text: 'material_dispatch_cancel_report'.tr,
+                click: () => askDialog(
+                  content: 'material_dispatch_cancel_all_report_tips'.tr,
+                  confirm: () => logic.itemCancelReport(
+                    data: data,
+                    refresh: () => onQuery(),
+                  ),
+                ),
+                combination: Combination.right,
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

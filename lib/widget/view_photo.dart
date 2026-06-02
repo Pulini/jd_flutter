@@ -5,16 +5,11 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-class ViewFilePhoto extends StatefulWidget {
+class ViewFilePhoto extends StatelessWidget {
   const ViewFilePhoto({super.key, required this.photos});
 
   final List<File> photos;
 
-  @override
-  State<ViewFilePhoto> createState() => _ViewFilePhotoState();
-}
-
-class _ViewFilePhotoState extends State<ViewFilePhoto> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -24,12 +19,12 @@ class _ViewFilePhotoState extends State<ViewFilePhoto> {
           color: Colors.transparent,
         ),
         scrollPhysics: const BouncingScrollPhysics(),
-        itemCount: widget.photos.length,
+        itemCount: photos.length,
         builder: (c, i) {
           return PhotoViewGalleryPageOptions(
-            imageProvider: FileImage(widget.photos[i]),
+            imageProvider: FileImage(photos[i]),
             heroAttributes: PhotoViewHeroAttributes(
-              tag: widget.photos[i].path,
+              tag: photos[i].path,
             ),
           );
         },
@@ -38,16 +33,11 @@ class _ViewFilePhotoState extends State<ViewFilePhoto> {
   }
 }
 
-class ViewNetPhoto extends StatefulWidget {
+class ViewNetPhoto extends StatelessWidget {
   const ViewNetPhoto({super.key, required this.photos});
 
   final List<String> photos;
 
-  @override
-  State<ViewNetPhoto> createState() => _ViewNetPhotoState();
-}
-
-class _ViewNetPhotoState extends State<ViewNetPhoto> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -57,26 +47,26 @@ class _ViewNetPhotoState extends State<ViewNetPhoto> {
           color: Colors.transparent,
         ),
         scrollPhysics: const BouncingScrollPhysics(),
-        itemCount: widget.photos.length,
+        itemCount: photos.length,
         builder: (c, i) {
           return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(widget.photos[i]),
+            imageProvider: NetworkImage(photos[i]),
             heroAttributes: PhotoViewHeroAttributes(
-              tag: widget.photos[i],
+              tag: photos[i],
             ),
           );
         },
         loadingBuilder: (context, event) {
           if (event == null) {
             return const Center(
-              child: Text("Loading"),
+              child: Text('Loading'),
             );
           }
           final value = event.cumulativeBytesLoaded /
               (event.expectedTotalBytes ?? event.cumulativeBytesLoaded);
           final percentage = (100 * value).floor();
           return Center(
-            child: Text("$percentage%"),
+            child: Text('$percentage%'),
           );
         },
       ),

@@ -30,6 +30,12 @@ class _WorkerCheckState extends State<WorkerCheck> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   void checkWorker(String number) {
     if (number.length >= 6) {
       getWorkerInfo(

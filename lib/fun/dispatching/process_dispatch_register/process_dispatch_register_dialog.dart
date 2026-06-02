@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
@@ -313,7 +314,7 @@ void addNewWorkerDialog(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(7),
                               child:
-                                  Image.network(avatar.value, fit: BoxFit.fill),
+                                  CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill),
                             ),
                           ),
                         ),

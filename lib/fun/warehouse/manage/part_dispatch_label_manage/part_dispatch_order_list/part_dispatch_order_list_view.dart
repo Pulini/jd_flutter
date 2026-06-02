@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,89 +64,13 @@ class _PartDispatchLabelManagePageState
     );
   }
 
-  Widget _imageItem(int i) => GestureDetector(
-        onTap: () => Get.to(() => ViewNetPhoto(photos: state.productUrlList)),
-        child: Hero(
-          tag: state.productUrlList[i],
-          child: Image.network(
-            state.productUrlList[i],
-            fit: BoxFit.cover,
-            errorBuilder: (ctx, err, st) => Image.asset(
-              'assets/images/ic_logo.png',
-              color: Colors.blue,
-            ),
-          ),
-        ),
+  Widget _imageItem(int i) => _PartDispatchOrderImageItem(
+        index: i,
+        state: state,
       );
 
-  Widget _partItem(PartDispatchOrderPartInfo data) {
-    var url = data.partPictureUrl();
-    var errorImage = Image.asset(
-      'assets/images/ic_logo.png',
-      color: Colors.blue,
-    );
-    return GestureDetector(
-      onTap: () => data.isSelected.value = !data.isSelected.value,
-      child: Obx(() => Container(
-            margin: const EdgeInsets.all(5),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2,
-                color: data.isSelected.value ? Colors.blue : Colors.grey,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              color: data.isSelected.value
-                  ? Colors.blue.shade100
-                  : Colors.grey.shade100,
-            ),
-            foregroundDecoration: RotatedCornerDecoration.withColor(
-              color: data.packTypeID == 478
-                  ? Colors.deepOrange
-                  : Colors.deepPurple,
-              badgeCornerRadius: const Radius.circular(8),
-              badgeSize: const Size(45, 45),
-              textSpan: TextSpan(
-                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
-                style: const TextStyle(fontSize: 14),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AspectRatio(
-                  aspectRatio: 2 / 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: url.isNotEmpty
-                        ? Image.network(
-                            url,
-                            fit: BoxFit.cover,
-                            errorBuilder: (ctx, err, st) => errorImage,
-                          )
-                        : errorImage,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Text(
-                      data.materialName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),),
-                    Text(
-                      '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          )),
-    );
-  }
+  Widget _partItem(PartDispatchOrderPartInfo data) =>
+      _PartDispatchOrderPartGridItem(data: data);
 
   @override
   Widget build(BuildContext context) {
@@ -304,5 +229,109 @@ class _PartDispatchLabelManagePageState
   void dispose() {
     Get.delete<PartDispatchLabelManageLogic>();
     super.dispose();
+  }
+}
+
+class _PartDispatchOrderImageItem extends StatelessWidget {
+  final int index;
+  final PartDispatchLabelManageState state;
+
+  const _PartDispatchOrderImageItem({
+    required this.index,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.to(() => ViewNetPhoto(photos: state.productUrlList)),
+      child: Hero(
+        tag: state.productUrlList[index],
+        child: CachedNetworkImage(
+          imageUrl: state.productUrlList[index],
+          fit: BoxFit.cover,
+          errorWidget: (ctx, err, st) => Image.asset(
+            'assets/images/ic_logo.png',
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PartDispatchOrderPartGridItem extends StatelessWidget {
+  final PartDispatchOrderPartInfo data;
+
+  const _PartDispatchOrderPartGridItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    var url = data.partPictureUrl();
+    var errorImage = Image.asset(
+      'assets/images/ic_logo.png',
+      color: Colors.blue,
+    );
+    return GestureDetector(
+      onTap: () => data.isSelected.value = !data.isSelected.value,
+      child: Obx(() => Container(
+            margin: const EdgeInsets.all(5),
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: data.isSelected.value ? Colors.blue : Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: data.isSelected.value
+                  ? Colors.blue.shade100
+                  : Colors.grey.shade100,
+            ),
+            foregroundDecoration: RotatedCornerDecoration.withColor(
+              color: data.packTypeID == 478
+                  ? Colors.deepOrange
+                  : Colors.deepPurple,
+              badgeCornerRadius: const Radius.circular(8),
+              badgeSize: const Size(45, 45),
+              textSpan: TextSpan(
+                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: url.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: url,
+                            fit: BoxFit.cover,
+                            errorWidget: (ctx, err, st) => errorImage,
+                          )
+                        : errorImage,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text(
+                      data.materialName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),),
+                    Text(
+                      '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )),
+    );
   }
 }

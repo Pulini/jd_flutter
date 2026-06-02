@@ -32,8 +32,101 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
         '${RouteConfig.sapCountingInventory.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  Column _item(InventoryPalletInfo data) {
-    var width = getScreenSize().width - 20;
+  void _queryOrder() {
+    logic.queryInventoryOrder(
+        isScan: false,
+        factory: factoryWarehouseController.getPickItem1().pickerId(),
+        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+        area: '');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBodyWithBottomSheet(
+      bottomSheet: [
+        LinkOptionsPicker(pickerController: factoryWarehouseController),
+        Obx(() => RadioGroup(
+              groupValue: state.orderType.value,
+              onChanged: (v) => state.orderType.value = v!,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_null'.tr),
+                      value: '',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_first_count'.tr),
+                      value: '10',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_second_count'.tr),
+                      value: '11',
+                    ),
+                  ),
+                ],
+              ),
+            ))
+      ],
+      query: () => _queryOrder(),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() => ListView.builder(
+                  itemCount: state.materialList.length,
+                  padding: const EdgeInsets.all(10),
+                  itemBuilder: (c, i) =>
+                      _CountingInventoryItem(
+                        data: state.materialList[i],
+                        screenWidth: getScreenSize().width - 20,
+                      ),
+                )),
+          ),
+          Obx(() => state.materialList.isEmpty
+              ? Container()
+              : SizedBox(
+                  width: double.infinity,
+                  child: CombinationButton(
+                    text: 'sap_inventory_submit'.tr,
+                    click: () => Get.to(
+                      () => SignatureWithWorkerNumberPage(
+                        hint: 'sap_inventory_worker_number'.tr,
+                        callback: (worker, image) => logic.submitScanInventory(
+                          workerInfo: worker,
+                          signature: image,
+                          finish: () => _queryOrder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ))
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<SapScanCodeInventoryLogic>();
+    super.dispose();
+  }
+}
+
+class _CountingInventoryItem extends StatelessWidget {
+  final InventoryPalletInfo data;
+  final double screenWidth;
+
+  const _CountingInventoryItem({
+    required this.data,
+    required this.screenWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     var textButtonPadding =
         const EdgeInsets.only(left: 7, top: 3, right: 7, bottom: 3);
     return Column(
@@ -117,7 +210,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
                 AnimatedContainer(
                   margin: const EdgeInsets.only(bottom: 10),
                   height: 5,
-                  width: width * data.getInventoryQtyPercent(),
+                  width: screenWidth * data.getInventoryQtyPercent(),
                   curve: Curves.easeInOut,
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
@@ -134,7 +227,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
                 AnimatedContainer(
                   margin: const EdgeInsets.only(bottom: 10),
                   height: 5,
-                  width: width * data.getInventoryQtyOwePercent(),
+                  width: screenWidth * data.getInventoryQtyOwePercent(),
                   curve: Curves.easeInOut,
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
@@ -151,85 +244,5 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
             )),
       ],
     );
-  }
-
-  void _queryOrder() {
-    logic.queryInventoryOrder(
-        isScan: false,
-        factory: factoryWarehouseController.getPickItem1().pickerId(),
-        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-        area: '');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBodyWithBottomSheet(
-      bottomSheet: [
-        LinkOptionsPicker(pickerController: factoryWarehouseController),
-        Obx(() => RadioGroup(
-              groupValue: state.orderType.value,
-              onChanged: (v) => state.orderType.value = v!,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('sap_inventory_null'.tr),
-                      value: '',
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('sap_inventory_first_count'.tr),
-                      value: '10',
-                    ),
-                  ),
-                  Expanded(
-                    child: RadioListTile(
-                      title: Text('sap_inventory_second_count'.tr),
-                      value: '11',
-                    ),
-                  ),
-                ],
-              ),
-            ))
-      ],
-      query: () => _queryOrder(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() => ListView.builder(
-                  itemCount: state.materialList.length,
-                  padding: const EdgeInsets.all(10),
-                  itemBuilder: (c, i) => _item(state.materialList[i]),
-                )),
-          ),
-          Obx(() => state.materialList.isEmpty
-              ? Container()
-              : SizedBox(
-                  width: double.infinity,
-                  child: CombinationButton(
-                    text: 'sap_inventory_submit'.tr,
-                    click: () => Get.to(
-                      () => SignatureWithWorkerNumberPage(
-                        hint: 'sap_inventory_worker_number'.tr,
-                        callback: (worker, image) => logic.submitScanInventory(
-                          workerInfo: worker,
-                          signature: image,
-                          finish: () => _queryOrder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ))
-        ],
-      ),
-      // body: AnimatedFlexExample()
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<SapScanCodeInventoryLogic>();
-    super.dispose();
   }
 }

@@ -1688,7 +1688,7 @@ class Translation extends Translations {
           'sap_print_picking_detail_recommend_storage_location': '推荐库位：',
           'sap_print_picking_detail_print_pick': 'SAP喷漆领料',
           'sap_print_picking_detail_label_list': '标签列表',
-          'sap_print_picking_detail_scanned': '已扫瞄：',
+          'sap_print_picking_detail_scanned': '已扫描：',
           'sap_print_picking_detail_pick_material': '领料',
           'sap_print_picking_barcode_list_label_no': '标签号：',
           'sap_print_picking_barcode_list_pallet_no': '托盘号：',
@@ -1861,7 +1861,7 @@ class Translation extends Translations {
           'sap_sales_shipment_pallet_label_no': '标签号：',
           'sap_sales_shipment_pallet_quantity': '数量：',
           'sap_sales_shipment_pallet_reset_label_status_tips': '确定要重置标签状态吗？',
-          'sap_sales_shipment_pallet_scan_or_select_label_tips': '扫瞄或勾选对应标签',
+          'sap_sales_shipment_pallet_scan_or_select_label_tips': '扫描或勾选对应标签',
           'incoming_inspection_order_no': '单号：',
           'incoming_inspection_delivery_qty': '总送货量：',
           'incoming_inspection_delivery_detail': '%s件  %s %s',
@@ -2830,7 +2830,7 @@ class Translation extends Translations {
           'delivery_order_label_change_pallet_no_success':
               '修改标签托盘号\r\n[%s]\r\n->\r\n[%s]\r\n成功。',
           'delivery_order_label_check_label_qty_exceed':
-              '该件货物料数量超出，请扫瞄数量更小的标签。',
+              '该件货物料数量超出，请扫描数量更小的标签。',
           'delivery_order_label_check_has_other_material':
               '该件货内包含了其他工单的物料，请拆分拣货。',
           'delivery_order_label_check_qty_exceed_tips': '数量超出本次提交上限，清删除对应标签。',
@@ -2979,7 +2979,7 @@ class Translation extends Translations {
           'purchase_order_warehousing_order_not_have_this_label': '该件不属于当前送货单!',
           'purchase_order_warehousing_label_scanned': '该标签已扫!',
           'purchase_order_warehousing_label_qty_exceed':
-              '该件货物料数量超出，请扫瞄数量更小的标签。',
+              '该件货物料数量超出，请扫描数量更小的标签。',
           'purchase_order_warehousing_has_other_material':
               '该件货内包含了其他工单的物料，请拆分拣货。',
           'purchase_order_warehousing_qty_exceed_tips': '数量超出本次提交上限，清删除对应标签。',

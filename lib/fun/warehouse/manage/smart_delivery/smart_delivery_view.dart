@@ -175,6 +175,8 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
 
   @override
   void dispose() {
+    insController.dispose();
+    controller.dispose();
     Get.delete<SmartDeliveryLogic>();
     super.dispose();
   }

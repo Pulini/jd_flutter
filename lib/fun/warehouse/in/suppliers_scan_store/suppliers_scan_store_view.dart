@@ -59,7 +59,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
               width: 200,
               child: Column(
                 children: [
-                   Text(
+                  Text(
                     'suppliers_scan_storage_conditions'.tr,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -97,13 +97,16 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                       TextButton(
                         onPressed: () {
                           if (state.peopleNumber.text.isEmpty) {
-                            showSnackBar(title: 'shack_bar_warm'.tr, message: 'suppliers_scan_input_operator'.tr);
+                            showSnackBar(
+                                title: 'shack_bar_warm'.tr,
+                                message:
+                                    'suppliers_scan_input_operator'.tr);
                           } else {
-                           logic.goReport();
-                           Get.back();
+                            logic.goReport();
+                            Get.back();
                           }
                         },
-                        child:  Text('dialog_default_confirm'.tr),
+                        child: Text('dialog_default_confirm'.tr),
                       ),
                       TextButton(
                         onPressed: () {
@@ -111,7 +114,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                           state.peopleNumber.clear();
                           Get.back();
                         },
-                        child:  Text('dialog_default_cancel'.tr),
+                        child: Text('dialog_default_cancel'.tr),
                       )
                     ],
                   )
@@ -248,5 +251,13 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    refreshController.dispose();
+    tecCode.dispose();
+    Get.delete<SuppliersScanStoreLogic>();
+    super.dispose();
   }
 }

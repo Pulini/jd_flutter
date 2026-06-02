@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -773,7 +774,7 @@ void addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: avatar.isNotEmpty
-                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                           : Icon(
                         Icons.account_circle,
                         size: 150,
@@ -880,7 +881,7 @@ void addHandoverWorker(HandoverInfo data, Function() refresh) {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: avatar.isNotEmpty
-                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                           : Icon(
                         Icons.account_circle,
                         size: 150,

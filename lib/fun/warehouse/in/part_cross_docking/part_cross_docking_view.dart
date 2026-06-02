@@ -33,53 +33,8 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
     }
   }
 
-  Widget _item(BarCodeInfo item) => Container(
-        margin: const EdgeInsets.only(bottom: 5),
-        padding: const EdgeInsets.only(left: 10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              item.isUsed ? Colors.red.shade100 : Colors.blue.shade100,
-              Colors.green.shade50
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: item.isUsed ? Colors.red : Colors.blue,
-            width: 2,
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: item.isUsed
-                  ? textSpan(
-                      hint: 'part_cross_docking_scan_item_state'.tr,
-                      hintColor: Colors.red,
-                      text: item.code ?? '',
-                      textColor: Colors.grey,
-                    )
-                  : Text(
-                      item.code ?? '',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue),
-                    ),
-            ),
-            IconButton(
-              onPressed: () => askDialog(
-                content: 'part_cross_docking_scan_item_delete_tips'.tr,
-                confirm: () => logic.deleteItem(item),
-              ),
-              icon: const Icon(
-                Icons.delete_forever,
-                color: Colors.red,
-              ),
-            )
-          ],
-        ),
-      );
+  Widget _item(BarCodeInfo item) =>
+      _PartCrossDockingItem(item: item, logic: logic);
 
   @override
   void initState() {
@@ -210,5 +165,63 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
   void dispose() {
     Get.delete<PartCrossDockingLogic>();
     super.dispose();
+  }
+}
+
+class _PartCrossDockingItem extends StatelessWidget {
+  final BarCodeInfo item;
+  final PartCrossDockingLogic logic;
+
+  const _PartCrossDockingItem({required this.item, required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            item.isUsed ? Colors.red.shade100 : Colors.blue.shade100,
+            Colors.green.shade50
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: item.isUsed ? Colors.red : Colors.blue,
+          width: 2,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: item.isUsed
+                ? textSpan(
+                    hint: 'part_cross_docking_scan_item_state'.tr,
+                    hintColor: Colors.red,
+                    text: item.code ?? '',
+                    textColor: Colors.grey,
+                  )
+                : Text(
+                    item.code ?? '',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.blue),
+                  ),
+          ),
+          IconButton(
+            onPressed: () => askDialog(
+              content: 'part_cross_docking_scan_item_delete_tips'.tr,
+              confirm: () => logic.deleteItem(item),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

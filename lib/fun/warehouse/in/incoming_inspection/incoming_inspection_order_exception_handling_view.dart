@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,29 +27,8 @@ class _OrderExceptionHandlingPageState
   final IncomingInspectionState state =
       Get.find<IncomingInspectionLogic>().state;
 
-  Widget _photoItem(PhotoBean item) => GestureDetector(
-        onTap: () {
-          Get.to(() => ViewNetPhoto(
-                photos: [
-                  for (PhotoBean f in state.inspectionDetail?.pictureList ?? [])
-                    f.photo ?? ''
-                ],
-              ));
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(7),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: Hero(
-              tag: item.photo ?? '',
-              child: Image.network(
-                item.photo ?? '',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-      );
+  Widget _photoItem(PhotoBean item) =>
+      _IncomingInspectionNetPhotoItem(item: item, state: state);
 
   Container _materialItem(InspectionMaterielInfo item) => Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -196,6 +176,43 @@ class _OrderExceptionHandlingPageState
             ),),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _IncomingInspectionNetPhotoItem extends StatelessWidget {
+  final PhotoBean item;
+  final IncomingInspectionState state;
+
+  const _IncomingInspectionNetPhotoItem({
+    required this.item,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => ViewNetPhoto(
+              photos: [
+                for (PhotoBean f in state.inspectionDetail?.pictureList ?? [])
+                  f.photo ?? ''
+              ],
+            ));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(7),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(7),
+          child: Hero(
+            tag: item.photo ?? '',
+            child: CachedNetworkImage(
+              imageUrl: item.photo ?? '',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -274,7 +274,7 @@ class _SapInkColorMatchingDetailPageState
       ),
       child: Column(children: [
         if (index >= 0)
-          ratioBarChart(ratioList: logic.getRatioColorLine(index)),
+          RatioBarChart(ratioList: logic.getRatioColorLine(index)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -261,7 +261,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(
-            child: progressIndicator(
+            child: CustomProgressIndicator(
               max: list.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
               value:
                   list.map((v) => v.checkQty ?? 0).reduce((a, b) => a.add(b)),

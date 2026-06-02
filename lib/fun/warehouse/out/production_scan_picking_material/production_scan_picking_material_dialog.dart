@@ -59,7 +59,7 @@ void selectSupplierAndDepartmentDialog({
                         onChanged: (v) => dialogSetState(() => isSupplier = v!),
                       ),
                       Expanded(
-                        child: selectView(
+                        child: SelectView(
                           list: isSupplier ? sList : [],
                           controller: sController,
                           errorMsg: isSupplier
@@ -79,7 +79,7 @@ void selectSupplierAndDepartmentDialog({
                             dialogSetState(() => isSupplier = !v!),
                       ),
                       Expanded(
-                        child: selectView(
+                        child: SelectView(
                           list: isSupplier ? [] : dList,
                           controller: dController,
                           errorMsg: isSupplier

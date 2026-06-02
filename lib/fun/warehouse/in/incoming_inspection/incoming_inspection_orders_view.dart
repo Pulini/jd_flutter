@@ -40,113 +40,6 @@ class _IncomingInspectionOrdersPageState
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.endDate}',
   );
 
-  Widget _item(InspectionOrderInfo item) {
-    return GestureDetector(
-      onTap: () {
-        logic.getInspectionOrderDetail(
-          interID: item.interID ?? '',
-          success: () {
-            switch (item.status) {
-              case '1':
-                Get.to(() => const OrderWaitInspectionPage())?.then((refresh) {
-                  if (refresh as bool) _query(true);
-                });
-                break;
-              case '2':
-                Get.to(() => const OrderWaitProcessingPage())?.then((refresh) {
-                  if (refresh  as bool) _query(true);
-                });
-                break;
-              case '3':
-                Get.to(() => const OrderSignedPage())?.then((refresh) {
-                  if (refresh  as bool) _query(true);
-                });
-                break;
-              case '4':
-                Get.to(() => const OrderExceptionHandlingPage())
-                    ?.then((refresh) {
-                  if (refresh  as bool) _query(true);
-                });
-                break;
-              case '5':
-                Get.to(() => const OrderExceptionClosePage())?.then((refresh) {
-                  if (refresh  as bool) _query(true);
-                });
-                break;
-              case '6':
-                Get.to(() => const OrderClosedPage())?.then((refresh) {
-                  if (refresh  as bool) _query(true);
-                });
-                break;
-            }
-          },
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.white,
-              item.status == '1' || item.status == '2'
-                  ? Colors.orange.shade100
-                  : item.status == '3'
-                      ? Colors.green.shade100
-                      : item.status == '4' || item.status == '5'
-                          ? Colors.red.shade100
-                          : Colors.blue.shade100,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          // color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: item.status == '1' || item.status == '2'
-                ? Colors.orange
-                : item.status == '3'
-                    ? Colors.green
-                    : item.status == '4' || item.status == '5'
-                        ? Colors.red
-                        : Colors.blue,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'incoming_inspection_order_order_no'.tr,
-                  text: item.number ?? '',
-                  textColor: Colors.green,
-                ),
-                SizedBox(
-                  width: 120,
-                  child: textSpan(
-                      hint: 'incoming_inspection_order_applicant'.tr,
-                      text: item.empName ?? ''),
-                ),
-              ],
-            ),
-            textSpan(
-              hint: 'incoming_inspection_order_suppler'.tr,
-              text: item.supplier ?? '',
-              textColor: Colors.black54,
-            ),
-            textSpan(
-              hint: 'incoming_inspection_order_modify_date'.tr,
-              text: item.applicationDate ?? '',
-              textColor: Colors.black54,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   void _showSearch() {
     showSheet(
       bodyPadding: const EdgeInsets.all(0),
@@ -278,6 +171,12 @@ class _IncomingInspectionOrdersPageState
   }
 
   @override
+  void dispose() {
+    tecInspectionSuppler.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'incoming_inspection_order_inspection_list'.tr,
@@ -291,7 +190,129 @@ class _IncomingInspectionOrdersPageState
         () => ListView.builder(
             padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             itemCount: state.inspectionOrderList.length,
-            itemBuilder: (c, i) => _item(state.inspectionOrderList[i])),
+            itemBuilder: (c, i) => _InspectionOrderItem(
+                  item: state.inspectionOrderList[i],
+                  logic: logic,
+                  onQuery: (isRefresh) => _query(isRefresh),
+                )),
+      ),
+    );
+  }
+}
+
+class _InspectionOrderItem extends StatelessWidget {
+  final InspectionOrderInfo item;
+  final IncomingInspectionLogic logic;
+  final void Function(bool) onQuery;
+  const _InspectionOrderItem({
+    required this.item,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        logic.getInspectionOrderDetail(
+          interID: item.interID ?? '',
+          success: () {
+            switch (item.status) {
+              case '1':
+                Get.to(() => const OrderWaitInspectionPage())?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+              case '2':
+                Get.to(() => const OrderWaitProcessingPage())?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+              case '3':
+                Get.to(() => const OrderSignedPage())?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+              case '4':
+                Get.to(() => const OrderExceptionHandlingPage())
+                    ?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+              case '5':
+                Get.to(() => const OrderExceptionClosePage())?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+              case '6':
+                Get.to(() => const OrderClosedPage())?.then((refresh) {
+                  if (refresh as bool) onQuery(true);
+                });
+                break;
+            }
+          },
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white,
+              item.status == '1' || item.status == '2'
+                  ? Colors.orange.shade100
+                  : item.status == '3'
+                      ? Colors.green.shade100
+                      : item.status == '4' || item.status == '5'
+                          ? Colors.red.shade100
+                          : Colors.blue.shade100,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: item.status == '1' || item.status == '2'
+                ? Colors.orange
+                : item.status == '3'
+                    ? Colors.green
+                    : item.status == '4' || item.status == '5'
+                        ? Colors.red
+                        : Colors.blue,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                expandedTextSpan(
+                  hint: 'incoming_inspection_order_order_no'.tr,
+                  text: item.number ?? '',
+                  textColor: Colors.green,
+                ),
+                SizedBox(
+                  width: 120,
+                  child: textSpan(
+                      hint: 'incoming_inspection_order_applicant'.tr,
+                      text: item.empName ?? ''),
+                ),
+              ],
+            ),
+            textSpan(
+              hint: 'incoming_inspection_order_suppler'.tr,
+              text: item.supplier ?? '',
+              textColor: Colors.black54,
+            ),
+            textSpan(
+              hint: 'incoming_inspection_order_modify_date'.tr,
+              text: item.applicationDate ?? '',
+              textColor: Colors.black54,
+            ),
+          ],
+        ),
       ),
     );
   }

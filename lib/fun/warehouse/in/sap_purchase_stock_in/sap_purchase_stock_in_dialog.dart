@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -54,7 +55,7 @@ void checkSaveDialog({
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
                           child: avatar.isNotEmpty
-                              ? Image.network(avatar.value, fit: BoxFit.fill)
+                              ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                               : Icon(
                                   Icons.account_circle,
                                   size: 150,
@@ -71,7 +72,7 @@ void checkSaveDialog({
                         avatar.value = w?.picUrl ?? '';
                       },
                     ),
-                    selectView(
+                    SelectView(
                       list: locationList,
                       controller: locationController,
                       errorMsg:
@@ -229,7 +230,7 @@ void stockInDialog({
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DatePicker(pickerController: dpcDate),
-                    selectView(
+                    SelectView(
                       list: locationList,
                       errorMsg:
                           'sap_purchase_stock_in_dialog_get_storage_location_failed'
@@ -242,7 +243,7 @@ void stockInDialog({
                       },
                     ),
                     if (isNeedFaceVerify.value)
-                      selectView(
+                      SelectView(
                         list: leaderList,
                         errorMsg: errorMsg.value,
                         hint: 'sap_purchase_stock_in_dialog_superintendent'.tr,
@@ -374,7 +375,7 @@ void temporaryDialog({
                   'sap_purchase_stock_in_dialog_generate_temporarily_order'.tr),
               content: SizedBox(
                 width: 300,
-                child: selectView(
+                child: SelectView(
                   list: leaders,
                   errorMsg: '',
                   hint: 'sap_purchase_stock_in_dialog_superintendent'.tr,

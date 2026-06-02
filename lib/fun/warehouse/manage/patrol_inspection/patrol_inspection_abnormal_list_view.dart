@@ -19,7 +19,46 @@ class _PatrolInspectionAbnormalListPageState
   final PatrolInspectionLogic logic = Get.find<PatrolInspectionLogic>();
   final PatrolInspectionState state = Get.find<PatrolInspectionLogic>().state;
 
-  Widget _item(List<PatrolInspectionAbnormalRecordInfo> group) {
+  @override
+  void initState() {
+    for (var v in state.abnormalRecordList) {
+      v.isSelect.value = false;
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'product_patrol_inspection_abnormal_inspection_abnormal_records'.tr,
+      body: Obx(() {
+        var group = logic.getAbnormalGroup();
+        return ListView.builder(
+          itemCount: group.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (c, i) => _PatrolAbnormalItem(
+            group: group[i],
+            state: state,
+            logic: logic,
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _PatrolAbnormalItem extends StatelessWidget {
+  final List<PatrolInspectionAbnormalRecordInfo> group;
+  final PatrolInspectionState state;
+  final PatrolInspectionLogic logic;
+  const _PatrolAbnormalItem({
+    required this.group,
+    required this.state,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 500,
       margin: const EdgeInsets.all(3),
@@ -86,7 +125,11 @@ class _PatrolInspectionAbnormalListPageState
           Expanded(
             child: ListView.builder(
               itemCount: group.length,
-              itemBuilder: (c, i) => _subItem(group, i),
+              itemBuilder: (c, i) => _PatrolAbnormalSubItem(
+                group: group,
+                index: i,
+                state: state,
+              ),
             ),
           ),
           Obx(() => group.any((v) => v.isSelect.value)
@@ -130,8 +173,20 @@ class _PatrolInspectionAbnormalListPageState
       ),
     );
   }
+}
 
-  Widget _subItem(List<PatrolInspectionAbnormalRecordInfo> group, int index) {
+class _PatrolAbnormalSubItem extends StatelessWidget {
+  final List<PatrolInspectionAbnormalRecordInfo> group;
+  final int index;
+  final PatrolInspectionState state;
+  const _PatrolAbnormalSubItem({
+    required this.group,
+    required this.index,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     var data = group[index];
     return GestureDetector(
       onTap: () {
@@ -189,29 +244,6 @@ class _PatrolInspectionAbnormalListPageState
               )
             ]),
           )),
-    );
-  }
-
-  @override
-  void initState() {
-    for (var v in state.abnormalRecordList) {
-      v.isSelect.value = false;
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'product_patrol_inspection_abnormal_inspection_abnormal_records'.tr,
-      body: Obx(() {
-        var group = logic.getAbnormalGroup();
-        return ListView.builder(
-          itemCount: group.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (c, i) => _item(group[i]),
-        );
-      }),
     );
   }
 }

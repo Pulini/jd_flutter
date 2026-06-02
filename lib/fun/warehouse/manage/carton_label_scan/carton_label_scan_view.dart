@@ -1,15 +1,15 @@
-import 'package:audioplayers/audioplayers.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/widget/combination_button_widget.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/scanner.dart';
 
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
@@ -34,59 +34,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   var ae1 = 'audios/audio_error1.mp3';
   var ae2 = 'audios/audio_error2.mp3';
 
-  Container _item(LinkDataSizeList data) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade50, Colors.white],
-        ),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textSpan(
-                hint: 'carton_label_scan_size'.tr,
-                text: data.size ?? '',
-              ),
-              textSpan(
-                hint: 'carton_label_scan_inside_label'.tr,
-                text: data.priceBarCode ?? '',
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textSpan(
-                hint: 'carton_label_scan_label_qty'.tr,
-                text: data.labelCount.toString(),
-                textColor: Colors.black,
-              ),
-              textSpan(
-                hint: 'carton_label_scan_scanned_qty'.tr,
-                text: data.scanned.toString(),
-                textColor: Colors.black,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   void playAudio(String as) {
     if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
-      //安卓8.0以上才能调用这个api
-      //安卓5.1会出现 Didn't find class "android.media.AudioFocusRequest"
       if (player.state != PlayerState.completed) {
         player.stop();
         player.setSource(AssetSource(as));
@@ -120,7 +69,6 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   void initState() {
     if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
-      //安卓8.0以上才能调用这个api
       player = AudioPlayer();
     }
     _scan();
@@ -206,7 +154,6 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                     ],
                   ),
                   borderRadius: BorderRadius.circular(10),
-                  // border: Border.all(color: Colors.blue.shade200, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -222,7 +169,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                         right: 4,
                         bottom: 8,
                       ),
-                      child: progressIndicator(
+                      child: CustomProgressIndicator(
                         max: state.labelTotal.value.toDouble(),
                         value: state.scannedLabelTotal.value.toDouble(),
                       ),
@@ -253,7 +200,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.cartonInsideLabelList.length,
-                  itemBuilder: (c, i) => _item(state.cartonInsideLabelList[i]),
+                  itemBuilder: (c, i) =>
+                      _CartonInsideLabelItem(data: state.cartonInsideLabelList[i]),
                 ),
               ),
               if (state.labelTotal.value != 0 &&
@@ -272,5 +220,60 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     Get.delete<CartonLabelScanLogic>();
     player.dispose();
     super.dispose();
+  }
+}
+
+class _CartonInsideLabelItem extends StatelessWidget {
+  final LinkDataSizeList data;
+  const _CartonInsideLabelItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade50, Colors.white],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'carton_label_scan_size'.tr,
+                text: data.size ?? '',
+              ),
+              textSpan(
+                hint: 'carton_label_scan_inside_label'.tr,
+                text: data.priceBarCode ?? '',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'carton_label_scan_label_qty'.tr,
+                text: data.labelCount.toString(),
+                textColor: Colors.black,
+              ),
+              textSpan(
+                hint: 'carton_label_scan_scanned_qty'.tr,
+                text: data.scanned.toString(),
+                textColor: Colors.black,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

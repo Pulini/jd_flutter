@@ -42,115 +42,11 @@ class _WaitPickingMaterialDetailPageState
     }
   }
 
-  Widget _item(WaitPickingMaterialOrderSubInfo item) {
-    return SizedBox(
-      width: 120 * 11,
-      child: Column(
-        children: [
-          Container(
-            height: 40,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54),
-              color: Colors.yellow.shade100,
-            ),
-            child: Row(
-              children: [
-                const SizedBox(width: 20),
-                textSpan(
-                  hint: 'wait_picking_material_order_detail_instruction'.tr,
-                  text: item.moNo ?? '',
-                ),
-                const SizedBox(width: 20),
-                textSpan(
-                  hint: 'wait_picking_material_order_detail_type_body'.tr,
-                  text: item.models?[0].typeBody ?? '',
-                ),
-              ],
-            ),
-          ),
-          for (WaitPickingMaterialOrderModelInfo sub in item.models ?? [])
-            GestureDetector(
-              onTap: () => _modifyQty(subItemList: [sub]),
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black54),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    Obx(() => Checkbox(
-                          activeColor: Colors.blue,
-                          side: const BorderSide(
-                            color: Colors.red,
-                            width: 2,
-                          ),
-                          value: sub.isSelected.value,
-                          onChanged: (v) {
-                            sub.isSelected.value = !sub.isSelected.value;
-                          },
-                        )),
-                    Expanded(
-                      flex: 2,
-                      child: Text(sub.size ?? ''),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.batch ?? ''),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.colorSystem ?? ''),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.location ?? ''),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.demandQuantity.toShowString()),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.releaseQuantity.toShowString()),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.unReleaseQuantity.toShowString()),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.receivedQuantity.toShowString()),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(sub.releaseQuantity
-                          .sub(sub.receivedQuantity ?? 0)
-                          .toShowString()),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child:
-                          Obx(() => Text(sub.pickingQty.value.toShowString())),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                          sub.workshopWarehousePickingQuantity.toShowString()),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child:
-                          Text(sub.nowActIssuedCommonQuantity.toShowString()),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  Widget _item(WaitPickingMaterialOrderSubInfo item) =>
+      _WaitPickingMaterialDetailItem(
+        item: item,
+        onModifyQty: _modifyQty,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +173,127 @@ class _WaitPickingMaterialDetailPageState
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WaitPickingMaterialDetailItem extends StatelessWidget {
+  final WaitPickingMaterialOrderSubInfo item;
+  final void Function({required List<WaitPickingMaterialOrderModelInfo> subItemList}) onModifyQty;
+
+  const _WaitPickingMaterialDetailItem({
+    required this.item,
+    required this.onModifyQty,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120 * 11,
+      child: Column(
+        children: [
+          Container(
+            height: 40,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              color: Colors.yellow.shade100,
+            ),
+            child: Row(
+              children: [
+                const SizedBox(width: 20),
+                textSpan(
+                  hint: 'wait_picking_material_order_detail_instruction'.tr,
+                  text: item.moNo ?? '',
+                ),
+                const SizedBox(width: 20),
+                textSpan(
+                  hint: 'wait_picking_material_order_detail_type_body'.tr,
+                  text: item.models?[0].typeBody ?? '',
+                ),
+              ],
+            ),
+          ),
+          for (WaitPickingMaterialOrderModelInfo sub in item.models ?? [])
+            GestureDetector(
+              onTap: () => onModifyQty(subItemList: [sub]),
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black54),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Obx(() => Checkbox(
+                          activeColor: Colors.blue,
+                          side: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                          value: sub.isSelected.value,
+                          onChanged: (v) {
+                            sub.isSelected.value = !sub.isSelected.value;
+                          },
+                        )),
+                    Expanded(
+                      flex: 2,
+                      child: Text(sub.size ?? ''),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.batch ?? ''),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.colorSystem ?? ''),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.location ?? ''),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.demandQuantity.toShowString()),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.releaseQuantity.toShowString()),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.unReleaseQuantity.toShowString()),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.receivedQuantity.toShowString()),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(sub.releaseQuantity
+                          .sub(sub.receivedQuantity ?? 0)
+                          .toShowString()),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child:
+                          Obx(() => Text(sub.pickingQty.value.toShowString())),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                          sub.workshopWarehousePickingQuantity.toShowString()),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child:
+                          Text(sub.nowActIssuedCommonQuantity.toShowString()),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

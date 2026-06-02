@@ -33,6 +33,12 @@ class _CartonLabelScanProgressPageState
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'carton_label_scan_progress_title'.tr,
@@ -94,7 +100,7 @@ class _CartonLabelScanProgressPageState
                               children: [
                                 Text('carton_label_scan_progress_scan_state'.tr),
                                 Expanded(
-                                  child: progressIndicator(
+                                  child: CustomProgressIndicator(
                                     max: state.progress[index].totalPiece ?? 0,
                                     value: state.progress[index].scanned,
                                   ),

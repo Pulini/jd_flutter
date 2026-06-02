@@ -30,7 +30,6 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
 
   var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
 
-  // var tecTypeBody = TextEditingController();
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.productionDispatch.name}${PickerType.startDate}',
@@ -48,165 +47,6 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
       endDate: dpcEndDate.getDateFormatYMD(),
     );
   }
-
-  Widget _item(OrderPackageInfo data) => Container(
-        margin: EdgeInsets.only(bottom: 5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 2),
-          borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () => selectPackProfileDialog(
-                  orderPackProfileID: data.packProfileID ?? 0,
-                  capacityQty: data.capacityQty ?? 0,
-                  packProfileList: state.packProfileList,
-                  callback: (int packProfileID, double capacityQty) =>
-                      logic.modifyOrderPackProfile(
-                    packOrderID: data.packProfileID ?? 0,
-                    packProfileID: packProfileID,
-                    capacityQty: capacityQty,
-                    refresh: () => _query(),
-                  ),
-                ),
-                child: Container(
-                  width: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(7),
-                      bottomLeft: Radius.circular(7),
-                    ),
-                    color: Colors.green,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/ic_box.png',
-                      color: Colors.white,
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    if (checkUserPermission('601080111')) {
-                      Get.to(() => PartDispatchLabelListPage(
-                            packOrderId: data.packageId ?? 0,
-                          ));
-                    } else {
-                      errorDialog(
-                          content:
-                              'part_dispatch_pack_order_no_print_permission'
-                                  .tr);
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            expandedTextSpan(
-                              flex: 5,
-                              hint: 'part_dispatch_pack_order_organization'.tr,
-                              text: data.organizeName ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 5,
-                              hint: 'part_dispatch_pack_order_pack_order_no'.tr,
-                              text: data.packageNo ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 2,
-                              hint: 'part_dispatch_pack_order_make_date'.tr,
-                              text: data.date ?? '',
-                              textColor: Colors.black54,
-                            ),
-                          ],
-                        ),
-                        textSpan(
-                          hint: 'part_dispatch_pack_order_dispatch_order_no'.tr,
-                          text: data.workCardNo ?? '',
-                          textColor: Colors.black54,
-                        ),
-                        textSpan(
-                          hint: 'part_dispatch_pack_order_instruction'.tr,
-                          text: data.billNO ?? '',
-                          textColor: Colors.black54,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            expandedTextSpan(
-                              flex: 5,
-                              hint:
-                                  'part_dispatch_pack_order_type_body_tips'.tr,
-                              text: data.productName ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 5,
-                              hint: 'part_dispatch_pack_order_process'.tr,
-                              text: data.processName ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 2,
-                              hint: 'part_dispatch_pack_order_maker'.tr,
-                              text: data.userName ?? '',
-                              textColor: Colors.black54,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          'part_dispatch_pack_order_pack_profile'.trArgs([
-                            logic.getOrderPackProfile(data.packProfileID),
-                            data.capacityQty.toShowString()
-                          ]),
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () =>
-                    logic.deletePackOrder(data: data, refresh: () => _query()),
-                child: Container(
-                  width: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(7),
-                      bottomRight: Radius.circular(7),
-                    ),
-                    color: Colors.red,
-                  ),
-                  child: Center(
-                    child: Icon(Icons.delete_forever, color: Colors.white),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +99,12 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
       body: Obx(() => ListView.builder(
             padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
             itemCount: state.packOrderList.length,
-            itemBuilder: (c, i) => _item(state.packOrderList[i]),
+            itemBuilder: (c, i) => _PackOrderItem(
+              data: state.packOrderList[i],
+              state: state,
+              logic: logic,
+              onQuery: () => _query(),
+            ),
           )),
     );
   }
@@ -268,5 +113,179 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   void dispose() {
     Get.delete<PackOrderListLogic>();
     super.dispose();
+  }
+}
+
+class _PackOrderItem extends StatelessWidget {
+  final OrderPackageInfo data;
+  final PackOrderListState state;
+  final PackOrderListLogic logic;
+  final VoidCallback onQuery;
+  const _PackOrderItem({
+    required this.data,
+    required this.state,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 5),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey, width: 2),
+        borderRadius: BorderRadius.circular(10),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () => selectPackProfileDialog(
+                orderPackProfileID: data.packProfileID ?? 0,
+                capacityQty: data.capacityQty ?? 0,
+                packProfileList: state.packProfileList,
+                callback: (int packProfileID, double capacityQty) =>
+                    logic.modifyOrderPackProfile(
+                  packOrderID: data.packProfileID ?? 0,
+                  packProfileID: packProfileID,
+                  capacityQty: capacityQty,
+                  refresh: () => onQuery(),
+                ),
+              ),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    bottomLeft: Radius.circular(7),
+                  ),
+                  color: Colors.green,
+                ),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/ic_box.png',
+                    color: Colors.white,
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  if (checkUserPermission('601080111')) {
+                    Get.to(() => PartDispatchLabelListPage(
+                          packOrderId: data.packageId ?? 0,
+                        ));
+                  } else {
+                    errorDialog(
+                        content:
+                            'part_dispatch_pack_order_no_print_permission'.tr);
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          expandedTextSpan(
+                            flex: 5,
+                            hint: 'part_dispatch_pack_order_organization'.tr,
+                            text: data.organizeName ?? '',
+                            textColor: Colors.black54,
+                          ),
+                          expandedTextSpan(
+                            flex: 5,
+                            hint: 'part_dispatch_pack_order_pack_order_no'.tr,
+                            text: data.packageNo ?? '',
+                            textColor: Colors.black54,
+                          ),
+                          expandedTextSpan(
+                            flex: 2,
+                            hint: 'part_dispatch_pack_order_make_date'.tr,
+                            text: data.date ?? '',
+                            textColor: Colors.black54,
+                          ),
+                        ],
+                      ),
+                      textSpan(
+                        hint: 'part_dispatch_pack_order_dispatch_order_no'.tr,
+                        text: data.workCardNo ?? '',
+                        textColor: Colors.black54,
+                      ),
+                      textSpan(
+                        hint: 'part_dispatch_pack_order_instruction'.tr,
+                        text: data.billNO ?? '',
+                        textColor: Colors.black54,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          expandedTextSpan(
+                            flex: 5,
+                            hint:
+                                'part_dispatch_pack_order_type_body_tips'.tr,
+                            text: data.productName ?? '',
+                            textColor: Colors.black54,
+                          ),
+                          expandedTextSpan(
+                            flex: 5,
+                            hint: 'part_dispatch_pack_order_process'.tr,
+                            text: data.processName ?? '',
+                            textColor: Colors.black54,
+                          ),
+                          expandedTextSpan(
+                            flex: 2,
+                            hint: 'part_dispatch_pack_order_maker'.tr,
+                            text: data.userName ?? '',
+                            textColor: Colors.black54,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'part_dispatch_pack_order_pack_profile'.trArgs([
+                          logic.getOrderPackProfile(data.packProfileID),
+                          data.capacityQty.toShowString()
+                        ]),
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () =>
+                  logic.deletePackOrder(data: data, refresh: () => onQuery()),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(7),
+                    bottomRight: Radius.circular(7),
+                  ),
+                  color: Colors.red,
+                ),
+                child: Center(
+                  child: Icon(Icons.delete_forever, color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

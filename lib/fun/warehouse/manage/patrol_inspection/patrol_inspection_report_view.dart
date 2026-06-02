@@ -19,102 +19,6 @@ class _PatrolInspectionReportPageState
   final PatrolInspectionLogic logic = Get.find<PatrolInspectionLogic>();
   final PatrolInspectionState state = Get.find<PatrolInspectionLogic>().state;
 
-  Widget _item(List<PatrolInspectionAbnormalRecordDetailInfo> group) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.blueAccent, width: 2),
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey.shade200,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              color: Colors.blue.shade100,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    group[0].typeBody ?? '',
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                expandedTextSpan(
-                  hint: 'product_patrol_inspection_report_inspections_qty'.tr,
-                  hintColor: Colors.black54,
-                  text: group.length.toString(),
-                  textColor: Colors.blue,
-                ),
-                expandedTextSpan(
-                  hint: 'product_patrol_inspection_report_qualified_qty'.tr,
-                  hintColor: Colors.black54,
-                  text: group
-                      .where((v) => v.abnormalDescription == '检验合格')
-                      .length
-                      .toString(),
-                  textColor: Colors.green.shade700,
-                ),
-                expandedTextSpan(
-                  hint: 'product_patrol_inspection_report_defects_qty'.tr,
-                  hintColor: Colors.black54,
-                  text: group
-                      .where((v) => v.abnormalDescription != '检验合格')
-                      .length
-                      .toString(),
-                  textColor: Colors.red,
-                ),
-              ],
-            ),
-          ),
-          for (var i = 0; i < group.length; ++i) _subItem(group[i], i),
-          const SizedBox(height: 5),
-        ],
-      ),
-    );
-  }
-
-  Widget _subItem(PatrolInspectionAbnormalRecordDetailInfo data, int index) {
-    return Container(
-      color: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
-      padding: const EdgeInsets.all(5),
-      child: Row(children: [
-        Expanded(
-          child: Text(
-            data.abnormalDescription ?? '',
-            style: TextStyle(
-              color: data.abnormalDescription == '检验合格'
-                  ? Colors.green.shade700
-                  : Colors.red,
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          data.recordDate ?? '',
-          style: TextStyle(
-            color: data.abnormalDescription == '检验合格'
-                ? Colors.green.shade700
-                : Colors.red,
-          ),
-        )
-      ]),
-    );
-  }
-
   @override
   void initState() {
     for (var v in state.abnormalRecordList) {
@@ -201,7 +105,8 @@ class _PatrolInspectionReportPageState
                     Expanded(
                       child: ListView.builder(
                         itemCount: morningReport[0].length,
-                        itemBuilder: (c, i) => _item(morningReport[0][i]),
+                        itemBuilder: (c, i) =>
+                            _PatrolReportItem(group: morningReport[0][i]),
                       ),
                     )
                   ],
@@ -260,7 +165,8 @@ class _PatrolInspectionReportPageState
                     Expanded(
                       child: ListView.builder(
                         itemCount: afternoonReport[0].length,
-                        itemBuilder: (c, i) => _item(afternoonReport[0][i]),
+                        itemBuilder: (c, i) =>
+                            _PatrolReportItem(group: afternoonReport[0][i]),
                       ),
                     )
                   ],
@@ -270,6 +176,116 @@ class _PatrolInspectionReportPageState
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PatrolReportItem extends StatelessWidget {
+  final List<PatrolInspectionAbnormalRecordDetailInfo> group;
+  const _PatrolReportItem({required this.group});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.blueAccent, width: 2),
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.shade200,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              color: Colors.blue.shade100,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    group[0].typeBody ?? '',
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                expandedTextSpan(
+                  hint: 'product_patrol_inspection_report_inspections_qty'.tr,
+                  hintColor: Colors.black54,
+                  text: group.length.toString(),
+                  textColor: Colors.blue,
+                ),
+                expandedTextSpan(
+                  hint: 'product_patrol_inspection_report_qualified_qty'.tr,
+                  hintColor: Colors.black54,
+                  text: group
+                      .where((v) => v.abnormalDescription == '检验合格')
+                      .length
+                      .toString(),
+                  textColor: Colors.green.shade700,
+                ),
+                expandedTextSpan(
+                  hint: 'product_patrol_inspection_report_defects_qty'.tr,
+                  hintColor: Colors.black54,
+                  text: group
+                      .where((v) => v.abnormalDescription != '检验合格')
+                      .length
+                      .toString(),
+                  textColor: Colors.red,
+                ),
+              ],
+            ),
+          ),
+          for (var i = 0; i < group.length; ++i)
+            _PatrolReportSubItem(data: group[i], index: i),
+          const SizedBox(height: 5),
+        ],
+      ),
+    );
+  }
+}
+
+class _PatrolReportSubItem extends StatelessWidget {
+  final PatrolInspectionAbnormalRecordDetailInfo data;
+  final int index;
+  const _PatrolReportSubItem({required this.data, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+      padding: const EdgeInsets.all(5),
+      child: Row(children: [
+        Expanded(
+          child: Text(
+            data.abnormalDescription ?? '',
+            style: TextStyle(
+              color: data.abnormalDescription == '检验合格'
+                  ? Colors.green.shade700
+                  : Colors.red,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          data.recordDate ?? '',
+          style: TextStyle(
+            color: data.abnormalDescription == '检验合格'
+                ? Colors.green.shade700
+                : Colors.red,
+          ),
+        )
+      ]),
     );
   }
 }
