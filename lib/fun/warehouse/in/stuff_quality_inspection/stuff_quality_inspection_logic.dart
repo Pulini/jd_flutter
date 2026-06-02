@@ -1502,6 +1502,7 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     } else {
       for (var subData in state.labelData) {
+        subData.select = true;
         if (isAll) {
           subData.unqualified = subData.boxQty;
           subData.short = 0;
