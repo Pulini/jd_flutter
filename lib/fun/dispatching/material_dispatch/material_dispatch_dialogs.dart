@@ -50,7 +50,7 @@ void subItemReportDialog(
         scrollable: true,
         title: data.mustEnter == '0'
             ? Text('material_dispatch_dialog_label_progress'.tr)
-            : Text('material_dispatch_dialog_label_progress_must'.tr,style: TextStyle(
+            : Text('material_dispatch_dialog_label_progress_must'.tr,style: const TextStyle(
             color: Colors.red),),
         content: SizedBox(
           height: 230,

@@ -313,9 +313,9 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
               leave: state.select.value.toString());
         },
-        body: Obx(() => Scaffold(
+        body: Scaffold(
               backgroundColor: Colors.transparent,
-              body: EasyRefresh(
+              body: Obx(() => EasyRefresh(
                 controller: controller,
                 onRefresh: () {
                   logic.refreshGetVisitList(
@@ -330,8 +330,8 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                   itemBuilder: (BuildContext context, int index) =>
                       _item(state.dataList.toList()[index]),
                 ),
-              ),
-            )));
+              )),
+            ));
   }
 
   @override

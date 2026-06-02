@@ -29,8 +29,8 @@ void selectPackProfileDialog({
   item(int i) => Obx(() => GestureDetector(
         onTap: () => selectIndex.value = i,
         child: Container(
-          margin: EdgeInsets.only(bottom: 5),
-          padding: EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 5),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             border: Border.all(
               color: selectIndex.value == i ? Colors.green : Colors.grey,
@@ -135,7 +135,7 @@ void selectInstructionsDialog({
         border: Border.all(color: bkgColor),
         color: Colors.white,
       ),
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         children: [
           Row(children: [
@@ -231,8 +231,8 @@ void selectInstructionsDialog({
   Widget itemWidget(int index) {
     var data = batchGroups[index];
     return Obx(() => Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             border: Border.all(
               color: selectIndex.value == index ? Colors.green : Colors.grey,
@@ -349,7 +349,7 @@ void viewPartDetailDialog(PartDispatchOrderPartInfo data) {
         ),
         IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(Icons.cancel, color: Colors.red),
+          icon: const Icon(Icons.cancel, color: Colors.red),
         )
       ],
     ),
@@ -411,9 +411,9 @@ void createLabelDialog({
           .reduce((a, b) => a < b ? a : b);
   var controller = TextEditingController(text: max.toString());
   Get.dialog(AlertDialog(
-    titlePadding: EdgeInsets.all(5),
-    contentPadding: EdgeInsets.all(10),
-    title: Padding(padding: EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
+    titlePadding: const EdgeInsets.all(5),
+    contentPadding: const EdgeInsets.all(10),
+    title: Padding(padding: const EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -448,7 +448,7 @@ void createLabelDialog({
                 ),
                 if (!isSingleSize)
                   Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: NumberEditText(
                       controller: controller,
                       hint: 'part_dispatch_create_label_dialog_input_create_qty'.tr,

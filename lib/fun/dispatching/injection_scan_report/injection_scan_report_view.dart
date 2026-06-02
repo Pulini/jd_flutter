@@ -50,7 +50,6 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
             Expanded(
               child: Obx(() =>
                   ListView.builder(
-                    shrinkWrap: true,
                     itemCount: state.showDataList.length,
                     itemBuilder: (context, index) =>
                         _item1(state.showDataList[index]),

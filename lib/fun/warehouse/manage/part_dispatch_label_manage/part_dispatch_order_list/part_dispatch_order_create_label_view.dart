@@ -93,7 +93,7 @@ class _PartDispatchOrderCreateLabelPageState
         )
       ],
       body: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -388,7 +388,7 @@ class _CreateLabelItem extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                contentPadding: EdgeInsets.only(bottom: 3),
+                contentPadding: const EdgeInsets.only(bottom: 3),
               ),
               style: const TextStyle(color: Colors.blue),
               controller: packQtyController,
@@ -418,7 +418,7 @@ class _CreateLabelItem extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(0),
                     ),
-                    contentPadding: EdgeInsets.only(bottom: 3)),
+                    contentPadding: const EdgeInsets.only(bottom: 3)),
                 style: const TextStyle(color: Colors.blue),
                 controller: countController,
                 onChanged: (v) => logic.setItemLabelCountListener(

@@ -61,7 +61,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                 children: [
                   Text(
                     'suppliers_scan_storage_conditions'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
                         fontSize: 18),

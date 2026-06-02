@@ -40,7 +40,7 @@ void main() {
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0.0),
       ),
       getPages: RouteConfig.appRoutes,
-      home:  App(),
+      home:  const App(),
     ),
   );
 }

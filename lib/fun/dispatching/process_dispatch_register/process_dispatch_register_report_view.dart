@@ -39,7 +39,7 @@ class _ProcessDispatchRegisterReportViewState
   Widget build(BuildContext context) {
     return pageBody(
       title: '报工',
-      actions: [TextButton(onPressed: () {}, child: Text('清空'))],
+      actions: [TextButton(onPressed: () {}, child: const Text('清空'))],
       body: Column(
         children: [
           Expanded(

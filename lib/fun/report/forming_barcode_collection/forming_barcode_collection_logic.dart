@@ -214,7 +214,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
           colorText: Colors.white,         // 文字颜色
           snackStyle: SnackStyle.FLOATING, // 样式
           borderRadius: 8,                 // 圆角
-          margin: EdgeInsets.all(10),      // 边距
+          margin: const EdgeInsets.all(10),      // 边距
         );
       } catch (e) {
         logger.e('显示Snackbar失败: $e');

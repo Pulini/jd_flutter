@@ -185,7 +185,6 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
             _title(),
             Expanded(
               child: Obx(() => ListView.builder(
-                    shrinkWrap: true,
                     itemCount: state.dataList.length,
                     itemBuilder: (context, index) =>
                         _item1(state.dataList[index]),

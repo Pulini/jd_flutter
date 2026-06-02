@@ -83,7 +83,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                     _query();
                   },
                 ),
-                icon: Icon(Icons.qr_code_scanner, color: Colors.blue),
+                icon: const Icon(Icons.qr_code_scanner, color: Colors.blue),
               ),
             ),
           ),
@@ -97,7 +97,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
       ],
       query: () => _query(),
       body: Obx(() => ListView.builder(
-            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
             itemCount: state.packOrderList.length,
             itemBuilder: (c, i) => _PackOrderItem(
               data: state.packOrderList[i],
@@ -131,7 +131,7 @@ class _PackOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey, width: 2),
         borderRadius: BorderRadius.circular(10),
@@ -159,7 +159,7 @@ class _PackOrderItem extends StatelessWidget {
               ),
               child: Container(
                 width: 40,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(7),
                     bottomLeft: Radius.circular(7),
@@ -190,7 +190,7 @@ class _PackOrderItem extends StatelessWidget {
                   }
                 },
                 child: Padding(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -256,7 +256,7 @@ class _PackOrderItem extends StatelessWidget {
                           logic.getOrderPackProfile(data.packProfileID),
                           data.capacityQty.toShowString()
                         ]),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                         ),
@@ -271,14 +271,14 @@ class _PackOrderItem extends StatelessWidget {
                   logic.deletePackOrder(data: data, refresh: () => onQuery()),
               child: Container(
                 width: 40,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(7),
                     bottomRight: Radius.circular(7),
                   ),
                   color: Colors.red,
                 ),
-                child: Center(
+                child: const Center(
                   child: Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

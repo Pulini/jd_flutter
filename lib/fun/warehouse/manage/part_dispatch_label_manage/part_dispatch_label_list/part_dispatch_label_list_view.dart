@@ -68,7 +68,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.labelList.length,
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 10,
                     right: 10,
                     bottom: 10,
@@ -202,9 +202,9 @@ class _PartDispatchLabelListItem extends StatelessWidget {
         var indexWidget = Container(
           width: 30,
           height: 30,
-          margin: EdgeInsets.only(right: 10),
+          margin: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
             border: Border.all(
               width: 2,
               color: data.isSelected.value ? Colors.green : Colors.grey,
@@ -213,7 +213,7 @@ class _PartDispatchLabelListItem extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             (index + 1).toString(),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         );
         var centerWidget = Expanded(
@@ -231,7 +231,7 @@ class _PartDispatchLabelListItem extends StatelessWidget {
                       data.totalQty().toString(),
                       data.materialList!.first.unitName ?? ''
                     ]),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.blue),
                   ),
                 ],
@@ -253,7 +253,7 @@ class _PartDispatchLabelListItem extends StatelessWidget {
           child: Container(
             height: 80,
             width: 160,
-            margin: EdgeInsets.only(left: 10),
+            margin: const EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               border: Border.all(
                 color: data.isSelected.value ? Colors.green : Colors.grey,
@@ -275,8 +275,8 @@ class _PartDispatchLabelListItem extends StatelessWidget {
           ),
         );
         return Container(
-          margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             border: Border.all(
               color: data.isSelected.value ? Colors.green : Colors.grey,
@@ -297,13 +297,13 @@ class _PartDispatchLabelListItem extends StatelessWidget {
           foregroundDecoration: RotatedCornerDecoration.withColor(
             badgePosition: BadgePosition.topStart,
             color: data.isPrint == true ? Colors.green : Colors.red,
-            badgeCornerRadius: Radius.circular(7),
-            badgeSize: Size(50, 50),
+            badgeCornerRadius: const Radius.circular(7),
+            badgeSize: const Size(50, 50),
             textSpan: TextSpan(
               text: data.isPrint == true
                   ? 'part_dispatch_label_printed'.tr
                   : 'part_dispatch_label_not_printed'.tr,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
             ),
           ),
           child: Row(children: [indexWidget, centerWidget, endWidget]),

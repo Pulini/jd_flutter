@@ -46,7 +46,7 @@ class _PumaAntiCounterfeitingOutboundPageState
                                   Border.all(width: 1, color: state.sortingList[index].use ? Colors.red :Colors.blue)),
                           child: Text(
                             state.sortingList[index].fBarCode.toString(),
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ))
 

@@ -308,13 +308,13 @@ class _WebPrinterState extends State<WebPrinter> {
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor(),
-      child: Obx(() => Scaffold(
+      child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
-              title: Text('打印清单预览'),
+              title: const Text('打印清单预览'),
               actions: [
-                ready.value
+                Obx(() => ready.value
                     ? IconButton(
                         onPressed: () => onLinePrintDialog(
                           a4PaperByteList,
@@ -323,12 +323,13 @@ class _WebPrinterState extends State<WebPrinter> {
                         icon: const Icon(Icons.print, color: Colors.blueAccent),
                       )
                     : const CircularProgressIndicator(),
+                ),
               ],
             ),
             body: GetPlatform.isAndroid || GetPlatform.isIOS
                 ? WebViewWidget(controller: webViewController)
                 : null,
-          )),
+          ),
     );
   }
 }

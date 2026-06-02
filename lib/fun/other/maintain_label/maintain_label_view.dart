@@ -80,7 +80,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
 
   Container _subitem(String text1, String text2, String text3, int type) {
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 10,
         right: 10,
       ),
@@ -131,7 +131,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     int type,
   ) {
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 10,
         right: 10,
       ),

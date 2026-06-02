@@ -51,7 +51,7 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
           DatePicker(pickerController: postDate),
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
+            child: const Row(
               children: [
                 ExpandedFrameText(
                   text: '物料',

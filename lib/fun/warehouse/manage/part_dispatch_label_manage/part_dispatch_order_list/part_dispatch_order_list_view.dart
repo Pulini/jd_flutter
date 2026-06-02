@@ -120,7 +120,7 @@ class _PartDispatchLabelManagePageState
               labelStyle: const TextStyle(color: Colors.black54),
               prefixIcon: IconButton(
                 onPressed: () => scannerDialog(detect: (c) => _query(code: c)),
-                icon: Icon(Icons.qr_code_scanner, color: Colors.blue),
+                icon: const Icon(Icons.qr_code_scanner, color: Colors.blue),
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),
@@ -148,8 +148,8 @@ class _PartDispatchLabelManagePageState
         children: [
           Container(
             height: 100,
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+            padding: const EdgeInsets.all(5),
+            margin: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
             decoration: BoxDecoration(
               border: Border.all(width: 2, color: Colors.black),
               borderRadius: BorderRadius.circular(10),
@@ -179,7 +179,7 @@ class _PartDispatchLabelManagePageState
                                   hint: 'part_dispatch_order_size'.tr, text: state.sizeListText.value),
                               Text(
                                 state.total.value,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
                                 ),
@@ -189,7 +189,7 @@ class _PartDispatchLabelManagePageState
                         ],
                       )),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 AspectRatio(
                   aspectRatio: 2 / 1,
                   child: Container(
@@ -213,7 +213,7 @@ class _PartDispatchLabelManagePageState
           Expanded(
             child: Obx(() => GridView.builder(
                   itemCount: state.partList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 6,
                     childAspectRatio: 7 / 5,
                   ),
@@ -276,7 +276,7 @@ class _PartDispatchOrderPartGridItem extends StatelessWidget {
       onTap: () => data.isSelected.value = !data.isSelected.value,
       child: Obx(() => Container(
             margin: const EdgeInsets.all(5),
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 2,

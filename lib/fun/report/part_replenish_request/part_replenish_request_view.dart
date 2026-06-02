@@ -61,7 +61,7 @@ class _PartReplenishRequestPageState extends State<PartReplenishRequestPage>
             unselectedLabelColor: Colors.grey,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             controller: tabController,
-            tabs: [
+            tabs: const [
               Tab(text: '部件表'),
               Tab(text: '补料表'),
             ],
@@ -76,13 +76,13 @@ class _PartReplenishRequestPageState extends State<PartReplenishRequestPage>
               scrollDirection: Axis.horizontal,
               children: [
                 Obx(() => ListView.builder(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       itemCount: state.partList.length,
                       itemBuilder: (c, i) =>
                           _PartReplenishItem(data: state.partList[i]),
                     )),
                 Obx(() => ListView.builder(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       itemCount:
                           state.partList.where((v) => v.hasSelect()).length,
                       itemBuilder: (c, i) => _PartReplenishSubItem(
@@ -141,10 +141,10 @@ class _PartReplenishItem extends StatelessWidget {
               maxFontSize: 18,
             ),
             children: [
-              Divider(indent: 10, endIndent: 10),
+              const Divider(indent: 10, endIndent: 10),
               for (var sizeItem in data.sizeList ?? <PartSizeInfo>[]) ...[
                 _PartSizeItem(sizeItem: sizeItem),
-                Divider(indent: 15, endIndent: 15),
+                const Divider(indent: 15, endIndent: 15),
               ],
             ],
           ),
@@ -159,11 +159,11 @@ class _PartSizeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.only(left: 20, right: 5),
+      padding: const EdgeInsetsGeometry.only(left: 20, right: 5),
       child: Row(
         children: [
           textSpan(hint: '尺码：', text: '${sizeItem.size}'),
-          Spacer(),
+          const Spacer(),
           SizedBox(
             width: 150,
             child: Obx(() => NumberDecimalEditText(
@@ -189,8 +189,8 @@ class _PartReplenishSubItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
-      margin: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
@@ -224,7 +224,7 @@ class _PartReplenishSubItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsetsGeometry.only(left: 10, top: 10, right: 10),
+            padding: const EdgeInsetsGeometry.only(left: 10, top: 10, right: 10),
             child: Row(
               children: [
                 ExpandedFrameText(
@@ -247,7 +247,7 @@ class _PartReplenishSubItem extends StatelessWidget {
           for (var sizeItem in (part.sizeList ?? <PartSizeInfo>[])
               .where((v) => v.replenishRequest.value > 0))
             Padding(
-              padding: EdgeInsetsGeometry.only(left: 10, right: 10),
+              padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
               child: Row(
                 children: [
                   ExpandedFrameText(
@@ -262,7 +262,7 @@ class _PartReplenishSubItem extends StatelessWidget {
               ),
             ),
           Padding(
-            padding: EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
+            padding: const EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
             child: Row(
               children: [
                 ExpandedFrameText(

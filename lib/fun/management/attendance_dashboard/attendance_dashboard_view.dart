@@ -111,7 +111,7 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: CupertinoSearchTextField(
                         prefixIcon: const SizedBox.shrink(),
                         suffixIcon: const Icon(CupertinoIcons.search),
@@ -236,7 +236,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                     ),
                     Text('attendance_dashboard_total'.tr,
                         style: tsSmallLightGrey),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                   ]),
                   Expanded(
                     child: _percentProgress(
@@ -252,11 +252,11 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                     ),
                     Text('attendance_dashboard_attendance'.tr,
                         style: tsSmallLightGrey),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                   ])
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +347,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                           animationController.forward();
                         }
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: Colors.blue,
                       ),

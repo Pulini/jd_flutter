@@ -44,14 +44,14 @@ class _MaterialLabelScanDetailPageState
           height: 500,
           child: Column(
             children: [
-              Text(
+              const Text(
                 '材料图片',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Expanded(
                 child: imageUrl != null && imageUrl.isNotEmpty
                     ? CachedNetworkImage(
@@ -63,7 +63,7 @@ class _MaterialLabelScanDetailPageState
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
@@ -83,7 +83,7 @@ class _MaterialLabelScanDetailPageState
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Column(
+                        child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -97,12 +97,12 @@ class _MaterialLabelScanDetailPageState
                         ),
                       ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Get.back(); // 关闭 Dialog
                 },
-                child: Text('关闭'),
+                child: const Text('关闭'),
               ),
             ],
           ),
@@ -492,7 +492,7 @@ class _MaterialLabelScanDetailPageState
                                   child: Text(
                                     '材料: <${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}',
                                     maxLines: 1,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,

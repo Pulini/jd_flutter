@@ -43,13 +43,13 @@ class _MaintainLabelCreateCustomPageState
         children: [
           Row(
             children: [
-              SizedBox(width: 15),
-              Text('批量箱容：'),
+              const SizedBox(width: 15),
+              const Text('批量箱容：'),
               Expanded(
                 child: NumberEditText(controller: batchBoxCapacityController),
               ),
-              SizedBox(width: 15),
-              Text('批量生成数：'),
+              const SizedBox(width: 15),
+              const Text('批量生成数：'),
               Expanded(
                 child: NumberEditText(controller: batchCreateGoodsController),
               ),
@@ -73,7 +73,7 @@ class _MaintainLabelCreateCustomPageState
                     click: () => logic.createCustomLabels(widget.labelType),
                   )),
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Obx(() => Checkbox(
                       value: state.createCustomLabelsData.isNotEmpty &&
                           state.createCustomLabelsData
@@ -89,7 +89,7 @@ class _MaintainLabelCreateCustomPageState
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: state.createCustomLabelsData.length,
                   itemBuilder: (c, i) => _item(state.createCustomLabelsData[i]),
                 )),

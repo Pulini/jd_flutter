@@ -31,9 +31,9 @@ class HomeLogic extends GetxController {
           ? Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
               child: const Icon(Icons.flutter_dash, color: Colors.white),
             )

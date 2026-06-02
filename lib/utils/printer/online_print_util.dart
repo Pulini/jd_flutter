@@ -192,7 +192,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
         PopScope(
           canPop: false,
           child: AlertDialog(
-            title: Text('选择打印机'),
+            title: const Text('选择打印机'),
             content: SizedBox(
               width: 400,
               child: Column(
@@ -226,7 +226,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
             actions: <Widget>[
               TextButton(
                 onPressed: () => print(),
-                child: Text('打印'),
+                child: const Text('打印'),
               ),
               TextButton(
                 onPressed: () => Get.back(),

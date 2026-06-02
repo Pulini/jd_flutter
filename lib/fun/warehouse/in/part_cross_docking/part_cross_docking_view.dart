@@ -46,7 +46,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
   Widget build(BuildContext context) {
     return pageBody(
       body: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
           children: [
             TextField(
@@ -88,14 +88,14 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () => manuallyAdd(),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add_circle,
                     color: Colors.blue,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Expanded(
               child: EasyRefresh(
                 controller: refreshController,

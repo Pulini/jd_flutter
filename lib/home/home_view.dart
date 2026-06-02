@@ -223,8 +223,8 @@ class HomeSubItem extends StatelessWidget {
           height: isGroup ? 30 : 40,
           color: _color(item),
         ),
-        title: Text(item.name, style: TextStyle(fontSize: 14)),
-        subtitle: Text(item.description, style: TextStyle(fontSize: 12)),
+        title: Text(item.name, style: const TextStyle(fontSize: 14)),
+        subtitle: Text(item.description, style: const TextStyle(fontSize: 12)),
         trailing: item.hasUpdate
             ? Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,

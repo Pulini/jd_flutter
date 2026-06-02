@@ -277,7 +277,6 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           children: [
             Expanded(
               child: Obx(() => ListView.builder(
-                    shrinkWrap: true,
                     itemCount: state.showDataList.length,
                     itemBuilder: (context, index) => _QiListItem(
                       index: index,

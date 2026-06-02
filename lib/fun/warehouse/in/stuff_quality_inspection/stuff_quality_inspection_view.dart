@@ -448,7 +448,7 @@ class _StuffQualityInspectionPageState
                   ),
                   IconButton(onPressed: (){
                     logic.getHandleType();
-                  }, icon: Icon(Icons.search)),
+                  }, icon: const Icon(Icons.search)),
                   Expanded(
                       child: NumberDecimalEditText(
                     hint: 'quality_inspection_availability'.tr,

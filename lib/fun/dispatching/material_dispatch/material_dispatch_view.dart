@@ -76,12 +76,12 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             children: [
               Text(
                 'material_dispatch_look_process_manual'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
@@ -113,15 +113,15 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Get.back(); // 关闭弹窗
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   // 增加内边距
-                  minimumSize: Size(100, 50),
+                  minimumSize: const Size(100, 50),
                   // 设置最小尺寸
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // 可选：调整圆角

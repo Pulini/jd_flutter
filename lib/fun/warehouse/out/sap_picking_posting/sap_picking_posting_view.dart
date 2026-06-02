@@ -36,7 +36,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         height: 40,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
           ),
@@ -45,7 +45,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         child: Center(
           child: AutoSizeText(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
     width: double.infinity,
     color: Colors.white,
     height: 45,
-    padding: EdgeInsets.only(left: 5, top: 5, right: 5),
+    padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
     child: TextField(
       controller: tecSemiFinishedProduct,
       decoration: InputDecoration(
@@ -76,7 +76,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade200),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
         hintText: '请扫描或输入半成品条码',
@@ -96,7 +96,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
           ),
-          icon: Icon(
+          icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
           ),
@@ -109,7 +109,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
     width: double.infinity,
     color: Colors.white,
     height: 45,
-    padding: EdgeInsets.only(left: 5, top: 5, right: 5),
+    padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
     child: TextField(
       controller: tecFinishedProduct,
       decoration: InputDecoration(
@@ -124,7 +124,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade200),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
         hintText: '请扫描或输入成品条码',
@@ -144,7 +144,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
           ),
-          icon: Icon(
+          icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
           ),
@@ -198,7 +198,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                       _itemSemiFinishedProduct(item),
                     Container(
                       padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(7),
                           bottomRight: Radius.circular(7),
@@ -233,7 +233,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     productPageTitle(
                       title: '拣配成品条码明，只允许编码/订单相同',
                       bkgColor: Colors.green,
@@ -242,8 +242,8 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                     state.finishedProductList.isNotEmpty
                         ? Container(
                             padding:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                            decoration: BoxDecoration(
+                                const EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(7),
                                 bottomRight: Radius.circular(7),
@@ -255,7 +255,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                               children: [
                                 AutoSizeText(
                                   '(${state.finishedProductList.first.materialCode})${state.finishedProductList.first.materialName}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                   maxLines: 2,
                                   minFontSize: 8,
                                   maxFontSize: 16,
@@ -291,7 +291,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
                                         ),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.delete_forever,
                                           color: Colors.red,
                                         ),
@@ -304,7 +304,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                           )
                         : Container(
                             padding: const EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(7),
                                 bottomRight: Radius.circular(7),

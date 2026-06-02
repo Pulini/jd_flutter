@@ -474,7 +474,7 @@ class _TmpOrderSubItem extends StatelessWidget {
                           text: data.model.ifEmpty(data.distributionType ?? ''),
                           textColor: Colors.blue.shade900,
                         ),
-                        SizedBox(width: 30),
+                        const SizedBox(width: 30),
                         expandedTextSpan(
                           flex: 2,
                           hint: 'temporary_order_remark'.tr,

@@ -37,7 +37,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
             padding: const EdgeInsets.all(5),
             itemCount: state.messageList.length,
             itemBuilder: (c, i) => Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.all(

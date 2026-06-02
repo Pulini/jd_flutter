@@ -46,7 +46,7 @@ class _MaintainLabelCreateMixPageState
         children: [
           Container(
             height: 40,
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: TextField(
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -97,7 +97,7 @@ class _MaintainLabelCreateMixPageState
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: state.createMixLabelsData.length,
                   itemBuilder: (c, i) => _item(state.createMixLabelsData[i]),
                 )),

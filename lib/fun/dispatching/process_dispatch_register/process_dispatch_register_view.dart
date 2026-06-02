@@ -312,7 +312,7 @@ class _ProcessDispatchRegisterPageState
     return pageBody(
       actions: [
         TextButton(
-          onPressed: () => Get.to(() => ProcessDispatchRegisterReportView())
+          onPressed: () => Get.to(() => const ProcessDispatchRegisterReportView())
               ?.then((_) => _initScan()),
           child: Text('process_dispatch_register_report'.tr),
         )

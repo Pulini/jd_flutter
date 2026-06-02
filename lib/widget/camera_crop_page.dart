@@ -505,9 +505,9 @@ void cameraCropResultDialog({
                     color: Colors.orange,
                   ),
                   const SizedBox(width: 8),
-                  Text(
+                  const Text(
                     '拍照结果',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
