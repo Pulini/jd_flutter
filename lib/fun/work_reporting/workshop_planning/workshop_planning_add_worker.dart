@@ -26,16 +26,6 @@ class _WorkshopPlanningAddWorkerPageState
   String flowProcessID = Get.arguments['flowProcessID'];
   String date = Get.arguments['date'];
 
-  Widget _workerItem(int i) => _AddWorkerGridItem(
-        index: i,
-        logic: logic,
-        state: state,
-        cWorkerType: cWorkerType,
-        tecWorkerNumber: tecWorkerNumber,
-        tecManHours: tecManHours,
-        tecCoefficient: tecCoefficient,
-      );
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -233,7 +223,7 @@ class _WorkshopPlanningAddWorkerPageState
                 ),
                 Expanded(
                   flex: 6,
-                  child: Obx(() => SelectView(
+                  child:SelectView(
                         list: state.workTypeList,
                         controller: cWorkerType,
                         hint: '选择工种',
@@ -241,7 +231,7 @@ class _WorkshopPlanningAddWorkerPageState
                           coefficient: tecCoefficient,
                           index: i,
                         ),
-                      )),
+                      ),
                 ),
               ],
             ),
@@ -254,13 +244,22 @@ class _WorkshopPlanningAddWorkerPageState
                     crossAxisCount: 4,
                     childAspectRatio: 5 / 3,
                   ),
-                  itemBuilder: (c, i) => _workerItem(i),
+                  itemBuilder: (c, i) => _AddWorkerGridItem(
+                    index: i,
+                    logic: logic,
+                    state: state,
+                    cWorkerType: cWorkerType,
+                    tecWorkerNumber: tecWorkerNumber,
+                    tecManHours: tecManHours,
+                    tecCoefficient: tecCoefficient,
+                  ),
                 )),
           ),
         ],
       ),
     );
   }
+
   @override
   void dispose() {
     cWorkerType.dispose();
