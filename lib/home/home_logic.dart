@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +21,7 @@ class HomeLogic extends GetxController {
 
   //用户头像
   late Widget userAvatar;
+  StreamSubscription<String>? _languageSubscription;
 
   @override
   void onInit() {
@@ -28,29 +31,23 @@ class HomeLogic extends GetxController {
           ? Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
               ),
               child: const Icon(Icons.flutter_dash, color: Colors.white),
             )
           : AspectRatio(
               aspectRatio: 1 / 1,
               child: ClipOval(
-                child: Image.network(
-                  userInfo!.picUrl!,
-                  fit: BoxFit.cover,
-                  cacheHeight: 200,
-                  cacheWidth: 200,
-                  errorBuilder: (ctx, err, st) => Image.asset(
-                    'assets/images/ic_logo.png',
-                    color: Colors.blue,
-                  ),
-                ),
+                child: cachedNetworkImage(
+                userInfo!.picUrl,
+                fit: BoxFit.cover,
+              ),
               ),
             ),
     );
-    state.language.listen((v) {
+    _languageSubscription = state.language.listen((v) {
       Future.delayed(const Duration(milliseconds: 500), () {
         state.getMenuFunction(success: (json) async {
           spSave(spSaveMenuInfo, textToKey(json.toString()));
@@ -111,7 +108,7 @@ class HomeLogic extends GetxController {
         )
     ];
     if (navigationSize != state.navigationBar.length) {
-      state.nBarIndex = 0;
+      state.nBarIndex.value = 0;
     }
     return formatButton(list);
   }
@@ -122,7 +119,7 @@ class HomeLogic extends GetxController {
   }
 
   void navigationBarClick(int index) {
-    state.nBarIndex = index;
+    state.nBarIndex.value = index;
     refreshButton();
   }
 
@@ -131,7 +128,7 @@ class HomeLogic extends GetxController {
     if (state.search.isEmpty) {
       list.addAll(
         functions.where((v) =>
-            v.classify == state.navigationBar[state.nBarIndex].className),
+            v.classify == state.navigationBar[state.nBarIndex.value].className),
       );
     } else {
       var bi = <ButtonItem>[];
@@ -150,13 +147,13 @@ class HomeLogic extends GetxController {
     }
     // list.add(
     //   HomeButton(
-    //     name: '我的团队',
-    //     description: '团队及考勤明细总览',
+    //     name: '部件补单申请',
+    //     description: '部件生产订单创建预补单和实补单',
     //     icon: 'https://geapp.goldemperor.com:8084/AppResourceFile/icon/2025-08-13-10-29-45.jpg',
     //     classify: '',
     //     id: 999,
     //     version: 200,
-    //     route: '/attendance_dashboard',
+    //     route: '/part_replenish_request',
     //     hasPermission: true,
     //   ),
     // );
@@ -237,5 +234,11 @@ class HomeLogic extends GetxController {
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  @override
+  void onClose() {
+    _languageSubscription?.cancel();
+    super.onClose();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -415,7 +416,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
                         height: 150,
                         child: ClipOval(
                           child: avatar.isNotEmpty
-                              ? Image.network(avatar.value, fit: BoxFit.fill)
+                              ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                               : Icon(
                                   Icons.account_circle,
                                   size: 150,
@@ -474,50 +475,60 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
   );
 }
 
-Widget _modifyContextEditText(WaitPickingMaterialOrderInfo info) {
-  var controller = TextEditingController(text: info.location ?? '');
-  return Container(
-    width: double.infinity,
-    margin: const EdgeInsets.all(5),
-    height: 40,
-    child: TextField(
-      controller: controller,
-      onChanged: (v) => info.modifyLocation = v,
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(
-          top: 0,
-          bottom: 0,
-          left: 15,
-          right: 10,
-        ),
-        filled: true,
-        fillColor: Colors.grey[300],
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(
-            color: Colors.transparent,
+Widget _modifyContextEditText(WaitPickingMaterialOrderInfo info) =>
+    _ModifyContextEditTextWidget(info: info);
+
+class _ModifyContextEditTextWidget extends StatelessWidget {
+  final WaitPickingMaterialOrderInfo info;
+
+  const _ModifyContextEditTextWidget({required this.info});
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = TextEditingController(text: info.location ?? '');
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.all(5),
+      height: 40,
+      child: TextField(
+        controller: controller,
+        onChanged: (v) => info.modifyLocation = v,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(
+            top: 0,
+            bottom: 0,
+            left: 15,
+            right: 10,
           ),
-        ),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        labelText: info.location ?? '',
-        labelStyle: const TextStyle(color: Colors.blueAccent),
-        prefixIcon: IconButton(
-          onPressed: () {
-            controller.text = info.location ?? '';
-          },
-          icon: const Icon(
-            Icons.replay_circle_filled,
+          filled: true,
+          fillColor: Colors.grey[300],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
           ),
-        ),
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.close, color: Colors.grey),
-          onPressed: () => controller.clear(),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          labelText: info.location ?? '',
+          labelStyle: const TextStyle(color: Colors.blueAccent),
+          prefixIcon: IconButton(
+            onPressed: () {
+              controller.text = info.location ?? '';
+            },
+            icon: const Icon(
+              Icons.replay_circle_filled,
+            ),
+          ),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.close, color: Colors.grey),
+            onPressed: () => controller.clear(),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 void modifyLocationDialog({
@@ -533,9 +544,10 @@ void modifyLocationDialog({
           content: SizedBox(
             width: 400,
             height: 300,
-            child: ListView(children: [
-              for (var v in list) _modifyContextEditText(v),
-            ]),
+            child: ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) => _modifyContextEditText(list[index]),
+            ),
           ),
           actions: [
             TextButton(

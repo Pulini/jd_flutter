@@ -77,7 +77,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                 Text('part_process_scan_report_allocation_situation'.tr,
                     style: style),
                 Expanded(
-                  child: percentIndicator(
+                  child: PercentIndicator(
                     max: data.getProcessMax(),
                     value: data.getDistributionMax(),
                   ),
@@ -139,35 +139,35 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
   }
 
   Row _reportItemTitle() => Row(children: [
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_title_process'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 10,
           text: 'part_process_scan_report_title_ins_number'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 5,
           text: 'part_process_scan_report_title_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: 'part_process_scan_report_title_ins_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: 'part_process_scan_report_title_report_qty'.tr,
           backgroundColor: Colors.blue,
@@ -177,27 +177,27 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
       ]);
 
   Row _reportItem1(ReportInfo item) => Row(children: [
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 20,
           text: item.name ?? '',
           backgroundColor: Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 10,
           text: item.instruction ?? '',
           backgroundColor: Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 5,
           text: item.size ?? '',
           backgroundColor: Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.white,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.qty.toShowString(),
           backgroundColor: Colors.white,
@@ -205,27 +205,27 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
       ]);
 
   Row _reportItem2(ReportInfo item) => Row(children: [
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_ins_total'.tr,
           backgroundColor: Colors.orange.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 10,
           text: item.instruction ?? '',
           backgroundColor: Colors.orange.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 5,
           text: '',
           backgroundColor: Colors.orange.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.orange.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.qty.toShowString(),
           backgroundColor: Colors.orange.shade100,
@@ -233,27 +233,27 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
       ]);
 
   Row _reportItem3(ReportInfo item) => Row(children: [
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_part_total'.tr,
           backgroundColor: Colors.greenAccent.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 10,
           text: '',
           backgroundColor: Colors.greenAccent.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 5,
           text: '',
           backgroundColor: Colors.greenAccent.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.greenAccent.shade100,
         ),
-        expandedFrameText(
+        ExpandedFrameText(
           flex: 7,
           text: item.qty.toShowString(),
           backgroundColor: Colors.greenAccent.shade100,
@@ -402,6 +402,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
 
   @override
   void dispose() {
+    tabController.dispose();
     state.cleanReportData();
     super.dispose();
   }

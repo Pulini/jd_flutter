@@ -19,7 +19,7 @@ void changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Func
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                selectView(
+                SelectView(
                   list: lines,
                   controller: controllerLines,
                   errorMsg: '',

@@ -324,7 +324,7 @@ class MaintainLabelLogic extends GetxController {
         orderData
             .sort((a, b) => (a.first.size ?? '').compareTo(b.first.size ?? ''));
         state.createMixLabelsData.value = orderData;
-        Get.to(() => MaintainLabelCreateMixPage())?.then((v) {
+        Get.to(() => const MaintainLabelCreateMixPage())?.then((v) {
           if (v) refreshDataList();
         });
       },

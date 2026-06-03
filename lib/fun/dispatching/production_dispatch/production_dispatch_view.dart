@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -120,8 +121,137 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     ];
   }
 
-  Widget _item1(List<ProductionDispatchOrderInfo> list, int index) {
-    var data = list[index];
+  Widget _item1(List<ProductionDispatchOrderInfo> list, int index) =>
+      _ProductionDispatchItem1(
+        data: list[index],
+        index: index,
+        logic: logic,
+        itemTitleStyle: itemTitleStyle,
+        printStatusText: (s) => _printStatusText(s),
+        printTextColor: (s) => _printTextColor(s),
+      );
+
+
+
+  Color _printTextColor(String? printStatus) {
+    return printStatus == null
+        ? Colors.red
+        : printStatus == '1'
+            ? Colors.orange
+            : printStatus == '2'
+                ? Colors.green
+                : printStatus == '3'
+                    ? Colors.blue
+                    : Colors.red;
+  }
+
+  String _printStatusText(String printStatus) => printStatus == '1'
+      ? 'production_dispatch_print_type_printed'.tr
+      : printStatus == '2'
+          ? 'production_dispatch_print_type_unprinted'.tr
+          : printStatus == '3'
+              ? 'production_dispatch_print_type_partial_printed'.tr
+              : 'production_dispatch_print_type_error'.tr;
+
+  Widget _item2(List<ProductionDispatchOrderInfo> list) =>
+      _ProductionDispatchItem2(
+        list: list,
+        logic: logic,
+        itemTitleStyle: itemTitleStyle,
+        printStatusText: (s) => _printStatusText(s),
+        printTextColor: (s) => _printTextColor(s),
+      );
+
+  Widget _bottomButtons() =>
+      _ProductionDispatchBottomButtons(
+        state: state,
+        logic: logic,
+        onQuery: () => _query(),
+      );
+
+  dynamic _query() => logic.query(
+      startTime: dpcStartDate.getDateFormatYMD(),
+      endTime: dpcEndDate.getDateFormatYMD(),
+      instruction: tecInstruction.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBodyWithDrawer(
+      queryWidgets: _queryWidgets(),
+      query: () => _query(),
+      body: Obx(
+        () => Column(
+          children: [
+            Expanded(
+              child: state.isSelectedMergeOrder.value
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.orderGroupList.length,
+                      itemBuilder: (c, i) => _item2(
+                        state.orderGroupList.entries.elementAt(i++).value,
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.orderList.length,
+                      itemBuilder: (c, i) => _item1(state.orderList, i),
+                    ),
+            ),
+            state.isSelectedMergeOrder.value
+                ? Container()
+                : state.orderList.isEmpty
+                    ? Container()
+                    : _bottomButtons()
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<ProductionDispatchLogic>();
+    super.dispose();
+  }
+}
+
+Expanded _buildDispatchText(String text, Color backgroundColor) {
+  return Expanded(
+    child: Container(
+      height: 30,
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
+        color: backgroundColor,
+      ),
+      child: Text(text),
+    ),
+  );
+}
+
+class _ProductionDispatchItem1 extends StatelessWidget {
+  final ProductionDispatchOrderInfo data;
+  final int index;
+  final ProductionDispatchLogic logic;
+  final TextStyle itemTitleStyle;
+  final String Function(String) printStatusText;
+  final Color Function(String?) printTextColor;
+
+  const _ProductionDispatchItem1({
+    required this.data,
+    required this.index,
+    required this.logic,
+    required this.itemTitleStyle,
+    required this.printStatusText,
+    required this.printTextColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => logic.item1click(index),
       child: Column(
@@ -186,8 +316,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                   Text('production_dispatch_timeout'.tr,
                       style: const TextStyle(color: Colors.red)),
                 Text(
-                  _printStatusText(data.printStatus ?? ''),
-                  style: TextStyle(color: _printTextColor(data.printStatus)),
+                  printStatusText(data.printStatus ?? ''),
+                  style: TextStyle(color: printTextColor(data.printStatus)),
                 )
               ],
             ),
@@ -299,46 +429,25 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       ),
     );
   }
+}
 
-  Expanded _text(String text, Color backgroundColor) {
-    return Expanded(
-      child: Container(
-        height: 30,
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-            width: 1,
-          ),
-          color: backgroundColor,
-        ),
-        child: Text(text),
-      ),
-    );
-  }
+class _ProductionDispatchItem2 extends StatelessWidget {
+  final List<ProductionDispatchOrderInfo> list;
+  final ProductionDispatchLogic logic;
+  final TextStyle itemTitleStyle;
+  final String Function(String) printStatusText;
+  final Color Function(String?) printTextColor;
 
-  Color _printTextColor(String? printStatus) {
-    return printStatus == null
-        ? Colors.red
-        : printStatus == '1'
-            ? Colors.orange
-            : printStatus == '2'
-                ? Colors.green
-                : printStatus == '3'
-                    ? Colors.blue
-                    : Colors.red;
-  }
+  const _ProductionDispatchItem2({
+    required this.list,
+    required this.logic,
+    required this.itemTitleStyle,
+    required this.printStatusText,
+    required this.printTextColor,
+  });
 
-  String _printStatusText(String printStatus) => printStatus == '1'
-      ? 'production_dispatch_print_type_printed'.tr
-      : printStatus == '2'
-          ? 'production_dispatch_print_type_unprinted'.tr
-          : printStatus == '3'
-              ? 'production_dispatch_print_type_partial_printed'.tr
-              : 'production_dispatch_print_type_error'.tr;
-
-  Widget _item2(List<ProductionDispatchOrderInfo> list) {
+  @override
+  Widget build(BuildContext context) {
     var data = list[0];
     var buttonStyle = ButtonStyle(
       shape: WidgetStateProperty.all(
@@ -346,7 +455,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       ),
       side: WidgetStateProperty.all(
         BorderSide(
-          color: _printTextColor(data.printStatus),
+          color: printTextColor(data.printStatus),
           width: 2,
         ),
       ),
@@ -415,8 +524,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 onPressed: () => logic.materialLabelMaintenance(data),
                 style: buttonStyle,
                 child: Text(
-                  _printStatusText(data.printStatus ?? ''),
-                  style: TextStyle(color: _printTextColor(data.printStatus)),
+                  printStatusText(data.printStatus ?? ''),
+                  style: TextStyle(color: printTextColor(data.printStatus)),
                 ),
               )
             ],
@@ -427,15 +536,20 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
           color: Colors.white,
           child: Row(
             children: [
-              _text('production_dispatch_plan_tracking_number_tips'.tr,
+              _buildDispatchText(
+                  'production_dispatch_plan_tracking_number_tips'.tr,
                   Colors.blue.shade100),
-              _text('production_dispatch_dispatch_date_tips'.tr,
+              _buildDispatchText(
+                  'production_dispatch_dispatch_date_tips'.tr,
                   Colors.blue.shade100),
-              _text('production_dispatch_plan_start_date_tips'.tr,
+              _buildDispatchText(
+                  'production_dispatch_plan_start_date_tips'.tr,
                   Colors.blue.shade100),
-              _text('production_dispatch_plan_end_date_tips'.tr,
+              _buildDispatchText(
+                  'production_dispatch_plan_end_date_tips'.tr,
                   Colors.blue.shade100),
-              _text('production_dispatch_completed_tips'.tr,
+              _buildDispatchText(
+                  'production_dispatch_completed_tips'.tr,
                   Colors.blue.shade100),
             ],
           ),
@@ -446,11 +560,11 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
             color: Colors.white,
             child: Row(
               children: [
-                _text(list[i].planBill ?? '', Colors.white),
-                _text(list[i].orderDate ?? '', Colors.white),
-                _text(list[i].planStartTime ?? '', Colors.white),
-                _text(list[i].planEndTime ?? '', Colors.white),
-                _text(list[i].getProgress(), Colors.white),
+                _buildDispatchText(list[i].planBill ?? '', Colors.white),
+                _buildDispatchText(list[i].orderDate ?? '', Colors.white),
+                _buildDispatchText(list[i].planStartTime ?? '', Colors.white),
+                _buildDispatchText(list[i].planEndTime ?? '', Colors.white),
+                _buildDispatchText(list[i].getProgress(), Colors.white),
               ],
             ),
           ),
@@ -485,8 +599,21 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       ],
     );
   }
+}
 
-  Widget _bottomButtons() {
+class _ProductionDispatchBottomButtons extends StatelessWidget {
+  final ProductionDispatchState state;
+  final ProductionDispatchLogic logic;
+  final VoidCallback onQuery;
+
+  const _ProductionDispatchBottomButtons({
+    required this.state,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -526,8 +653,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
-                          isEnabled: state.cbIsEnabledProcessInstruction.value,
-                          text: 'production_dispatch_bt_process_instruction'.tr,
+                          isEnabled:
+                              state.cbIsEnabledProcessInstruction.value,
+                          text: 'production_dispatch_bt_process_instruction'
+                              .tr,
                           click: () => logic.processSpecification(
                               manufactureInstructionsDialog),
                         ),
@@ -555,32 +684,37 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           isEnabled: state.cbIsEnabledProcessOpen.value,
                           text: state.cbNameProcess.value,
                           click: () =>
-                              logic.offOnProcess(refresh: () => _query()),
+                              logic.offOnProcess(refresh: () => onQuery()),
                         ),
                   state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
                           isEnabled: state.cbIsEnabledDeleteDownstream.value,
-                          text: 'production_dispatch_bt_delete_downstream'.tr,
-                          click: () =>
-                              logic.deleteDownstream(refresh: () => _query()),
+                          text:
+                              'production_dispatch_bt_delete_downstream'.tr,
+                          click: () => logic.deleteDownstream(
+                              refresh: () => onQuery()),
                         ),
                   state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
-                          isEnabled: state.cbIsEnabledDeleteLastReport.value,
-                          text: 'production_dispatch_bt_delete_last_report'.tr,
-                          click: () =>
-                              logic.deleteLastReport(refresh: () => _query()),
+                          isEnabled:
+                              state.cbIsEnabledDeleteLastReport.value,
+                          text:
+                              'production_dispatch_bt_delete_last_report'.tr,
+                          click: () => logic.deleteLastReport(
+                              refresh: () => onQuery()),
                         ),
                   state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
-                          isEnabled: state.cbIsEnabledLabelMaintenance.value,
-                          text: 'production_dispatch_bt_label_maintenance'.tr,
+                          isEnabled:
+                              state.cbIsEnabledLabelMaintenance.value,
+                          text:
+                              'production_dispatch_bt_label_maintenance'.tr,
                           click: () => logic.labelMaintenance(),
                         ),
                   state.isSelectedMany.value
@@ -589,18 +723,23 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           combination: Combination.middle,
                           isEnabled: state.cbIsEnabledUpdateSap.value,
                           text: 'production_dispatch_bt_update_sap'.tr,
-                          click: () => logic.updateSap(refresh: () => _query()),
+                          click: () =>
+                              logic.updateSap(refresh: () => onQuery()),
                         ),
                   state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
-                          isEnabled: state.cbIsEnabledPrintMaterialHead.value,
-                          text: 'production_dispatch_bt_print_material_head'.tr,
+                          isEnabled:
+                              state.cbIsEnabledPrintMaterialHead.value,
+                          text:
+                              'production_dispatch_bt_print_material_head'
+                                  .tr,
                           click: () => logic.getSurplusMaterial(
                             print: (list) => showSelectMaterialPopup(
                               surplusMaterialList: list,
-                              print: (data) => logic.printSurplusMaterial(data),
+                              print: (data) =>
+                                  logic.printSurplusMaterial(data),
                             ),
                           ),
                         ),
@@ -614,7 +753,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                             initQty: logic.getReportMax(),
                             callback: (qty) => logic.reportToSap(
                               qty: qty,
-                              refresh: () => () => _query(),
+                              refresh: () => () => onQuery(),
                             ),
                           ),
                         ),
@@ -632,50 +771,5 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         ),
       ),
     );
-  }
-
-  dynamic _query() => logic.query(
-      startTime: dpcStartDate.getDateFormatYMD(),
-      endTime: dpcEndDate.getDateFormatYMD(),
-      instruction: tecInstruction.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
-      queryWidgets: _queryWidgets(),
-      query: () => _query(),
-      body: Obx(
-        () => Column(
-          children: [
-            Expanded(
-              child: state.isSelectedMergeOrder.value
-                  ? ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.orderGroupList.length,
-                      itemBuilder: (c, i) => _item2(
-                        state.orderGroupList.entries.elementAt(i++).value,
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.orderList.length,
-                      itemBuilder: (c, i) => _item1(state.orderList, i),
-                    ),
-            ),
-            state.isSelectedMergeOrder.value
-                ? Container()
-                : state.orderList.isEmpty
-                    ? Container()
-                    : _bottomButtons()
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<ProductionDispatchLogic>();
-    super.dispose();
   }
 }

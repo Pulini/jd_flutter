@@ -22,13 +22,157 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
 
   var tecPiece = TextEditingController();
 
-  Widget _item(SapPrintLabelInfo label) {
+  @override
+  void initState() {
+    pdaScanner(scan: (code) => logic.scanLabel(code));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      actions: [
+        IconButton(
+          onPressed: () => logic.cleanLabels(),
+          icon: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: const Icon(
+              Icons.cleaning_services,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Transform.scale(
+            scale: 1.8,
+            child: Obx(
+              () => Checkbox(
+                value: logic.isSelectedAll(),
+                shape: const CircleBorder(),
+                onChanged: (v) => logic.selectAll(v!),
+              ),
+            )),
+        IconButton(
+          onPressed: () => logic.printLabel(),
+          icon: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: const Icon(
+              Icons.print,
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: TextField(
+              onSubmitted: (value) => logic.searchPiece(tecPiece.text),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              controller: tecPiece,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(0),
+                filled: true,
+                fillColor: Colors.grey.shade300,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                hintStyle: const TextStyle(color: Colors.white),
+                suffixIcon: IconButton(
+                  onPressed: () => logic.searchPiece(tecPiece.text),
+                  icon: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(Icons.search, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: SwitchButton(
+                    onChanged: (s) => state.isMaterialLabel.value = s,
+                    name: '打印物料表',
+                    value: state.isMaterialLabel.value,
+                  ),
+                ),
+                Expanded(
+                    child: SwitchButton(
+                  onChanged: (s) => state.isMaterialLabel.value = s,
+                  name: '打印备注行',
+                  value: state.isMaterialLabel.value,
+                )),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Obx(() => ListView.builder(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  itemCount: state.labelList.length,
+                  itemBuilder: (c, i) =>
+                      _LabelPrintItem(label: state.labelList[i], state: state),
+                )),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    tecPiece.dispose();
+    Get.delete<SapLabelReprintLogic>();
+    super.dispose();
+  }
+}
+
+class _LabelPrintItem extends StatelessWidget {
+  final SapPrintLabelInfo label;
+  final SapLabelReprintState state;
+  const _LabelPrintItem({required this.label, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey,width: 2),
+        border: Border.all(color: Colors.grey, width: 2),
         gradient: LinearGradient(
           colors: [Colors.blue.shade50, Colors.white],
           begin: Alignment.topCenter,
@@ -126,140 +270,5 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
               ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    pdaScanner(scan: (code) => logic.scanLabel(code));
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      actions: [
-        IconButton(
-          onPressed: () => logic.cleanLabels(),
-          icon: Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.orange, // 背景色
-              borderRadius: BorderRadius.circular(25), // 圆角（可选）
-            ),
-            child: const Icon(
-              Icons.cleaning_services,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        Transform.scale(
-            scale: 1.8,
-            child: Obx(
-              () => Checkbox(
-                value: logic.isSelectedAll(),
-                shape: const CircleBorder(),
-                onChanged: (v) => logic.selectAll(v!),
-              ),
-            )),
-        IconButton(
-          onPressed: () => logic.printLabel(),
-          icon: Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.blue, // 背景色
-              borderRadius: BorderRadius.circular(25), // 圆角（可选）
-            ),
-            child: const Icon(
-              Icons.print,
-              color: Colors.white,
-            ),
-          ),
-        )
-      ],
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 10, right: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child:TextField(
-              onSubmitted: (value) => logic.searchPiece(tecPiece.text),
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              controller: tecPiece,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(0),
-                filled: true,
-                fillColor: Colors.grey.shade300,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                ),
-                hintStyle: const TextStyle(color: Colors.white),
-                suffixIcon: IconButton(
-                  onPressed: () => logic.searchPiece(tecPiece.text),
-                  icon: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.green, // 背景色
-                      borderRadius: BorderRadius.circular(25), // 圆角（可选）
-                    ),
-                    child: const Icon(Icons.search, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            margin: const EdgeInsets.only(left: 10, right: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: SwitchButton(
-                    onChanged: (s) => state.isMaterialLabel.value = s,
-                    name: '打印物料表',
-                    value: state.isMaterialLabel.value,
-                  ),
-                ),
-                Expanded(
-                    child: SwitchButton(
-                  onChanged: (s) => state.isMaterialLabel.value = s,
-                  name: '打印备注行',
-                  value: state.isMaterialLabel.value,
-                )),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: Obx(() => ListView.builder(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  itemCount: state.labelList.length,
-                  itemBuilder: (c, i) => _item(state.labelList[i]),
-                )),
-          )
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<SapLabelReprintLogic>();
-    super.dispose();
   }
 }

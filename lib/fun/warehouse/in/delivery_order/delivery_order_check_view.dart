@@ -25,174 +25,8 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
   final DeliveryOrderState state = Get.find<DeliveryOrderLogic>().state;
   var numberController = TextEditingController();
 
-  Widget _item(DeliveryOrderDetailItemInfo data) {
-    var itemStyle = const TextStyle(
-      color: Colors.black54,
-    );
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey,width: 2),
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade50, Colors.white],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'delivery_order_detail_material'
-                .trArgs(['${data.materialCode}) ${data.materialDescription}']),
-            style: const TextStyle(
-              color: Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_delivery_qty'.trArgs([
-                    data.deliverySumQty.toShowString(),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      'delivery_order_check_check_qty'.tr,
-                      style: const TextStyle(color: Colors.green),
-                    ),
-                    SizedBox(
-                      width: 130,
-                      child: NumberDecimalEditText(
-                        initQty: data.checkQuantity,
-                        onChanged: (v) => data.checkQuantity = v,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_piece'.trArgs([
-                    '${data.numPage}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  'delivery_order_detail_type_body'.trArgs([
-                    data.factoryType.ifEmpty(data.distributiveForm ?? ''),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_qualified_qty'.trArgs([
-                    data.qualifiedQuantity.toShowString(),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_unqualified_qty'.trArgs([
-                    data.unqualifiedQuantity.toShowString(),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_short_qty'.trArgs([
-                    data.shortQuantity.toShowString(),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_stock_in_qty'.trArgs([
-                    data.storageQuantity.toShowString(),
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_delivery_date'.trArgs([
-                    '${data.deliveryDate}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_picking_department'.trArgs([
-                    '${data.pickingDepartment}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_instruction_no'.trArgs([
-                    '${data.salesAndDistributionVoucherNumber}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_stock_out_voucher'.trArgs([
-                    '${data.stockOutVoucher}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_stock_out_reverse_voucher'.trArgs([
-                    '${data.stockOutWriteOffVoucher}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  'delivery_order_detail_stock_out_reverse_reason'.trArgs([
-                    '${data.reasonsStockOutWriteOff}',
-                  ]),
-                  style: itemStyle,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(data.size(), style: itemStyle),
-        ],
-      ),
-    );
-  }
+  Widget _item(DeliveryOrderDetailItemInfo data) =>
+      _DeliveryOrderCheckItem(data: data);
 
   void _showLocation() {
     showCupertinoModalPopup(
@@ -246,6 +80,12 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
       state.getStorageLocationList();
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    numberController.dispose();
+    super.dispose();
   }
 
   @override
@@ -479,6 +319,182 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _DeliveryOrderCheckItem extends StatelessWidget {
+  final DeliveryOrderDetailItemInfo data;
+
+  const _DeliveryOrderCheckItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    var itemStyle = const TextStyle(
+      color: Colors.black54,
+    );
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'delivery_order_detail_material'
+                .trArgs(['${data.materialCode}) ${data.materialDescription}']),
+            style: const TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_delivery_qty'.trArgs([
+                    data.deliverySumQty.toShowString(),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      'delivery_order_check_check_qty'.tr,
+                      style: const TextStyle(color: Colors.green),
+                    ),
+                    SizedBox(
+                      width: 130,
+                      child: NumberDecimalEditText(
+                        initQty: data.checkQuantity,
+                        onChanged: (v) => data.checkQuantity = v,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_piece'.trArgs([
+                    '${data.numPage}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'delivery_order_detail_type_body'.trArgs([
+                    data.factoryType.ifEmpty(data.distributiveForm ?? ''),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_qualified_qty'.trArgs([
+                    data.qualifiedQuantity.toShowString(),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_unqualified_qty'.trArgs([
+                    data.unqualifiedQuantity.toShowString(),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_short_qty'.trArgs([
+                    data.shortQuantity.toShowString(),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_stock_in_qty'.trArgs([
+                    data.storageQuantity.toShowString(),
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_delivery_date'.trArgs([
+                    '${data.deliveryDate}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_picking_department'.trArgs([
+                    '${data.pickingDepartment}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_instruction_no'.trArgs([
+                    '${data.salesAndDistributionVoucherNumber}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_stock_out_voucher'.trArgs([
+                    '${data.stockOutVoucher}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_stock_out_reverse_voucher'.trArgs([
+                    '${data.stockOutWriteOffVoucher}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'delivery_order_detail_stock_out_reverse_reason'.trArgs([
+                    '${data.reasonsStockOutWriteOff}',
+                  ]),
+                  style: itemStyle,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(data.size(), style: itemStyle),
+        ],
       ),
     );
   }

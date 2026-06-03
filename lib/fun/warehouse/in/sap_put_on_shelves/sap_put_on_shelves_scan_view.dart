@@ -74,6 +74,12 @@ class _SapPutOnShelvesScanPageState extends State<SapPutOnShelvesScanPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Obx(() => pageBody(
           actions: [

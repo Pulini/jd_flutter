@@ -34,173 +34,6 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
   var controller = TextEditingController();
   var fn = FocusNode();
 
-  Widget _item(ReprintLabelInfo label) {
-    return GestureDetector(
-        onTap: () {
-          if (label.isNewLabel == 'X') {
-            setState(() => label.select = !label.select);
-          }
-        },
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: label.select ? Colors.blue.shade100 : Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: label.select
-                ? Border.all(color: Colors.green, width: 2)
-                : Border.all(color: Colors.white, width: 2),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  expandedTextSpan(
-                    hint: 'sap_wms_split_label_material'.tr,
-                    text: '(${label.materialCode})${label.materialName}',
-                    textColor: Colors.green.shade900,
-                    maxLines: 2,
-                  ),
-                  Checkbox(
-                    value: label.select,
-                    onChanged: (c) =>
-                        setState(() => label.select = !label.select),
-                  )
-                ],
-              ),
-              textSpan(hint: 'sap_wms_split_label_type_body'.tr, text: label.typeBody ?? ''),
-              const Divider(indent: 10, endIndent: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  textSpan(
-                    hint: 'sap_wms_split_label_size'.tr,
-                    text: label.size ?? '',
-                    textColor: Colors.green.shade900,
-                  ),
-                  textSpan(
-                    hint: '数量：',
-                    text: '${label.quantity.toShowString()} ${label.unit}',
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ));
-  }
-
-  Container _originalLabelItem() {
-    if (state.hasOriginalLabel.value) {
-      return Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.green.shade50,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.blue.shade200, width: 2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textSpan(
-              hint: 'sap_wms_split_label_material'.tr,
-              text:
-                  '(${state.originalLabel!.materialCode})${state.originalLabel!.materialName}',
-              textColor: Colors.green.shade900,
-              maxLines: 2,
-            ),
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'sap_wms_split_label_type_body'.tr,
-                  text: state.originalLabel!.typeBody ?? '',
-                  maxLines: 2,
-                ),
-                if (state.originalLabel!.size?.isNotEmpty == true)
-                  textSpan(
-                    hint: 'sap_wms_split_label_size'.tr,
-                    text: state.originalLabel!.size ?? '',
-                    textColor: Colors.green.shade900,
-                  ),
-              ],
-            ),
-            const Divider(),
-            Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: Colors.blue, width: 2),
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  textSpan(
-                    hint: 'sap_wms_split_label_split_qty'.tr,
-                    text:
-                        '${state.originalLabel!.quantity.toShowString()} ${state.originalLabel!.unit}',
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextField(
-                      focusNode: fn,
-                      onSubmitted: (value) => split(),
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
-                      ],
-                      onChanged: (c) {
-                        if (c.toDoubleTry() >
-                            (state.originalLabel!.quantity ?? 0)) {
-                          controller.text = (state.originalLabel!.quantity ?? 0)
-                              .toShowString();
-                        }
-                      },
-                      controller: controller,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                          top: 0,
-                          bottom: 0,
-                          left: 15,
-                          right: 10,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide:
-                              const BorderSide(color: Colors.blue, width: 2),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        hintStyle: const TextStyle(color: Colors.white),
-                        suffixIcon: CombinationButton(
-                          text: '拆出',
-                          click: () => split(),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
   void split() {
     hidKeyboard();
     logic.split(
@@ -238,10 +71,23 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
             child: Obx(() => ListView(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   children: [
-                    _originalLabelItem(),
+                    if (state.hasOriginalLabel.value)
+                      _SplitOriginalLabelItem(
+                        state: state,
+                        controller: controller,
+                        fn: fn,
+                        onSplit: split,
+                      ),
                     for (var item
                         in state.labelList.where((v) => v.isNewLabel == 'X'))
-                      _item(item)
+                      _SplitLabelItem(
+                        label: item,
+                        onTap: () {
+                          if (item.isNewLabel == 'X') {
+                            setState(() => item.select = !item.select);
+                          }
+                        },
+                      )
                   ],
                 )),
           ),
@@ -277,7 +123,194 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
 
   @override
   void dispose() {
+    controller.dispose();
+    fn.dispose();
     Get.delete<SapWmsSplitLabelLogic>();
     super.dispose();
+  }
+}
+
+class _SplitOriginalLabelItem extends StatelessWidget {
+  final SapWmsSplitLabelState state;
+  final TextEditingController controller;
+  final FocusNode fn;
+  final VoidCallback onSplit;
+
+  const _SplitOriginalLabelItem({
+    required this.state,
+    required this.controller,
+    required this.fn,
+    required this.onSplit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.green.shade50,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.blue.shade200, width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textSpan(
+            hint: 'sap_wms_split_label_material'.tr,
+            text:
+                '(${state.originalLabel!.materialCode})${state.originalLabel!.materialName}',
+            textColor: Colors.green.shade900,
+            maxLines: 2,
+          ),
+          Row(
+            children: [
+              expandedTextSpan(
+                hint: 'sap_wms_split_label_type_body'.tr,
+                text: state.originalLabel!.typeBody ?? '',
+                maxLines: 2,
+              ),
+              if (state.originalLabel!.size?.isNotEmpty == true)
+                textSpan(
+                  hint: 'sap_wms_split_label_size'.tr,
+                  text: state.originalLabel!.size ?? '',
+                  textColor: Colors.green.shade900,
+                ),
+            ],
+          ),
+          const Divider(),
+          Container(
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: Row(
+              children: [
+                const SizedBox(width: 10),
+                textSpan(
+                  hint: 'sap_wms_split_label_split_qty'.tr,
+                  text:
+                      '${state.originalLabel!.quantity.toShowString()} ${state.originalLabel!.unit}',
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: TextField(
+                    focusNode: fn,
+                    onSubmitted: (value) => onSplit(),
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                    ],
+                    onChanged: (c) {
+                      if (c.toDoubleTry() >
+                          (state.originalLabel!.quantity ?? 0)) {
+                        controller.text = (state.originalLabel!.quantity ?? 0)
+                            .toShowString();
+                      }
+                    },
+                    controller: controller,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 0,
+                        left: 15,
+                        right: 10,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      hintStyle: const TextStyle(color: Colors.white),
+                      suffixIcon: CombinationButton(
+                        text: '拆出',
+                        click: () => onSplit(),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _SplitLabelItem extends StatelessWidget {
+  final ReprintLabelInfo label;
+  final VoidCallback onTap;
+
+  const _SplitLabelItem({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          if (label.isNewLabel == 'X') {
+            onTap();
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: label.select ? Colors.blue.shade100 : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: label.select
+                ? Border.all(color: Colors.green, width: 2)
+                : Border.all(color: Colors.white, width: 2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  expandedTextSpan(
+                    hint: 'sap_wms_split_label_material'.tr,
+                    text: '(${label.materialCode})${label.materialName}',
+                    textColor: Colors.green.shade900,
+                    maxLines: 2,
+                  ),
+                  Checkbox(
+                    value: label.select,
+                    onChanged: (c) => onTap(),
+                  )
+                ],
+              ),
+              textSpan(hint: 'sap_wms_split_label_type_body'.tr, text: label.typeBody ?? ''),
+              const Divider(indent: 10, endIndent: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textSpan(
+                    hint: 'sap_wms_split_label_size'.tr,
+                    text: label.size ?? '',
+                    textColor: Colors.green.shade900,
+                  ),
+                  textSpan(
+                    hint: '数量：',
+                    text: '${label.quantity.toShowString()} ${label.unit}',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }

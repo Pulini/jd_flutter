@@ -78,254 +78,6 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
     );
   }
 
-  Widget _item(int index) {
-    var group = state.temporaryOrderList[index];
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 2),
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade50, Colors.white],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: 'temporary_order_supplier'.tr,
-                          hintColor: Colors.black54,
-                          text: group[0].supplierName ?? '',
-                          textColor: Colors.red,
-                        ),
-                        expandedTextSpan(
-                          flex: 2,
-                          hint: 'temporary_order_final_customer'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].finalCustomer ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: 'temporary_order_temporary_no'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].temporaryNo ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                        expandedTextSpan(
-                          hint: 'temporary_order_temporary_date'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].billDate ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                        expandedTextSpan(
-                          hint: 'temporary_order_temporary_worker'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].biller ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: 'temporary_order_factory'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].factoryName ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                        expandedTextSpan(
-                          hint: 'temporary_order_storage_location'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].storageLocationName ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                        expandedTextSpan(
-                          hint: 'temporary_order_remark'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: group[0].remark ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                onPressed: () => checkUserPermission('105180203')
-                    ? reasonInputPopup(
-                        title: [
-                          Center(
-                            child: Text(
-                              'temporary_order_delete'.tr,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                        hintText: 'temporary_order_delete_reason'.tr,
-                        tips: 'temporary_order_delete_tips'.tr,
-                        isCanCancel: true,
-                        confirm: (s) => logic.deleteTemporaryOrder(
-                          temporaryNo: group[0].temporaryNo ?? '',
-                          reason: s,
-                          success: (msg) => successDialog(
-                            content: msg,
-                            back: () {
-                              Get.back();
-                              _query();
-                            },
-                          ),
-                        ),
-                      )
-                    : errorDialog(content: 'temporary_order_no_permission'.tr),
-                icon: const Icon(
-                  Icons.delete_forever,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-          for (var subItem in group) _subItem(subItem),
-        ],
-      ),
-    );
-  }
-
-  Widget _subItem(TemporaryOrderInfo data) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Column(
-        children: [
-          const Divider(),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          flex: 3,
-                          hint: 'temporary_order_material'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: '(${data.materialCode}) ${data.materialName}',
-                          textColor: Colors.blue.shade900,
-                        ),
-                        expandedTextSpan(
-                          hint: 'temporary_order_temporary_qty'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: data.temporaryQty(),
-                          textColor: Colors.blue.shade900,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                       textSpan(
-                          hint: 'temporary_order_type_body'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: data.model.ifEmpty(data.distributionType ?? ''),
-                          textColor: Colors.blue.shade900,
-                        ),
-                        SizedBox(width: 30),
-                        expandedTextSpan(
-                          flex: 2,
-                          hint: 'temporary_order_remark'.tr,
-                          isBold: false,
-                          hintColor: Colors.black54,
-                          text: data.detailRemark ?? '',
-                          textColor: Colors.blue.shade900,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              CombinationButton(
-                  text: 'temporary_order_detail_inspection'.tr,
-                  combination: Combination.left,
-                  click: () {
-                    if (checkUserPermission('105180501')) {
-                      logic.viewTemporaryOrderDetail(
-                        inspection:true,
-                        temporaryNo: data.temporaryNo ?? '',
-                        materialCode: data.materialCode ?? '', success: () {
-                        logic.queryTemporaryOrders(
-                          startDate: dpcStartDate.getDateFormatYMD(),
-                          endDate: dpcEndDate.getDateFormatYMD(),
-                          temporaryNo: tecTemporaryNo.text,
-                          productionNumber: tecProductionOrderNo.text,
-                          factoryType: tecTypeBody.text,
-                          supplierName: opcSupplier.selectedId.value,
-                          materialCode: tecMaterialCode.text,
-                          factoryArea: opcCompany.selectedId.value,
-                          factoryNo: opcFactory.selectedId.value,
-                          userNumber: tecInspectorNumber.text,
-                          trackNo: tecTrackNo.text,
-                        );
-                      });
-                    } else {
-                      errorDialog(
-                        content: 'temporary_order_detail_no_permission'.tr,
-                      );
-                    }
-                  }),
-              CombinationButton(
-                text: 'temporary_order_view_detail'.tr,
-                combination: Combination.right,
-                click: () => logic.viewTemporaryOrderDetail(
-                  inspection: false,
-                  temporaryNo: data.temporaryNo ?? '',
-                  materialCode: data.materialCode ?? '',
-                  success: () {
-                    logic.queryTemporaryOrders(
-                      startDate: dpcStartDate.getDateFormatYMD(),
-                      endDate: dpcEndDate.getDateFormatYMD(),
-                      temporaryNo: tecTemporaryNo.text,
-                      productionNumber: tecProductionOrderNo.text,
-                      factoryType: tecTypeBody.text,
-                      supplierName: opcSupplier.selectedId.value,
-                      materialCode: tecMaterialCode.text,
-                      factoryArea: opcCompany.selectedId.value,
-                      factoryNo: opcFactory.selectedId.value,
-                      userNumber: tecInspectorNumber.text,
-                      trackNo: tecTrackNo.text,
-                    );
-                  },
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -502,7 +254,12 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
             () => ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: state.temporaryOrderList.length,
-              itemBuilder: (c, i) => _item(i),
+              itemBuilder: (c, i) => _TmpOrderItem(
+                index: i,
+                state: state,
+                logic: logic,
+                onQuery: () => _query(),
+              ),
             ),
           ),
         ),
@@ -514,5 +271,256 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
   void dispose() {
     Get.delete<TemporaryOrderLogic>();
     super.dispose();
+  }
+}
+
+class _TmpOrderItem extends StatelessWidget {
+  final int index;
+  final TemporaryOrderState state;
+  final TemporaryOrderLogic logic;
+  final VoidCallback onQuery;
+  const _TmpOrderItem({
+    required this.index,
+    required this.state,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var group = state.temporaryOrderList[index];
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          hint: 'temporary_order_supplier'.tr,
+                          hintColor: Colors.black54,
+                          text: group[0].supplierName ?? '',
+                          textColor: Colors.red,
+                        ),
+                        expandedTextSpan(
+                          flex: 2,
+                          hint: 'temporary_order_final_customer'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].finalCustomer ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          hint: 'temporary_order_temporary_no'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].temporaryNo ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                        expandedTextSpan(
+                          hint: 'temporary_order_temporary_date'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].billDate ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                        expandedTextSpan(
+                          hint: 'temporary_order_temporary_worker'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].biller ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          hint: 'temporary_order_factory'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].factoryName ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                        expandedTextSpan(
+                          hint: 'temporary_order_storage_location'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].storageLocationName ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                        expandedTextSpan(
+                          hint: 'temporary_order_remark'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: group[0].remark ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () => checkUserPermission('105180203')
+                    ? reasonInputPopup(
+                        title: [
+                          Center(
+                            child: Text(
+                              'temporary_order_delete'.tr,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                        hintText: 'temporary_order_delete_reason'.tr,
+                        tips: 'temporary_order_delete_tips'.tr,
+                        isCanCancel: true,
+                        confirm: (s) => logic.deleteTemporaryOrder(
+                          temporaryNo: group[0].temporaryNo ?? '',
+                          reason: s,
+                          success: (msg) => successDialog(
+                            content: msg,
+                            back: () {
+                              Get.back();
+                              onQuery();
+                            },
+                          ),
+                        ),
+                      )
+                    : errorDialog(content: 'temporary_order_no_permission'.tr),
+                icon: const Icon(
+                  Icons.delete_forever,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+          for (var subItem in group)
+            _TmpOrderSubItem(data: subItem, logic: logic, onQuery: onQuery),
+        ],
+      ),
+    );
+  }
+}
+
+class _TmpOrderSubItem extends StatelessWidget {
+  final TemporaryOrderInfo data;
+  final TemporaryOrderLogic logic;
+  final VoidCallback onQuery;
+  const _TmpOrderSubItem({
+    required this.data,
+    required this.logic,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Column(
+        children: [
+          const Divider(),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          flex: 3,
+                          hint: 'temporary_order_material'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: '(${data.materialCode}) ${data.materialName}',
+                          textColor: Colors.blue.shade900,
+                        ),
+                        expandedTextSpan(
+                          hint: 'temporary_order_temporary_qty'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: data.temporaryQty(),
+                          textColor: Colors.blue.shade900,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                       textSpan(
+                          hint: 'temporary_order_type_body'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: data.model.ifEmpty(data.distributionType ?? ''),
+                          textColor: Colors.blue.shade900,
+                        ),
+                        const SizedBox(width: 30),
+                        expandedTextSpan(
+                          flex: 2,
+                          hint: 'temporary_order_remark'.tr,
+                          isBold: false,
+                          hintColor: Colors.black54,
+                          text: data.detailRemark ?? '',
+                          textColor: Colors.blue.shade900,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              CombinationButton(
+                  text: 'temporary_order_detail_inspection'.tr,
+                  combination: Combination.left,
+                  click: () {
+                    if (checkUserPermission('105180501')) {
+                      logic.viewTemporaryOrderDetail(
+                        inspection:true,
+                        temporaryNo: data.temporaryNo ?? '',
+                        materialCode: data.materialCode ?? '', success: () {
+                        onQuery();
+                      });
+                    } else {
+                      errorDialog(
+                        content: 'temporary_order_detail_no_permission'.tr,
+                      );
+                    }
+                  }),
+              CombinationButton(
+                text: 'temporary_order_view_detail'.tr,
+                combination: Combination.right,
+                click: () => logic.viewTemporaryOrderDetail(
+                  inspection: false,
+                  temporaryNo: data.temporaryNo ?? '',
+                  materialCode: data.materialCode ?? '',
+                  success: () {
+                    onQuery();
+                  },
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

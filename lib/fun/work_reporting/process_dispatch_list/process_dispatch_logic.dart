@@ -582,4 +582,11 @@ class ProcessDispatchLogic extends GetxController
     }
     state.showLabelList.refresh();
   }
+
+  @override
+  void onClose() {
+    tabController.dispose();
+    textNumber.dispose();
+    super.onClose();
+  }
 }

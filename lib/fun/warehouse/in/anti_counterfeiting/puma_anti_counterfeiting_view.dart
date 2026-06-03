@@ -131,4 +131,10 @@ class _PumaAntiCounterfeitingPageState
     );
     super.initState();
   }
+
+  @override
+  void dispose() {
+    Get.delete<PumaAntiCounterfeitingLogic>();
+    super.dispose();
+  }
 }

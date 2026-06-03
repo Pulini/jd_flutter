@@ -115,7 +115,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text('打印标签预览'),
+            title: const Text('打印标签预览'),
             actions: [
               htmlImages.length == labelList.length && labelList.isNotEmpty
                   ? IconButton(

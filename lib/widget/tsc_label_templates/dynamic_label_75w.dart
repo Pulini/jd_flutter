@@ -122,7 +122,7 @@ Widget _createTableWidget({
     list.add(Row(
       children: [
         for (var j = 0; j < table[i].length; ++j)
-          expandedFrameText(
+          ExpandedFrameText(
             borderColor: Colors.black,
             alignment: j == 0
                 ? Alignment.centerLeft

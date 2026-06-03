@@ -19,58 +19,6 @@ class _DailyReportPageState extends State<DailyReportPage> {
   final logic = Get.put(DailyReportLogic());
   final state = Get.find<DailyReportLogic>().state;
 
-  Container _item(DailyReport? item) {
-    return Container(
-      color: item == null ? Colors.greenAccent : item.getItemColor(),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            state.isCommand.value
-                ? Expanded(
-              flex: 2,
-              child: Text(
-                item == null
-                    ? 'page_daily_report_table_title_hint5'.tr
-                    : item.seOrderNo ?? '',
-              ),
-            ) : const SizedBox.shrink(),
-            Expanded(
-              flex: 1,
-              child: Text(
-                item == null
-                    ? 'page_daily_report_table_title_hint2'.tr
-                    : item.size ?? '',
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(item == null
-                  ? 'page_daily_report_table_title_hint4'.tr
-                  : item.qty.toString()),
-            ),
-            Expanded(
-              flex: 6,
-              child: Text(
-                item == null
-                    ? 'page_daily_report_table_title_hint1'.tr
-                    : item.materialName ?? '',
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                item == null
-                    ? 'page_daily_report_table_title_hint3'.tr
-                    : item.processName ?? '',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
@@ -94,8 +42,9 @@ class _DailyReportPageState extends State<DailyReportPage> {
               child: ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  _item(null),
-                  for (var data in state.dataList) _item(data),
+                  _DailyReportItem.empty(isCommand: state.isCommand.value),
+                  for (var data in state.dataList)
+                    _DailyReportItem(item: data, isCommand: state.isCommand.value),
                 ],
               ),
             ),
@@ -107,5 +56,67 @@ class _DailyReportPageState extends State<DailyReportPage> {
   void dispose() {
     Get.delete<DailyReportLogic>();
     super.dispose();
+  }
+}
+
+class _DailyReportItem extends StatelessWidget {
+  final DailyReport? item;
+  final bool isCommand;
+
+  const _DailyReportItem({this.item, required this.isCommand});
+
+  const _DailyReportItem.empty({required this.isCommand}) : item = null;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: item == null ? Colors.greenAccent : item!.getItemColor(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            isCommand
+                ? Expanded(
+              flex: 2,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint5'.tr
+                    : item!.seOrderNo ?? '',
+              ),
+            ) : const SizedBox.shrink(),
+            Expanded(
+              flex: 1,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint2'.tr
+                    : item!.size ?? '',
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(item == null
+                  ? 'page_daily_report_table_title_hint4'.tr
+                  : item!.qty.toString()),
+            ),
+            Expanded(
+              flex: 6,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint1'.tr
+                    : item!.materialName ?? '',
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint3'.tr
+                    : item!.processName ?? '',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

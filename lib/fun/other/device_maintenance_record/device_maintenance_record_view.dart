@@ -127,6 +127,12 @@ class _DeviceMaintenanceRecordViewState
   }
 
   @override
+  void dispose() {
+    Get.delete<DeviceMaintenanceRecordLogic>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       title: 'device_maintenance_equipment_maintenance_records'.tr,

@@ -22,47 +22,8 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  Widget _item(WorkerInfo wi, int index) {
-    return Obx(() => GestureDetector(
-          onTap: () {
-            state.select.value = index;
-          },
-          child: Card(
-            color: state.select.value == index
-                ? Colors.greenAccent.shade100
-                : Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                children: [
-                  avatarPhoto(wi.picUrl),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          wi.empCode ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        Text(
-                          wi.empName ?? '',
-                          style: TextStyle(
-                            color: Colors.blue.shade800,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ));
-  }
+  Widget _item(WorkerInfo wi, int index) =>
+      _ProcessDispatchModifyLabelWorkerItem(wi: wi, index: index, state: state);
 
   @override
   void initState() {
@@ -171,5 +132,60 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
     state.processName.value = '';
     state.qty.value = '';
     super.dispose();
+  }
+}
+
+class _ProcessDispatchModifyLabelWorkerItem extends StatelessWidget {
+  final WorkerInfo wi;
+  final int index;
+  final ProcessDispatchRegisterState state;
+
+  const _ProcessDispatchModifyLabelWorkerItem({
+    required this.wi,
+    required this.index,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => GestureDetector(
+          onTap: () {
+            state.select.value = index;
+          },
+          child: Card(
+            color: state.select.value == index
+                ? Colors.greenAccent.shade100
+                : Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  avatarPhoto(wi.picUrl),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          wi.empCode ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Text(
+                          wi.empName ?? '',
+                          style: TextStyle(
+                            color: Colors.blue.shade800,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }

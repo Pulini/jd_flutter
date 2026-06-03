@@ -244,6 +244,8 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
 
   @override
   void dispose() {
+    inputController.dispose();
+    refreshController.dispose();
     Get.delete<SaleScanOutWarehouseLogic>();
     super.dispose();
   }

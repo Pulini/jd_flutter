@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_state.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -22,124 +23,116 @@ class _ProductionDispatchDetailPageState
   final logic = Get.find<ProductionDispatchLogic>();
   final state = Get.find<ProductionDispatchLogic>().state;
 
-  Widget _titleDetails() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Obx(() => Row(
-            children: [
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getDispatchTotal(),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getTodayGoal(),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getReported(),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getUnderCount(),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getAccumulateReportCount(),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  state.workCardTitle.value.getReportedCount(),
-                ),
-              ),
-            ],
-          )),
+  Widget _titleDetails() =>
+      _DispatchDetailTitle(state: state);
+
+  Widget _operationButtons() =>
+      _DispatchDetailOperationButtons(logic: logic, state: state, setStateFn: setState);
+
+  Widget _workProcedure() =>
+      _DispatchDetailWorkProcedure(
+        logic: logic,
+        state: state,
+        itemBuilder: (data, index) => _workProcedureItem(data, index),
+      );
+
+  Widget _workProcedureItem(WorkCardList data, int index) =>
+      _DispatchDetailWorkProcedureItem(
+        data: data,
+        index: index,
+        logic: logic,
+        state: state,
+      );
+
+  Widget _dispatch() =>
+      _DispatchDetailDispatch(
+        logic: logic,
+        state: state,
+        itemBuilder: (item) => _dispatchItem(item),
+      );
+
+  Widget _dispatchItem(DispatchInfo data) =>
+      _DispatchDetailDispatchItem(data: data, logic: logic, state: state);
+
+  Widget _bottomButtons() =>
+      _DispatchDetailBottomButtons(logic: logic, state: state, context: context);
+
+  @override
+  void initState() {
+    state.detailViewGetWorkerList();
+    SaveDispatch.getSave(
+      state.workCardTitle.value.processBillNumber ?? '',
+      (v) => askDialog(
+        content: 'production_dispatch_detail_has_save_tips'.tr,
+        confirm: () => logic.applySaveDispatch(v),
+      ),
     );
+    super.initState();
   }
 
-  Widget _operationButtons() {
-    return SizedBox(
-      height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                CheckBox(
-                  onChanged: (c) => setState(() => logic.checkAutoCount(c)),
-                  name: 'production_dispatch_detail_auto_input'.tr,
-                  value: state.isCheckedAutoCount,
-                ),
-                CheckBox(
-                  onChanged: (c) => setState(() => logic.checkDivideEqually(c)),
-                  name: 'production_dispatch_detail_sharing'.tr,
-                  value: state.isCheckedDivideEqually,
-                ),
-                CheckBox(
-                  onChanged: (c) => setState(() => logic.checkRounding(c)),
-                  name: 'production_dispatch_detail_round_up'.tr,
-                  value: state.isCheckedRounding,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Obx(() => CombinationButton(
-                combination: Combination.left,
-                text: 'production_dispatch_detail_next_process'.tr,
-                isEnabled: state.isEnabledNextWorkProcedure.value,
-                click: () => logic.detailViewNextWorkProcedure(),
-              )),
-          Obx(() => CombinationButton(
-                combination: Combination.right,
-                isEnabled: state.isEnabledBatchDispatch.value,
-                text: 'production_dispatch_detail_batch_record_working'.tr,
-                click: () => logic.detailViewBatchModifyDispatchClick(
-                  (v1, v2) => batchModifyDispatchQtyDialog(
-                    state.isCheckedDivideEqually,
-                    state.isCheckedRounding,
-                    v1,
-                    v2,
-                    (v3) => logic.detailViewBatchModifyDispatch(v1, v3),
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+        title: 'production_dispatch_detail_dispatch'.tr,
+        body: Column(
+          children: [
+            _titleDetails(),
+            _operationButtons(),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: _workProcedure(),
                   ),
+                  Expanded(
+                    flex: 7,
+                    child: _dispatch(),
+                  ),
+                ],
+              ),
+            ),
+            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
+          ],
+        ),
+        actions: [
+          if (state.workCardTitle.value.cardNoReportStatus == 1)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Text(
+                'production_dispatch_detail_outsourcing'.tr,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                  fontSize: 20,
                 ),
-              )),
-        ],
-      ),
-    );
+              ),
+            )
+        ]);
   }
 
-  Widget _workProcedure() {
-    return Obx(
-      () => Container(
-        margin: EdgeInsets.only(left: 5),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey.shade600,
-            width: 2,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: state.workProcedure.length,
-          itemBuilder: (BuildContext context, int index) =>
-              _workProcedureItem(state.workProcedure[index], index),
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    state.remake();
+    super.dispose();
   }
+}
 
-  Widget _workProcedureItem(WorkCardList data, int index) {
+class _DispatchDetailWorkProcedureItem extends StatelessWidget {
+  final WorkCardList data;
+  final int index;
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+
+  const _DispatchDetailWorkProcedureItem({
+    required this.data,
+    required this.index,
+    required this.logic,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => Container(
           margin: const EdgeInsets.only(bottom: 5),
           height: 50,
@@ -274,8 +267,264 @@ class _ProductionDispatchDetailPageState
           ),
         ));
   }
+}
 
-  Widget _dispatch() {
+class _DispatchDetailDispatchItem extends StatelessWidget {
+  final DispatchInfo data;
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+
+  const _DispatchDetailDispatchItem({
+    required this.data,
+    required this.logic,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => logic.detailViewDispatchItemClick(
+        data,
+        (surplus) => modifyDispatchQtyDialog(data, surplus, (di) => di),
+      ),
+      onLongPress: () {
+        data.select = !data.select!;
+        state.isCheckedSelectAllDispatch =
+            !state.dispatchInfo.any((v) => !v.select!);
+        state.isEnabledBatchDispatch.value =
+            state.dispatchInfo.where((v) => v.select!).length > 1;
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.grey.shade200, Colors.blue.shade100],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
+          border: Border.all(
+            color: data.select! ? Colors.green : Colors.grey.shade600,
+            width: data.select! ? 4 : 2,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(data.select! ? 12 : 10),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      data.getName(),
+                      style: TextStyle(
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      data.getQty(),
+                      style: TextStyle(
+                        color:
+                            data.qty == 0 ? Colors.red : Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => logic.detailViewDispatchItemDeleteClick(data),
+              child: Container(
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                ),
+                child: const Icon(
+                  size: 30,
+                  Icons.delete_forever,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DispatchDetailTitle extends StatelessWidget {
+  final ProductionDispatchState state;
+
+  const _DispatchDetailTitle({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Obx(() => Row(
+            children: [
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getDispatchTotal(),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getTodayGoal(),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getReported(),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getUnderCount(),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getAccumulateReportCount(),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  state.workCardTitle.value.getReportedCount(),
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+}
+
+class _DispatchDetailOperationButtons extends StatelessWidget {
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+  final void Function(VoidCallback fn) setStateFn;
+
+  const _DispatchDetailOperationButtons({
+    required this.logic,
+    required this.state,
+    required this.setStateFn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                CheckBox(
+                  onChanged: (c) => setStateFn(() => logic.checkAutoCount(c)),
+                  name: 'production_dispatch_detail_auto_input'.tr,
+                  value: state.isCheckedAutoCount,
+                ),
+                CheckBox(
+                  onChanged: (c) =>
+                      setStateFn(() => logic.checkDivideEqually(c)),
+                  name: 'production_dispatch_detail_sharing'.tr,
+                  value: state.isCheckedDivideEqually,
+                ),
+                CheckBox(
+                  onChanged: (c) => setStateFn(() => logic.checkRounding(c)),
+                  name: 'production_dispatch_detail_round_up'.tr,
+                  value: state.isCheckedRounding,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Obx(() => CombinationButton(
+                combination: Combination.left,
+                text: 'production_dispatch_detail_next_process'.tr,
+                isEnabled: state.isEnabledNextWorkProcedure.value,
+                click: () => logic.detailViewNextWorkProcedure(),
+              )),
+          Obx(() => CombinationButton(
+                combination: Combination.right,
+                isEnabled: state.isEnabledBatchDispatch.value,
+                text: 'production_dispatch_detail_batch_record_working'.tr,
+                click: () => logic.detailViewBatchModifyDispatchClick(
+                  (v1, v2) => batchModifyDispatchQtyDialog(
+                    state.isCheckedDivideEqually,
+                    state.isCheckedRounding,
+                    v1,
+                    v2,
+                    (v3) => logic.detailViewBatchModifyDispatch(v1, v3),
+                  ),
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class _DispatchDetailWorkProcedure extends StatelessWidget {
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+  final Widget Function(WorkCardList, int) itemBuilder;
+
+  const _DispatchDetailWorkProcedure({
+    required this.logic,
+    required this.state,
+    required this.itemBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Container(
+        margin: const EdgeInsets.only(left: 5),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey.shade600,
+            width: 2,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(5),
+          itemCount: state.workProcedure.length,
+          itemBuilder: (BuildContext context, int index) =>
+              itemBuilder(state.workProcedure[index], index),
+        ),
+      ),
+    );
+  }
+}
+
+class _DispatchDetailDispatch extends StatelessWidget {
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+  final Widget Function(DispatchInfo) itemBuilder;
+
+  const _DispatchDetailDispatch({
+    required this.logic,
+    required this.state,
+    required this.itemBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() => Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Container(
@@ -334,7 +583,8 @@ class _ProductionDispatchDetailPageState
                       CheckBox(
                         onChanged: (c) => logic.checkSelectAllDispatch(c),
                         needSave: false,
-                        name: 'production_dispatch_detail_select_all_worker'.tr,
+                        name:
+                            'production_dispatch_detail_select_all_worker'.tr,
                         isEnabled: state.isEnabledSelectAllDispatch,
                         value: state.isCheckedSelectAllDispatch,
                       ),
@@ -349,7 +599,7 @@ class _ProductionDispatchDetailPageState
                       crossAxisCount: 3,
                       childAspectRatio: 4 / 1,
                       children: state.dispatchInfo
-                          .map((item) => _dispatchItem(item))
+                          .map((item) => itemBuilder(item))
                           .toList()),
                 ),
               ],
@@ -357,89 +607,21 @@ class _ProductionDispatchDetailPageState
           ),
         ));
   }
+}
 
-  Widget _dispatchItem(DispatchInfo data) {
-    return GestureDetector(
-      onTap: () => logic.detailViewDispatchItemClick(
-        data,
-        (surplus) =>
-            modifyDispatchQtyDialog(data, surplus, (di) => setState(() => di)),
-      ),
-      onLongPress: () {
-        setState(() => data.select = !data.select!);
-        state.isCheckedSelectAllDispatch =
-            !state.dispatchInfo.any((v) => !v.select!);
-        state.isEnabledBatchDispatch.value =
-            state.dispatchInfo.where((v) => v.select!).length > 1;
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey.shade200, Colors.blue.shade100],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
-          border: Border.all(
-            color: data.select! ? Colors.green : Colors.grey.shade600,
-            width: data.select! ? 4 : 2,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(data.select! ? 12 : 10),
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      data.getName(),
-                      style: TextStyle(
-                        color: Colors.blue.shade900,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      data.getQty(),
-                      style: TextStyle(
-                        color:
-                            data.qty == 0 ? Colors.red : Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () =>
-                  setState(() => logic.detailViewDispatchItemDeleteClick(data)),
-              child: Container(
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                  ),
-                ),
-                child: const Icon(
-                  size: 30,
-                  Icons.delete_forever,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class _DispatchDetailBottomButtons extends StatelessWidget {
+  final ProductionDispatchLogic logic;
+  final ProductionDispatchState state;
+  final BuildContext context;
 
-  Widget _bottomButtons() {
+  const _DispatchDetailBottomButtons({
+    required this.logic,
+    required this.state,
+    required this.context,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
       child: Row(
@@ -460,7 +642,7 @@ class _ProductionDispatchDetailPageState
                   combination: Combination.middle,
                   text: 'production_dispatch_detail_last_dispatch'.tr,
                   click: () => showDispatchList(
-                      context,
+                      this.context,
                       true,
                       state.batchWorkProcedure.isNotEmpty
                           ? state.batchWorkProcedure
@@ -471,7 +653,7 @@ class _ProductionDispatchDetailPageState
                       (data, surplus) => modifyDispatchQtyDialog(
                         data,
                         surplus,
-                        (di) => setState(() => di),
+                        (di) => di,
                       ),
                     );
                   }),
@@ -480,14 +662,14 @@ class _ProductionDispatchDetailPageState
                   combination: Combination.middle,
                   text: 'production_dispatch_detail_now_dispatch'.tr,
                   click: () => showDispatchList(
-                      context, false, state.workProcedure, (i1, i2) {
+                      this.context, false, state.workProcedure, (i1, i2) {
                     logic.detailViewJumpToDispatchOnWorkProcedure(
                       i1,
                       i2,
                       (data, surplus) => modifyDispatchQtyDialog(
                         data,
                         surplus,
-                        (di) => setState(() => di),
+                        (di) => di,
                       ),
                     );
                   }),
@@ -547,65 +729,5 @@ class _ProductionDispatchDetailPageState
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    state.detailViewGetWorkerList();
-    SaveDispatch.getSave(
-      state.workCardTitle.value.processBillNumber ?? '',
-      (v) => askDialog(
-        content: 'production_dispatch_detail_has_save_tips'.tr,
-        confirm: () => logic.applySaveDispatch(v),
-      ),
-    );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-        title: 'production_dispatch_detail_dispatch'.tr,
-        body: Column(
-          children: [
-            _titleDetails(),
-            _operationButtons(),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: _workProcedure(),
-                  ),
-                  Expanded(
-                    flex: 7,
-                    child: _dispatch(),
-                  ),
-                ],
-              ),
-            ),
-            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
-          ],
-        ),
-        actions: [
-          if (state.workCardTitle.value.cardNoReportStatus == 1)
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Text(
-                'production_dispatch_detail_outsourcing'.tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
-                  fontSize: 20,
-                ),
-              ),
-            )
-        ]);
-  }
-
-  @override
-  void dispose() {
-    state.remake();
-    super.dispose();
   }
 }

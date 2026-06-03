@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -19,6 +21,7 @@ class _ScannerState extends State<Scanner> {
   var nativeDeviceOrientationCommunicator =
       NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
+  StreamSubscription<NativeDeviceOrientation>? _orientationSubscription;
   late var scanner = MobileScanner(
     onDetect: (v) {
       var data = v.barcodes.firstOrNull?.displayValue ?? '';
@@ -49,10 +52,16 @@ class _ScannerState extends State<Scanner> {
           .orientation(useSensor: false)
           .then((orientation) => _setOrientation(orientation));
     });
-    nativeDeviceOrientationCommunicator
+    _orientationSubscription = nativeDeviceOrientationCommunicator
         .onOrientationChanged(useSensor: false)
         .listen((orientation) => _setOrientation(orientation));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _orientationSubscription?.cancel();
+    super.dispose();
   }
 
   @override

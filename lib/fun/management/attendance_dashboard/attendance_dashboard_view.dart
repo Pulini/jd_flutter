@@ -39,111 +39,17 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
     lastDate: DateTime.now(),
   );
 
-  Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: EdgeInsets.only(left: 10, top: 5, bottom: 5),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(100),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(100),
-            bottomRight: Radius.circular(100),
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: avatarPhoto(data.photo, borderRadius: 100),
-            ),
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 35),
-                          child: AutoSizeText(
-                            '(${data.empNumber}) ${data.empName}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                            maxLines: 1,
-                            minFontSize: 8,
-                            maxFontSize: 18,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 35),
-                          child: textSpan(
-                            hintColor: Colors.grey,
-                            textColor: Colors.black54,
-                            hint: 'attendance_dashboard_team_item_dept'.tr,
-                            text: data.deptName ?? '',
-                            maxLines: 2,
-                            isBold: false,
-                          ),
-                        ),
-                        textSpan(
-                          hintColor: Colors.grey,
-                          textColor: Colors.black54,
-                          hint: 'attendance_dashboard_team_item_duty'.tr,
-                          text: data.dutyName ?? '',
-                          isBold: false,
-                        ),
-                        textSpan(
-                          hintColor: Colors.grey,
-                          textColor: Colors.black54,
-                          hint: 'attendance_dashboard_team_item_begin_data'.tr,
-                          text: data.beginHireDate ?? '',
-                          isBold: false,
-                        ),
-                        textSpan(
-                          hintColor: Colors.grey,
-                          hint: 'attendance_dashboard_team_item_phone'.tr,
-                          text: data.phone ?? '',
-                          isBold: false,
-                        ),
-                      ],
-                    ),
-                    if (!data.phone.isNullOrEmpty())
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: IconButton(
-                          onPressed: () => makePhoneCall(data.phone!),
-                          icon: Icon(
-                            Icons.phone_forwarded_rounded,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget _teamMemberInfoItem(TeamMemberInfo data) => _TeamMemberInfoCard(data: data);
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ever(state.searchTeamMemberText, (v) => logic.searchTeamMember(v));
       dpcAttendanceDay.onSelected = (v) => logic.getAttendanceDashboard(
-            date: getDateYMD(time: v),
-            success: () => refreshController.finishRefresh(),
-            error: () => refreshController.finishRefresh(),
-          );
+        date: getDateYMD(time: v),
+        success: () => refreshController.finishRefresh(),
+        error: () => refreshController.finishRefresh(),
+      );
       refreshController.callRefresh();
     });
     super.initState();
@@ -184,28 +90,28 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
                     DatePicker(pickerController: dpcAttendanceDay),
                     Expanded(
                       child: Obx(() => EasyRefresh(
-                            controller: refreshController,
-                            header: const MaterialHeader(),
-                            onRefresh: () => logic.getAttendanceDashboard(
-                              date: dpcAttendanceDay.getDateFormatYMD(),
-                              success: () => refreshController.finishRefresh(),
-                              error: () => refreshController.finishRefresh(),
-                            ),
-                            child: ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: state.attendanceDataList.length,
-                              itemBuilder: (c, i) => AttendanceDashboardItem(
-                                data: state.attendanceDataList[i],
-                              ),
-                            ),
-                          )),
+                        controller: refreshController,
+                        header: const MaterialHeader(),
+                        onRefresh: () => logic.getAttendanceDashboard(
+                          date: dpcAttendanceDay.getDateFormatYMD(),
+                          success: () => refreshController.finishRefresh(),
+                          error: () => refreshController.finishRefresh(),
+                        ),
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: state.attendanceDataList.length,
+                          itemBuilder: (c, i) => AttendanceDashboardItem(
+                            data: state.attendanceDataList[i],
+                          ),
+                        ),
+                      )),
                     )
                   ],
                 ),
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: CupertinoSearchTextField(
                         prefixIcon: const SizedBox.shrink(),
                         suffixIcon: const Icon(CupertinoIcons.search),
@@ -214,16 +120,16 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
                           borderRadius: BorderRadius.circular(20),
                         ),
                         onChanged: (text) =>
-                            state.searchTeamMemberText.value = text,
+                        state.searchTeamMemberText.value = text,
                         placeholder: 'attendance_dashboard_search_hint'.tr,
                       ),
                     ),
                     Expanded(
                       child: Obx(() => ListView.builder(
-                            itemCount: state.teamMemberShowList.length,
-                            itemBuilder: (c, i) => _teamMemberInfoItem(
-                                state.teamMemberShowList[i]),
-                          )),
+                        itemCount: state.teamMemberShowList.length,
+                        itemBuilder: (c, i) => _teamMemberInfoItem(
+                            state.teamMemberShowList[i]),
+                      )),
                     ),
                   ],
                 )
@@ -237,6 +143,9 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
 
   @override
   void dispose() {
+    tabController.dispose();
+    pageController.dispose();
+    refreshController.dispose();
     Get.delete<AttendanceDashboardLogic>();
     super.dispose();
   }
@@ -277,64 +186,11 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
   Widget _percentProgress({
     required double max,
     required double value,
-  }) {
-    var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
-    return Container(
-      padding: EdgeInsets.only(left: 5, right: 5),
-      height: 15,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 2,
-            bottom: 2,
-            left: 0,
-            right: 0,
-            child: LinearProgressIndicator(
-              borderRadius: const BorderRadius.all(Radius.circular(100)),
-              value: percent,
-              backgroundColor: Colors.grey.shade300,
-              color: Colors.blue.shade200,
-            ),
-          ),
-          Center(
-            child: Text(
-              '${percent.mul(100).toShowString()}%',
-              style: TextStyle(
-                height: 1,
-                color: Colors.black87,
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  }) =>
+      _AttendancePercentProgress(max: max, value: value);
 
-  Widget _itemCard(String text1, String text2) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.blue.shade50],
-          ),
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(text1),
-            Text(text2, style: tsSmallLightGrey),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _itemCard(String text1, String text2) =>
+      _AttendanceItemCard(text1: text1, text2: text2);
 
 
 
@@ -380,7 +236,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                     ),
                     Text('attendance_dashboard_total'.tr,
                         style: tsSmallLightGrey),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                   ]),
                   Expanded(
                     child: _percentProgress(
@@ -396,11 +252,11 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                     ),
                     Text('attendance_dashboard_attendance'.tr,
                         style: tsSmallLightGrey),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                   ])
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -491,7 +347,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                           animationController.forward();
                         }
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down_rounded,
                         color: Colors.blue,
                       ),
@@ -503,6 +359,198 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
           ),
         );
       },
+    );
+  }
+}
+
+class _TeamMemberInfoCard extends StatelessWidget {
+  final TeamMemberInfo data;
+
+  const _TeamMemberInfoCard({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade50, Colors.white],
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(100),
+          topRight: Radius.circular(10),
+          bottomLeft: Radius.circular(100),
+          bottomRight: Radius.circular(100),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: avatarPhoto(data.photo, borderRadius: 100),
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 35),
+                        child: AutoSizeText(
+                          '(${data.empNumber}) ${data.empName}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                          maxLines: 1,
+                          minFontSize: 8,
+                          maxFontSize: 18,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 35),
+                        child: textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_dept'.tr,
+                          text: data.deptName ?? '',
+                          maxLines: 2,
+                          isBold: false,
+                        ),
+                      ),
+                      textSpan(
+                        hintColor: Colors.grey,
+                        textColor: Colors.black54,
+                        hint: 'attendance_dashboard_team_item_duty'.tr,
+                        text: data.dutyName ?? '',
+                        isBold: false,
+                      ),
+                      textSpan(
+                        hintColor: Colors.grey,
+                        textColor: Colors.black54,
+                        hint: 'attendance_dashboard_team_item_begin_data'.tr,
+                        text: data.beginHireDate ?? '',
+                        isBold: false,
+                      ),
+                      textSpan(
+                        hintColor: Colors.grey,
+                        hint: 'attendance_dashboard_team_item_phone'.tr,
+                        text: data.phone ?? '',
+                        isBold: false,
+                      ),
+                    ],
+                  ),
+                  if (!data.phone.isNullOrEmpty())
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: IconButton(
+                        onPressed: () => makePhoneCall(data.phone!),
+                        icon: const Icon(
+                          Icons.phone_forwarded_rounded,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AttendancePercentProgress extends StatelessWidget {
+  final double max;
+  final double value;
+
+  const _AttendancePercentProgress({
+    required this.max,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+    return Container(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      height: 15,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 2,
+            bottom: 2,
+            left: 0,
+            right: 0,
+            child: LinearProgressIndicator(
+              borderRadius: const BorderRadius.all(Radius.circular(100)),
+              value: percent,
+              backgroundColor: Colors.grey.shade300,
+              color: Colors.blue.shade200,
+            ),
+          ),
+          Center(
+            child: Text(
+              '${percent.mul(100).toShowString()}%',
+              style: const TextStyle(
+                height: 1,
+                color: Colors.black87,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AttendanceItemCard extends StatelessWidget {
+  static const _textStyle = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.bold,
+    color: Colors.grey,
+  );
+
+  final String text1;
+  final String text2;
+
+  const _AttendanceItemCard({
+    required this.text1,
+    required this.text2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.blue.shade50],
+          ),
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(text1),
+            Text(text2, style: _textStyle),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -56,7 +56,88 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
     );
   }
 
-  Widget _item(QualityInspectionInfo data) {
+  @override
+  Widget build(BuildContext context) {
+    return pageBodyWithDrawer(
+      actions: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blue, width: 2),
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+          ),
+          margin: const EdgeInsets.only(right: 10),
+          height: 45,
+          width: 500,
+          child: Row(
+            children: [
+              Expanded(
+                child: DatePicker(pickerController: reportStartDateController),
+              ),
+              Expanded(
+                child: DatePicker(pickerController: reportEndDateController),
+              ),
+              CombinationButton(
+                text: 'product_quality_inspection_view_report'.tr,
+                click: () => logic.getInspectionReport(
+                  startDate: reportStartDateController.getDateFormatSapYMD(),
+                  endDate: reportEndDateController.getDateFormatSapYMD(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+      queryWidgets: [
+        EditText(
+          hint: 'product_quality_inspection_instruction'.tr,
+          controller: instructionNoController,
+        ),
+        EditText(
+          hint: 'product_quality_inspection_type_body'.tr,
+          controller: typeBodyController,
+        ),
+        EditText(
+          hint: 'product_quality_inspection_customer_po'.tr,
+          controller: customerPOController,
+        ),
+        DatePicker(pickerController: queryStartDateController),
+        DatePicker(pickerController: queryEndDateController),
+      ],
+      query: _query,
+      body: Obx(() => ListView.builder(
+            itemCount: state.orderList.length,
+            itemBuilder: (c, i) => _InspectionItem(
+              data: state.orderList[i],
+              logic: logic,
+              refresh: _query,
+            ),
+          )),
+    );
+  }
+
+  @override
+  void dispose() {
+    instructionNoController.dispose();
+    typeBodyController.dispose();
+    customerPOController.dispose();
+    Get.delete<QualityInspectionLogic>();
+    super.dispose();
+  }
+}
+
+class _InspectionItem extends StatelessWidget {
+  final QualityInspectionInfo data;
+  final QualityInspectionLogic logic;
+  final VoidCallback refresh;
+  const _InspectionItem({
+    required this.data,
+    required this.logic,
+    required this.refresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -92,13 +173,30 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
             ],
           ),
           const Divider(indent: 10, endIndent: 10),
-          for (var order in data.groupOrder!) _subItem(order)
+          for (var order in data.groupOrder!)
+            _InspectionSubItem(
+              data: order,
+              logic: logic,
+              refresh: refresh,
+            )
         ],
       ),
     );
   }
+}
 
-  Row _subItem(QualityInspectionOrderInfo data) {
+class _InspectionSubItem extends StatelessWidget {
+  final QualityInspectionOrderInfo data;
+  final QualityInspectionLogic logic;
+  final VoidCallback refresh;
+  const _InspectionSubItem({
+    required this.data,
+    required this.logic,
+    required this.refresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     var textStyle = const TextStyle(color: Colors.black54);
     return Row(
       children: [
@@ -207,7 +305,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
           child: TextButton(
             onPressed: () => logic.getOrderDetail(
               workOrderNo: data.workOrderNo ?? '',
-              refresh: _query,
+              refresh: refresh,
             ),
             child: Text(
               data.status == '4'
@@ -223,67 +321,5 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
         )
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
-      actions: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue, width: 2),
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.white,
-          ),
-          margin: const EdgeInsets.only(right: 10),
-          height: 45,
-          width: 500,
-          child: Row(
-            children: [
-              Expanded(
-                child: DatePicker(pickerController: reportStartDateController),
-              ),
-              Expanded(
-                child: DatePicker(pickerController: reportEndDateController),
-              ),
-              CombinationButton(
-                text: 'product_quality_inspection_view_report'.tr,
-                click: () => logic.getInspectionReport(
-                  startDate: reportStartDateController.getDateFormatSapYMD(),
-                  endDate: reportEndDateController.getDateFormatSapYMD(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-      queryWidgets: [
-        EditText(
-          hint: 'product_quality_inspection_instruction'.tr,
-          controller: instructionNoController,
-        ),
-        EditText(
-          hint: 'product_quality_inspection_type_body'.tr,
-          controller: typeBodyController,
-        ),
-        EditText(
-          hint: 'product_quality_inspection_customer_po'.tr,
-          controller: customerPOController,
-        ),
-        DatePicker(pickerController: queryStartDateController),
-        DatePicker(pickerController: queryEndDateController),
-      ],
-      query: _query,
-      body: Obx(() => ListView.builder(
-            itemCount: state.orderList.length,
-            itemBuilder: (c, i) => _item(state.orderList[i]),
-          )),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<QualityInspectionLogic>();
-    super.dispose();
   }
 }

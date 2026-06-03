@@ -501,6 +501,7 @@ class _FormingBarcodeCollectionPageState
 
   @override
   void dispose() {
+    tabController.dispose();
     Get.delete<FormingBarcodeCollectionLogic>();
     super.dispose();
   }

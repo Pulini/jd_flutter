@@ -73,7 +73,7 @@ class _CartonLabelScanProgressDetailViewState
                   ),
                   SizedBox(
                     width: 120,
-                    child: progressIndicator(
+                    child: CustomProgressIndicator(
                       max: list.length.toDouble(),
                       value: list
                           .where((v) =>

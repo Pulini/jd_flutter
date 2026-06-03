@@ -24,58 +24,8 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
   final SapPackingScanReverseState state =
       Get.find<SapPackingScanReverseLogic>().state;
 
-  Widget _item(SapPackingScanReverseLabelInfo data) => Container(
-        padding: const EdgeInsets.all(7),
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 40,
-              child: Row(
-                children: [
-                  expandedTextSpan(
-                    hint: '件ID：',
-                    text: data.pieceId ?? '',
-                    textColor: Colors.blue.shade900,
-                  ),
-                  IconButton(
-                    onPressed: () => askDialog(
-                      content: '确定要删除该标签吗？',
-                      confirm: () => logic.deleteReverseLabel(data),
-                    ),
-                    icon: const Icon(Icons.delete_forever, color: Colors.red),
-                  )
-                ],
-              ),
-            ),
-            for (SapPackingScanReverseLabelMaterialInfo item
-                in data.materialList!) ...{
-              const Divider(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  expandedTextSpan(
-                    hint: '物料：',
-                    text: '(${item.materialNumber})${item.materialName}'
-                        .allowWordTruncation(),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(width: 10),
-                  textSpan(
-                    hint: '数量：',
-                    text: '${item.commonQty.toShowString()} ${item.commonUnit}',
-                  )
-                ],
-              )
-            }
-          ],
-        ),
-      );
+  Widget _item(SapPackingScanReverseLabelInfo data) =>
+      _SapPackingScanReverseItem(data: data, logic: logic);
 
   @override
   void initState() {
@@ -123,5 +73,71 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
   void dispose() {
     Get.delete<SapPackingScanReverseLogic>();
     super.dispose();
+  }
+}
+
+class _SapPackingScanReverseItem extends StatelessWidget {
+  final SapPackingScanReverseLabelInfo data;
+  final SapPackingScanReverseLogic logic;
+
+  const _SapPackingScanReverseItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(7),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 40,
+            child: Row(
+              children: [
+                expandedTextSpan(
+                  hint: '件ID：',
+                  text: data.pieceId ?? '',
+                  textColor: Colors.blue.shade900,
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                    content: '确定要删除该标签吗？',
+                    confirm: () => logic.deleteReverseLabel(data),
+                  ),
+                  icon: const Icon(Icons.delete_forever, color: Colors.red),
+                )
+              ],
+            ),
+          ),
+          for (SapPackingScanReverseLabelMaterialInfo item
+              in data.materialList!) ...{
+            const Divider(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                expandedTextSpan(
+                  hint: '物料：',
+                  text: '(${item.materialNumber})${item.materialName}'
+                      .allowWordTruncation(),
+                  maxLines: 3,
+                ),
+                const SizedBox(width: 10),
+                textSpan(
+                  hint: '数量：',
+                  text: '${item.commonQty.toShowString()} ${item.commonUnit}',
+                )
+              ],
+            )
+          }
+        ],
+      ),
+    );
   }
 }

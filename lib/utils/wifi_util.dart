@@ -35,7 +35,7 @@ class WiFiManager {
         await WiFiForIoTPlugin.forceWifiUsage(true);
 
         // 等待网络稳定
-        await Future.delayed(Duration(milliseconds: 1500));
+        await Future.delayed(const Duration(milliseconds: 1500));
       }
 
       return true;

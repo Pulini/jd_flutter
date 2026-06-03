@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
@@ -28,8 +29,8 @@ void selectPackProfileDialog({
   item(int i) => Obx(() => GestureDetector(
         onTap: () => selectIndex.value = i,
         child: Container(
-          margin: EdgeInsets.only(bottom: 5),
-          padding: EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 5),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             border: Border.all(
               color: selectIndex.value == i ? Colors.green : Colors.grey,
@@ -134,11 +135,11 @@ void selectInstructionsDialog({
         border: Border.all(color: bkgColor),
         color: Colors.white,
       ),
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         children: [
           Row(children: [
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_instruction'.tr,
               borderColor: bkgColor,
@@ -147,20 +148,20 @@ void selectInstructionsDialog({
             ),
             SizedBox(
               width: 60,
-              child: frameText(
+              child: FrameText(
                 alignment: Alignment.center,
                 text: 'part_dispatch_select_instruction_dialog_part_qty'.tr,
                 borderColor: bkgColor,
                 backgroundColor: Colors.orange.shade100,
               ),
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_dispatch_qty'.tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               alignment: Alignment.center,
               text: 'part_dispatch_select_instruction_dialog_total_dispatch_qty'.tr,
               borderColor: bkgColor,
@@ -179,25 +180,25 @@ void selectInstructionsDialog({
           ]),
           for (int i = 0; i < list.length; i++)
             Row(children: [
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].dataList.first.seOrderNo ?? '',
                 borderColor: bkgColor,
                 flex: 2,
               ),
               SizedBox(
                 width: 60,
-                child: frameText(
+                child: FrameText(
                   alignment: Alignment.center,
                   text: list[i].dataList.length.toString(),
                   borderColor: bkgColor,
                 ),
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].dataList.first.workCardQty.toShowString(),
                 borderColor: bkgColor,
                 alignment: Alignment.centerRight,
               ),
-              expandedFrameText(
+              ExpandedFrameText(
                 text: list[i].totalQty.toShowString(),
                 borderColor: bkgColor,
                 alignment: Alignment.centerRight,
@@ -230,8 +231,8 @@ void selectInstructionsDialog({
   Widget itemWidget(int index) {
     var data = batchGroups[index];
     return Obx(() => Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             border: Border.all(
               color: selectIndex.value == index ? Colors.green : Colors.grey,
@@ -348,7 +349,7 @@ void viewPartDetailDialog(PartDispatchOrderPartInfo data) {
         ),
         IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(Icons.cancel, color: Colors.red),
+          icon: const Icon(Icons.cancel, color: Colors.red),
         )
       ],
     ),
@@ -410,9 +411,9 @@ void createLabelDialog({
           .reduce((a, b) => a < b ? a : b);
   var controller = TextEditingController(text: max.toString());
   Get.dialog(AlertDialog(
-    titlePadding: EdgeInsets.all(5),
-    contentPadding: EdgeInsets.all(10),
-    title: Padding(padding: EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
+    titlePadding: const EdgeInsets.all(5),
+    contentPadding: const EdgeInsets.all(10),
+    title: Padding(padding: const EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -429,7 +430,7 @@ void createLabelDialog({
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: avatar.isNotEmpty
-                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
                           : Icon(
                               Icons.account_circle,
                               size: 150,
@@ -447,7 +448,7 @@ void createLabelDialog({
                 ),
                 if (!isSingleSize)
                   Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: NumberEditText(
                       controller: controller,
                       hint: 'part_dispatch_create_label_dialog_input_create_qty'.tr,

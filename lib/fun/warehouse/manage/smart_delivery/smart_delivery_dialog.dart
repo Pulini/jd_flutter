@@ -375,14 +375,14 @@ void createDeliveryTaskDialog({
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    selectView(
+                    SelectView(
                       list: agvList,
                       controller: agvController,
                       errorMsg:
                           'smart_delivery_dialog_unable_query_device_info'.tr,
                       hint: 'smart_delivery_dialog_execute_device'.tr,
                     ),
-                    selectView(
+                    SelectView(
                       list: taskTypeList,
                       controller: agvTypeController,
                       errorMsg:
@@ -394,7 +394,7 @@ void createDeliveryTaskDialog({
                         endList = taskTypeList[i].endPoint ?? [];
                       }),
                     ),
-                    selectView(
+                    SelectView(
                       list: startList,
                       controller: startController,
                       errorMsg:
@@ -402,7 +402,7 @@ void createDeliveryTaskDialog({
                               .tr,
                       hint: 'smart_delivery_dialog_task_starting_point'.tr,
                     ),
-                    selectView(
+                    SelectView(
                       list: endList,
                       controller: endController,
                       errorMsg:

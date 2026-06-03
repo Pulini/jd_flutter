@@ -93,7 +93,7 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Expanded(
-                  child: Obx(() => progressIndicator(
+                  child: Obx(() => CustomProgressIndicator(
                         max: state.colorOrderList[index].qty ?? 0,
                         value: scannedList.isEmpty
                             ? 0

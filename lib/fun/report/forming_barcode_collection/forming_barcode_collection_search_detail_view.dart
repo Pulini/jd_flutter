@@ -158,6 +158,12 @@ class _FormingBarcodeCollectionSearchDetailPageState
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'forming_code_collection_instruction_details'.tr,

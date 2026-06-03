@@ -22,87 +22,8 @@ class _PickingMaterialOrderProgressPageState
       Get.find<PickingMaterialOrderLogic>().state;
   int index = Get.arguments['index'];
 
-  Widget _item(PickingMaterialOrderMaterialInfo data) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade50, Colors.white],
-        ),
-        borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: Column(
-        children: [
-          Row(children: [
-            expandedTextSpan(
-              hint: 'picking_material_order_material_tips'.tr,
-              text: '(${data.materialCode}) ${data.materialName}',
-              textColor: data.pickingStatusColor(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Text(
-                data.preparedMaterialsStatusText(),
-                style: TextStyle(color: data.preparedMaterialsStatusColor()),
-              ),
-            ),
-            Text('picking_material_order_preparing_material_qty'.tr),
-            SizedBox(
-              width: 200,
-              child: data.isBasicUnit
-                  ? NumberDecimalEditText(
-                      max: data.canBasicPreparingMaterialsQty(),
-                      initQty: data.basicPreparingMaterialsQty(),
-                      resetQty: data.canBasicPreparingMaterialsQty(),
-                      onChanged: (v) {
-                        setState(
-                            () => data.setLinesBasicPreparedMaterialsQty(v));
-                      },
-                    )
-                  : NumberDecimalEditText(
-                      max: data.canCommonPreparingMaterialsQty(),
-                      initQty: data.commonPreparingMaterialsQty(),
-                resetQty: data.canBasicPreparingMaterialsQty(),
-                      onChanged: (v) {
-                        setState(
-                            () => data.setLinesCommonPreparedMaterialsQty(v));
-                      },
-                    ),
-            ),
-            data.isOnlyOneUnit()
-                ? Text(data.basicUnit ?? '')
-                : GestureDetector(
-                    onTap: () => setState(() {
-                      data.isBasicUnit = !data.isBasicUnit;
-                    }),
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 7, top: 3, right: 7, bottom: 3),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        data.isBasicUnit
-                            ? data.basicUnit ?? ''
-                            : data.commonUnit ?? '',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-            const SizedBox(width: 10),
-          ]),
-        ],
-      ),
-    );
-  }
+  Widget _item(PickingMaterialOrderMaterialInfo data) =>
+      _PickingMaterialOrderProgressItem(data: data, setStateFn: setState);
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +69,99 @@ class _PickingMaterialOrderProgressPageState
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PickingMaterialOrderProgressItem extends StatelessWidget {
+  final PickingMaterialOrderMaterialInfo data;
+  final void Function(VoidCallback fn) setStateFn;
+
+  const _PickingMaterialOrderProgressItem({
+    required this.data,
+    required this.setStateFn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade50, Colors.white],
+        ),
+        borderRadius: BorderRadius.circular(50),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        children: [
+          Row(children: [
+            expandedTextSpan(
+              hint: 'picking_material_order_material_tips'.tr,
+              text: '(${data.materialCode}) ${data.materialName}',
+              textColor: data.pickingStatusColor(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Text(
+                data.preparedMaterialsStatusText(),
+                style: TextStyle(color: data.preparedMaterialsStatusColor()),
+              ),
+            ),
+            Text('picking_material_order_preparing_material_qty'.tr),
+            SizedBox(
+              width: 200,
+              child: data.isBasicUnit
+                  ? NumberDecimalEditText(
+                      max: data.canBasicPreparingMaterialsQty(),
+                      initQty: data.basicPreparingMaterialsQty(),
+                      resetQty: data.canBasicPreparingMaterialsQty(),
+                      onChanged: (v) {
+                        setStateFn(
+                            () => data.setLinesBasicPreparedMaterialsQty(v));
+                      },
+                    )
+                  : NumberDecimalEditText(
+                      max: data.canCommonPreparingMaterialsQty(),
+                      initQty: data.commonPreparingMaterialsQty(),
+                      resetQty: data.canBasicPreparingMaterialsQty(),
+                      onChanged: (v) {
+                        setStateFn(
+                            () => data.setLinesCommonPreparedMaterialsQty(v));
+                      },
+                    ),
+            ),
+            data.isOnlyOneUnit()
+                ? Text(data.basicUnit ?? '')
+                : GestureDetector(
+                    onTap: () => setStateFn(() {
+                      data.isBasicUnit = !data.isBasicUnit;
+                    }),
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 7, top: 3, right: 7, bottom: 3),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        data.isBasicUnit
+                            ? data.basicUnit ?? ''
+                            : data.commonUnit ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+            const SizedBox(width: 10),
+          ]),
+        ],
       ),
     );
   }

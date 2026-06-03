@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
@@ -142,7 +143,7 @@ void setCapacityDialog({
 
           item(CreateLabel data) => Container(
                 margin: const EdgeInsets.only(bottom: 5),
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey, width: 2),
@@ -161,11 +162,11 @@ void setCapacityDialog({
                     ),
                     Text(data.qty.toShowString()),
                     Padding(
-                      padding: EdgeInsets.only(left: 7, right: 7),
+                      padding: const EdgeInsets.only(left: 7, right: 7),
                       child: IconButton(
                         onPressed: () =>
                             dialogSetState(() => createList.remove(data)),
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete_forever,
                           color: Colors.red,
                         ),
@@ -208,7 +209,7 @@ void setCapacityDialog({
                       Expanded(
                           child: WorkerCheck(onChanged: (w) => worker = w)),
                       Padding(
-                        padding: EdgeInsets.only(top: 5),
+                        padding: const EdgeInsets.only(top: 5),
                         child: CombinationButton(
                           text:
                               'process_dispatch_register_dialog_add_worker'.tr,
@@ -313,7 +314,7 @@ void addNewWorkerDialog(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(7),
                               child:
-                                  Image.network(avatar.value, fit: BoxFit.fill),
+                                  CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill),
                             ),
                           ),
                         ),
@@ -382,7 +383,7 @@ void reportDialog(ProcessDispatchLabelInfo data, Function() refresh) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 '1、输入员工二维码。\r\n2、填写合格数。',
                 style: TextStyle(color: Colors.green),
               ),

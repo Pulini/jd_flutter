@@ -154,4 +154,11 @@ var tecCode=TextEditingController();
     );
     super.initState();
   }
+
+  @override
+  void dispose() {
+    tecCode.dispose();
+    Get.delete<PartReportScanLogic>();
+    super.dispose();
+  }
 }

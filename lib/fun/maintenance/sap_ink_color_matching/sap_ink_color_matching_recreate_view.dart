@@ -133,7 +133,7 @@ class _SapInkColorMatchingRecreatePageState
   void initState() {
     logic.initRecreateItemData(index);
     ratioBarChartWidget =
-        ratioBarChart(ratioList: logic.getRecreateRatioColorLine());
+        RatioBarChart(ratioList: logic.getRecreateRatioColorLine());
 
     super.initState();
   }
@@ -270,6 +270,8 @@ class _SapInkColorMatchingRecreatePageState
 
   @override
   void dispose() {
+    controller.dispose();
+    fn.dispose();
     state.cleanRecreate();
     super.dispose();
   }

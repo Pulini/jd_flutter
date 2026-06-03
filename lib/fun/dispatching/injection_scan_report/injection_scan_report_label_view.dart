@@ -18,42 +18,8 @@ class _InjectionScanReportLabelPageState extends State<InjectionScanReportLabelP
       .find<InjectionScanReportLogic>()
       .state;
 
-  Widget _item(ShowProcessBarcodeInfo data) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade200, Colors.green.shade50],
-        ),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('外箱条码：${data.barCode}',style: const TextStyle(  fontWeight: FontWeight.bold,),),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textSpan(
-                hint: 'injection_scan_label_size'.tr,
-                text: data.size ?? '',
-                textColor: Colors.black,
-              ),
-              textSpan(
-                hint: 'injection_scan_label_capacity'.tr,
-                text: '${data.qty}<${data.unit}>序列号：${data.num}',
-                textColor: Colors.black,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _item(ShowProcessBarcodeInfo data) =>
+      _InjectionScanReportLabelItem(data: data);
 
   @override
   Widget build(BuildContext context) {
@@ -86,5 +52,52 @@ class _InjectionScanReportLabelPageState extends State<InjectionScanReportLabelP
             ),
           ],
         ),));
+  }
+}
+
+class _InjectionScanReportLabelItem extends StatelessWidget {
+  final ShowProcessBarcodeInfo data;
+
+  const _InjectionScanReportLabelItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade200, Colors.green.shade50],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '外箱条码：${data.barCode}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'injection_scan_label_size'.tr,
+                text: data.size ?? '',
+                textColor: Colors.black,
+              ),
+              textSpan(
+                hint: 'injection_scan_label_capacity'.tr,
+                text: '${data.qty}<${data.unit}>序列号：${data.num}',
+                textColor: Colors.black,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

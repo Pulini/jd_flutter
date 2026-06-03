@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,89 +64,13 @@ class _PartDispatchLabelManagePageState
     );
   }
 
-  Widget _imageItem(int i) => GestureDetector(
-        onTap: () => Get.to(() => ViewNetPhoto(photos: state.productUrlList)),
-        child: Hero(
-          tag: state.productUrlList[i],
-          child: Image.network(
-            state.productUrlList[i],
-            fit: BoxFit.cover,
-            errorBuilder: (ctx, err, st) => Image.asset(
-              'assets/images/ic_logo.png',
-              color: Colors.blue,
-            ),
-          ),
-        ),
+  Widget _imageItem(int i) => _PartDispatchOrderImageItem(
+        index: i,
+        state: state,
       );
 
-  Widget _partItem(PartDispatchOrderPartInfo data) {
-    var url = data.partPictureUrl();
-    var errorImage = Image.asset(
-      'assets/images/ic_logo.png',
-      color: Colors.blue,
-    );
-    return GestureDetector(
-      onTap: () => data.isSelected.value = !data.isSelected.value,
-      child: Obx(() => Container(
-            margin: const EdgeInsets.all(5),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 2,
-                color: data.isSelected.value ? Colors.blue : Colors.grey,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              color: data.isSelected.value
-                  ? Colors.blue.shade100
-                  : Colors.grey.shade100,
-            ),
-            foregroundDecoration: RotatedCornerDecoration.withColor(
-              color: data.packTypeID == 478
-                  ? Colors.deepOrange
-                  : Colors.deepPurple,
-              badgeCornerRadius: const Radius.circular(8),
-              badgeSize: const Size(45, 45),
-              textSpan: TextSpan(
-                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
-                style: const TextStyle(fontSize: 14),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AspectRatio(
-                  aspectRatio: 2 / 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: url.isNotEmpty
-                        ? Image.network(
-                            url,
-                            fit: BoxFit.cover,
-                            errorBuilder: (ctx, err, st) => errorImage,
-                          )
-                        : errorImage,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: Text(
-                      data.materialName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),),
-                    Text(
-                      '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          )),
-    );
-  }
+  Widget _partItem(PartDispatchOrderPartInfo data) =>
+      _PartDispatchOrderPartGridItem(data: data);
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +120,7 @@ class _PartDispatchLabelManagePageState
               labelStyle: const TextStyle(color: Colors.black54),
               prefixIcon: IconButton(
                 onPressed: () => scannerDialog(detect: (c) => _query(code: c)),
-                icon: Icon(Icons.qr_code_scanner, color: Colors.blue),
+                icon: const Icon(Icons.qr_code_scanner, color: Colors.blue),
               ),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),
@@ -223,8 +148,8 @@ class _PartDispatchLabelManagePageState
         children: [
           Container(
             height: 100,
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+            padding: const EdgeInsets.all(5),
+            margin: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
             decoration: BoxDecoration(
               border: Border.all(width: 2, color: Colors.black),
               borderRadius: BorderRadius.circular(10),
@@ -254,7 +179,7 @@ class _PartDispatchLabelManagePageState
                                   hint: 'part_dispatch_order_size'.tr, text: state.sizeListText.value),
                               Text(
                                 state.total.value,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
                                 ),
@@ -264,7 +189,7 @@ class _PartDispatchLabelManagePageState
                         ],
                       )),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 AspectRatio(
                   aspectRatio: 2 / 1,
                   child: Container(
@@ -288,7 +213,7 @@ class _PartDispatchLabelManagePageState
           Expanded(
             child: Obx(() => GridView.builder(
                   itemCount: state.partList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 6,
                     childAspectRatio: 7 / 5,
                   ),
@@ -304,5 +229,109 @@ class _PartDispatchLabelManagePageState
   void dispose() {
     Get.delete<PartDispatchLabelManageLogic>();
     super.dispose();
+  }
+}
+
+class _PartDispatchOrderImageItem extends StatelessWidget {
+  final int index;
+  final PartDispatchLabelManageState state;
+
+  const _PartDispatchOrderImageItem({
+    required this.index,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.to(() => ViewNetPhoto(photos: state.productUrlList)),
+      child: Hero(
+        tag: state.productUrlList[index],
+        child: CachedNetworkImage(
+          imageUrl: state.productUrlList[index],
+          fit: BoxFit.cover,
+          errorWidget: (ctx, err, st) => Image.asset(
+            'assets/images/ic_logo.png',
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PartDispatchOrderPartGridItem extends StatelessWidget {
+  final PartDispatchOrderPartInfo data;
+
+  const _PartDispatchOrderPartGridItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    var url = data.partPictureUrl();
+    var errorImage = Image.asset(
+      'assets/images/ic_logo.png',
+      color: Colors.blue,
+    );
+    return GestureDetector(
+      onTap: () => data.isSelected.value = !data.isSelected.value,
+      child: Obx(() => Container(
+            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: data.isSelected.value ? Colors.blue : Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: data.isSelected.value
+                  ? Colors.blue.shade100
+                  : Colors.grey.shade100,
+            ),
+            foregroundDecoration: RotatedCornerDecoration.withColor(
+              color: data.packTypeID == 478
+                  ? Colors.deepOrange
+                  : Colors.deepPurple,
+              badgeCornerRadius: const Radius.circular(8),
+              badgeSize: const Size(45, 45),
+              textSpan: TextSpan(
+                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: url.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: url,
+                            fit: BoxFit.cover,
+                            errorWidget: (ctx, err, st) => errorImage,
+                          )
+                        : errorImage,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text(
+                      data.materialName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),),
+                    Text(
+                      '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )),
+    );
   }
 }

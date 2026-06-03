@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -36,6 +39,7 @@ class _SignaturePageState extends State<SignaturePage> {
   late RxBool reSignature;
   var nDOC = NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
+  StreamSubscription<NativeDeviceOrientation>? _orientationSubscription;
 
   void _setOrientation(NativeDeviceOrientation orientation) {
     if (orientation == NativeDeviceOrientation.landscapeLeft) {
@@ -57,10 +61,16 @@ class _SignaturePageState extends State<SignaturePage> {
           .orientation(useSensor: false)
           .then((orientation) => _setOrientation(orientation));
     });
-    nDOC
+    _orientationSubscription = nDOC
         .onOrientationChanged(useSensor: false)
         .listen((orientation) => _setOrientation(orientation));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _orientationSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -178,6 +188,7 @@ class _SignatureWithWorkerNumberPageState
   );
   var nDOC = NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
+  StreamSubscription<NativeDeviceOrientation>? _orientationSubscription;
   WorkerInfo? worker;
   var avatar = ''.obs;
   var name = ''.obs;
@@ -201,10 +212,16 @@ class _SignatureWithWorkerNumberPageState
           .orientation(useSensor: false)
           .then((orientation) => _setOrientation(orientation));
     });
-    nDOC
+    _orientationSubscription = nDOC
         .onOrientationChanged(useSensor: false)
         .listen((orientation) => _setOrientation(orientation));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _orientationSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -234,8 +251,8 @@ class _SignatureWithWorkerNumberPageState
                     size: 120,
                     color: Colors.grey.shade300,
                   )
-                : Image.network(
-                    avatar.value,
+                : CachedNetworkImage(
+                    imageUrl: avatar.value,
                     fit: BoxFit.fill,
                   ),
           )),

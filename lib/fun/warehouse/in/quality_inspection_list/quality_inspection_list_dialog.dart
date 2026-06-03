@@ -137,12 +137,12 @@ void showColor(List<StuffColorSeparationList> colorList) {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: 'quality_inspection_color_title'.tr,
                     textColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
                   ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: 'quality_inspection_quality_title'.tr,
                     textColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
@@ -154,11 +154,11 @@ void showColor(List<StuffColorSeparationList> colorList) {
                   itemCount: colorList.length,
                   itemBuilder: (c, i) => Row(
                     children: [
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: colorList[i].batch ?? '',
                         backgroundColor: Colors.greenAccent.shade100,
                       ),
-                      expandedFrameText(
+                      ExpandedFrameText(
                         text: colorList[i]
                             .colorSeparationQuantity!
                             .toDoubleTry()

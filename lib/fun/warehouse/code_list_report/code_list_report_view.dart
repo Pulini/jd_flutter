@@ -57,7 +57,32 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
         ));
   }
 
-  Widget _item2(List<DataList> list, Color bkg) {
+  Widget _item2(List<DataList> list, Color bkg) =>
+      _CodeListReportItem2(list: list, bkg: bkg);
+
+  @override
+  void initState() {
+    if (Get.arguments != null) {
+      state.getData(Get.arguments['reportData']);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<CodeListReportLogic>();
+    super.dispose();
+  }
+}
+
+class _CodeListReportItem2 extends StatelessWidget {
+  final List<DataList> list;
+  final Color bkg;
+
+  const _CodeListReportItem2({required this.list, required this.bkg});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         for (var i in list)
@@ -82,13 +107,5 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
           ),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    if (Get.arguments != null) {
-      state.getData(Get.arguments['reportData']);
-    }
-    super.initState();
   }
 }

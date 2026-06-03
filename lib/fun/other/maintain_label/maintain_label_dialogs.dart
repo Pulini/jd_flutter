@@ -357,13 +357,13 @@ void selectInstructDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('选择指令'),
+              const Text('选择指令'),
               TextButton(
                   onPressed: () {
                     Get.back();
                     allCallback.call();
                   },
-                  child: Text('整单生成'))
+                  child: const Text('整单生成'))
             ],
           ),
           content: SizedBox(

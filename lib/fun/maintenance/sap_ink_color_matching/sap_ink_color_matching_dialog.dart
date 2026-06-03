@@ -546,7 +546,7 @@ void puttingDialog({
                             .sub(nowWeight)
                             .add(actual)
                             .clamp(0.0, double.infinity);
-                        return percentIndicator(
+                        return PercentIndicator(
                           max: data.finalWeight.value,
                           value: v,
                           color: v > data.finalWeight.value

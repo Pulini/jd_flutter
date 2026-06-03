@@ -252,7 +252,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
         DatePicker(pickerController: pcEndDate),
         SwitchButton(
           onChanged: (isSelect) {
-            setState(() => state.isOutsourcing = isSelect);
+            state.isOutsourcing = isSelect;
             spSave('${Get.currentRoute}/isOutsourcing', isSelect);
           },
           name: 'work_order_list_outsource'.tr,
@@ -260,7 +260,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
         ),
         SwitchButton(
           onChanged: (isSelect) {
-            setState(() => state.isClosed = isSelect);
+            state.isClosed = isSelect;
             spSave('${Get.currentRoute}/isClosed', isSelect);
           },
           name: 'work_order_list_is_closed'.tr,

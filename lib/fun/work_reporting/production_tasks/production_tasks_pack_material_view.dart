@@ -23,7 +23,47 @@ class _ProductionTasksPackMaterialPageState
   String instruction = Get.arguments['instruction'];
   var controller = TextEditingController();
 
-  Widget _item(ProductionTasksPackMaterialInfo data) {
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'production_tasks_pack_material_packing_list'.tr,
+      actions: [
+        Container(
+          width: 240,
+          margin: const EdgeInsets.only(right: 10),
+          child: CupertinoSearchTextField(
+            decoration: BoxDecoration(
+              color: Colors.white54,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            placeholder: 'production_tasks_pack_material_quick_filter'.tr,
+            onChanged: (v) => logic.searchPackMaterial(v),
+          ),
+        )
+      ],
+      body: Obx(() => ListView.builder(
+            padding: const EdgeInsets.all(10),
+            itemCount: state.packMaterialShowList.length,
+            itemBuilder: (c, i) =>
+                _PackMaterialItem(data: state.packMaterialShowList[i]),
+          )),
+    );
+  }
+
+  @override
+  void dispose() {
+    state.packMaterialList.clear();
+    state.packMaterialShowList.clear();
+    super.dispose();
+  }
+}
+
+class _PackMaterialItem extends StatelessWidget {
+  final ProductionTasksPackMaterialInfo data;
+  const _PackMaterialItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -98,38 +138,5 @@ class _ProductionTasksPackMaterialPageState
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'production_tasks_pack_material_packing_list'.tr,
-      actions: [
-        Container(
-          width: 240,
-          margin: const EdgeInsets.only(right: 10),
-          child: CupertinoSearchTextField(
-            decoration: BoxDecoration(
-              color: Colors.white54,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            placeholder: 'production_tasks_pack_material_quick_filter'.tr,
-            onChanged: (v) => logic.searchPackMaterial(v),
-          ),
-        )
-      ],
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: state.packMaterialShowList.length,
-            itemBuilder: (c, i) => _item(state.packMaterialShowList[i]),
-          )),
-    );
-  }
-
-  @override
-  void dispose() {
-    state.packMaterialList.clear();
-    state.packMaterialShowList.clear();
-    super.dispose();
   }
 }

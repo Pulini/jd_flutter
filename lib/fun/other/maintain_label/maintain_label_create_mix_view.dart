@@ -21,133 +21,8 @@ class _MaintainLabelCreateMixPageState
   final state = Get.find<MaintainLabelLogic>().state;
   var maxLabelNumController = TextEditingController();
 
-  Widget _item(List<PickingBarCodeInfo> data) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey, width: 2),
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textSpan(
-              hint: '尺码:',
-              text: data.first.size ?? '',
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                expandedFrameText(
-                  lineHeight: 40,
-                  text: '指令',
-                  alignment: Alignment.center,
-                  isBold: true,
-                  flex: 3,
-                  backgroundColor: Colors.blue.shade100,
-                  borderColor: Colors.black,
-                ),
-                expandedFrameText(
-                  lineHeight: 40,
-                  text: '剩余数',
-                  alignment: Alignment.center,
-                  isBold: true,
-                  flex: 1,
-                  backgroundColor: Colors.blue.shade100,
-                  borderColor: Colors.black,
-                ),
-                expandedFrameText(
-                  lineHeight: 40,
-                  text: '装箱数',
-                  alignment: Alignment.center,
-                  isBold: true,
-                  flex: 2,
-                  backgroundColor: Colors.blue.shade100,
-                  borderColor: Colors.black,
-                ),
-                SizedBox(
-                  height: 35,
-                  child: Obx(() => Checkbox(
-                        value: data.every((v) => v.isSelected.value),
-                        onChanged: (v) {
-                          for (var sub in data) {
-                            sub.isSelected.value = v!;
-                          }
-                          logic.refreshMaxLabel();
-                        },
-                      )),
-                ),
-              ],
-            ),
-            for (var sub in data)
-              Row(
-                children: [
-                  expandedFrameText(
-                    lineHeight: 40,
-                    text: sub.mtono ?? '',
-                    flex: 3,
-                    backgroundColor: Colors.white,
-                    borderColor: Colors.black,
-                  ),
-                  expandedFrameText(
-                    lineHeight: 40,
-                    text: sub.surplusQty.toShowString(),
-                    alignment: Alignment.center,
-                    flex: 1,
-                    backgroundColor: Colors.white,
-                    borderColor: Colors.black,
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                        height: 40,
-                        padding: EdgeInsets.only(
-                          left: 3,
-                          right: 3,
-                          bottom: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                        ),
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          controller: sub.packingQtyController,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 0, bottom: 15),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                          onChanged: (v) {
-                            sub.packingQty.value = v.toDoubleTry();
-                            logic.refreshMaxLabel();
-                          },
-                        ),
-                      )),
-                  SizedBox(
-                    height: 40,
-                    child: Obx(() => Checkbox(
-                          value: sub.isSelected.value,
-                          onChanged: (v) {
-                            sub.isSelected.value = v!;
-                            logic.refreshMaxLabel();
-                          },
-                        )),
-                  ),
-                ],
-              ),
-          ],
-        ),
-      );
+  Widget _item(List<PickingBarCodeInfo> data) =>
+      _MaintainLabelCreateMixItem(data: data, logic: logic);
 
   @override
   void initState() {
@@ -158,6 +33,12 @@ class _MaintainLabelCreateMixPageState
   }
 
   @override
+  void dispose() {
+    maxLabelNumController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: "创建混码标签",
@@ -165,7 +46,7 @@ class _MaintainLabelCreateMixPageState
         children: [
           Container(
             height: 40,
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: TextField(
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -216,11 +97,152 @@ class _MaintainLabelCreateMixPageState
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: state.createMixLabelsData.length,
                   itemBuilder: (c, i) => _item(state.createMixLabelsData[i]),
                 )),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class _MaintainLabelCreateMixItem extends StatelessWidget {
+  final List<PickingBarCodeInfo> data;
+  final MaintainLabelLogic logic;
+
+  const _MaintainLabelCreateMixItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+        gradient:  LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textSpan(
+            hint: '尺码:',
+            text: data.first.size ?? '',
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              ExpandedFrameText(
+                lineHeight: 40,
+                text: '指令',
+                alignment: Alignment.center,
+                isBold: true,
+                flex: 3,
+                backgroundColor: Colors.blue.shade100,
+                borderColor: Colors.black,
+              ),
+              ExpandedFrameText(
+                lineHeight: 40,
+                text: '剩余数',
+                alignment: Alignment.center,
+                isBold: true,
+                flex: 1,
+                backgroundColor: Colors.blue.shade100,
+                borderColor: Colors.black,
+              ),
+              ExpandedFrameText(
+                lineHeight: 40,
+                text: '装箱数',
+                alignment: Alignment.center,
+                isBold: true,
+                flex: 2,
+                backgroundColor: Colors.blue.shade100,
+                borderColor: Colors.black,
+              ),
+              SizedBox(
+                height: 35,
+                child: Obx(() => Checkbox(
+                      value: data.every((v) => v.isSelected.value),
+                      onChanged: (v) {
+                        for (var sub in data) {
+                          sub.isSelected.value = v!;
+                        }
+                        logic.refreshMaxLabel();
+                      },
+                    )),
+              ),
+            ],
+          ),
+          for (var sub in data)
+            Row(
+              children: [
+                ExpandedFrameText(
+                  lineHeight: 40,
+                  text: sub.mtono ?? '',
+                  flex: 3,
+                  backgroundColor: Colors.white,
+                  borderColor: Colors.black,
+                ),
+                ExpandedFrameText(
+                  lineHeight: 40,
+                  text: sub.surplusQty.toShowString(),
+                  alignment: Alignment.center,
+                  flex: 1,
+                  backgroundColor: Colors.white,
+                  borderColor: Colors.black,
+                ),
+                Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 40,
+                      padding: const EdgeInsets.only(
+                        left: 3,
+                        right: 3,
+                        bottom: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                      ),
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        controller: sub.packingQtyController,
+                        decoration: const InputDecoration(
+                          contentPadding:
+                              EdgeInsets.only(top: 0, bottom: 15),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        onChanged: (v) {
+                          sub.packingQty.value = v.toDoubleTry();
+                          logic.refreshMaxLabel();
+                        },
+                      ),
+                    )),
+                SizedBox(
+                  height: 40,
+                  child: Obx(() => Checkbox(
+                        value: sub.isSelected.value,
+                        onChanged: (v) {
+                          sub.isSelected.value = v!;
+                          logic.refreshMaxLabel();
+                        },
+                      )),
+                ),
+              ],
+            ),
         ],
       ),
     );

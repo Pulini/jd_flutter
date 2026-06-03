@@ -19,56 +19,6 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
-
-  Container _item(LinkDataSizeList data) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade50, Colors.white],
-        ),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey, width: 2),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textSpan(
-                hint: 'carton_label_scan_size'.tr,
-                text: data.size ?? '',
-              ),
-              textSpan(
-                hint: 'carton_label_scan_inside_label'.tr,
-                text: data.priceBarCode ?? '',
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textSpan(
-                hint: 'carton_label_scan_label_qty'.tr,
-                text: data.labelCount.toString(),
-                textColor: Colors.black,
-              ),
-              textSpan(
-                hint: 'carton_label_scan_scanned_qty'.tr,
-                text: data.scanned.toString(),
-                textColor: Colors.black,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
     pdaScanner(scan: (barCode) {
@@ -137,7 +87,6 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                 ],
               ),
               borderRadius: BorderRadius.circular(10),
-              // border: Border.all(color: Colors.blue.shade200, width: 2),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -157,7 +106,8 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
             child: ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: state.priorityCartonInsideLabelList.length,
-              itemBuilder: (c, i) => _item(state.priorityCartonInsideLabelList[i]),
+              itemBuilder: (c, i) =>
+                  _PriorityInsideLabelItem(data: state.priorityCartonInsideLabelList[i]),
             ),
           ),
           CombinationButton(
@@ -171,4 +121,59 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
     );
   }
 
+}
+
+class _PriorityInsideLabelItem extends StatelessWidget {
+  final LinkDataSizeList data;
+  const _PriorityInsideLabelItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade50, Colors.white],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'carton_label_scan_size'.tr,
+                text: data.size ?? '',
+              ),
+              textSpan(
+                hint: 'carton_label_scan_inside_label'.tr,
+                text: data.priceBarCode ?? '',
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'carton_label_scan_label_qty'.tr,
+                text: data.labelCount.toString(),
+                textColor: Colors.black,
+              ),
+              textSpan(
+                hint: 'carton_label_scan_scanned_qty'.tr,
+                text: data.scanned.toString(),
+                textColor: Colors.black,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -815,7 +815,7 @@ List<Widget> createA4PaperMaterialList({
         alignment: Alignment.bottomLeft,
         child: Text(
           table[0],
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -853,7 +853,7 @@ List<Widget> createA4PaperMaterialList({
 
     if (table[2].isNotEmpty) {
       if (table[1].isNotEmpty) {
-        widgetList.add([30, SizedBox(height: 30)]);
+        widgetList.add([30, const SizedBox(height: 30)]);
       }
       widgetList.add([
         20,
@@ -992,21 +992,21 @@ Widget _createPaper({
                     children: [
                       Text(
                         customsDeclarationType,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '原料厂区：$factoryName',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         orderType,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
@@ -1018,7 +1018,7 @@ Widget _createPaper({
                   top: 0,
                   child: Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -1029,7 +1029,7 @@ Widget _createPaper({
                   right: tableTitleHeight + paperPadding,
                   child: Text(
                     '${userInfo?.name}(${getPrintTime()})',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
@@ -1053,7 +1053,7 @@ Widget _createPaper({
                           ),
                           Text(
                             palletNumber,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
@@ -1073,7 +1073,7 @@ Widget _createPaper({
               children: [
                 Text(
                   '$page / $totalPage',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -1108,7 +1108,7 @@ Widget _borderText({
     child: Text(
       text,
       style: style ??
-          TextStyle(
+          const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
@@ -1250,7 +1250,7 @@ void _createSizeMaterialTable({
                   ),
                   padding: const EdgeInsets.only(left: 3, right: 3),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     '单',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -1393,7 +1393,7 @@ void _createSizeMaterialTable({
               alignment: Alignment.center,
               child: Text(
                 total.toShowString(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),
@@ -1409,7 +1409,7 @@ void _createSizeMaterialTable({
               ),
               padding: const EdgeInsets.only(left: 3, right: 3),
               alignment: Alignment.center,
-              child: Text(
+              child: const Text(
                 '1',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -1437,7 +1437,7 @@ void _createSizeMaterialTable({
                   ),
                   padding: const EdgeInsets.only(left: 3, right: 3),
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     '混',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -1505,7 +1505,7 @@ void _createSizeMaterialTable({
             flex: 5,
           ),
         ]),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
       ],
     ),
   );
@@ -1560,7 +1560,7 @@ void _createMaterialTable({
             alignment: Alignment.center,
             child: Text(
               (index + 1).toString(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
@@ -1604,7 +1604,7 @@ void _createMaterialTable({
                 alignment: Alignment.centerLeft,
                 child: Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     // lineSpacing: 6,

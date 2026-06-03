@@ -100,7 +100,7 @@ class PartDispatchLabelManageLogic extends GetxController {
         );
         state.isSingleSize = selectList.first.packTypeID == 478;
         state.hasLastLabel = false;
-        Get.to(() => PartDispatchOrderCreateLabelPage())?.then((_){
+        Get.to(() => const PartDispatchOrderCreateLabelPage())?.then((_){
          if( state.needRefreshPartList){
            refresh.call();
          }

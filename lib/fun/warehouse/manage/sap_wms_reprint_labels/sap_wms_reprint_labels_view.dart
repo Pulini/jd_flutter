@@ -31,118 +31,6 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
         '${RouteConfig.sapWmsReprintLabels.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  GestureDetector _item(ReprintLabelInfo label) {
-    return GestureDetector(
-      onTap: () => setState(() => label.select = !label.select),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: label.select ? Colors.blue.shade100 : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: label.select
-              ? Border.all(color: Colors.green, width: 2)
-              : Border.all(color: Colors.white, width: 2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AutoSizeText(
-              label.materialName ?? '',
-              style: const TextStyle(color: Colors.red),
-              maxLines: 2,
-              minFontSize: 8,
-              maxFontSize: 18,
-            ),
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: '标签：',
-                  text: label.labelNumber ?? '',
-                  isBold: false,
-                  textColor: Colors.grey,
-                ),
-                Text('${label.quantity}${label.unit}'),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  /*
-  _labelTitle(ReprintLabelInfo label) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 3,
-        right: 3,
-      ),
-      child: Text(
-        label.factory??'',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      ),
-    );
-  }
-
-  _subTitle(ReprintLabelInfo label) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 3,
-        right: 3,
-      ),
-      child: AutoSizeText(
-        label.instructionNo ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 36,
-        ),
-        maxLines: 2,
-        minFontSize: 12,
-        maxFontSize: 36,
-      ),
-    );
-  }
-
-  _tableHeader(ReprintLabelInfo label) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 3,
-        right: 3,
-      ),
-      child: AutoSizeText(
-        label.instructionNo ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 36,
-        ),
-        maxLines: 2,
-        minFontSize: 12,
-        maxFontSize: 36,
-      ),
-    );
-  }
-
-
-
-  _previewLabelList() {
-    var selected = state.labelList.where((v) => v.select).toList();
-    Get.to(() => PreviewLabelList(
-          labelWidgets: [
-            for (var item in selected)
-            dynamicLabelTemplate(
-                qrCode: item.labelNumber ?? '',
-                title: _labelTitle(item),
-                subTitle: _subTitle(item),
-               header: _tableHeader(item),
-              )
-          ],
-        ));
-  }
-*/
-
   @override
   void initState() {
     pdaScanner(
@@ -192,7 +80,13 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
               () => ListView.builder(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 itemCount: state.labelList.length,
-                itemBuilder: (c, i) => _item(state.labelList[i]),
+                itemBuilder: (c, i) => _ReprintLabelItem(
+                  label: state.labelList[i],
+                  onTap: () => setState(
+                    () => state.labelList[i].select =
+                        !state.labelList[i].select,
+                  ),
+                ),
               ),
             ),
           ),
@@ -218,5 +112,53 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
   void dispose() {
     Get.delete<SapWmsReprintLabelsLogic>();
     super.dispose();
+  }
+}
+
+class _ReprintLabelItem extends StatelessWidget {
+  final ReprintLabelInfo label;
+  final VoidCallback onTap;
+
+  const _ReprintLabelItem({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: label.select ? Colors.blue.shade100 : Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: label.select
+              ? Border.all(color: Colors.green, width: 2)
+              : Border.all(color: Colors.white, width: 2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AutoSizeText(
+              label.materialName ?? '',
+              style: const TextStyle(color: Colors.red),
+              maxLines: 2,
+              minFontSize: 8,
+              maxFontSize: 18,
+            ),
+            Row(
+              children: [
+                expandedTextSpan(
+                  hint: '标签：',
+                  text: label.labelNumber ?? '',
+                  isBold: false,
+                  textColor: Colors.grey,
+                ),
+                Text('${label.quantity}${label.unit}'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -140,6 +140,15 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
   }
 
   @override
+  void dispose() {
+    tecInstructionNumber.dispose();
+    tecBatch.dispose();
+    tecMaterialCode.dispose();
+    Get.delete<TimelyInventoryLogic>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [

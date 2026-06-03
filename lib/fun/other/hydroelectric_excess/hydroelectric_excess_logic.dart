@@ -74,7 +74,7 @@ class HydroelectricExcessLogic extends GetxController {
   }
 
   void arkSendImage(Function(String) success) {
-    Get.to(() => CameraCropPage())?.then((image) {
+    Get.to(() => const CameraCropPage())?.then((image) {
       if (image != null) {
         cameraCropResultDialog(
           imageBytes: image,

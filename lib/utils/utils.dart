@@ -925,10 +925,10 @@ Future<void> getDeviceInstalledAppsInfo({
   required Function(Map, List<Map>) callback,
 }) async {
   if (GetPlatform.isAndroid) {
-    var apps = await MethodChannel(channelDeviceInfoFlutterToAndroid)
+    var apps = await const MethodChannel(channelDeviceInfoFlutterToAndroid)
         .invokeMethod('GetInstalledApps');
 
-    var deviceInf = await MethodChannel(channelDeviceInfoFlutterToAndroid)
+    var deviceInf = await const MethodChannel(channelDeviceInfoFlutterToAndroid)
         .invokeMethod('GetDeviceInfo');
 
     callback.call(deviceInf, apps.cast<Map>());

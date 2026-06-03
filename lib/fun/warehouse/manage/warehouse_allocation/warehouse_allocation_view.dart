@@ -154,6 +154,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
 
   @override
   void dispose() {
+    tecCode.dispose();
     Get.delete<WarehouseAllocationLogic>();
     super.dispose();
   }

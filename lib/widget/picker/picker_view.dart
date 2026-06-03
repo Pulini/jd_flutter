@@ -243,12 +243,7 @@ class LinkOptionsPicker extends StatelessWidget {
   final double margin;
   final Color bkgColor;
 
-  Widget _pickerText(PickerItem data) {
-    return Text(
-      data.toShow(),
-      style: TextStyle(fontSize: data.toShow().length > 10 ? 12 : 16),
-    );
-  }
+  Widget _pickerText(PickerItem data) => _PickerItemText(data: data);
 
   void _showOptions() {
     if (pickerController.enable.value == false) return;
@@ -401,8 +396,25 @@ class LinkOptionsPicker extends StatelessWidget {
   }
 }
 
-class CheckBoxPicker extends StatelessWidget {
+class _PickerItemText extends StatelessWidget {
+  final PickerItem data;
+
+  const _PickerItemText({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      data.toShow(),
+      style: TextStyle(fontSize: data.toShow().length > 10 ? 12 : 16),
+    );
+  }
+}
+
+class CheckBoxPicker extends StatefulWidget {
   final CheckBoxPickerController checkBoxController;
+  final double height;
+  final double margin;
+  final Color bkgColor;
 
   const CheckBoxPicker({
     super.key,
@@ -412,9 +424,20 @@ class CheckBoxPicker extends StatelessWidget {
     this.bkgColor = Colors.black12,
   });
 
-  final double height;
-  final double margin;
-  final Color bkgColor;
+  @override
+  State<CheckBoxPicker> createState() => _CheckBoxPickerState();
+}
+
+class _CheckBoxPickerState extends State<CheckBoxPicker> {
+  CheckBoxPickerController get checkBoxController =>
+      widget.checkBoxController;
+
+  @override
+  void initState() {
+    super.initState();
+    checkBoxController.search('');
+    checkBoxController.getData();
+  }
 
   void _showCheckBoxList() {
     if (checkBoxController.enable.value == false) return;
@@ -506,19 +529,17 @@ class CheckBoxPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checkBoxController.search('');
-    checkBoxController.getData();
     return Container(
-      height: height,
-      margin: EdgeInsets.all(margin),
+      height: widget.height,
+      margin: EdgeInsets.all(widget.margin),
       padding: EdgeInsets.only(
         left: 10,
-        top: margin > 0 ? margin - 2 : 0,
-        bottom: margin > 0 ? margin - 2 : 0,
-        right: margin > 0 ? margin - 2 : 0,
+        top: widget.margin > 0 ? widget.margin - 2 : 0,
+        bottom: widget.margin > 0 ? widget.margin - 2 : 0,
+        right: widget.margin > 0 ? widget.margin - 2 : 0,
       ),
       decoration: BoxDecoration(
-        color: bkgColor,
+        color: widget.bkgColor,
         borderRadius: BorderRadius.circular(50),
       ),
       child: Row(

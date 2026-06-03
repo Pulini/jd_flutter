@@ -114,114 +114,13 @@ class _StuffQualityInspectionLabelPageState
     );
   }
 
-  Widget _item(StuffQualityInspectionLabelInfo data, int position) {
-    var backColors = Colors.white;
-    if (data.barCode == '合计') {
-      backColors = Colors.yellow.shade200;
-    } else {
-      if (data.select) {
-        backColors = Colors.green.shade100;
-      } else {
-        backColors = Colors.white;
-      }
-    }
-    return SizedBox(
-      width: 100 * 9,
-      child: SizedBox(
-        height: 35,
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              if(data.barCode!='合计'){
-                data.select = !data.select;
-              }
-            });
-          },
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 5,
-                  child: _text(
-                      //标签
-                      mes: data.label ?? '',
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //装箱数量
-                      mes: data.barCode=='合计'? '':data.boxQty.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //尺码
-                      mes: data.size ?? '',
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //不合格数量
-                      mes: data.unqualified.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //短码
-                      mes: data.short.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //体积
-                      mes: data.barCode=='合计'? '':data.volume.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //毛重
-                      mes:  data.barCode=='合计'? '':data.grossWeight.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 2,
-                  child: _text(
-                      //净重
-                      mes: data.barCode=='合计'? '':data.netWeight.toShowString(),
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 14,
-                  child: _text(
-                      //物料名称
-                      mes: data.barCode=='合计'? '':'(${data.materialCode ?? ''})${data.materialName ?? ''}',
-                      backColor: backColors,
-                      head: false,
-                      paddingNumber: 5)),
-            ],
-          ),
-          onLongPress: () {
-            if(data.barCode!='合计'){
-              _showChangeDialog(data, position);
-            }
-          },
-        ),
-      ),
-    );
-  }
+  Widget _item(StuffQualityInspectionLabelInfo data, int position) =>
+      _StuffQualityInspectionLabelItem(
+        data: data,
+        position: position,
+        setStateFn: setState,
+        onLongPress: () => _showChangeDialog(data, position),
+      );
 
   Container _text({
     required String mes,
@@ -417,6 +316,195 @@ class _StuffQualityInspectionLabelPageState
               ),
             ),
           )),
+    );
+  }
+}
+
+class _StuffQualityInspectionLabelItem extends StatelessWidget {
+  final StuffQualityInspectionLabelInfo data;
+  final int position;
+  final void Function(VoidCallback fn) setStateFn;
+  final VoidCallback onLongPress;
+
+  const _StuffQualityInspectionLabelItem({
+    required this.data,
+    required this.position,
+    required this.setStateFn,
+    required this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var backColors = Colors.white;
+    if (data.barCode == '合计') {
+      backColors = Colors.yellow.shade200;
+    } else {
+      if (data.select) {
+        backColors = Colors.green.shade100;
+      } else {
+        backColors = Colors.white;
+      }
+    }
+    return SizedBox(
+      width: 100 * 9,
+      child: SizedBox(
+        height: 35,
+        child: InkWell(
+          onTap: () {
+            setStateFn(() {
+              if (data.barCode != '合计') {
+                data.select = !data.select;
+              }
+            });
+          },
+          child: Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.label ?? '',
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.barCode == '合计' ? '' : data.boxQty.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.size ?? '',
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.unqualified.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.short.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.barCode == '合计' ? '' : data.volume.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.barCode == '合计' ? '' : data.grossWeight.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.barCode == '合计' ? '' : data.netWeight.toShowString(),
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 14,
+                child: Container(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    color: backColors,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    data.barCode == '合计'
+                        ? ''
+                        : '(${data.materialCode ?? ''})${data.materialName ?? ''}',
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          onLongPress: () {
+            if (data.barCode != '合计') {
+              onLongPress();
+            }
+          },
+        ),
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,7 @@ class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
   final WiFiManager wifiManager = WiFiManager();
+  StreamSubscription<dynamic>? _socketSubscription;
 
   Future<void> connectToNetwork({
     required String ssid,
@@ -25,7 +27,7 @@ class PropertyLogic extends GetxController {
       password: password,
     );
 
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
     loadingDismiss();
     if (result) {
       // 连接成功后，锁定当前WiFi网络防止自动切换
@@ -34,7 +36,7 @@ class PropertyLogic extends GetxController {
         // 如果锁定失败，给出警告但不中断流程
         errorDialog(content: '警告：无法锁定WiFi网络，可能会出现连接不稳定');
       }
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       success?.call();
     } else {
       errorDialog(content: '连接失败。');
@@ -46,10 +48,10 @@ class PropertyLogic extends GetxController {
       loadingShow('正在连接到激光打印机，并下发内容...');
       // 连接到指定地址和端口
       final socket = await Socket.connect("192.168.6.2", 8050,
-          timeout: Duration(seconds: 10));
+          timeout: const Duration(seconds: 10));
 
       // 监听数据响应
-      socket.listen((data) {
+      _socketSubscription = socket.listen((data) {
         wifiManager.disconnectFromWiFi();
       });
 
@@ -65,7 +67,7 @@ class PropertyLogic extends GetxController {
       await socket.flush();
 
       // 延迟关闭连接
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 3));
       socket.destroy();
       loadingDismiss();
     } catch (e) {
@@ -410,5 +412,11 @@ class PropertyLogic extends GetxController {
     } else {
       return 0;
     }
+  }
+
+  @override
+  void onClose() {
+    _socketSubscription?.cancel();
+    super.onClose();
   }
 }

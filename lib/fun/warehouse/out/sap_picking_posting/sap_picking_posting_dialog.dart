@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
   Get.dialog(AlertDialog(
-    title: Text('半成品物料详情'),
+    title: const Text('半成品物料详情'),
     content: SizedBox(
       width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
       height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
@@ -28,13 +28,13 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
             maxLines: 3,
             fontSize: 18,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: groupData.dataList.length,
               itemBuilder: (c, i) => Container(
-                padding: EdgeInsets.all(5),
-                margin: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.all(5),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   color: Colors.white,
@@ -52,7 +52,7 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
                       child: Center(
                         child: Text(
                           (i + 1).toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -60,7 +60,7 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 10),
                       child: textSpan(
                         hint: '数量：',
                         text: groupData.dataList[i].quantity.toShowString(),
@@ -96,7 +96,7 @@ void addSemiFinishedProductMaterialDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('添加半成品物料'),
+        title: const Text('添加半成品物料'),
         content: SizedBox(
           width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
           height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
@@ -110,7 +110,7 @@ void addSemiFinishedProductMaterialDialog(
                           text: materialName.value,
                           maxLines: 3,
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: tecSemiFinishedProduct,
                       decoration: InputDecoration(
@@ -125,18 +125,18 @@ void addSemiFinishedProductMaterialDialog(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey.shade200),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
                         hintText: '输入物料编码',
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
                           onPressed: () => tecSemiFinishedProduct.clear(),
-                          icon: Icon(Icons.clear),
+                          icon: const Icon(Icons.clear),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: tecSemiFinishedProductQty,
                       inputFormatters: [
@@ -154,14 +154,14 @@ void addSemiFinishedProductMaterialDialog(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey.shade200),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
                         hintText: '输入物料数量',
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
                           onPressed: () => tecSemiFinishedProductQty.clear(),
-                          icon: Icon(Icons.clear),
+                          icon: const Icon(Icons.clear),
                         ),
                       ),
                     ),
@@ -254,8 +254,8 @@ void pickingCacheDialog({
           debugPrint('index:$index');
         },
         child: Container(
-          padding: EdgeInsets.all(7),
-          margin: EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(7),
+          margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             border: selectIndex.value==index
                 ? Border.all(color: Colors.blue, width: 4)
@@ -292,7 +292,7 @@ void pickingCacheDialog({
                         error: (msg) => errorDialog(content: msg),
                       ),
                     ),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
                     ),
@@ -301,7 +301,7 @@ void pickingCacheDialog({
               ),
               if (!data.materialCode.isNullOrEmpty())
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7),
                     color: Colors.green.shade50,
@@ -310,9 +310,9 @@ void pickingCacheDialog({
                     children: [
                       Text(
                         '(${data.materialCode})${data.materialName}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -338,8 +338,8 @@ void pickingCacheDialog({
   var dialog = PopScope(
     canPop: false,
     child: AlertDialog(
-      title: Text('暂存记录'),
-      contentPadding: EdgeInsets.all(10),
+      title: const Text('暂存记录'),
+      contentPadding: const EdgeInsets.all(10),
       content: SizedBox(
         width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
         height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,

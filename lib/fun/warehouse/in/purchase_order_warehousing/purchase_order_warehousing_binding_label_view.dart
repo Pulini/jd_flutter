@@ -24,35 +24,8 @@ class _PurchaseOrderWarehousingBindingLabelPageState
       Get.find<PurchaseOrderWarehousingLogic>().state;
   var pieceController = TextEditingController();
 
-  Widget _item(DeliveryOrderLabelInfo data) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      padding: const EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
-            ),
-          ),
-          IconButton(
-            onPressed: () => askDialog(
-              content: 'purchase_order_warehousing_label_check_delete_tips'.tr,
-              confirm: () => logic.deletePiece(pieceInfo: data),
-            ),
-            icon: const Icon(
-              Icons.delete_forever,
-              color: Colors.red,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  Widget _item(DeliveryOrderLabelInfo data) =>
+      _PurchaseOrderBindingLabelItem(data: data, logic: logic);
 
   @override
   void initState() {
@@ -61,6 +34,12 @@ class _PurchaseOrderWarehousingBindingLabelPageState
       if (code.isNotEmpty) logic.scanLabel(code);
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    pieceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -136,7 +115,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
                     ),
                   ),
                   Expanded(
-                    child: progressIndicator(
+                    child: CustomProgressIndicator(
                       max: logic.getMaterialsTotal(),
                       value: logic.getScanProgress(),
                     ),
@@ -161,7 +140,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
                     ),
                   ),
                   Expanded(
-                    child: progressIndicator(
+                    child: CustomProgressIndicator(
                       max: size[1],
                       value: logic.getSizeScanProgress(size[0] ?? ''),
                     ),
@@ -189,6 +168,48 @@ class _PurchaseOrderWarehousingBindingLabelPageState
                 click: () =>
                     logic.submitLabelBinding(() => Get.back(result: true)),
               ))
+        ],
+      ),
+    );
+  }
+}
+
+class _PurchaseOrderBindingLabelItem extends StatelessWidget {
+  final DeliveryOrderLabelInfo data;
+  final PurchaseOrderWarehousingLogic logic;
+
+  const _PurchaseOrderBindingLabelItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
+            ),
+          ),
+          IconButton(
+            onPressed: () => askDialog(
+              content:
+                  'purchase_order_warehousing_label_check_delete_tips'.tr,
+              confirm: () => logic.deletePiece(pieceInfo: data),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          )
         ],
       ),
     );

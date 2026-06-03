@@ -15,8 +15,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
-const _logo = 'assets/images/ic_logo.png';
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -46,21 +44,11 @@ class _HomePageState extends State<HomePage>
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                leading: Image.network(
+                leading: cachedNetworkImage(
                   (item as HomeButtonGroup).icon,
                   width: 50,
                   height: 50,
-                  cacheHeight: 75,
-                  cacheWidth: 75,
                   color: Colors.blueAccent,
-                  errorBuilder: (c, e, s) => Image.asset(
-                    _logo,
-                    height: 30,
-                    width: 30,
-                    cacheHeight: 75,
-                    cacheWidth: 75,
-                    color: Colors.blueAccent,
-                  ),
                 ),
                 title: Text(item.name,style: const TextStyle(fontSize: 18)),
                 subtitle: Text(item.description),
@@ -136,7 +124,7 @@ class _HomePageState extends State<HomePage>
                   borderRadius: BorderRadius.circular(20),
                 ),
                 placeholder: 'home_top_search'.tr,
-                onChanged: (v) => setState(() => logic.search(v)),
+                onChanged: (v) => logic.search(v),
               ),
               backgroundColor: Colors.transparent,
               actions: [
@@ -166,31 +154,20 @@ class _HomePageState extends State<HomePage>
                       items: [
                         for (var bar in state.navigationBar)
                           BottomNavigationBarItem(
-                            icon: Image.network(
-                              bar.icon ?? '',
+                            icon: cachedNetworkImage(
+                              bar.icon,
                               width: 30,
                               height: 30,
-                              cacheHeight: 75,
-                              cacheWidth: 75,
                               color: bar.getTextColor(),
-                              errorBuilder: (ctx, err, stackTrace) =>
-                                  Image.asset(
-                                _logo,
-                                height: 30,
-                                width: 30,
-                                cacheHeight: 75,
-                                cacheWidth: 75,
-                                color: bar.getTextColor(),
-                              ),
                             ),
                             label: bar.className ?? 'Fun',
                             backgroundColor: bar.getBKGColor(),
                           )
                       ],
-                      currentIndex: state.nBarIndex,
+                      currentIndex: state.nBarIndex.value,
                       selectedItemColor:
                           state.navigationBar.first.getTextColor(),
-                      onTap: (i) => setState(() => logic.navigationBarClick(i)),
+                      onTap: (i) => logic.navigationBarClick(i),
                     ),
             )),
       ),
@@ -199,6 +176,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
+    refreshController.dispose();
     Get.delete<HomeLogic>();
     super.dispose();
   }
@@ -239,24 +217,14 @@ class HomeSubItem extends StatelessWidget {
                   )
                 : item.toFunction(checkUpData: checkUpData),
         enabled: item.hasUpdate ? true : item.hasPermission,
-        leading: Image.network(
+        leading: cachedNetworkImage(
           item.icon,
           width: isGroup ? 30 : 40,
           height: isGroup ? 30 : 40,
-          cacheHeight: 75,
-          cacheWidth: 75,
           color: _color(item),
-          errorBuilder: (context, url, error) => Image.asset(
-            _logo,
-            width: isGroup ? 30 : 40,
-            height: isGroup ? 30 : 40,
-            cacheHeight: 75,
-            cacheWidth: 75,
-            color: _color(item),
-          ),
         ),
-        title: Text(item.name, style: TextStyle(fontSize: 14)),
-        subtitle: Text(item.description, style: TextStyle(fontSize: 12)),
+        title: Text(item.name, style: const TextStyle(fontSize: 14)),
+        subtitle: Text(item.description, style: const TextStyle(fontSize: 12)),
         trailing: item.hasUpdate
             ? Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,

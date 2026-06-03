@@ -25,18 +25,18 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         width: 100,
         child: Column(
           children: [
-            expandedFrameText(
+            ExpandedFrameText(
               text: 'machine_dispatch_report_size'.tr,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: 'machine_dispatch_report_report_qty'.tr,
               backgroundColor: Colors.green.shade200,
               alignment: Alignment.center,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: 'machine_dispatch_report_current_shift_under_qty'.tr,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
@@ -49,18 +49,18 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         width: 70,
         child: Column(
           children: [
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.size ?? '',
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.getReportQty().toShowString(),
               backgroundColor: Colors.green.shade200,
               alignment: Alignment.center,
             ),
-            expandedFrameText(
+            ExpandedFrameText(
               text: data.notFullQty.toShowString(),
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
@@ -80,18 +80,18 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
       width: 70,
       child: Column(
         children: [
-          expandedFrameText(
+          ExpandedFrameText(
             text: 'machine_dispatch_report_total'.tr,
             backgroundColor: Colors.blue.shade300,
             textColor: Colors.white,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: reportQty.toShowString(),
             backgroundColor: Colors.green.shade200,
             alignment: Alignment.center,
           ),
-          expandedFrameText(
+          ExpandedFrameText(
             text: notFullQty.toShowString(),
             backgroundColor: Colors.orange.shade100,
             alignment: Alignment.center,

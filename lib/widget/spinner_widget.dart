@@ -9,6 +9,7 @@ class SpinnerController {
   var dataList = <String>[];
   final Function(int)? onChanged;
   final Function(int)? onSelected;
+  late final List<DropdownMenuItem<String>> _items;
 
   SpinnerController({
     this.saveKey,
@@ -16,6 +17,10 @@ class SpinnerController {
     this.onChanged,
     this.onSelected,
   }) {
+    _items = dataList
+        .map<DropdownMenuItem<String>>(
+            (v) => DropdownMenuItem<String>(value: v, child: Text(v)))
+        .toList(growable: false);
     selectIndex = getSave();
     select.value = dataList[selectIndex];
     onSelected?.call(selectIndex);
@@ -70,12 +75,9 @@ class Spinner extends StatelessWidget {
       child: Obx(() => DropdownButton<String>(
             isExpanded: true,
             value: controller.select.value,
-            underline: Container(height: 0),
+            underline: const SizedBox.shrink(),
             onChanged: (String? value) => controller.changeSelected(value),
-            items: controller.dataList
-                .map<DropdownMenuItem<String>>((String value) =>
-                    DropdownMenuItem<String>(value: value, child: Text(value)))
-                .toList(),
+            items: controller._items,
           )),
     );
   }

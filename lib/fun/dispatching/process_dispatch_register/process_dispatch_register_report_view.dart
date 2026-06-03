@@ -26,56 +26,8 @@ class _ProcessDispatchRegisterReportViewState
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  Widget _item(ProcessDispatchLabelInfo data) => GestureDetector(
-        onTap: () => reportDialog(data, () => setState(() {})),
-        onLongPress: () => askDialog(
-          content: '确定要删除贴标吗？',
-          confirm: () => state.barCodeList.remove(data),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey, width: 2),
-            gradient: LinearGradient(
-              colors: [
-                data.isReported.value
-                    ? Colors.red.shade100
-                    : Colors.blue.shade50,
-                Colors.white
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: Text(data.instructions ?? '')),
-                      Text('${data.empName}(${data.empNumber})')
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(child: Text(data.processName ?? '')),
-                      Text(
-                          '${data.qty.toString()}/${data.boxCapacity.toShowString()}')
-                    ],
-                  ),
-                ],
-              )),
-              Checkbox(
-                value: data.isSelected.value,
-                onChanged: (v) => data.isSelected.value = v!,
-              ),
-            ],
-          ),
-        ),
-      );
+  Widget _item(ProcessDispatchLabelInfo data) =>
+      _ProcessDispatchReportItem(data: data, state: state, setStateFn: setState);
 
   @override
   void initState() {
@@ -87,7 +39,7 @@ class _ProcessDispatchRegisterReportViewState
   Widget build(BuildContext context) {
     return pageBody(
       title: '报工',
-      actions: [TextButton(onPressed: () {}, child: Text('清空'))],
+      actions: [TextButton(onPressed: () {}, child: const Text('清空'))],
       body: Column(
         children: [
           Expanded(
@@ -113,6 +65,70 @@ class _ProcessDispatchRegisterReportViewState
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _ProcessDispatchReportItem extends StatelessWidget {
+  final ProcessDispatchLabelInfo data;
+  final ProcessDispatchRegisterState state;
+  final void Function(VoidCallback fn) setStateFn;
+
+  const _ProcessDispatchReportItem({
+    required this.data,
+    required this.state,
+    required this.setStateFn,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => reportDialog(data, () => setStateFn(() {})),
+      onLongPress: () => askDialog(
+        content: '确定要删除贴标吗？',
+        confirm: () => state.barCodeList.remove(data),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey, width: 2),
+          gradient: LinearGradient(
+            colors: [
+              data.isReported.value ? Colors.red.shade100 : Colors.blue.shade50,
+              Colors.white
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(data.instructions ?? '')),
+                    Text('${data.empName}(${data.empNumber})')
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Text(data.processName ?? '')),
+                    Text(
+                        '${data.qty.toString()}/${data.boxCapacity.toShowString()}')
+                  ],
+                ),
+              ],
+            )),
+            Checkbox(
+              value: data.isSelected.value,
+              onChanged: (v) => data.isSelected.value = v!,
+            ),
+          ],
+        ),
       ),
     );
   }

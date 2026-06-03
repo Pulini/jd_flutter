@@ -225,49 +225,8 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
   }
 
-  Widget _item(SapPackingScanMaterialInfo data) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          color: Colors.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(data.trackNo ?? '', textAlign: TextAlign.center),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(data.quality.toShowString(),
-                      textAlign: TextAlign.center),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(data.unit ?? '', textAlign: TextAlign.center),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    data.scannedCount().toShowString(),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: textSpan(
-                hint: '物料：',
-                text: '(${data.materialNumber}) ${data.materialName}',
-                maxLines: 3,
-              ),
-            ),
-          ],
-        ),
-      );
+  Widget _item(SapPackingScanMaterialInfo data) =>
+      _SapPackingScanMaterialItem(data: data);
 
   void _pickDate({DateTime? date, required Function(String) callback}) {
     var pickDate = date ?? DateTime.now();
@@ -337,28 +296,28 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: '跟踪号',
                     borderColor: Colors.black,
                     flex: 3,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: '待装柜数',
                     borderColor: Colors.black,
                     flex: 2,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: '单位',
                     borderColor: Colors.black,
                     flex: 1,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
-                  expandedFrameText(
+                  ExpandedFrameText(
                     text: '扫码数量',
                     borderColor: Colors.black,
                     flex: 2,
@@ -421,5 +380,58 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
   void dispose() {
     Get.delete<SapPackingScanLogic>();
     super.dispose();
+  }
+}
+
+class _SapPackingScanMaterialItem extends StatelessWidget {
+  final SapPackingScanMaterialInfo data;
+
+  const _SapPackingScanMaterialItem({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Text(data.trackNo ?? '', textAlign: TextAlign.center),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(data.quality.toShowString(),
+                    textAlign: TextAlign.center),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(data.unit ?? '', textAlign: TextAlign.center),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  data.scannedCount().toShowString(),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: textSpan(
+              hint: '物料：',
+              text: '(${data.materialNumber}) ${data.materialName}',
+              maxLines: 3,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

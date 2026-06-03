@@ -25,167 +25,6 @@ class _DeliveryOrderLabelBindingPageState
   late TabController tabController = TabController(length: 2, vsync: this);
   var pieceController = TextEditingController();
 
-  Widget _materialItem(Map<String, List<dynamic>> map) {
-    var materialCode = map.keys.first;
-    var list = map.values.first;
-    return Obx(() => Container(
-          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey, width: 2),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade50, Colors.white],
-            ),
-          ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  textSpan(hint: 'delivery_order_label_check_material'.tr, text: materialCode),
-                  const SizedBox(width: 5),
-                  Expanded(
-                    child: progressIndicator(
-                      max: logic.getMaterialsTotal(materialCode),
-                      value: logic.getScanProgress(materialCode),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 5),
-              for (var size in list) ..._sizeItem(size, materialCode)
-            ],
-          ),
-        ));
-  }
-
-  List<Widget> _sizeItem(List<dynamic> size, String materialCode) {
-    return [
-      if ((size[0] as String).isNotEmpty)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 5),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 40,
-                child: Text(
-                  '${size[0]}#',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: progressIndicator(
-                  max: size[1],
-                  color: Colors.blue.shade300,
-                  value: logic.getSizeScanProgress(materialCode, size[0] ?? ''),
-                ),
-              )
-            ],
-          ),
-        ),
-      for (DeliveryOrderLabelInfo label in size[2]) _labelItem(label)
-    ];
-  }
-
-  Widget _labelItem(DeliveryOrderLabelInfo data) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.only(left: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: data.isChecked.value
-              ? Colors.green.shade200
-              : Colors.grey.shade300,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
-                style: TextStyle(
-                  color: data.isChecked.value ? Colors.black87 : Colors.black38,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () => askDialog(
-                content: 'delivery_order_label_check_delete_tips'.tr,
-                confirm: () => logic.deletePiece(pieceInfo: data),
-              ),
-              icon: const Icon(
-                Icons.delete_forever,
-                color: Colors.red,
-              ),
-            )
-          ],
-        ),
-      );
-
-  Widget _palletItem(Map<String, List<DeliveryOrderLabelInfo>> map) {
-    var palletNo = map.keys.first;
-    var labelList = map.values.first;
-    return Obx(
-      () => palletNo.isNotEmpty
-          ? Container(
-              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey, width: 2),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.blue.shade50, Colors.white],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      textSpan(hint: 'delivery_order_label_check_pallet'.tr, text: palletNo),
-                      textSpan(
-                        hint: 'delivery_order_label_check_piece'.tr,
-                        hintColor: Colors.black45,
-                        text: labelList.length.toString(),
-                        textColor: Colors.black87,
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  for (var label in labelList) _labelItem(label)
-                ],
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                children: [for (var label in labelList) _labelItem(label)],
-              ),
-            ),
-    );
-  }
-
-  Widget _scanningList() {
-    var list = logic.getLabelList();
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (c, i) => _materialItem(list[i]),
-    );
-  }
-
-  Widget _palletList() {
-    var list = logic.getPalletList();
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (c, i) => _palletItem(list[i]),
-    );
-  }
-
   @override
   void initState() {
     state.canAddPiece.value = false;
@@ -200,13 +39,19 @@ class _DeliveryOrderLabelBindingPageState
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    pieceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'delivery_order_label_check_title'.tr,
       popTitle: 'delivery_order_label_check_exit_tips'.tr,
       actions: [
         TextButton(
-          // onPressed: ()=>logic.scanLabel('GE10029136'),
           onPressed: () => askDialog(
             content: 'delivery_order_label_check_clear_tips'.tr,
             confirm: () => state.scannedLabelList.clear(),
@@ -287,10 +132,13 @@ class _DeliveryOrderLabelBindingPageState
             ),
           ),
           Expanded(
-            child: Obx(() => TabBarView(
+            child: TabBarView(
                   controller: tabController,
-                  children: [_scanningList(), _palletList()],
-                )),
+                  children: [
+                    _LabelScanningList(logic: logic),
+                    _LabelPalletList(logic: logic),
+                  ],
+                ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -332,6 +180,249 @@ class _DeliveryOrderLabelBindingPageState
           )
         ],
       ),
+    );
+  }
+}
+
+class _LabelScanningList extends StatelessWidget {
+  final DeliveryOrderLogic logic;
+  const _LabelScanningList({required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      var list = logic.getLabelList();
+      return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (c, i) => _LabelMaterialItem(
+          map: list[i],
+          logic: logic,
+          deletePiece: (data) => logic.deletePiece(pieceInfo: data),
+        ),
+      );
+    });
+  }
+}
+
+class _LabelPalletList extends StatelessWidget {
+  final DeliveryOrderLogic logic;
+  const _LabelPalletList({required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      var list = logic.getPalletList();
+      return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (c, i) => _LabelPalletItem(
+          map: list[i],
+          deletePiece: (data) => logic.deletePiece(pieceInfo: data),
+        ),
+      );
+    });
+  }
+}
+
+class _LabelMaterialItem extends StatelessWidget {
+  final Map<String, List<dynamic>> map;
+  final DeliveryOrderLogic logic;
+  final void Function(DeliveryOrderLabelInfo) deletePiece;
+
+  const _LabelMaterialItem({
+    required this.map,
+    required this.logic,
+    required this.deletePiece,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var materialCode = map.keys.first;
+    var list = map.values.first;
+    return Obx(() => Container(
+          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey, width: 2),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade50, Colors.white],
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  textSpan(hint: 'delivery_order_label_check_material'.tr, text: materialCode),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: CustomProgressIndicator(
+                      max: logic.getMaterialsTotal(materialCode),
+                      value: logic.getScanProgress(materialCode),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 5),
+              for (var size in list)
+                ..._LabelSizeItem(
+                  size: size,
+                  materialCode: materialCode,
+                  logic: logic,
+                  deletePiece: deletePiece,
+                ).build(context),
+            ],
+          ),
+        ));
+  }
+}
+
+class _LabelSizeItem {
+  final List<dynamic> size;
+  final String materialCode;
+  final DeliveryOrderLogic logic;
+  final void Function(DeliveryOrderLabelInfo) deletePiece;
+
+  _LabelSizeItem({
+    required this.size,
+    required this.materialCode,
+    required this.logic,
+    required this.deletePiece,
+  });
+
+  List<Widget> build(BuildContext context) {
+    return [
+      if ((size[0] as String).isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 40,
+                child: Text(
+                  '${size[0]}#',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: CustomProgressIndicator(
+                  max: size[1],
+                  color: Colors.blue.shade300,
+                  value: logic.getSizeScanProgress(materialCode, size[0] ?? ''),
+                ),
+              )
+            ],
+          ),
+        ),
+      for (DeliveryOrderLabelInfo label in size[2])
+        _LabelItem(data: label, deletePiece: deletePiece),
+    ];
+  }
+}
+
+class _LabelItem extends StatelessWidget {
+  final DeliveryOrderLabelInfo data;
+  final void Function(DeliveryOrderLabelInfo) deletePiece;
+
+  const _LabelItem({required this.data, required this.deletePiece});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(()=>Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: data.isChecked.value
+            ? Colors.green.shade200
+            : Colors.grey.shade300,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
+              style: TextStyle(
+                color: data.isChecked.value ? Colors.black87 : Colors.black38,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () => askDialog(
+              content: 'delivery_order_label_check_delete_tips'.tr,
+              confirm: () => deletePiece(data),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          )
+        ],
+      ),
+    ));
+  }
+}
+
+class _LabelPalletItem extends StatelessWidget {
+  final Map<String, RxList<DeliveryOrderLabelInfo>> map;
+  final void Function(DeliveryOrderLabelInfo) deletePiece;
+
+  const _LabelPalletItem({
+    required this.map,
+    required this.deletePiece,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var palletNo = map.keys.first;
+    var labelList = map.values.first;
+    return Obx(
+      () => palletNo.isNotEmpty
+          ? Container(
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey, width: 2),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.blue.shade50, Colors.white],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textSpan(hint: 'delivery_order_label_check_pallet'.tr, text: palletNo),
+                      textSpan(
+                        hint: 'delivery_order_label_check_piece'.tr,
+                        hintColor: Colors.black45,
+                        text: labelList.length.toString(),
+                        textColor: Colors.black87,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  for (var label in labelList)
+                    _LabelItem(data: label, deletePiece: deletePiece),
+                ],
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                children: [
+                  for (var label in labelList)
+                    _LabelItem(data: label, deletePiece: deletePiece),
+                ],
+              ),
+            ),
     );
   }
 }

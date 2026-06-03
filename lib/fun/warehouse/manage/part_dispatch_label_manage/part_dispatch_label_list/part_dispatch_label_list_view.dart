@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
@@ -33,127 +34,10 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
 
   var pu = PrintUtil();
 
-  Widget _item(int index) => GestureDetector(
-        onTap: () => state.labelList[index].isSelected.value =
-            !state.labelList[index].isSelected.value,
-        child: Obx(() {
-          var data = state.labelList[index];
-          var url = data.pictureUrlList.first;
-          var errorImage = Image.asset(
-            width: 70,
-            'assets/images/ic_logo.png',
-            color: Colors.blue,
-          );
-          var indexWidget = Container(
-            width: 30,
-            height: 30,
-            margin: EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-              border: Border.all(
-                width: 2,
-                color: data.isSelected.value ? Colors.green : Colors.grey,
-              ),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              (index + 1).toString(),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          );
-          var centerWidget = Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    textSpan(
-                        hint: 'part_dispatch_label_type_body'.tr,
-                        text: data.productName ?? ''),
-                    Text(
-                      'part_dispatch_label_material'.trArgs([
-                        data.totalQty().toString(),
-                        data.materialList!.first.unitName ?? ''
-                      ]),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue),
-                    ),
-                  ],
-                ),
-                textSpan(
-                    hint: 'part_dispatch_label_part'.tr,
-                    text: data.getPartsName()),
-                textSpan(
-                    hint: 'part_dispatch_label_instruction'.tr,
-                    text: data.billNo ?? ''),
-                textSpan(
-                    hint: 'part_dispatch_label_size'.tr, text: data.getSize()),
-              ],
-            ),
-          );
-          var endWidget = GestureDetector(
-            onTap: () =>
-                Get.to(() => ViewNetPhoto(photos: data.pictureUrlList)),
-            child: Container(
-              height: 80,
-              width: 160,
-              margin: EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: data.isSelected.value ? Colors.green : Colors.grey,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(7),
-                child: url.isNotEmpty
-                    ? Image.network(
-                        width: 70,
-                        url,
-                        fit: BoxFit.cover,
-                        errorBuilder: (ctx, err, st) => errorImage,
-                      )
-                    : errorImage,
-              ),
-            ),
-          );
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: data.isSelected.value ? Colors.green : Colors.grey,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(10),
-              gradient: LinearGradient(
-                colors: [
-                  data.isSelected.value
-                      ? Colors.green.shade100
-                      : Colors.blue.shade50,
-                  Colors.white
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            foregroundDecoration: RotatedCornerDecoration.withColor(
-              badgePosition: BadgePosition.topStart,
-              color: data.isPrint == true ? Colors.green : Colors.red,
-              badgeCornerRadius: Radius.circular(7),
-              badgeSize: Size(50, 50),
-              textSpan: TextSpan(
-                text: data.isPrint == true
-                    ? 'part_dispatch_label_printed'.tr
-                    : 'part_dispatch_label_not_printed'.tr,
-                style: TextStyle(fontSize: 12),
-              ),
-            ),
-            child: Row(children: [indexWidget, centerWidget, endWidget]),
-          );
-        }),
+  Widget _item(int index) => _PartDispatchLabelListItem(
+        index: index,
+        logic: logic,
+        state: state,
       );
 
   void _query() {
@@ -184,7 +68,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.labelList.length,
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 10,
                     right: 10,
                     bottom: 10,
@@ -288,5 +172,143 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
   void dispose() {
     Get.delete<PartDispatchLabelListLogic>();
     super.dispose();
+  }
+}
+
+class _PartDispatchLabelListItem extends StatelessWidget {
+  final int index;
+  final PartDispatchLabelListLogic logic;
+  final PartDispatchLabelListState state;
+
+  const _PartDispatchLabelListItem({
+    required this.index,
+    required this.logic,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => state.labelList[index].isSelected.value =
+          !state.labelList[index].isSelected.value,
+      child: Obx(() {
+        var data = state.labelList[index];
+        var url = data.pictureUrlList.first;
+        var errorImage = Image.asset(
+          width: 70,
+          'assets/images/ic_logo.png',
+          color: Colors.blue,
+        );
+        var indexWidget = Container(
+          width: 30,
+          height: 30,
+          margin: const EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
+            border: Border.all(
+              width: 2,
+              color: data.isSelected.value ? Colors.green : Colors.grey,
+            ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            (index + 1).toString(),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        );
+        var centerWidget = Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textSpan(
+                      hint: 'part_dispatch_label_type_body'.tr,
+                      text: data.productName ?? ''),
+                  Text(
+                    'part_dispatch_label_material'.trArgs([
+                      data.totalQty().toString(),
+                      data.materialList!.first.unitName ?? ''
+                    ]),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.blue),
+                  ),
+                ],
+              ),
+              textSpan(
+                  hint: 'part_dispatch_label_part'.tr,
+                  text: data.getPartsName()),
+              textSpan(
+                  hint: 'part_dispatch_label_instruction'.tr,
+                  text: data.billNo ?? ''),
+              textSpan(
+                  hint: 'part_dispatch_label_size'.tr, text: data.getSize()),
+            ],
+          ),
+        );
+        var endWidget = GestureDetector(
+          onTap: () =>
+              Get.to(() => ViewNetPhoto(photos: data.pictureUrlList)),
+          child: Container(
+            height: 80,
+            width: 160,
+            margin: const EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: data.isSelected.value ? Colors.green : Colors.grey,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(7),
+              child: url.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: url,
+                      width: 70,
+                      fit: BoxFit.cover,
+                      errorWidget: (ctx, err, st) => errorImage,
+                    )
+                  : errorImage,
+            ),
+          ),
+        );
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: data.isSelected.value ? Colors.green : Colors.grey,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                data.isSelected.value
+                    ? Colors.green.shade100
+                    : Colors.blue.shade50,
+                Colors.white
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          foregroundDecoration: RotatedCornerDecoration.withColor(
+            badgePosition: BadgePosition.topStart,
+            color: data.isPrint == true ? Colors.green : Colors.red,
+            badgeCornerRadius: const Radius.circular(7),
+            badgeSize: const Size(50, 50),
+            textSpan: TextSpan(
+              text: data.isPrint == true
+                  ? 'part_dispatch_label_printed'.tr
+                  : 'part_dispatch_label_not_printed'.tr,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          child: Row(children: [indexWidget, centerWidget, endWidget]),
+        );
+      }),
+    );
   }
 }

@@ -203,28 +203,8 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
         ),
       );
 
-  Widget _itemSubTitle({required String title, required String data}) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.green.shade700,
-            ),
-          ),
-          Text(
-            data,
-            style: TextStyle(
-              color: Colors.blue.shade900,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  Widget _itemSubTitle({required String title, required String data}) =>
+      _WaitPickingMaterialItemSubTitle(title: title, data: data);
 
   Container _item(WaitPickingMaterialOrderInfo data) {
     var textButtonPadding =
@@ -488,122 +468,12 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  Widget _subItem(WaitPickingMaterialOrderInfo order, int index) {
-    WaitPickingMaterialOrderSubInfo data = order.items![index];
-    double proportion = order.getProportion();
-    RxBool isBaseUnit = order.isBaseUnit;
-
-    return GestureDetector(
-      onTap: () => logic.goDetail(order, index),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black54, width: 1),
-        ),
-        child: Row(
-          children: [
-            Obx(() => Checkbox(
-                  activeColor: Colors.blue,
-                  side: const BorderSide(
-                    color: Colors.red,
-                    width: 2,
-                  ),
-                  value: data.selectedCount() > 0,
-                  onChanged: (v) => logic.selectSubItemAll(v!, data),
-                )),
-            const SizedBox(width: 10),
-            Expanded(
-              flex: 4,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    data.getOrderType(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade900,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  textSpan(
-                    isBold: false,
-                    hint: 'wait_picking_material_order_instruction'.tr,
-                    text: data.moNo ?? '',
-                    textColor: Colors.blue.shade900,
-                  ),
-                  const SizedBox(width: 20),
-                  expandedTextSpan(
-                    isBold: false,
-                    hint: 'wait_picking_material_order_part'.tr,
-                    maxLines: 2,
-                    text: data.position ?? '',
-                    textColor: Colors.blue.shade900,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Obx(() => Text(
-                          data
-                              .getTotal(proportion, isBaseUnit.value)
-                              .toFixed(3)
-                              .toShowString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.blue.shade900),
-                        )),
-                  ),
-                  Expanded(
-                    child: Obx(() => Text(
-                          data
-                              .getUnRelease(proportion, isBaseUnit.value)
-                              .toFixed(3)
-                              .toShowString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.blue.shade900),
-                        )),
-                  ),
-                  Expanded(
-                    child: Obx(() => Text(
-                          data
-                              .getReceived(proportion, isBaseUnit.value)
-                              .toFixed(3)
-                              .toShowString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.blue.shade900),
-                        )),
-                  ),
-                  Expanded(
-                    child: Obx(() => Text(
-                          data
-                              .getUnreceived(proportion, isBaseUnit.value)
-                              .toFixed(3)
-                              .toShowString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.blue.shade900),
-                        )),
-                  ),
-                  Expanded(
-                    child: Obx(() => Text(
-                          data
-                              .getPicking(proportion, isBaseUnit.value)
-                              .toFixed(3)
-                              .toShowString(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: Colors.blue.shade900),
-                        )),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget _subItem(WaitPickingMaterialOrderInfo order, int index) =>
+      _WaitPickingMaterialSubItem(
+        order: order,
+        index: index,
+        logic: logic,
+      );
 
   void _pickingMaterial({required bool isMove, required bool isPosting}) {
     logic.checkPickingMaterial(
@@ -1041,5 +911,169 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
   void dispose() {
     Get.delete<WaitPickingMaterialLogic>();
     super.dispose();
+  }
+}
+
+class _WaitPickingMaterialItemSubTitle extends StatelessWidget {
+  final String title;
+  final String data;
+
+  const _WaitPickingMaterialItemSubTitle({
+    required this.title,
+    required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.green.shade700,
+            ),
+          ),
+          Text(
+            data,
+            style: TextStyle(
+              color: Colors.blue.shade900,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _WaitPickingMaterialSubItem extends StatelessWidget {
+  final WaitPickingMaterialOrderInfo order;
+  final int index;
+  final WaitPickingMaterialLogic logic;
+
+  const _WaitPickingMaterialSubItem({
+    required this.order,
+    required this.index,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    WaitPickingMaterialOrderSubInfo data = order.items![index];
+    double proportion = order.getProportion();
+    RxBool isBaseUnit = order.isBaseUnit;
+
+    return GestureDetector(
+      onTap: () => logic.goDetail(order, index),
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black54, width: 1),
+        ),
+        child: Row(
+          children: [
+            Obx(() => Checkbox(
+                  activeColor: Colors.blue,
+                  side: const BorderSide(
+                    color: Colors.red,
+                    width: 2,
+                  ),
+                  value: data.selectedCount() > 0,
+                  onChanged: (v) => logic.selectSubItemAll(v!, data),
+                )),
+            const SizedBox(width: 10),
+            Expanded(
+              flex: 4,
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    data.getOrderType(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue.shade900,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  textSpan(
+                    isBold: false,
+                    hint: 'wait_picking_material_order_instruction'.tr,
+                    text: data.moNo ?? '',
+                    textColor: Colors.blue.shade900,
+                  ),
+                  const SizedBox(width: 20),
+                  expandedTextSpan(
+                    isBold: false,
+                    hint: 'wait_picking_material_order_part'.tr,
+                    maxLines: 2,
+                    text: data.position ?? '',
+                    textColor: Colors.blue.shade900,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => Text(
+                          data
+                              .getTotal(proportion, isBaseUnit.value)
+                              .toFixed(3)
+                              .toShowString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.blue.shade900),
+                        )),
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          data
+                              .getUnRelease(proportion, isBaseUnit.value)
+                              .toFixed(3)
+                              .toShowString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.blue.shade900),
+                        )),
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          data
+                              .getReceived(proportion, isBaseUnit.value)
+                              .toFixed(3)
+                              .toShowString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.blue.shade900),
+                        )),
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          data
+                              .getUnreceived(proportion, isBaseUnit.value)
+                              .toFixed(3)
+                              .toShowString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.blue.shade900),
+                        )),
+                  ),
+                  Expanded(
+                    child: Obx(() => Text(
+                          data
+                              .getPicking(proportion, isBaseUnit.value)
+                              .toFixed(3)
+                              .toShowString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.blue.shade900),
+                        )),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

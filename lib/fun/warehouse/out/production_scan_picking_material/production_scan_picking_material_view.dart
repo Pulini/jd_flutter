@@ -214,6 +214,8 @@ class _ProductionScanPickingMaterialPageState
 
   @override
   void dispose() {
+    inputController.dispose();
+    refreshController.dispose();
     Get.delete<ProductionScanPickingMaterialLogic>();
     super.dispose();
   }

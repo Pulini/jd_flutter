@@ -131,402 +131,6 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     }
   }
 
-  Widget _item(int index) {
-    var data = state.deliveryOrderList[index];
-    var phoneItem = Column(children: [
-      Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textSpan(
-                  hint: 'delivery_order_supplier'.tr,
-                  text: data.first.supplierName ?? '',
-                  textColor: Colors.red,
-                ),
-                Row(children: [
-                  expandedTextSpan(
-                    hint: 'delivery_order_company'.tr,
-                    text: data.first.companyCode ?? '',
-                    textColor: Colors.black45,
-                  ),
-                  textSpan(
-                    hint: 'delivery_order_piece'.tr,
-                    text: data.first.numPage ?? '',
-                  ),
-                ]),
-                Row(children: [
-                  expandedTextSpan(
-                    hint: 'delivery_order_deliver_no'.tr,
-                    text: data.first.deliNo ?? '',
-                    textColor: Colors.black45,
-                  ),
-                  expandedTextSpan(
-                    hint: 'delivery_order_delivery_location'.tr,
-                    text: data.first.deliveryLocation ?? '',
-                    textColor: Colors.black45,
-                  ),
-                ]),
-                Row(
-                  children: [
-                    expandedTextSpan(
-                      hint: 'delivery_order_factory'.tr,
-                      text: data.first.factoryName ?? '',
-                      textColor: Colors.black45,
-                    ),
-                    expandedTextSpan(
-                      hint: 'delivery_order_build_date'.tr,
-                      text: data.first.billDate ?? '',
-                      textColor: Colors.black45,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    expandedTextSpan(
-                      hint: 'delivery_order_location_storage'.tr,
-                      text: data.first.locationName ?? '',
-                      textColor: Colors.black45,
-                    ),
-                    expandedTextSpan(
-                      hint: 'delivery_order_final_customer'.tr,
-                      text: data.first.finalCustomer ?? '',
-                      textColor: Colors.black45,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    expandedTextSpan(
-                      hint: 'delivery_order_match_code'.tr,
-                      text: data.first.matchCode ?? '',
-                      textColor: Colors.black45,
-                    ),
-                    expandedTextSpan(
-                      hint: 'delivery_order_track_no'.tr,
-                      text: data.first.trackNo ?? '',
-                      textColor: Colors.black45,
-                    ),
-                  ],
-                ),
-                textSpan(
-                  hint: 'delivery_order_remark'.tr,
-                  text: data.first.remark ?? '',
-                  textColor: Colors.black45,
-                ),
-              ],
-            ),
-          ),
-          Obx(() => Checkbox(
-                value: data.every((v) => v.isSelected.value),
-                onChanged: (c) {
-                  for (var v in data) {
-                    v.isSelected.value = c!;
-                  }
-                },
-              )),
-        ],
-      ),
-      const Divider(indent: 10, endIndent: 10),
-      for (var item in data) _subItem(item),
-      Row(
-        children: [
-          CombinationButton(
-            text: 'delivery_order_check'.tr,
-            click: () => _checkOrder(true, data),
-          ),
-          Expanded(child: Container()),
-          Text(
-            data.first.isExempt == true
-                ? 'delivery_order_exempt'.tr
-                : 'delivery_order_not_exempt'.tr,
-            style: TextStyle(
-              color: data.first.isExempt == true ? Colors.blue : Colors.red,
-            ),
-          ),
-          const SizedBox(width: 20),
-          Text(
-            data.first.isPackingMaterials == true
-                ? 'delivery_order_in_and_out'.tr
-                : 'delivery_order_not_in_and_out'.tr,
-            style: TextStyle(
-              color:
-                  data.first.isPackingMaterials == true ? Colors.blue : Colors.red,
-            ),
-          ),
-        ],
-      )
-    ]);
-    var pdaItem = Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                        hint: 'delivery_order_supplier'.tr,
-                        text: data.first.supplierName ?? '',
-                        textColor: Colors.red,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_company'.tr,
-                        text: data.first.companyCode ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_factory'.tr,
-                        text: data.first.factoryName ?? '',
-                        textColor: Colors.black45,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                        hint: 'delivery_order_deliver_no'.tr,
-                        text: data.first.deliNo ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_delivery_location'.tr,
-                        text: data.first.deliveryLocation ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_build_date'.tr,
-                        text: data.first.billDate ?? '',
-                        textColor: Colors.black45,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                        hint: 'delivery_order_piece'.tr,
-                        text: data.first.numPage ?? '',
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_location_storage'.tr,
-                        text: data.first.locationName ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_match_code'.tr,
-                        text: data.first.matchCode ?? '',
-                        textColor: Colors.black45,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                        hint: 'delivery_order_final_customer'.tr,
-                        text: data.first.finalCustomer ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_track_no'.tr,
-                        text: data.first.trackNo ?? '',
-                        textColor: Colors.black45,
-                      ),
-                      expandedTextSpan(
-                        hint: 'delivery_order_remark'.tr,
-                        text: data.first.remark ?? '',
-                        textColor: Colors.black45,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Obx(() => Checkbox(
-                  value: data.every((v) => v.isSelected.value),
-                  onChanged: (c) {
-                    for (var v in data) {
-                      v.isSelected.value = c!;
-                    }
-                  },
-                )),
-          ],
-        ),
-        const Divider(indent: 10, endIndent: 10),
-        for (var item in data) _subItem(item),
-        Row(
-          children: [
-            CombinationButton(
-              text: 'delivery_order_check'.tr,
-              click: () => _checkOrder(true, data),
-            ),
-            Expanded(child: Container()),
-            Text(
-              data.first.isExempt == true
-                  ? 'delivery_order_exempt'.tr
-                  : 'delivery_order_not_exempt'.tr,
-              style: TextStyle(
-                color: data.first.isExempt == true ? Colors.blue : Colors.red,
-              ),
-            ),
-            const SizedBox(width: 20),
-            Text(
-              data.first.isPackingMaterials == true
-                  ? 'delivery_order_in_and_out'.tr
-                  : 'delivery_order_not_in_and_out'.tr,
-              style: TextStyle(
-                color: data.first.isPackingMaterials == true
-                    ? Colors.blue
-                    : Colors.red,
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-    return GestureDetector(
-      onTap: () => _checkOrder(false, data),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(10),
-        foregroundDecoration: data.first.hasSubscript()
-            ? RotatedCornerDecoration.withColor(
-                color: data.first.isInspected() ? Colors.orange : Colors.green,
-                badgeCornerRadius: const Radius.circular(8),
-                badgeSize: const Size(45, 45),
-                textSpan: TextSpan(
-                  text: data.first.isInspected()
-                      ? 'delivery_order_checked'.tr
-                      : 'delivery_order_temporarily_received'.tr,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            : null,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey, width: 2),
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade50, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: width < 600 ? phoneItem : pdaItem,
-      ),
-    );
-  }
-
-  Widget _subItem(DeliveryOrderInfo item) {
-    var phoneSubItem = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textSpan(
-          hint: 'delivery_order_material'.tr,
-          text: '(${item.materialCode}) ${item.materialName}',
-          textColor: Colors.blue.shade900,
-        ),
-        textSpan(
-          hint: 'delivery_order_factory_type_body'.tr,
-          text: item.model ?? '',
-          textColor: Colors.black45,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            textSpan(
-              hint: 'delivery_order_comm_unit'.tr,
-              text: item.commUnit ?? '',
-              textColor: Colors.black45,
-            ),
-            textSpan(
-              hint: 'delivery_order_coefficient'.tr,
-              text: item.coefficient ?? '',
-              textColor: Colors.black45,
-            ),
-            textSpan(
-              hint: 'delivery_order_base_unit'.tr,
-              text: item.baseUnit ?? '',
-              textColor: Colors.black45,
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            textSpan(
-              hint: 'delivery_order_delivery_qty'.tr,
-              text: item.deliveryQty().toShowString(),
-              textColor: Colors.black45,
-            ),
-            textSpan(
-              hint: 'delivery_order_check_qty'.tr,
-              text: item.checkQuantity.toDoubleTry().toShowString(),
-              textColor: Colors.black45,
-            ),
-          ],
-        ),
-        const Divider(indent: 10, endIndent: 10),
-      ],
-    );
-    var pdaSubItem = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textSpan(
-          hint: 'delivery_order_material'.tr,
-          text: '(${item.materialCode}) ${item.materialName}',
-          textColor: Colors.blue.shade900,
-        ),
-        Row(
-          children: [
-            expandedTextSpan(
-              flex: 3,
-              hint: 'delivery_order_delivery_qty'.tr,
-              text: item.deliveryQty().toShowString(),
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              flex: 3,
-              hint: 'delivery_order_check_qty'.tr,
-              text: item.checkQuantity.toDoubleTry().toShowString(),
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              flex: 6,
-              hint: 'delivery_order_factory_type_body'.tr,
-              text: item.model ?? '',
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              flex: 2,
-              hint: 'delivery_order_coefficient'.tr,
-              text: item.coefficient ?? '',
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              flex: 2,
-              hint: 'delivery_order_comm_unit'.tr,
-              text: item.commUnit ?? '',
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              flex: 2,
-              hint: 'delivery_order_base_unit'.tr,
-              text: item.baseUnit ?? '',
-              textColor: Colors.black45,
-            ),
-          ],
-        ),
-        const Divider(indent: 10, endIndent: 10),
-      ],
-    );
-    return width < 600 ? phoneSubItem : pdaSubItem;
-  }
-
   void _inputReason({required Function(String) callback}) {
     reasonInputPopup(
       title: [
@@ -838,7 +442,11 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                 child: Obx(() => ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.deliveryOrderList.length,
-                      itemBuilder: (c, i) => _item(i),
+                      itemBuilder: (c, i) => _DeliveryOrderItem(
+                        data: state.deliveryOrderList[i],
+                        width: width,
+                        onCheckOrder: _checkOrder,
+                      ),
                     )),
               ),
               Obx(() => Row(
@@ -874,7 +482,6 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                           text: 'delivery_order_stock_in_reverse'.tr,
                           click: () => logic.checkReversalStockIn(
                             reversalWithCode: (list) {
-                              //标签功能尚未使用，先执行直接冲销
                               _inputReason(
                                 callback: (reason) => logic.reversalStockIn(
                                   workCenterID: opcWorkCenter.selectedId.value,
@@ -958,5 +565,422 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   void dispose() {
     Get.delete<DeliveryOrderLogic>();
     super.dispose();
+  }
+}
+
+class _DeliveryOrderItem extends StatelessWidget {
+  final List<DeliveryOrderInfo> data;
+  final double width;
+  final void Function(bool, List<DeliveryOrderInfo>) onCheckOrder;
+
+  const _DeliveryOrderItem({
+    required this.data,
+    required this.width,
+    required this.onCheckOrder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var phoneItem = Column(children: [
+      Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                textSpan(
+                  hint: 'delivery_order_supplier'.tr,
+                  text: data.first.supplierName ?? '',
+                  textColor: Colors.red,
+                ),
+                Row(children: [
+                  expandedTextSpan(
+                    hint: 'delivery_order_company'.tr,
+                    text: data.first.companyCode ?? '',
+                    textColor: Colors.black45,
+                  ),
+                  textSpan(
+                    hint: 'delivery_order_piece'.tr,
+                    text: data.first.numPage ?? '',
+                  ),
+                ]),
+                Row(children: [
+                  expandedTextSpan(
+                    hint: 'delivery_order_deliver_no'.tr,
+                    text: data.first.deliNo ?? '',
+                    textColor: Colors.black45,
+                  ),
+                  expandedTextSpan(
+                    hint: 'delivery_order_delivery_location'.tr,
+                    text: data.first.deliveryLocation ?? '',
+                    textColor: Colors.black45,
+                  ),
+                ]),
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      hint: 'delivery_order_factory'.tr,
+                      text: data.first.factoryName ?? '',
+                      textColor: Colors.black45,
+                    ),
+                    expandedTextSpan(
+                      hint: 'delivery_order_build_date'.tr,
+                      text: data.first.billDate ?? '',
+                      textColor: Colors.black45,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      hint: 'delivery_order_location_storage'.tr,
+                      text: data.first.locationName ?? '',
+                      textColor: Colors.black45,
+                    ),
+                    expandedTextSpan(
+                      hint: 'delivery_order_final_customer'.tr,
+                      text: data.first.finalCustomer ?? '',
+                      textColor: Colors.black45,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      hint: 'delivery_order_match_code'.tr,
+                      text: data.first.matchCode ?? '',
+                      textColor: Colors.black45,
+                    ),
+                    expandedTextSpan(
+                      hint: 'delivery_order_track_no'.tr,
+                      text: data.first.trackNo ?? '',
+                      textColor: Colors.black45,
+                    ),
+                  ],
+                ),
+                textSpan(
+                  hint: 'delivery_order_remark'.tr,
+                  text: data.first.remark ?? '',
+                  textColor: Colors.black45,
+                ),
+              ],
+            ),
+          ),
+          Obx(() => Checkbox(
+                value: data.every((v) => v.isSelected.value),
+                onChanged: (c) {
+                  for (var v in data) {
+                    v.isSelected.value = c!;
+                  }
+                },
+              )),
+        ],
+      ),
+      const Divider(indent: 10, endIndent: 10),
+      for (var item in data) _DeliverySubItem(item: item, width: width),
+      Row(
+        children: [
+          CombinationButton(
+            text: 'delivery_order_check'.tr,
+            click: () => onCheckOrder(true, data),
+          ),
+          Expanded(child: Container()),
+          Text(
+            data.first.isExempt == true
+                ? 'delivery_order_exempt'.tr
+                : 'delivery_order_not_exempt'.tr,
+            style: TextStyle(
+              color: data.first.isExempt == true ? Colors.blue : Colors.red,
+            ),
+          ),
+          const SizedBox(width: 20),
+          Text(
+            data.first.isPackingMaterials == true
+                ? 'delivery_order_in_and_out'.tr
+                : 'delivery_order_not_in_and_out'.tr,
+            style: TextStyle(
+              color:
+                  data.first.isPackingMaterials == true ? Colors.blue : Colors.red,
+            ),
+          ),
+        ],
+      )
+    ]);
+    var pdaItem = Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      expandedTextSpan(
+                        hint: 'delivery_order_supplier'.tr,
+                        text: data.first.supplierName ?? '',
+                        textColor: Colors.red,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_company'.tr,
+                        text: data.first.companyCode ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_factory'.tr,
+                        text: data.first.factoryName ?? '',
+                        textColor: Colors.black45,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      expandedTextSpan(
+                        hint: 'delivery_order_deliver_no'.tr,
+                        text: data.first.deliNo ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_delivery_location'.tr,
+                        text: data.first.deliveryLocation ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_build_date'.tr,
+                        text: data.first.billDate ?? '',
+                        textColor: Colors.black45,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      expandedTextSpan(
+                        hint: 'delivery_order_piece'.tr,
+                        text: data.first.numPage ?? '',
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_location_storage'.tr,
+                        text: data.first.locationName ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_match_code'.tr,
+                        text: data.first.matchCode ?? '',
+                        textColor: Colors.black45,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      expandedTextSpan(
+                        hint: 'delivery_order_final_customer'.tr,
+                        text: data.first.finalCustomer ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_track_no'.tr,
+                        text: data.first.trackNo ?? '',
+                        textColor: Colors.black45,
+                      ),
+                      expandedTextSpan(
+                        hint: 'delivery_order_remark'.tr,
+                        text: data.first.remark ?? '',
+                        textColor: Colors.black45,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Obx(() => Checkbox(
+                  value: data.every((v) => v.isSelected.value),
+                  onChanged: (c) {
+                    for (var v in data) {
+                      v.isSelected.value = c!;
+                    }
+                  },
+                )),
+          ],
+        ),
+        const Divider(indent: 10, endIndent: 10),
+        for (var item in data) _DeliverySubItem(item: item, width: width),
+        Row(
+          children: [
+            CombinationButton(
+              text: 'delivery_order_check'.tr,
+              click: () => onCheckOrder(true, data),
+            ),
+            Expanded(child: Container()),
+            Text(
+              data.first.isExempt == true
+                  ? 'delivery_order_exempt'.tr
+                  : 'delivery_order_not_exempt'.tr,
+              style: TextStyle(
+                color: data.first.isExempt == true ? Colors.blue : Colors.red,
+              ),
+            ),
+            const SizedBox(width: 20),
+            Text(
+              data.first.isPackingMaterials == true
+                  ? 'delivery_order_in_and_out'.tr
+                  : 'delivery_order_not_in_and_out'.tr,
+              style: TextStyle(
+                color: data.first.isPackingMaterials == true
+                    ? Colors.blue
+                    : Colors.red,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+    return GestureDetector(
+      onTap: () => onCheckOrder(false, data),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        foregroundDecoration: data.first.hasSubscript()
+            ? RotatedCornerDecoration.withColor(
+                color: data.first.isInspected() ? Colors.orange : Colors.green,
+                badgeCornerRadius: const Radius.circular(8),
+                badgeSize: const Size(45, 45),
+                textSpan: TextSpan(
+                  text: data.first.isInspected()
+                      ? 'delivery_order_checked'.tr
+                      : 'delivery_order_temporarily_received'.tr,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : null,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey, width: 2),
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade50, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: width < 600 ? phoneItem : pdaItem,
+      ),
+    );
+  }
+}
+
+class _DeliverySubItem extends StatelessWidget {
+  final DeliveryOrderInfo item;
+  final double width;
+
+  const _DeliverySubItem({required this.item, required this.width});
+
+  @override
+  Widget build(BuildContext context) {
+    if (width < 600) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textSpan(
+            hint: 'delivery_order_material'.tr,
+            text: '(${item.materialCode}) ${item.materialName}',
+            textColor: Colors.blue.shade900,
+          ),
+          textSpan(
+            hint: 'delivery_order_factory_type_body'.tr,
+            text: item.model ?? '',
+            textColor: Colors.black45,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'delivery_order_comm_unit'.tr,
+                text: item.commUnit ?? '',
+                textColor: Colors.black45,
+              ),
+              textSpan(
+                hint: 'delivery_order_coefficient'.tr,
+                text: item.coefficient ?? '',
+                textColor: Colors.black45,
+              ),
+              textSpan(
+                hint: 'delivery_order_base_unit'.tr,
+                text: item.baseUnit ?? '',
+                textColor: Colors.black45,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: 'delivery_order_delivery_qty'.tr,
+                text: item.deliveryQty().toShowString(),
+                textColor: Colors.black45,
+              ),
+              textSpan(
+                hint: 'delivery_order_check_qty'.tr,
+                text: item.checkQuantity.toDoubleTry().toShowString(),
+                textColor: Colors.black45,
+              ),
+            ],
+          ),
+          const Divider(indent: 10, endIndent: 10),
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textSpan(
+          hint: 'delivery_order_material'.tr,
+          text: '(${item.materialCode}) ${item.materialName}',
+          textColor: Colors.blue.shade900,
+        ),
+        Row(
+          children: [
+            expandedTextSpan(
+              flex: 3,
+              hint: 'delivery_order_delivery_qty'.tr,
+              text: item.deliveryQty().toShowString(),
+              textColor: Colors.black45,
+            ),
+            expandedTextSpan(
+              flex: 3,
+              hint: 'delivery_order_check_qty'.tr,
+              text: item.checkQuantity.toDoubleTry().toShowString(),
+              textColor: Colors.black45,
+            ),
+            expandedTextSpan(
+              flex: 6,
+              hint: 'delivery_order_factory_type_body'.tr,
+              text: item.model ?? '',
+              textColor: Colors.black45,
+            ),
+            expandedTextSpan(
+              flex: 2,
+              hint: 'delivery_order_coefficient'.tr,
+              text: item.coefficient ?? '',
+              textColor: Colors.black45,
+            ),
+            expandedTextSpan(
+              flex: 2,
+              hint: 'delivery_order_comm_unit'.tr,
+              text: item.commUnit ?? '',
+              textColor: Colors.black45,
+            ),
+            expandedTextSpan(
+              flex: 2,
+              hint: 'delivery_order_base_unit'.tr,
+              text: item.baseUnit ?? '',
+              textColor: Colors.black45,
+            ),
+          ],
+        ),
+        const Divider(indent: 10, endIndent: 10),
+      ],
+    );
   }
 }

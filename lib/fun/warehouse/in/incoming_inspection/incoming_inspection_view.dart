@@ -44,190 +44,6 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
   var tecDeliveryNo = TextEditingController();
   var tecMaterialCode = TextEditingController();
 
-  Widget _deliveryItem(List<List<InspectionDeliveryInfo>> group) => Card(
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          title: textSpan(
-            hint: 'incoming_inspection_order_no'.tr,
-            text: group.first.first.billNo ?? '',
-            textColor: Colors.green,
-          ),
-          subtitle: textSpan(
-            hint: 'incoming_inspection_delivery_qty'.tr,
-            text: 'incoming_inspection_delivery_detail'.trArgs([
-              group.first.first.numPage.toString(),
-              logic.getItemQty(group).toShowString(),
-              group.first.first.unitName ?? '',
-            ]),
-            textColor: Colors.green,
-          ),
-          leading: IconButton(
-            onPressed: () => askDialog(
-              content: 'incoming_inspection_delete_order_tips'.tr,
-              confirm: () => logic.deleteDeliveryOrder(group),
-            ),
-            icon: const Icon(
-              Icons.delete_forever,
-              color: Colors.red,
-            ),
-          ),
-          children: [for (var item in group) _subItem(item)],
-        ),
-      );
-
-  Widget _subItem(List<InspectionDeliveryInfo> item) => Container(
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.green.shade50,
-              Colors.blue.shade100,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          // color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.blue, width: 2),
-        ),
-        child: ExpansionTile(
-          backgroundColor: Colors.transparent,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          title: textSpan(
-            maxLines: 2,
-            hint: 'incoming_inspection_material'.tr,
-            text: '(${item.first.materialCode}) ${item.first.materialName}'
-                .allowWordTruncation(),
-          ),
-          subtitle: textSpan(
-              hint: 'incoming_inspection_material_delivery_qty'.tr,
-              text:
-                  '${logic.getItemMaterialQty(item).toShowString()} ${item.first.unitName}'),
-          leading: IconButton(
-            onPressed: () => askDialog(
-              content: 'incoming_inspection_delete_material_tips'.tr,
-              confirm: () => logic.deleteDeliveryMaterialGroupOrder(item),
-            ),
-            icon: const Icon(
-              Icons.delete_forever,
-              color: Colors.red,
-            ),
-          ),
-          children: [
-            for (var subItem in item)
-              Column(
-                children: [
-                  const Divider(indent: 10, endIndent: 10),
-                  InkWell(
-                    onTap: () => modifySubItemMaterialDialog(
-                        item: subItem, modify: () => logic.modify()),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: textSpan(
-                            hint: 'incoming_inspection_detail_delivery_qty'.tr,
-                            text:
-                                '${subItem.qty.toShowString()} ${subItem.unitName}',
-                            textColor: Colors.black54,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => askDialog(
-                            content: 'incoming_inspection_delete_item_tips'.tr,
-                            confirm: () => logic.deleteDeliveryItem(subItem),
-                          ),
-                          icon: const Icon(
-                            Icons.delete_forever,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              )
-          ],
-        ),
-      );
-
-  Widget _addMaterialItem(InspectionDeliveryInfo item) {
-    return InkWell(
-      onTap: () => addOrModifyMaterialDialog(
-        item: item,
-        modify: () => logic.modifyMaterialItem(),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.green.shade50,
-              Colors.blue.shade100,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          // color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.blue, width: 2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textSpan(
-              hint: 'incoming_inspection_material'.tr,
-              text: item.materialName.allowWordTruncation(),
-              maxLines: 3,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      textSpan(
-                        hint: 'incoming_inspection_order_no'.tr,
-                        text: item.billNo ?? '',
-                        textColor: Colors.black54,
-                      ),
-                      textSpan(
-                        hint: 'incoming_inspection_delivery_detail_tips'.tr,
-                        text: 'incoming_inspection_delivery_detail'.trArgs([
-                          item.numPage.toString(),
-                          item.qty.toShowString(),
-                          item.unitName ?? '',
-                        ]),
-                        textColor: Colors.black54,
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => askDialog(
-                    content: 'incoming_inspection_delete_item_tips'.tr,
-                    confirm: () => logic.deleteMaterialItem(item),
-                  ),
-                  icon: const Icon(
-                    Icons.delete_forever,
-                    color: Colors.red,
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget initSearch() => Container(
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
@@ -337,14 +153,26 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
       body: Column(
         children: [
           Expanded(
-            child: Obx(() => ListView(
-                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                  children: [
-                    for (var item in state.deliveryList) _deliveryItem(item),
+            child: Obx(() {
+                  final items = <Widget>[
+                    for (var item in state.deliveryList)
+                      _InspectionDeliveryItem(
+                        group: item,
+                        logic: logic,
+                      ),
                     for (var item in state.addMaterialList)
-                      _addMaterialItem(item),
-                  ],
-                )),
+                      _InspectionAddMaterialItem(
+                        item: item,
+                        onDelete: () => logic.deleteMaterialItem(item),
+                        onModify: () => logic.modifyMaterialItem(),
+                      ),
+                  ];
+                  return ListView.builder(
+                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) => items[index],
+                  );
+                }),
           ),
           Container(
             padding: const EdgeInsets.only(left: 5, right: 5),
@@ -403,5 +231,226 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
   void dispose() {
     Get.delete<IncomingInspectionLogic>();
     super.dispose();
+  }
+}
+
+class _InspectionDeliveryItem extends StatelessWidget {
+  final List<List<InspectionDeliveryInfo>> group;
+  final IncomingInspectionLogic logic;
+
+  const _InspectionDeliveryItem({required this.group, required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        title: textSpan(
+          hint: 'incoming_inspection_order_no'.tr,
+          text: group.first.first.billNo ?? '',
+          textColor: Colors.green,
+        ),
+        subtitle: textSpan(
+          hint: 'incoming_inspection_delivery_qty'.tr,
+          text: 'incoming_inspection_delivery_detail'.trArgs([
+            group.first.first.numPage.toString(),
+            logic.getItemQty(group).toShowString(),
+            group.first.first.unitName ?? '',
+          ]),
+          textColor: Colors.green,
+        ),
+        leading: IconButton(
+          onPressed: () => askDialog(
+            content: 'incoming_inspection_delete_order_tips'.tr,
+            confirm: () => logic.deleteDeliveryOrder(group),
+          ),
+          icon: const Icon(
+            Icons.delete_forever,
+            color: Colors.red,
+          ),
+        ),
+        children: [
+          for (var item in group)
+            _InspectionSubItem(
+              item: item,
+              logic: logic,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InspectionSubItem extends StatelessWidget {
+  final List<InspectionDeliveryInfo> item;
+  final IncomingInspectionLogic logic;
+
+  const _InspectionSubItem({required this.item, required this.logic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.green.shade50,
+            Colors.blue.shade100,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.blue, width: 2),
+      ),
+      child: ExpansionTile(
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        title: textSpan(
+          maxLines: 2,
+          hint: 'incoming_inspection_material'.tr,
+          text: '(${item.first.materialCode}) ${item.first.materialName}'
+              .allowWordTruncation(),
+        ),
+        subtitle: textSpan(
+            hint: 'incoming_inspection_material_delivery_qty'.tr,
+            text:
+                '${logic.getItemMaterialQty(item).toShowString()} ${item.first.unitName}'),
+        leading: IconButton(
+          onPressed: () => askDialog(
+            content: 'incoming_inspection_delete_material_tips'.tr,
+            confirm: () => logic.deleteDeliveryMaterialGroupOrder(item),
+          ),
+          icon: const Icon(
+            Icons.delete_forever,
+            color: Colors.red,
+          ),
+        ),
+        children: [
+          for (var subItem in item)
+            Column(
+              children: [
+                const Divider(indent: 10, endIndent: 10),
+                InkWell(
+                  onTap: () => modifySubItemMaterialDialog(
+                      item: subItem, modify: () => logic.modify()),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: textSpan(
+                          hint: 'incoming_inspection_detail_delivery_qty'.tr,
+                          text:
+                              '${subItem.qty.toShowString()} ${subItem.unitName}',
+                          textColor: Colors.black54,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => askDialog(
+                          content: 'incoming_inspection_delete_item_tips'.tr,
+                          confirm: () => logic.deleteDeliveryItem(subItem),
+                        ),
+                        icon: const Icon(
+                          Icons.delete_forever,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class _InspectionAddMaterialItem extends StatelessWidget {
+  final InspectionDeliveryInfo item;
+  final VoidCallback onDelete;
+  final VoidCallback onModify;
+
+  const _InspectionAddMaterialItem({
+    required this.item,
+    required this.onDelete,
+    required this.onModify,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => addOrModifyMaterialDialog(
+        item: item,
+        modify: () => onModify(),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.green.shade50,
+              Colors.blue.shade100,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.blue, width: 2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            textSpan(
+              hint: 'incoming_inspection_material'.tr,
+              text: item.materialName.allowWordTruncation(),
+              maxLines: 3,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      textSpan(
+                        hint: 'incoming_inspection_order_no'.tr,
+                        text: item.billNo ?? '',
+                        textColor: Colors.black54,
+                      ),
+                      textSpan(
+                        hint: 'incoming_inspection_delivery_detail_tips'.tr,
+                        text: 'incoming_inspection_delivery_detail'.trArgs([
+                          item.numPage.toString(),
+                          item.qty.toShowString(),
+                          item.unitName ?? '',
+                        ]),
+                        textColor: Colors.black54,
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                    content: 'incoming_inspection_delete_item_tips'.tr,
+                    confirm: () => onDelete(),
+                  ),
+                  icon: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

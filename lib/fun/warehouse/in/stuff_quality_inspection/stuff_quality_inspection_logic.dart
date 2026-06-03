@@ -1640,9 +1640,9 @@ class StuffQualityInspectionLogic extends GetxController {
                             style: const TextStyle(color: Colors.grey, fontSize: 18),
                           ),
                         ),
-                        Text(
+                        const Text(
                           '请选择NG类型',
-                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                         ),
                         TextButton(
                           onPressed: () {

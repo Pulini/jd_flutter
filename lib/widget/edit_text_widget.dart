@@ -93,7 +93,7 @@ class _EditTextState extends State<EditText> {
           suffixIcon: widget.hasClose
               ? IconButton(
             icon: widget.myIcon ??
-                Icon(Icons.close, color: Colors.grey),
+                const Icon(Icons.close, color: Colors.grey),
             onPressed: () {
               widget.onChanged?.call('');
               _controller.clear();

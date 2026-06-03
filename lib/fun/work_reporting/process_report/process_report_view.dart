@@ -169,6 +169,12 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
   }
 
   @override
+  void dispose() {
+    Get.delete<ProcessReportLogic>();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
         body: Column(

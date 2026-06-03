@@ -56,6 +56,12 @@ class LabelDetailPageState extends State<LabelDetailPage> {
   }
 
   @override
+  void dispose() {
+    workerNumberController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var materialList = logic.getScannedMaterialsInfo();
     return pageBody(
@@ -125,7 +131,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
             margin: const EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: [
-                expandedFrameText(
+                ExpandedFrameText(
                   text: 'delivery_order_label_check_detail_material'.tr,
                   isBold: true,
                   textColor: Colors.white,
@@ -134,7 +140,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                 ),
                 SizedBox(
                   width: 100,
-                  child: frameText(
+                  child: FrameText(
                     text: 'delivery_order_label_check_detail_quantity'.tr,
                     isBold: true,
                     textColor: Colors.white,
@@ -158,17 +164,27 @@ class LabelDetailPageState extends State<LabelDetailPage> {
     );
   }
 
-  Widget _item(List<String> item, Color bkg) {
+  Widget _item(List<String> item, Color bkg) =>
+      _DeliveryOrderBindingLabelDetailItem(item: item);
+}
+
+class _DeliveryOrderBindingLabelDetailItem extends StatelessWidget {
+  final List<String> item;
+
+  const _DeliveryOrderBindingLabelDetailItem({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
-        expandedFrameText(
+        ExpandedFrameText(
           text: item[0],
           borderColor: Colors.black,
           backgroundColor: Colors.white,
         ),
         SizedBox(
           width: 100,
-          child: frameText(
+          child: FrameText(
             text: item[1],
             borderColor: Colors.black,
             backgroundColor: Colors.white,

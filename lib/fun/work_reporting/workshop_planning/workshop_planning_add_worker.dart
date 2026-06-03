@@ -26,43 +26,15 @@ class _WorkshopPlanningAddWorkerPageState
   String flowProcessID = Get.arguments['flowProcessID'];
   String date = Get.arguments['date'];
 
-  Obx _workerItem(int i) => Obx(() => GestureDetector(
-        onTap: () => logic.selectWorker(
-          worker: state.workerList[i].deepCopy(),
-          workerType: cWorkerType,
-          workerNumber: tecWorkerNumber,
-          manHours: tecManHours,
-          coefficient: tecCoefficient,
-        ),
-        child: Container(
-          margin: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              colors: [Colors.green.shade100, Colors.blue.shade200],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomRight,
-            ),
-            border: state.workerListSelectedIndex.value == i
-                ? Border.all(
-                    color: Colors.green,
-                    width: 2,
-                  )
-                : null,
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '(${state.workerList[i].number})',
-                style: const TextStyle(fontSize: 10),
-              ),
-              Text(state.workerList[i].name ?? ''),
-            ],
-          ),
-        ),
-      ));
+  Widget _workerItem(int i) => _AddWorkerGridItem(
+        index: i,
+        logic: logic,
+        state: state,
+        cWorkerType: cWorkerType,
+        tecWorkerNumber: tecWorkerNumber,
+        tecManHours: tecManHours,
+        tecCoefficient: tecCoefficient,
+      );
 
   @override
   void initState() {
@@ -261,7 +233,7 @@ class _WorkshopPlanningAddWorkerPageState
                 ),
                 Expanded(
                   flex: 6,
-                  child: Obx(() => selectView(
+                  child: Obx(() => SelectView(
                         list: state.workTypeList,
                         controller: cWorkerType,
                         hint: '选择工种',
@@ -288,5 +260,74 @@ class _WorkshopPlanningAddWorkerPageState
         ],
       ),
     );
+  }
+  @override
+  void dispose() {
+    cWorkerType.dispose();
+    tecWorkerNumber.dispose();
+    tecManHours.dispose();
+    tecCoefficient.dispose();
+    super.dispose();
+  }
+}
+
+class _AddWorkerGridItem extends StatelessWidget {
+  final int index;
+  final WorkshopPlanningLogic logic;
+  final WorkshopPlanningState state;
+  final FixedExtentScrollController cWorkerType;
+  final TextEditingController tecWorkerNumber;
+  final TextEditingController tecManHours;
+  final TextEditingController tecCoefficient;
+
+  const _AddWorkerGridItem({
+    required this.index,
+    required this.logic,
+    required this.state,
+    required this.cWorkerType,
+    required this.tecWorkerNumber,
+    required this.tecManHours,
+    required this.tecCoefficient,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => GestureDetector(
+          onTap: () => logic.selectWorker(
+            worker: state.workerList[index].deepCopy(),
+            workerType: cWorkerType,
+            workerNumber: tecWorkerNumber,
+            manHours: tecManHours,
+            coefficient: tecCoefficient,
+          ),
+          child: Container(
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                colors: [Colors.green.shade100, Colors.blue.shade200],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomRight,
+              ),
+              border: state.workerListSelectedIndex.value == index
+                  ? Border.all(
+                      color: Colors.green,
+                      width: 2,
+                    )
+                  : null,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '(${state.workerList[index].number})',
+                  style: const TextStyle(fontSize: 10),
+                ),
+                Text(state.workerList[index].name ?? ''),
+              ],
+            ),
+          ),
+        ));
   }
 }

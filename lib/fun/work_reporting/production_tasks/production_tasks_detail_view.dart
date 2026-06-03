@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
@@ -25,114 +26,8 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
   Widget productionTasksTableItem({
     ProductionTasksDetailItemInfo? data,
     int? type,
-  }) {
-    var size = '';
-    var qty = '';
-    var productScannedQty = '';
-    var manualScannedQty = '';
-    var scannedQty = '';
-    var owe = '';
-    var completionRate = '';
-    var installedQty = '';
-    var scannedNotInstalled = '';
-    var bkgColor = type != null && type == 1
-        ? Colors.blueAccent
-        : type == 2
-            ? Colors.green.shade100
-            : Colors.white;
-    var textColor = type != null && type == 1 ? Colors.white : Colors.black87;
-    if (type != null && type == 1) {
-      size = 'production_tasks_detail_size'.tr;
-      qty = 'production_tasks_detail_production_qty'.tr;
-      productScannedQty = 'production_tasks_detail_auto_scan'.tr;
-      manualScannedQty = 'production_tasks_detail_manual_scan'.tr;
-      scannedQty = 'production_tasks_detail_total_scan'.tr;
-      owe = 'production_tasks_detail_owing_qty'.tr;
-      completionRate = 'production_tasks_detail_completion_rate'.tr;
-      installedQty = 'production_tasks_detail_packaged_qty'.tr;
-      scannedNotInstalled = 'production_tasks_detail_scanned_unpackaged'.tr;
-    } else {
-      if (type != null && type == 2) {
-        data = logic.getDetailTotalItem();
-      }
-      size = data!.size ?? '';
-      qty = data.qty.toShowString();
-      productScannedQty = data.productScannedQty.toShowString();
-      manualScannedQty = data.manualScannedQty.toShowString();
-      scannedQty = data.scannedQty.toShowString();
-      owe = data.getOwe().toShowString();
-      completionRate = data.getCompletionRate();
-      installedQty = data.installedQty.toShowString();
-      scannedNotInstalled = data.scannedNotInstalled().toShowString();
-    }
-    return Row(
-      children: [
-        expandedFrameText(
-          text: size,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: qty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: productScannedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: manualScannedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: scannedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: owe,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: completionRate,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: installedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        expandedFrameText(
-          text: scannedNotInstalled,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-      ],
-    );
-  }
+  }) =>
+      _ProductionTasksDetailTableItem(data: data, type: type, logic: logic);
 
   Column _packetWay() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -235,10 +130,10 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                         aspectRatio: 16 / 9,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
                             fit: BoxFit.fill,
-                            imageUrl,
-                            errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                            errorWidget: (ctx, err, stackTrace) => Image.asset(
                               'assets/images/ic_logo.png',
                               color: Colors.blue,
                             ),
@@ -347,7 +242,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
-                                      child: percentIndicator(
+                                      child: PercentIndicator(
                                     max: state.detailShouldPackQty.value,
                                     value: state.detailPackagedQty.value,
                                   ))
@@ -406,6 +301,129 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ProductionTasksDetailTableItem extends StatelessWidget {
+  final ProductionTasksDetailItemInfo? data;
+  final int? type;
+  final ProductionTasksLogic logic;
+
+  const _ProductionTasksDetailTableItem({
+    this.data,
+    this.type,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var effectiveData = data;
+    var size = '';
+    var qty = '';
+    var productScannedQty = '';
+    var manualScannedQty = '';
+    var scannedQty = '';
+    var owe = '';
+    var completionRate = '';
+    var installedQty = '';
+    var scannedNotInstalled = '';
+    var bkgColor = type != null && type == 1
+        ? Colors.blueAccent
+        : type == 2
+            ? Colors.green.shade100
+            : Colors.white;
+    var textColor = type != null && type == 1 ? Colors.white : Colors.black87;
+    if (type != null && type == 1) {
+      size = 'production_tasks_detail_size'.tr;
+      qty = 'production_tasks_detail_production_qty'.tr;
+      productScannedQty = 'production_tasks_detail_auto_scan'.tr;
+      manualScannedQty = 'production_tasks_detail_manual_scan'.tr;
+      scannedQty = 'production_tasks_detail_total_scan'.tr;
+      owe = 'production_tasks_detail_owing_qty'.tr;
+      completionRate = 'production_tasks_detail_completion_rate'.tr;
+      installedQty = 'production_tasks_detail_packaged_qty'.tr;
+      scannedNotInstalled = 'production_tasks_detail_scanned_unpackaged'.tr;
+    } else {
+      if (type != null && type == 2) {
+        effectiveData = logic.getDetailTotalItem();
+      }
+      size = effectiveData!.size ?? '';
+      qty = effectiveData.qty.toShowString();
+      productScannedQty = effectiveData.productScannedQty.toShowString();
+      manualScannedQty = effectiveData.manualScannedQty.toShowString();
+      scannedQty = effectiveData.scannedQty.toShowString();
+      owe = effectiveData.getOwe().toShowString();
+      completionRate = effectiveData.getCompletionRate();
+      installedQty = effectiveData.installedQty.toShowString();
+      scannedNotInstalled = effectiveData.scannedNotInstalled().toShowString();
+    }
+    return Row(
+      children: [
+        ExpandedFrameText(
+          text: size,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: qty,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: productScannedQty,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: manualScannedQty,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: scannedQty,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: owe,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: completionRate,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: installedQty,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+        ExpandedFrameText(
+          text: scannedNotInstalled,
+          backgroundColor: bkgColor,
+          textColor: textColor,
+          isBold: true,
+          alignment: Alignment.center,
+        ),
+      ],
     );
   }
 }

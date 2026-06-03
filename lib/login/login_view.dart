@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/login/login_state.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -88,6 +89,210 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const Center(child: LoginPick(isReLogin: false)),
           const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+Wrap _buildLoginBox({required Widget child, EdgeInsets? padding}) => Wrap(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            color: isTestUrl() ? Colors.teal : Colors.blueAccent,
+          ),
+          margin: const EdgeInsets.all(5),
+          padding: padding ?? const EdgeInsets.all(20),
+          child: child,
+        )
+      ],
+    );
+
+TextField _buildLoginTextField({
+  required TextEditingController controller,
+  required String hint,
+  required Icon leftIcon,
+  required int maxLength,
+  bool isPassword = false,
+}) =>
+    TextField(
+      obscureText: isPassword,
+      controller: controller,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white),
+        counterStyle: const TextStyle(color: Colors.white),
+        prefixIcon: leftIcon,
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.close, color: Colors.white),
+          onPressed: () {
+            controller.clear();
+          },
+        ),
+      ),
+      maxLength: maxLength,
+    );
+
+class _PhoneLoginWidget extends StatelessWidget {
+  final LoginLogic logic;
+  final LoginState state;
+  final TextEditingController phoneController;
+  final TextEditingController passwordController;
+  final TextEditingController vCodeController;
+
+  const _PhoneLoginWidget({
+    required this.logic,
+    required this.state,
+    required this.phoneController,
+    required this.passwordController,
+    required this.vCodeController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLoginBox(
+      child: Column(
+        children: [
+          _buildLoginTextField(
+            controller: phoneController,
+            hint: 'login_hint_phone'.tr,
+            leftIcon: const Icon(Icons.phone, color: Colors.white),
+            maxLength: 11,
+          ),
+          _buildLoginTextField(
+            controller: passwordController,
+            hint: 'login_hint_password'.tr,
+            leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
+            maxLength: 10,
+            isPassword: true,
+          ),
+          if (!isTestUrl())
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: NumberTextField(
+                    numberController: vCodeController,
+                    maxLength: 6,
+                    textStyle: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'login_hint_verify_code'.tr,
+                      hintStyle: const TextStyle(color: Colors.white),
+                      counterStyle: const TextStyle(color: Colors.white),
+                      prefixIcon: const Icon(Icons.email_outlined,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Obx(() => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: state.countTimer.value == 0
+                            ? Colors.white
+                            : Colors.grey.shade400,
+                      ),
+                      onPressed: () => logic.getVerifyCode(
+                        phoneController.text,
+                      ),
+                      child: Text(
+                        state.countTimer.value == 0
+                            ? 'get_verify_code'.tr
+                            : (60 - state.countTimer.value).toString(),
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 213, 41, 42),
+                        ),
+                      ),
+                    )),
+              ],
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class _FaceLoginWidget extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _FaceLoginWidget({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLoginBox(
+      child: _buildLoginTextField(
+        controller: controller,
+        hint: 'login_hint_phone'.tr,
+        leftIcon: const Icon(Icons.phone_android, color: Colors.white),
+        maxLength: 11,
+      ),
+    );
+  }
+}
+
+class _MachineLoginWidget extends StatelessWidget {
+  final TextEditingController machineController;
+  final TextEditingController passwordController;
+
+  const _MachineLoginWidget({
+    required this.machineController,
+    required this.passwordController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLoginBox(
+      child: Column(
+        children: [
+          _buildLoginTextField(
+            controller: machineController,
+            hint: 'login_hint_machine'.tr,
+            leftIcon: const Icon(Icons.precision_manufacturing,
+                color: Colors.white),
+            maxLength: 10,
+          ),
+          _buildLoginTextField(
+            controller: passwordController,
+            hint: 'login_hint_password'.tr,
+            leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
+            maxLength: 10,
+            isPassword: true,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WorkLoginWidget extends StatelessWidget {
+  final TextEditingController workNumberController;
+  final TextEditingController passwordController;
+
+  const _WorkLoginWidget({
+    required this.workNumberController,
+    required this.passwordController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildLoginBox(
+      child: Column(
+        children: [
+          _buildLoginTextField(
+            controller: workNumberController,
+            hint: 'login_hint_work_number'.tr,
+            leftIcon: const Icon(Icons.badge_outlined, color: Colors.white),
+            maxLength: 6,
+          ),
+          _buildLoginTextField(
+            controller: passwordController,
+            hint: 'login_hint_password'.tr,
+            leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
+            maxLength: 10,
+            isPassword: true,
+          ),
         ],
       ),
     );
@@ -191,20 +396,6 @@ class _LoginPickState extends State<LoginPick>
         maxLength: maxLength,
       );
 
-  Wrap _box(Widget child, {EdgeInsets? padding}) => Wrap(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
-              color: isTestUrl() ? Colors.teal : Colors.blueAccent,
-            ),
-            margin: const EdgeInsets.all(5),
-            padding: padding ?? const EdgeInsets.all(20),
-            child: child,
-          )
-        ],
-      );
-
   Widget feishuLogin() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -245,114 +436,26 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  Widget _phoneLogin() => _box(
-        Column(
-          children: [
-            textField(
-              controller: phoneLoginPhoneController,
-              hint: 'login_hint_phone'.tr,
-              leftIcon: const Icon(Icons.phone, color: Colors.white),
-              maxLength: 11,
-            ),
-            textField(
-              controller: phoneLoginPasswordController,
-              hint: 'login_hint_password'.tr,
-              leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
-              maxLength: 10,
-              isPassword: true,
-            ),
-            if (!isTestUrl())
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: NumberTextField(
-                      numberController: phoneLoginVCodeController,
-                      maxLength: 6,
-                      textStyle: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: 'login_hint_verify_code'.tr,
-                        hintStyle: const TextStyle(color: Colors.white),
-                        counterStyle: const TextStyle(color: Colors.white),
-                        prefixIcon: const Icon(Icons.email_outlined,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Obx(() => ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: state.countTimer.value == 0
-                              ? Colors.white
-                              : Colors.grey.shade400,
-                        ),
-                        onPressed: () => logic.getVerifyCode(
-                          phoneLoginPhoneController.text,
-                        ),
-                        child: Text(
-                          state.countTimer.value == 0
-                              ? 'get_verify_code'.tr
-                              : (60 - state.countTimer.value).toString(),
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 213, 41, 42),
-                          ),
-                        ),
-                      )),
-                ],
-              )
-          ],
-        ),
+  Widget _phoneLogin() => _PhoneLoginWidget(
+        logic: logic,
+        state: state,
+        phoneController: phoneLoginPhoneController,
+        passwordController: phoneLoginPasswordController,
+        vCodeController: phoneLoginVCodeController,
       );
 
-  Widget _faceLogin() => _box(
-        textField(
-          controller: faceLoginPhoneController,
-          hint: 'login_hint_phone'.tr,
-          leftIcon: const Icon(Icons.phone_android, color: Colors.white),
-          maxLength: 11,
-        ),
+  Widget _faceLogin() => _FaceLoginWidget(
+        controller: faceLoginPhoneController,
       );
 
-  Widget _machineLogin() => _box(
-        Column(
-          children: [
-            textField(
-              controller: machineLoginMachineController,
-              hint: 'login_hint_machine'.tr,
-              leftIcon: const Icon(Icons.precision_manufacturing,
-                  color: Colors.white),
-              maxLength: 10,
-            ),
-            textField(
-              controller: machineLoginPasswordController,
-              hint: 'login_hint_password'.tr,
-              leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
-              maxLength: 10,
-              isPassword: true,
-            ),
-          ],
-        ),
+  Widget _machineLogin() => _MachineLoginWidget(
+        machineController: machineLoginMachineController,
+        passwordController: machineLoginPasswordController,
       );
 
-  Widget _workLogin() => _box(
-        Column(
-          children: [
-            textField(
-              controller: workLoginWorkNumberController,
-              hint: 'login_hint_work_number'.tr,
-              leftIcon: const Icon(Icons.badge_outlined, color: Colors.white),
-              maxLength: 6,
-            ),
-            textField(
-              controller: workLoginPasswordController,
-              hint: 'login_hint_password'.tr,
-              leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
-              maxLength: 10,
-              isPassword: true,
-            ),
-          ],
-        ),
+  Widget _workLogin() => _WorkLoginWidget(
+        workNumberController: workLoginWorkNumberController,
+        passwordController: workLoginPasswordController,
       );
 
   void _changeBaseUrlDialog() {
@@ -385,7 +488,7 @@ class _LoginPickState extends State<LoginPick>
                   controller: mesInputController,
                   hint: 'MES url',
                 ),
-                selectView(
+                SelectView(
                   controller: mesScrollController,
                   list: mesList.map((v) => v.name).toList(),
                   select: (i) => mesInputController.text = mesList[i].value,
@@ -397,7 +500,7 @@ class _LoginPickState extends State<LoginPick>
                   controller: sapInputController,
                   hint: 'SAP url',
                 ),
-                selectView(
+                SelectView(
                   controller: sapScrollController,
                   list: sapList.map((v) => v.name).toList(),
                   select: (i) => sapInputController.text = sapList[i].value,
@@ -495,9 +598,21 @@ class _LoginPickState extends State<LoginPick>
     super.initState();
   }
 
+
+
+
   @override
   void dispose() {
     tabController.removeListener(_onTabChanged);
+    tabController.dispose();
+    faceLoginPhoneController.dispose();
+    machineLoginMachineController.dispose();
+    machineLoginPasswordController.dispose();
+    phoneLoginPhoneController.dispose();
+    phoneLoginPasswordController.dispose();
+    phoneLoginVCodeController.dispose();
+    workLoginWorkNumberController.dispose();
+    workLoginPasswordController.dispose();
     Get.delete<LoginLogic>();
     super.dispose();
   }
@@ -609,3 +724,4 @@ class _LoginPickState extends State<LoginPick>
     );
   }
 }
+

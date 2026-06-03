@@ -81,119 +81,6 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
     );
   }
 
-  Widget _item(WorkshopPlanningInfo data) => GestureDetector(
-        onTap: () {
-          state.planInfo = data.deepCopy();
-          Get.to(() => const WorkshopPlanningSalaryCountPage())?.then((v) {
-            state.planInfo = null;
-            state.workersCache.clear();
-            if (v != null && v as  bool){
-              if (state.scanJson != null) {
-                logic.refreshProcessPlan();
-              }else{
-                _query();
-              }
-            }
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade50, Colors.white],
-            ),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey, width: 2),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              textSpan(hint: '生产单号：', text: data.planTrackingNumber ?? ''),
-              textSpan(
-                hint: '物料：',
-                text: data.materialName ?? '',
-                maxLines: 3,
-                textColor: Colors.green.shade900,
-              ),
-              Row(
-                children: [
-                  expandedTextSpan(
-                    hint: '工序：',
-                    text: data.processName ?? '',
-                    textColor: Colors.blue.shade900,
-                  ),
-                  textSpan(
-                    hint: '订单数量：',
-                    text: data.processQty.toShowString(),
-                    textColor: Colors.blue.shade900,
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  expandedFrameText(
-                    flex: 1,
-                    text: '尺码',
-                    backgroundColor: Colors.green.shade100,
-                    alignment: Alignment.center,
-                    isBold: true,
-                  ),
-                  expandedFrameText(
-                    flex: 2,
-                    text: '订单数量',
-                    backgroundColor: Colors.green.shade100,
-                    alignment: Alignment.center,
-                    isBold: true,
-                  ),
-                  expandedFrameText(
-                    flex: 2,
-                    text: '累计报工数',
-                    backgroundColor: Colors.green.shade100,
-                    alignment: Alignment.center,
-                    isBold: true,
-                  ),
-                  expandedFrameText(
-                    flex: 2,
-                    text: '未报工数',
-                    backgroundColor: Colors.green.shade100,
-                    alignment: Alignment.center,
-                    isBold: true,
-                  ),
-                ],
-              ),
-              for (var sub in data.sizeLists!)
-                Row(
-                  children: [
-                    expandedFrameText(
-                      flex: 1,
-                      text: sub.size ?? '',
-                      alignment: Alignment.center,
-                    ),
-                    expandedFrameText(
-                      flex: 2,
-                      text: sub.processQty.toShowString(),
-                      alignment: Alignment.center,
-                    ),
-                    expandedFrameText(
-                      flex: 2,
-                      text: sub.finishQty.toShowString(),
-                      alignment: Alignment.center,
-                    ),
-                    expandedFrameText(
-                      flex: 2,
-                      text: sub.unFinishQty.toShowString(),
-                      alignment: Alignment.center,
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-      );
-
   @override
   void initState() {
     opcDepartment = OptionsPickerController(
@@ -234,7 +121,12 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
             child: Obx(() => ListView.builder(
                   padding: const EdgeInsets.all(10),
                   itemCount: state.planList.length,
-                  itemBuilder: (c, i) => _item(state.planList[i]),
+                  itemBuilder: (c, i) => _WorkshopPlanningItem(
+                    data: state.planList[i],
+                    logic: logic,
+                    state: state,
+                    onQuery: _query,
+                  ),
                 )),
           )
         ],
@@ -246,5 +138,135 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
   void dispose() {
     Get.delete<WorkshopPlanningLogic>();
     super.dispose();
+  }
+}
+
+class _WorkshopPlanningItem extends StatelessWidget {
+  final WorkshopPlanningInfo data;
+  final WorkshopPlanningLogic logic;
+  final WorkshopPlanningState state;
+  final VoidCallback onQuery;
+
+  const _WorkshopPlanningItem({
+    required this.data,
+    required this.logic,
+    required this.state,
+    required this.onQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        state.planInfo = data.deepCopy();
+        Get.to(() => const WorkshopPlanningSalaryCountPage())?.then((v) {
+          state.planInfo = null;
+          state.workersCache.clear();
+          if (v != null && v as bool) {
+            if (state.scanJson != null) {
+              logic.refreshProcessPlan();
+            } else {
+              onQuery();
+            }
+          }
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue.shade50, Colors.white],
+          ),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey, width: 2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            textSpan(hint: '生产单号：', text: data.planTrackingNumber ?? ''),
+            textSpan(
+              hint: '物料：',
+              text: data.materialName ?? '',
+              maxLines: 3,
+              textColor: Colors.green.shade900,
+            ),
+            Row(
+              children: [
+                expandedTextSpan(
+                  hint: '工序：',
+                  text: data.processName ?? '',
+                  textColor: Colors.blue.shade900,
+                ),
+                textSpan(
+                  hint: '订单数量：',
+                  text: data.processQty.toShowString(),
+                  textColor: Colors.blue.shade900,
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                ExpandedFrameText(
+                  flex: 1,
+                  text: '尺码',
+                  backgroundColor: Colors.green.shade100,
+                  alignment: Alignment.center,
+                  isBold: true,
+                ),
+                ExpandedFrameText(
+                  flex: 2,
+                  text: '订单数量',
+                  backgroundColor: Colors.green.shade100,
+                  alignment: Alignment.center,
+                  isBold: true,
+                ),
+                ExpandedFrameText(
+                  flex: 2,
+                  text: '累计报工数',
+                  backgroundColor: Colors.green.shade100,
+                  alignment: Alignment.center,
+                  isBold: true,
+                ),
+                ExpandedFrameText(
+                  flex: 2,
+                  text: '未报工数',
+                  backgroundColor: Colors.green.shade100,
+                  alignment: Alignment.center,
+                  isBold: true,
+                ),
+              ],
+            ),
+            for (var sub in data.sizeLists!)
+              Row(
+                children: [
+                  ExpandedFrameText(
+                    flex: 1,
+                    text: sub.size ?? '',
+                    alignment: Alignment.center,
+                  ),
+                  ExpandedFrameText(
+                    flex: 2,
+                    text: sub.processQty.toShowString(),
+                    alignment: Alignment.center,
+                  ),
+                  ExpandedFrameText(
+                    flex: 2,
+                    text: sub.finishQty.toShowString(),
+                    alignment: Alignment.center,
+                  ),
+                  ExpandedFrameText(
+                    flex: 2,
+                    text: sub.unFinishQty.toShowString(),
+                    alignment: Alignment.center,
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

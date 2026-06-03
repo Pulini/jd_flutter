@@ -25,74 +25,8 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   var tecSemiFinishedProduct = TextEditingController();
   var tecFinishedProduct = TextEditingController();
 
-  Widget _itemSemiFinishedProduct(SapPickingPostingGroup data) => Container(
-        padding: EdgeInsets.only(left: 5),
-        color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 35,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AutoSizeText(
-                      data.material(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      maxLines: 2,
-                      minFontSize: 8,
-                      maxFontSize: 16,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => askDialog(
-                      content: '确定要删除该物料吗？',
-                      confirm: () => logic.deleteSemiFinishedProductItem(data),
-                    ),
-                    icon: Icon(Icons.delete_forever, color: Colors.red),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 35,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: textSpan(
-                      hint: '累积数：',
-                      hintColor: Colors.grey.shade700,
-                      text: data.cumulativeQty().toShowString(),
-                      isBold: false,
-                    ),
-                  ),
-                  Expanded(
-                    child: data.dataList.first.label.isNullOrEmpty()
-                        ? Text(
-                            '手动添加物料',
-                            style: TextStyle(color: Colors.green.shade700),
-                          )
-                        : textSpan(
-                            hint: '扫码次数：',
-                            hintColor: Colors.grey.shade700,
-                            text: data.scanCount().toString(),
-                            isBold: false,
-                          ),
-                  ),
-                  IconButton(
-                    onPressed: () => semiFinishedProductDetailsDialog(data),
-                    icon: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              indent: 5,
-              endIndent: 10,
-              height: 2,
-            ),
-          ],
-        ),
-      );
+  Widget _itemSemiFinishedProduct(SapPickingPostingGroup data) =>
+      _SapPickingPostingSemiFinishedItem(data: data, logic: logic);
 
   Widget productPageTitle({
     required String title,
@@ -102,7 +36,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         height: 40,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(7),
             topRight: Radius.circular(7),
           ),
@@ -111,7 +45,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         child: Center(
           child: AutoSizeText(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -127,7 +61,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
     width: double.infinity,
     color: Colors.white,
     height: 45,
-    padding: EdgeInsets.only(left: 5, top: 5, right: 5),
+    padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
     child: TextField(
       controller: tecSemiFinishedProduct,
       decoration: InputDecoration(
@@ -142,7 +76,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade200),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
         hintText: '请扫描或输入半成品条码',
@@ -162,7 +96,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
           ),
-          icon: Icon(
+          icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
           ),
@@ -175,7 +109,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
     width: double.infinity,
     color: Colors.white,
     height: 45,
-    padding: EdgeInsets.only(left: 5, top: 5, right: 5),
+    padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
     child: TextField(
       controller: tecFinishedProduct,
       decoration: InputDecoration(
@@ -190,7 +124,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade200),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
         hintText: '请扫描或输入成品条码',
@@ -210,7 +144,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
           ),
-          icon: Icon(
+          icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
           ),
@@ -264,7 +198,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                       _itemSemiFinishedProduct(item),
                     Container(
                       padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(7),
                           bottomRight: Radius.circular(7),
@@ -299,7 +233,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     productPageTitle(
                       title: '拣配成品条码明，只允许编码/订单相同',
                       bkgColor: Colors.green,
@@ -308,8 +242,8 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                     state.finishedProductList.isNotEmpty
                         ? Container(
                             padding:
-                                EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                            decoration: BoxDecoration(
+                                const EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(7),
                                 bottomRight: Radius.circular(7),
@@ -321,7 +255,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                               children: [
                                 AutoSizeText(
                                   '(${state.finishedProductList.first.materialCode})${state.finishedProductList.first.materialName}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                   maxLines: 2,
                                   minFontSize: 8,
                                   maxFontSize: 16,
@@ -357,7 +291,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
                                         ),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.delete_forever,
                                           color: Colors.red,
                                         ),
@@ -370,7 +304,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                           )
                         : Container(
                             padding: const EdgeInsets.only(bottom: 5),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(7),
                                 bottomRight: Radius.circular(7),
@@ -416,5 +350,87 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   void dispose() {
     Get.delete<SapPickingPostingLogic>();
     super.dispose();
+  }
+}
+
+class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
+  final SapPickingPostingGroup data;
+  final SapPickingPostingLogic logic;
+
+  const _SapPickingPostingSemiFinishedItem({
+    required this.data,
+    required this.logic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5),
+      color: Colors.white,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 35,
+            child: Row(
+              children: [
+                Expanded(
+                  child: AutoSizeText(
+                    data.material(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    minFontSize: 8,
+                    maxFontSize: 16,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                    content: '确定要删除该物料吗？',
+                    confirm: () => logic.deleteSemiFinishedProductItem(data),
+                  ),
+                  icon: const Icon(Icons.delete_forever, color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 35,
+            child: Row(
+              children: [
+                Expanded(
+                  child: textSpan(
+                    hint: '累积数：',
+                    hintColor: Colors.grey.shade700,
+                    text: data.cumulativeQty().toShowString(),
+                    isBold: false,
+                  ),
+                ),
+                Expanded(
+                  child: data.dataList.first.label.isNullOrEmpty()
+                      ? Text(
+                          '手动添加物料',
+                          style: TextStyle(color: Colors.green.shade700),
+                        )
+                      : textSpan(
+                          hint: '扫码次数：',
+                          hintColor: Colors.grey.shade700,
+                          text: data.scanCount().toString(),
+                          isBold: false,
+                        ),
+                ),
+                IconButton(
+                  onPressed: () => semiFinishedProductDetailsDialog(data),
+                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
+          const Divider(
+            indent: 5,
+            endIndent: 10,
+            height: 2,
+          ),
+        ],
+      ),
+    );
   }
 }

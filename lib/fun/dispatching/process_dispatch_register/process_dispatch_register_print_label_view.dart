@@ -60,12 +60,79 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
     );
   }
 
-  Widget _item(Barcode data) {
+  Widget _item(Barcode data) =>
+      _ProcessDispatchPrintLabelItem(
+        data: data,
+        logic: logic,
+        onSelected: () => setState(() {}),
+        onPrint: (d) => _printLabel(d),
+        onPreview: (d) => _previewLabel(d),
+        onDelete: (d) => logic.deleteLabel(d),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'process_dispatch_register_print_label_list'.tr,
+      body: Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(5),
+                  itemCount: state.labelList.length,
+                  itemBuilder: (context, index) =>
+                      _item(state.labelList[index]),
+                ),
+              ),
+              if (state.labelList.any((v) => v.isSelected))
+                Row(
+                  children: [
+                    Expanded(
+                      child: CombinationButton(
+                        text: 'process_dispatch_register_print_print'.tr,
+                        combination: Combination.left,
+                        click: () => _printLabelList(),
+                      ),
+                    ),
+                    Expanded(
+                      child: CombinationButton(
+                        text: 'process_dispatch_register_print_view_print'.tr,
+                        combination: Combination.right,
+                        click: () => _previewLabelList(),
+                      ),
+                    ),
+                  ],
+                )
+            ],
+          )),
+    );
+  }
+}
+
+class _ProcessDispatchPrintLabelItem extends StatelessWidget {
+  final Barcode data;
+  final ProcessDispatchRegisterLogic logic;
+  final VoidCallback onSelected;
+  final ValueSetter<Barcode> onPrint;
+  final ValueSetter<Barcode> onPreview;
+  final ValueSetter<Barcode> onDelete;
+
+  const _ProcessDispatchPrintLabelItem({
+    required this.data,
+    required this.logic,
+    required this.onSelected,
+    required this.onPrint,
+    required this.onPreview,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          data.isSelected = !data.isSelected;
-        });
+        data.isSelected = !data.isSelected;
+        onSelected();
       },
       child: Card(
         color: data.isSelected ? Colors.greenAccent.shade100 : Colors.white,
@@ -111,7 +178,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                     text: data.mustQty.toShowString(),
                   ),
                   GestureDetector(
-                    onTap: () => _printLabel(data),
+                    onTap: () => onPrint(data),
                     child: Container(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       decoration: BoxDecoration(
@@ -129,7 +196,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                   ),
                   const SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () => _previewLabel(data),
+                    onTap: () => onPreview(data),
                     child: Container(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       decoration: BoxDecoration(
@@ -147,7 +214,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                   ),
                   const SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () => logic.deleteLabel(data),
+                    onTap: () => onDelete(data),
                     child: Container(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       decoration: BoxDecoration(
@@ -169,45 +236,6 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return pageBody(
-      title: 'process_dispatch_register_print_label_list'.tr,
-      body: Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(5),
-                  itemCount: state.labelList.length,
-                  itemBuilder: (context, index) =>
-                      _item(state.labelList[index]),
-                ),
-              ),
-              if (state.labelList.any((v) => v.isSelected))
-                Row(
-                  children: [
-                    Expanded(
-                      child: CombinationButton(
-                        text: 'process_dispatch_register_print_print'.tr,
-                        combination: Combination.left,
-                        click: () => _printLabelList(),
-                      ),
-                    ),
-                    Expanded(
-                      child: CombinationButton(
-                        text: 'process_dispatch_register_print_view_print'.tr,
-                        combination: Combination.right,
-                        click: () => _previewLabelList(),
-                      ),
-                    ),
-                  ],
-                )
-            ],
-          )),
     );
   }
 }
