@@ -240,7 +240,8 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   Widget _packetWay() => _ProductionTasksPacketWay(packetWay: state.packetWay);
 
-  Widget  _specificRequirements() => _ProductionTasksSpecificRequirements(specificRequirements: state.specificRequirements);
+  Widget _specificRequirements() => _ProductionTasksSpecificRequirements(
+      specificRequirements: state.specificRequirements);
 
   @override
   void initState() {
@@ -504,7 +505,10 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: () => onMoveUp(index),
+          onPressed: () => logic.changeSort(
+              oldIndex: index,
+              newIndex: index - 1,
+              refresh: () => onMoveUp(index)),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.blueAccent,
@@ -524,7 +528,10 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         child: IconButton(
           onPressed: () {
             if (index < state.orderList.length - 1) {
-              onMoveDown(index);
+              logic.changeSort(
+                  oldIndex: index,
+                  newIndex: index + 1,
+                  refresh: () => onMoveDown(index));
             }
           },
           icon: const Icon(
@@ -544,7 +551,7 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         height: _isSelected() ? 39 : 0,
         child: CombinationButton(
           text: 'production_tasks_top_up'.tr,
-          click: () => onMoveTop(index),
+          click: () => logic.changeSort(oldIndex: index, newIndex: 0, refresh: ()=>onMoveTop(index)),
         ),
       ),
     );
@@ -563,9 +570,8 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         data.mtoNo ?? '',
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: _isSelected() || index == 0
-              ? Colors.blueAccent
-              : Colors.black87,
+          color:
+              _isSelected() || index == 0 ? Colors.blueAccent : Colors.black87,
         ),
       ),
     );
@@ -686,8 +692,7 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         child: AnimatedContainer(
           foregroundDecoration: outBox,
           curve: Curves.fastOutSlowIn,
-          margin:
-              const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+          margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
           padding: const EdgeInsets.all(5),
           width: state.selected != 0 && _isSelected() ? 250 : 200,
           decoration: BoxDecoration(
@@ -742,8 +747,7 @@ class _ProductionTasksOrderItem extends StatelessWidget {
                         ),
                       ),
                       duration: duration,
-                      child: Row(
-                          children: [Expanded(child: mtoNo), viewFile]),
+                      child: Row(children: [Expanded(child: mtoNo), viewFile]),
                     ),
                     clientOrderNo,
                   ],
@@ -768,8 +772,7 @@ class _ProductionTasksOrderRemoveItem extends StatelessWidget {
       sizeFactor: animation,
       axis: Axis.horizontal,
       child: Container(
-        margin: const EdgeInsets.only(
-            left: 5, right: 5, top: 10, bottom: 10),
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
         width: 200,
       ),
     );

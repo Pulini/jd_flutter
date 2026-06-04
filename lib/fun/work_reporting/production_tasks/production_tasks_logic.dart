@@ -180,7 +180,7 @@ class ProductionTasksLogic extends GetxController {
           }
         }
       } catch (e) {
-        logger.d('mqttRefresh error=$e');
+        logger.d('mqttRefresh error=${e.toString()}');
       }
     } else if (topic == state.mqttTopic[0]) {
       var info = ProductionTasksInfo.fromJson(jsonDecode(data)['Data']);
