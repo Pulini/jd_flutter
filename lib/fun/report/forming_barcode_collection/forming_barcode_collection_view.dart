@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_logic.dart';
@@ -6,6 +7,7 @@ import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -31,6 +33,32 @@ class _FormingBarcodeCollectionPageState
 
   //tab控制器
   late TabController tabController = TabController(length: 2, vsync: this);
+
+  //显示SnackBar
+  void showBottom({
+    Color color = Colors.green,
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Center(
+          child: AutoSizeText(
+            'forming_code_collection_no_find'.tr,
+            maxLines: 1,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontSize: 20
+            ),
+          ),
+        ),
+        duration: duration,
+        backgroundColor: color,
+        behavior: SnackBarBehavior.fixed,
+      ),
+    );
+  }
 
 
   // 其他功能
@@ -470,6 +498,7 @@ class _FormingBarcodeCollectionPageState
 
   void _scan() {
     pdaScanner(scan: (scanCode) {
+      logger.f('state.workCardInterID:'+state.workCardInterID);
       if (tabController.index == 0) {
         if (scanCode.isNotEmpty && state.canScan == true) {
           state.canScan = true;
@@ -484,7 +513,9 @@ class _FormingBarcodeCollectionPageState
                       showScanTips();
                       logic.setShowData(dataBean);
                     });
-              });
+              }, error: () {
+            showBottom();
+          });
         }
       }
     });

@@ -334,11 +334,12 @@ class FormingBarcodeCollectionLogic extends GetxController {
   void checkCode({
     required String code,
     required Function(String, SizeRelations) success,
+    required Function() error,
   }) {
     for (var data in state.dataList) {
       if (data.isShow == true) {
         if (data.sizeRelations!.none((v) => v.barCode == code)) {
-          showSnackBar(message: 'forming_code_collection_no_find'.tr);
+          error.call();
           break;
         } else {
           for (var data in data.sizeRelations!) {
