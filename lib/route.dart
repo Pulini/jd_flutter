@@ -414,7 +414,7 @@ class RouteConfig {
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    200,
+    201,
     const ProductionTasksPage(),
   );
 
