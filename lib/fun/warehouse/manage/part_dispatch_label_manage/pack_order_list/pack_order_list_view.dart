@@ -28,7 +28,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   final PackOrderListState state = Get.find<PackOrderListLogic>().state;
   var tecDispatchOrderNo = TextEditingController();
 
-  var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
+  var tecTypeBody = TextEditingController();
 
   var dpcStartDate = DatePickerController(
     PickerType.startDate,

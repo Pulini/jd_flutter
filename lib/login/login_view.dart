@@ -621,7 +621,7 @@ class _LoginPickState extends State<LoginPick>
   Widget build(BuildContext context) {
     return SizedBox(
       width: 320,
-      height: 450,
+      height: 400,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
@@ -658,7 +658,7 @@ class _LoginPickState extends State<LoginPick>
             Obx(() => isShowLoginButton.value
                 ? Padding(
                     padding:
-                        const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
