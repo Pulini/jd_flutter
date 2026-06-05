@@ -23,40 +23,6 @@ class _ProductionDispatchDetailPageState
   final logic = Get.find<ProductionDispatchLogic>();
   final state = Get.find<ProductionDispatchLogic>().state;
 
-  Widget _titleDetails() =>
-      _DispatchDetailTitle(state: state);
-
-  Widget _operationButtons() =>
-      _DispatchDetailOperationButtons(logic: logic, state: state, setStateFn: setState);
-
-  Widget _workProcedure() =>
-      _DispatchDetailWorkProcedure(
-        logic: logic,
-        state: state,
-        itemBuilder: (data, index) => _workProcedureItem(data, index),
-      );
-
-  Widget _workProcedureItem(WorkCardList data, int index) =>
-      _DispatchDetailWorkProcedureItem(
-        data: data,
-        index: index,
-        logic: logic,
-        state: state,
-      );
-
-  Widget _dispatch() =>
-      _DispatchDetailDispatch(
-        logic: logic,
-        state: state,
-        itemBuilder: (item) => _dispatchItem(item),
-      );
-
-  Widget _dispatchItem(DispatchInfo data) =>
-      _DispatchDetailDispatchItem(data: data, logic: logic, state: state);
-
-  Widget _bottomButtons() =>
-      _DispatchDetailBottomButtons(logic: logic, state: state, context: context);
-
   @override
   void initState() {
     state.detailViewGetWorkerList();
@@ -76,23 +42,67 @@ class _ProductionDispatchDetailPageState
         title: 'production_dispatch_detail_dispatch'.tr,
         body: Column(
           children: [
-            _titleDetails(),
-            _operationButtons(),
+            _DispatchDetailTitle(state: state),
+            _DispatchDetailOperationButtons(
+                logic: logic, state: state, setStateFn: setState),
             Expanded(
               child: Row(
                 children: [
                   Expanded(
                     flex: 4,
-                    child: _workProcedure(),
+                    child: _DispatchDetailWorkProcedure(
+                      logic: logic,
+                      state: state,
+                      itemBuilder: (data, index) =>
+                          _DispatchDetailWorkProcedureItem(
+                        data: data,
+                        index: index,
+                        logic: logic,
+                        state: state,
+                      ),
+                    ),
                   ),
                   Expanded(
                     flex: 7,
-                    child: _dispatch(),
+                    child: _DispatchDetailDispatch(
+                      logic: logic,
+                      state: state,
+                      itemBuilder: (item) => _DispatchDetailDispatchItem(
+                        data: item,
+                        onTap: () => logic.detailViewDispatchItemClick(
+                          item,
+                          (surplus) => modifyDispatchQtyDialog(
+                            item,
+                            surplus,
+                            () => state.dispatchInfo.refresh(),
+                          ),
+                        ),
+                        onLongPress: () {
+                          item.select = !item.select!;
+                          state.isCheckedSelectAllDispatch =
+                              !state.dispatchInfo.any((v) => !v.select!);
+                          state.isEnabledBatchDispatch.value = state
+                                  .dispatchInfo
+                                  .where((v) => v.select!)
+                                  .length >
+                              1;
+                          state.dispatchInfo.refresh();
+                        },
+                        onDeleteItem: () =>
+                            logic.detailViewDispatchItemDeleteClick(item),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
+            state.isSelectedMergeOrder.value
+                ? Container()
+                : _DispatchDetailBottomButtons(
+                    logic: logic,
+                    state: state,
+                    context: context,
+                  )
           ],
         ),
         actions: [
@@ -271,29 +281,22 @@ class _DispatchDetailWorkProcedureItem extends StatelessWidget {
 
 class _DispatchDetailDispatchItem extends StatelessWidget {
   final DispatchInfo data;
-  final ProductionDispatchLogic logic;
-  final ProductionDispatchState state;
+  final Function onTap;
+  final Function onLongPress;
+  final Function onDeleteItem;
 
   const _DispatchDetailDispatchItem({
     required this.data,
-    required this.logic,
-    required this.state,
+    required this.onTap,
+    required this.onLongPress,
+    required this.onDeleteItem,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => logic.detailViewDispatchItemClick(
-        data,
-        (surplus) => modifyDispatchQtyDialog(data, surplus, (di) => di),
-      ),
-      onLongPress: () {
-        data.select = !data.select!;
-        state.isCheckedSelectAllDispatch =
-            !state.dispatchInfo.any((v) => !v.select!);
-        state.isEnabledBatchDispatch.value =
-            state.dispatchInfo.where((v) => v.select!).length > 1;
-      },
+      onTap: () => onTap.call(),
+      onLongPress: () => onLongPress.call(),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -337,7 +340,7 @@ class _DispatchDetailDispatchItem extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => logic.detailViewDispatchItemDeleteClick(data),
+              onTap: () => onDeleteItem.call(),
               child: Container(
                 height: double.infinity,
                 decoration: const BoxDecoration(
@@ -525,87 +528,87 @@ class _DispatchDetailDispatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey.shade600,
-                width: 2,
-              ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.shade600,
+              width: 2,
             ),
-            child: Column(
-              children: [
-                Container(
-                  height: 45,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: state.workProcedureSelect.value == -1
-                          ? Colors.grey.shade500
-                          : Colors.blue,
-                      width: 4,
-                    ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(12),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Obx(() => CombinationButton(
-                            text: 'production_dispatch_detail_add_worker'.tr,
-                            isEnabled: state.isEnabledAddOne.value,
-                            click: () => addWorkerDialog(
-                              state.workerList,
-                              logic.detailViewGetSelectedWorkerList(),
-                              (v) => logic.detailViewModifyDispatch(works: v),
-                            ),
-                          )),
-                      CheckBox(
-                        onChanged: (c) {
-                          logic.detailViewAddAllWorker(
-                            () => askDialog(
-                              content:
-                                  'production_dispatch_detail_clean_tips'.tr,
-                              confirm: () =>
-                                  logic.cleanDispatchFromWorkProcedure(),
-                            ),
-                          );
-                        },
-                        needSave: false,
-                        name: 'production_dispatch_detail_add_all_worker'.tr,
-                        isEnabled: state.isEnabledAddAllDispatch,
-                        value: state.isCheckedAddAllDispatch,
-                      ),
-                      CheckBox(
-                        onChanged: (c) => logic.checkSelectAllDispatch(c),
-                        needSave: false,
-                        name:
-                            'production_dispatch_detail_select_all_worker'.tr,
-                        isEnabled: state.isEnabledSelectAllDispatch,
-                        value: state.isCheckedSelectAllDispatch,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: GridView.count(
-                      padding: const EdgeInsets.all(5),
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 5.0,
-                      crossAxisCount: 3,
-                      childAspectRatio: 4 / 1,
-                      children: state.dispatchInfo
-                          .map((item) => itemBuilder(item))
-                          .toList()),
-                ),
-              ],
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10),
             ),
           ),
-        ));
+          child: Column(
+            children: [
+              Container(
+                height: 45,
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: state.workProcedureSelect.value == -1
+                        ? Colors.grey.shade500
+                        : Colors.blue,
+                    width: 4,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Obx(() => CombinationButton(
+                          text: 'production_dispatch_detail_add_worker'.tr,
+                          isEnabled: state.isEnabledAddOne.value,
+                          click: () => addWorkerDialog(
+                            state.workerList,
+                            logic.detailViewGetSelectedWorkerList(),
+                            (v) => logic.detailViewModifyDispatch(works: v),
+                          ),
+                        )),
+                    CheckBox(
+                      onChanged: (c) {
+                        logic.detailViewAddAllWorker(
+                          () => askDialog(
+                            content: 'production_dispatch_detail_clean_tips'.tr,
+                            confirm: () =>
+                                logic.cleanDispatchFromWorkProcedure(),
+                          ),
+                        );
+                      },
+                      needSave: false,
+                      name: 'production_dispatch_detail_add_all_worker'.tr,
+                      isEnabled: state.isEnabledAddAllDispatch,
+                      value: state.isCheckedAddAllDispatch,
+                    ),
+                    CheckBox(
+                      onChanged: (c) => logic.checkSelectAllDispatch(c),
+                      needSave: false,
+                      name: 'production_dispatch_detail_select_all_worker'.tr,
+                      isEnabled: state.isEnabledSelectAllDispatch,
+                      value: state.isCheckedSelectAllDispatch,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: GridView.count(
+                    padding: const EdgeInsets.all(5),
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                    crossAxisCount: 3,
+                    childAspectRatio: 4 / 1,
+                    children: state.dispatchInfo
+                        .map((item) => itemBuilder(item))
+                        .toList()),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -653,7 +656,7 @@ class _DispatchDetailBottomButtons extends StatelessWidget {
                       (data, surplus) => modifyDispatchQtyDialog(
                         data,
                         surplus,
-                        (di) => di,
+                        () => state.dispatchInfo.refresh(),
                       ),
                     );
                   }),
@@ -669,7 +672,7 @@ class _DispatchDetailBottomButtons extends StatelessWidget {
                       (data, surplus) => modifyDispatchQtyDialog(
                         data,
                         surplus,
-                        (di) => di,
+                        () => state.dispatchInfo.refresh(),
                       ),
                     );
                   }),

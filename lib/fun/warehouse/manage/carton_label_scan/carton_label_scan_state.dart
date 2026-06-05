@@ -19,26 +19,24 @@ class CartonLabelScanState {
   var priorityCartonInsideLabelList = <LinkDataSizeList>[].obs;
   var priorityCartonLabel = ''.obs;
   var priorityPo = ''.obs;
+  var dispatchNumber=''.obs;
   CartonLabelScanInfo? priorityCartonLabelInfo;
 
   void queryCartonLabelInfo({
     required String code,
+    required Function(CartonLabelScanInfo) success,
     required Function(String) error,
   }) {
-    labelTotal.value=0;
-    scannedLabelTotal.value=0;
     httpGet(
       loading:'carton_label_scan_querying_outside_label_detail'.tr  ,
       method: webApiGetCartonLabelInfo,
       params: {
         'CartonBarCode': code,
+        'DispatchNumber':dispatchNumber.value,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-          cartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
-          cartonLabel.value = cartonLabelInfo?.outBoxBarCode ?? '';
-          cartonInsideLabelList.value = cartonLabelInfo!.linkDataSizeList ?? [];
-          labelTotal.value = cartonInsideLabelList.fold(0, (total, next) => total + next.labelCount!);
+        success.call(CartonLabelScanInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -86,6 +84,7 @@ class CartonLabelScanState {
         'CartonBarCode': cartonLabelInfo?.outBoxBarCode,
         'Mix': cartonLabelInfo?.mix,
         'UserID': userInfo?.userID,
+        'DispatchNumber': dispatchNumber.value,
         'OutBoxSizeList': [
           for (var data in cartonInsideLabelList)
             {

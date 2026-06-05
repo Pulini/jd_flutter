@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_detail_view.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -18,28 +16,31 @@ class CartonLabelScanLogic extends GetxController {
   void queryPriorityCartonLabelInfo({
     required String code,
   }) {
-    httpGet(
-      loading:'carton_label_scan_querying_outside_label_detail'.tr  ,
-      method: webApiGetCartonLabelInfo,
-      params: {
-        'CartonBarCode': code,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        state.priorityCartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
+    state.queryCartonLabelInfo(
+      code: code,
+      success: (data) {
+        state.priorityCartonLabelInfo =data;
         state.priorityCartonLabel.value = state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
         state.priorityPo.value = state.priorityCartonLabelInfo?.custOrderNumber ?? '';
         state.priorityCartonInsideLabelList.value = state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
-      } else {
+      },
+      error: (msg){
         state.clearPriority();
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
+        errorDialog(content: msg);},
+    );
   }
 
   void queryCartonLabelInfo(String code) {
+    state.labelTotal.value=0;
+    state.scannedLabelTotal.value=0;
     state.queryCartonLabelInfo(
       code: code,
+      success: (data) {
+       state.cartonLabelInfo = data;
+       state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
+       state.cartonInsideLabelList.value = state.cartonLabelInfo!.linkDataSizeList ?? [];
+       state.labelTotal.value = state.cartonInsideLabelList.fold(0, (total, next) => total + next.labelCount!);
+      },
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -70,6 +71,14 @@ class CartonLabelScanLogic extends GetxController {
     required Function() submitSuccess,
     required Function() submitError,
   }) {
+    if(code.startsWith('P')&&code.length>5){
+      state.dispatchNumber.value=code;
+      return;
+    }
+    if(state.dispatchNumber.value.isEmpty){
+      errorDialog(content: 'carton_label_scan_label_scan_dispatch_no_empty_tips'.tr);
+      return;
+    }
     if (isSubmitting) return;
     if (state.cartonLabel.value.isEmpty) {
       outsideCode.call(code);

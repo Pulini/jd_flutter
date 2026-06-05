@@ -300,7 +300,7 @@ void addWorkerDialog(
 void modifyDispatchQtyDialog(
   DispatchInfo di,
   double surplus,
-  Function(DispatchInfo) callback,
+  Function() callback,
 ) {
   var qty = 0.0;
   Get.dialog(PopScope(
@@ -340,7 +340,7 @@ void modifyDispatchQtyDialog(
           onPressed: () {
             Get.back();
             di.qty = qty;
-            callback.call(di);
+            callback.call();
           },
           child: Text('dialog_default_confirm'.tr),
         ),

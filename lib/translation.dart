@@ -1495,11 +1495,13 @@ class Translation extends Translations {
           'carton_label_scan_rescan_code': '重新扫码',
           'carton_label_scan_rescan_inside_code': '重扫内标',
           'carton_label_scan_submit': '提交',
+          'carton_label_scan_dispatch_no': '派工单号：',
           'carton_label_scan_querying_outside_label_detail': '正在查询外箱标签明细...',
           'carton_label_scan_submitting_scan_progress': '正在提交扫码进度...',
           'carton_label_scan_submitting_change_priority': '正在修改优先级...',
           'carton_label_scan_label_scan_completed_tips':
               '条码[%s]已扫满，请确认是否放错或重复扫码。',
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':'请先扫描生产派工单二维码！',
           'carton_label_scan_label_placement_error_tips':
               '条码[%s]不是外箱对应数据，请检查是否放错。',
           'carton_label_scan_success': '操作成功',
@@ -5399,6 +5401,7 @@ class Translation extends Translations {
           'carton_label_scan_rescan_code': 'Rescan barcode',
           'carton_label_scan_rescan_inside_code': 'Rescan inside barcode',
           'carton_label_scan_submit': 'Submit',
+          'carton_label_scan_dispatch_no': 'Dispatch no：',
           'carton_label_scan_querying_outside_label_detail':
               'Querying_outside_label_detail...',
           'carton_label_scan_submitting_scan_progress':
@@ -5407,6 +5410,7 @@ class Translation extends Translations {
               'Modifying priority...',
           'carton_label_scan_label_scan_completed_tips':
               'Barcode [ %s ] has been scanned to capacity. Please confirm if it has been placed incorrectly or scanned repeatedly.',
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':'Please scan the production dispatch order QR code first！',
           'carton_label_scan_label_placement_error_tips':
               'Barcode [ %s ] is not the corresponding data for the outer box, please check if it is placed incorrectly.',
           'carton_label_scan_success': 'Operation successful',
@@ -9837,6 +9841,7 @@ class Translation extends Translations {
           'carton_label_scan_rescan_code': 'Pindai Ulang Kode',
           'carton_label_scan_rescan_inside_code': 'Pindai Ulang Label Dalam',
           'carton_label_scan_submit': 'Ajukan',
+          'carton_label_scan_dispatch_no': 'NOP:',
           'carton_label_scan_querying_outside_label_detail':
               'Mengkueri detail label kotak luar...',
           'carton_label_scan_submitting_scan_progress':
@@ -9845,7 +9850,8 @@ class Translation extends Translations {
               'Mengubah prioritas...',
           'carton_label_scan_label_scan_completed_tips':
               'Kode batang [%s] telah penuh dipindai, harap konfirmasi apakah salah tempat atau duplikat pemindaian.',
-          'carton_label_scan_label_placement_error_tips':
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':'Nomor Order Penugasan tidak boleh kosong !',
+        'carton_label_scan_label_placement_error_tips':
               'Kode batang [%s] bukan data yang sesuai dengan kotak luar, harap periksa apakah salah tempat.',
           'carton_label_scan_success': 'Operasi Berhasil',
           'carton_label_scan_progress_title':

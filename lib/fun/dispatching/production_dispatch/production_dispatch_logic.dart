@@ -173,7 +173,7 @@ class ProductionDispatchLogic extends GetxController {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
         Get.to(() => const MaintainLabelPage(), arguments: {
-          'materialCodes': [v.materialCode??''],
+          'materialCodes': [v.materialCode ?? ''],
           'interID': v.interID,
           'isMaterialLabel': false,
           'SapProcessName': v.sapProcessName,
@@ -191,7 +191,7 @@ class ProductionDispatchLogic extends GetxController {
   void materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
-        'materialCodes': [data.materialCode??''],
+        'materialCodes': [data.materialCode ?? ''],
         'interID': data.interID,
         'isMaterialLabel': true,
         'SapProcessName': data.sapProcessName,
@@ -203,11 +203,12 @@ class ProductionDispatchLogic extends GetxController {
       );
     }
   }
+
   //物料贴标维护
   void partOrderLabelMaintenance(List<ProductionDispatchOrderInfo> list) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
-        'materialCodes': list.map((v)=>v.materialCode??'').toList(),
+        'materialCodes': list.map((v) => v.materialCode ?? '').toList(),
         'interID': list.first.interID,
         'isMaterialLabel': true,
         'isPartOrder': true,
@@ -224,7 +225,7 @@ class ProductionDispatchLogic extends GetxController {
   //更新领料配套数
   void updateSap({required Function() refresh}) {
     state.updateSap(
-      success:(msg)=>successDialog(content: msg,back: refresh),
+      success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -722,6 +723,7 @@ class ProductionDispatchLogic extends GetxController {
     state.dispatchInfo.remove(dispatchInfo);
     state.isEnabledSelectAllDispatch = state.dispatchInfo.isNotEmpty;
     state.workProcedure.refresh();
+    state.dispatchInfo.refresh();
   }
 
   //从汇总列表跳转到指定工序并打开指定员工到派工数据

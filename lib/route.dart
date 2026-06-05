@@ -176,7 +176,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    224,
+    225,
     const ProductionDispatchPage(),
   );
 
@@ -260,7 +260,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    201,
+    202,
     const CartonLabelScanPage(),
   );
 

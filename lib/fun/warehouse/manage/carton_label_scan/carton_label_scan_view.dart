@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -48,6 +49,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
 
   void _scan() {
     pdaScanner(scan: (barCode) {
+      logger.f('--------');
       logic.scan(
         code: barCode,
         outsideCode: (code) {
@@ -204,6 +206,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                       _CartonInsideLabelItem(data: state.cartonInsideLabelList[i]),
                 ),
               ),
+              textSpan(hint: 'carton_label_scan_dispatch_no'.tr, text: state.dispatchNumber.value),
               if (state.labelTotal.value != 0 &&
                   state.labelTotal.value == state.scannedLabelTotal.value)
                 CombinationButton(
