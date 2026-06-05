@@ -51,46 +51,13 @@ class _ProductionDispatchDetailPageState
                   Expanded(
                     flex: 4,
                     child: _DispatchDetailWorkProcedure(
-                      logic: logic,
-                      state: state,
-                      itemBuilder: (data, index) =>
-                          _DispatchDetailWorkProcedureItem(
-                        data: data,
-                        index: index,
-                        logic: logic,
-                        state: state,
-                      ),
-                    ),
+                        logic: logic, state: state),
                   ),
                   Expanded(
                     flex: 7,
                     child: _DispatchDetailDispatch(
                       logic: logic,
                       state: state,
-                      itemBuilder: (item) => _DispatchDetailDispatchItem(
-                        data: item,
-                        onTap: () => logic.detailViewDispatchItemClick(
-                          item,
-                          (surplus) => modifyDispatchQtyDialog(
-                            item,
-                            surplus,
-                            () => state.dispatchInfo.refresh(),
-                          ),
-                        ),
-                        onLongPress: () {
-                          item.select = !item.select!;
-                          state.isCheckedSelectAllDispatch =
-                              !state.dispatchInfo.any((v) => !v.select!);
-                          state.isEnabledBatchDispatch.value = state
-                                  .dispatchInfo
-                                  .where((v) => v.select!)
-                                  .length >
-                              1;
-                          state.dispatchInfo.refresh();
-                        },
-                        onDeleteItem: () =>
-                            logic.detailViewDispatchItemDeleteClick(item),
-                      ),
                     ),
                   ),
                 ],
@@ -482,12 +449,10 @@ class _DispatchDetailOperationButtons extends StatelessWidget {
 class _DispatchDetailWorkProcedure extends StatelessWidget {
   final ProductionDispatchLogic logic;
   final ProductionDispatchState state;
-  final Widget Function(WorkCardList, int) itemBuilder;
 
   const _DispatchDetailWorkProcedure({
     required this.logic,
     required this.state,
-    required this.itemBuilder,
   });
 
   @override
@@ -505,11 +470,14 @@ class _DispatchDetailWorkProcedure extends StatelessWidget {
           ),
         ),
         child: ListView.builder(
-          padding: const EdgeInsets.all(5),
-          itemCount: state.workProcedure.length,
-          itemBuilder: (BuildContext context, int index) =>
-              itemBuilder(state.workProcedure[index], index),
-        ),
+            padding: const EdgeInsets.all(5),
+            itemCount: state.workProcedure.length,
+            itemBuilder: (c, i) => _DispatchDetailWorkProcedureItem(
+                  data: state.workProcedure[i],
+                  index: i,
+                  logic: logic,
+                  state: state,
+                )),
       ),
     );
   }
@@ -518,12 +486,10 @@ class _DispatchDetailWorkProcedure extends StatelessWidget {
 class _DispatchDetailDispatch extends StatelessWidget {
   final ProductionDispatchLogic logic;
   final ProductionDispatchState state;
-  final Widget Function(DispatchInfo) itemBuilder;
 
   const _DispatchDetailDispatch({
     required this.logic,
     required this.state,
-    required this.itemBuilder,
   });
 
   @override
@@ -601,7 +567,32 @@ class _DispatchDetailDispatch extends StatelessWidget {
                     crossAxisCount: 3,
                     childAspectRatio: 4 / 1,
                     children: state.dispatchInfo
-                        .map((item) => itemBuilder(item))
+                        .map(
+                          (item) => _DispatchDetailDispatchItem(
+                            data: item,
+                            onTap: () => logic.detailViewDispatchItemClick(
+                              item,
+                              (surplus) => modifyDispatchQtyDialog(
+                                item,
+                                surplus,
+                                () => state.dispatchInfo.refresh(),
+                              ),
+                            ),
+                            onLongPress: () {
+                              item.select = !item.select!;
+                              state.isCheckedSelectAllDispatch =
+                                  !state.dispatchInfo.any((v) => !v.select!);
+                              state.isEnabledBatchDispatch.value = state
+                                      .dispatchInfo
+                                      .where((v) => v.select!)
+                                      .length >
+                                  1;
+                              state.dispatchInfo.refresh();
+                            },
+                            onDeleteItem: () =>
+                                logic.detailViewDispatchItemDeleteClick(item),
+                          ),
+                        )
                         .toList()),
               ),
             ],
