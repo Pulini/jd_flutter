@@ -36,6 +36,13 @@ class BarCodeInfo {
       )
       ''';
 
+  static Database? _db;
+
+  static Future<Database> _getDb() async {
+    _db ??= await openDb();
+    return _db!;
+  }
+
   BarCodeInfo({
     this.id,
     required this.code,
@@ -59,21 +66,18 @@ class BarCodeInfo {
   }
 
   void save({required Function(BarCodeInfo) callback}) {
-    openDb().then((db) {
+    _getDb().then((db) {
       db.insert(
         tableName,
         toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       ).then(
         (value) {
-          logger.e(value);
           id = value;
-          db.close();
           callback.call(this);
         },
         onError: (e) {
           logger.e('数据库操作异常：$e');
-          db.close();
         },
       );
     });
@@ -83,43 +87,36 @@ class BarCodeInfo {
     required String type,
     required Function(List<BarCodeInfo>) callback,
   }) {
-    openDb().then((db) {
+    _getDb().then((db) {
       db.query(
         tableName,
         where: 'type = ?',
         whereArgs: [type],
       ).then((value) {
-        logger.e(value);
-        db.close();
         callback.call([for (var v in value) BarCodeInfo.fromJson(v)]);
       }, onError: (e) {
         logger.e('数据库操作异常：$e');
-        db.close();
         callback.call([]);
       });
     });
   }
 
   void delete({required Function() callback}) {
-    openDb().then((db) {
+    _getDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
-        db.close();
         callback.call();
       }, onError: (e) {
         logger.e('数据库操作异常：$e');
-        db.close();
       });
     });
   }
 
   void deleteByCode({required Function() callback}) {
-    openDb().then((db) {
+    _getDb().then((db) {
       db.delete(tableName, where: 'code = ?', whereArgs: [code]).then((value) {
-        db.close();
         callback.call();
       }, onError: (e) {
         logger.e('数据库操作异常：$e');
-        db.close();
       });
     });
   }
@@ -128,13 +125,11 @@ class BarCodeInfo {
     required String type,
     required Function(int) callback,
   }) {
-    openDb().then((db) {
+    _getDb().then((db) {
       db.delete(tableName, where: 'type = ?', whereArgs: [type]).then((value) {
-        db.close();
         callback.call(value);
       }, onError: (e) {
         logger.e('数据库操作异常：$e');
-        db.close();
       });
     });
   }

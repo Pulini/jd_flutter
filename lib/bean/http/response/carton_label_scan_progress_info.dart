@@ -20,7 +20,7 @@ class CartonLabelScanProgressInfo {
     custOrderNumber = json['CustOrderNumber'];
     totalPiece = json['TotalPiece'];
     noScanPiece = json['NoScanPiece'];
-    scanned=totalPiece!-noScanPiece!;
+    scanned = totalPiece! - noScanPiece!;
   }
 
   int? interID;
@@ -39,7 +39,6 @@ class CartonLabelScanProgressInfo {
     map['NoScanPiece'] = noScanPiece;
     return map;
   }
-
 }
 
 // OutBoxBarCode : "00340486681090872291"
@@ -59,12 +58,16 @@ class CartonLabelScanProgressDetailInfo {
     outBoxBarCode = json['OutBoxBarCode'];
     size = json['Size'];
     sendCustomSystemState = json['SendCustomSystemState'];
+    totalPiece = json['TotalPiece'];
+    scanPiece = json['ScanPiece'];
   }
 
   String? cartonNo;
   String? outBoxBarCode;
   String? size;
   int? sendCustomSystemState;
+  int? totalPiece;
+  int? scanPiece;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -72,11 +75,18 @@ class CartonLabelScanProgressDetailInfo {
     map['OutBoxBarCode'] = outBoxBarCode;
     map['Size'] = size;
     map['SendCustomSystemState'] = sendCustomSystemState;
+    map['TotalPiece'] = totalPiece;
+    map['ScanPiece'] = scanPiece;
     return map;
   }
-  MaterialColor stateColor(){
-    return sendCustomSystemState==1?Colors.yellow:sendCustomSystemState==2?Colors.green:Colors.grey;
-  }
 
+  Color stateColor() {
+    return sendCustomSystemState == 1
+        ? Colors.deepOrange.shade300
+        : sendCustomSystemState == 2
+            ? Colors.green
+            : Colors.grey;
+  }
+  String getScanProgress()=>'$scanPiece / $totalPiece';
 
 }

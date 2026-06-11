@@ -30,6 +30,7 @@ import com.jd.pzx.jd_flutter.utils.BDevice
 import com.jd.pzx.jd_flutter.utils.deviceList
 import tw.com.prolific.pl2303gmultilib.PL2303GMultiLib
 import android.widget.Toast
+import com.jd.pzx.jd_flutter.utils.jsonToList
 
 /**
  * File Name : USBReceiver
@@ -49,6 +50,8 @@ const val ACTION_ID3 = "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED"
 const val BarCode3 = "data"
 const val ACTION_ID4 = "android.intent.ACTION_DECODE_DATA"
 const val BarCode4 = "barcode_string"
+const val ACTION_ID5 = "com.action.ai.x1"
+const val BarCode5 = "decoded_json_results"
 const val WEIGHT_DEVICE_DETACHED = "tw.PL2303MultiUSBMessage"
 const val WEIGHT_DEVICE_NAME = "com.prolific.pl2300G_multisimpletest.USB_PERMISSION"
 
@@ -80,6 +83,7 @@ class ReceiverUtil(
     private val bleStateClose: () -> Unit,
     private val bleStateOpen: () -> Unit,
     private val scanCode: (String) -> Unit,
+    private val scanCodeList: (List<String>) -> Unit,
 ) {
     //东集扫码枪密码:4007770876
     private var permissionListener: (Boolean) -> Unit = {}
@@ -98,6 +102,7 @@ class ReceiverUtil(
                 ACTION_ID2 -> scanCode.invoke(intent.getStringExtra(BarCode2).toString())
                 ACTION_ID3 -> scanCode.invoke(intent.getStringExtra(BarCode3).toString())
                 ACTION_ID4 -> scanCode.invoke(intent.getStringExtra(BarCode4).toString())
+                ACTION_ID5 -> scanCodeList.invoke(jsonToList(intent.getStringExtra(BarCode5).toString()))
                 ACTION_USB_PERMISSION -> {
                     Log.e("Pan", "USB设备权限申请结果")
                     synchronized(this) {
@@ -269,6 +274,7 @@ class ReceiverUtil(
                 addAction(ACTION_ID2)
                 addAction(ACTION_ID3)
                 addAction(ACTION_ID4)
+                addAction(ACTION_ID5)
                 addAction(WEIGHT_DEVICE_DETACHED)
             }, Context.RECEIVER_EXPORTED)
         } else {
@@ -289,6 +295,7 @@ class ReceiverUtil(
                 addAction(ACTION_ID2)
                 addAction(ACTION_ID3)
                 addAction(ACTION_ID4)
+                addAction(ACTION_ID5)
                 addAction(WEIGHT_DEVICE_DETACHED)
             })
         }

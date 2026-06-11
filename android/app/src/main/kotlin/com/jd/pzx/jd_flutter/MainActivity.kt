@@ -97,6 +97,9 @@ class MainActivity : FlutterActivity() {
         scanCode = {
             sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
         },
+        scanCodeList = {
+            sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "AkxPdaScanner", it)
+        }
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -47,8 +47,10 @@ import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/confirm_packing_method/confirm_packing_method_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/pack_order_list/pack_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_order_list/part_dispatch_order_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_label_manage/part_label_manage_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
@@ -260,7 +262,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    202,
+    205,
     const CartonLabelScanPage(),
   );
 
@@ -442,7 +444,7 @@ class RouteConfig {
   //来料稽查
   static Routes incomingInspection = Routes(
     '/incoming_inspection',
-    204,
+    205,
     const IncomingInspectionPage(),
   );
 
@@ -677,6 +679,13 @@ class RouteConfig {
     const MaterialLabelScanPage(),
   );
 
+  //部件派工装箱方式确认
+  static Routes confirmPackingMethod = Routes(
+    '/confirm_packing_method',
+    200,
+    const ConfirmPackingMethodPage(),
+  );
+
   //部件派工标签管理
   static Routes partDispatchLabelManage = Routes(
     '/part_dispatch_label_manage',
@@ -710,6 +719,13 @@ class RouteConfig {
     '/part_replenish_request',
     200,
     const PartReplenishRequestPage(),
+  );
+
+  //部件标签管理
+  static Routes partLabelManagePage = Routes(
+    '/part_label_manage',
+    200,
+    const PartLabelManagePage(),
   );
 
   //本地功能入口列表
@@ -801,6 +817,8 @@ class RouteConfig {
     attendanceDashboardPage,
     sapPickingPostingPage,
     partReplenishRequestPage,
+    confirmPackingMethod,
+    partLabelManagePage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1164,6 +1182,14 @@ class RouteConfig {
     GetPage(
       name: partReplenishRequestPage.name,
       page: () => partReplenishRequestPage.page,
+    ),
+    GetPage(
+      name: confirmPackingMethod.name,
+      page: () => confirmPackingMethod.page,
+    ),
+    GetPage(
+      name: partLabelManagePage.name,
+      page: () => partLabelManagePage.page,
     ),
   ];
 }

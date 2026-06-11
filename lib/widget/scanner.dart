@@ -12,7 +12,9 @@ class Scanner extends StatefulWidget {
   const Scanner({super.key, this.title = '扫描二维码'});
 
   final String title;
-  String getClassName() =>runtimeType.toString();
+
+  String getClassName() => runtimeType.toString();
+
   @override
   State<Scanner> createState() => _ScannerState();
 }
@@ -88,37 +90,19 @@ void scannerDialog({
   String title = '请扫描二维码',
   required Function(String code) detect,
 }) {
+  var detected = false;
   var scanner = MobileScanner(
     onDetect: (v) {
       var data = v.barcodes.firstOrNull?.displayValue ?? '';
       debugPrint('scannerDialog code=$data');
-      if (data.isNotEmpty) {
+      if (data.isNotEmpty && !detected) {
+        detected = true;
         detect.call(data);
         Get.back();
       }
     },
   );
 
-  var quarterTurns = 0.obs;
-  setOrientation(NativeDeviceOrientation orientation) {
-    if (orientation == NativeDeviceOrientation.landscapeLeft) {
-      quarterTurns.value = 3;
-    } else if (orientation == NativeDeviceOrientation.landscapeRight) {
-      quarterTurns.value = 1;
-    } else if (orientation == NativeDeviceOrientation.portraitDown) {
-      quarterTurns.value = 2;
-    } else {
-      quarterTurns.value = 0;
-    }
-  }
-
-  NativeDeviceOrientationCommunicator()
-      .orientation(useSensor: false)
-      .then((orientation) => setOrientation(orientation));
-
-  NativeDeviceOrientationCommunicator()
-      .onOrientationChanged(useSensor: false)
-      .listen((orientation) => setOrientation(orientation));
   Get.dialog(
     PopScope(
       canPop: false,
@@ -141,10 +125,7 @@ void scannerDialog({
           aspectRatio: 1 / 1,
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Obx(() => RotatedBox(
-                  quarterTurns: quarterTurns.value,
-                  child: scanner,
-                )),
+            child: scanner,
           ),
         ),
       ),
@@ -161,10 +142,18 @@ void pdaScanner({required Function(String) scan}) {
           scan.call(call.arguments);
         }
         break;
+      case 'AkxPdaScanner':
+        {
+          for (var element in call.arguments) {
+            scan.call(element);
+          }
+        }
+        break;
     }
     return Future.value(call);
   });
 }
+
 void closePdaScanner() {
   debugPrint('PdaScanner 取消监听');
   const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler(null);

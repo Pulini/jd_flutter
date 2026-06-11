@@ -2,6 +2,128 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
+class PartDispatchConfirmInfo {
+  List<PartDispatchMaterialList>? materialList;
+  List<PartDispatchPackingMethodInfo>? packingMethodList;
+  PartDispatchPackingInfo? packingMethod;
+
+  PartDispatchConfirmInfo({
+    this.materialList,
+    this.packingMethodList,
+    this.packingMethod,
+  });
+
+  factory PartDispatchConfirmInfo.fromJson(dynamic json) {
+    return PartDispatchConfirmInfo(
+      materialList: [
+        if (json['WorkCardData'] != null)
+          for (var item in json['WorkCardData'])
+            PartDispatchMaterialList.fromJson(item)
+      ],
+      packingMethodList: [
+        if (json['PackageProfileData'] != null)
+          for (var item in json['PackageProfileData'])
+            PartDispatchPackingMethodInfo.fromJson(item)
+      ],
+      packingMethod: PartDispatchPackingInfo.fromJson(json['HeadItem']),
+    );
+  }
+}
+
+//"ItemID": 24,
+//"Number": "Package26000053",
+//"Name": "单部件单码装",
+//"OrganizeID": 67,
+//"BoxCapacity": 50.0
+class PartDispatchPackingMethodInfo {
+  int? itemID;
+  String? number;
+  String? name;
+  int? organizeID;
+  double? boxCapacity;
+
+  PartDispatchPackingMethodInfo({
+    this.itemID,
+    this.number,
+    this.name,
+    this.organizeID,
+    this.boxCapacity,
+  });
+
+  factory PartDispatchPackingMethodInfo.fromJson(dynamic json) {
+    return PartDispatchPackingMethodInfo(
+      itemID: json['ItemID'],
+      number: json['Number'],
+      name: json['Name'],
+      organizeID: json['OrganizeID'],
+      boxCapacity: json['BoxCapacity'].toString().toDoubleTry(),
+    );
+  }
+}
+
+// "MaterialName": "19.5mm*26.5mm黑镍色饰扣",
+// "PictureUrl": "",
+// "SeOrderNo": "ZJ2400000272",
+// "BatchNo": "",
+// "WorkCardQty": 550.0000000000,
+// "WorkCardID": 556056
+class PartDispatchMaterialList {
+  String? materialName;
+  String? seOrderNo;
+  String? batchNo;
+  double? qty;
+  int? workCardID;
+  String? pictureUrl;
+
+  PartDispatchMaterialList({
+    this.materialName,
+    this.pictureUrl,
+    this.seOrderNo,
+    this.batchNo,
+    this.qty,
+    this.workCardID,
+  });
+
+  factory PartDispatchMaterialList.fromJson(dynamic json) {
+    return PartDispatchMaterialList(
+      materialName: json['MaterialName'],
+      seOrderNo: json['SeOrderNo'],
+      batchNo: json['BatchNo'],
+      qty: json['Qty'].toString().toDoubleTry(),
+      workCardID: json['WorkCardID'].toString().toIntTry(),
+      pictureUrl: json['PictureUrl'],
+    );
+  }
+}
+
+//"PackageProfileID": 24,
+//"WorkCardID": 218775,
+//"PackageProfileCapacityQty": 24
+class PartDispatchPackingInfo {
+  int? packingMethodID;
+  int? workCardID;
+  double? packingMethodCapacityQty;
+
+  PartDispatchPackingInfo({
+    this.packingMethodID,
+    this.workCardID,
+    this.packingMethodCapacityQty,
+  });
+
+  factory PartDispatchPackingInfo.fromJson(dynamic json) {
+    return PartDispatchPackingInfo(
+      packingMethodID: json['PackageProfileID'],
+      workCardID: json['WorkCardID'],
+      packingMethodCapacityQty:
+          json['PackageProfileCapacityQty'].toString().toDoubleTry(),
+    );
+  }
+}
+
+
+
+
+
 //{
 //     "ProductName": "PNS26312586-01",
 //     "SeOrderNo": "JZ2500120",

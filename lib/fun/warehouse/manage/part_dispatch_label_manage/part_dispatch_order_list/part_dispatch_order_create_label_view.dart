@@ -28,27 +28,11 @@ class _PartDispatchOrderCreateLabelPageState
   var tecBatchSetLabelCount = TextEditingController();
   var tecLabelCount = TextEditingController();
 
-  Widget _titleItem() =>
-      _CreateLabelTitleItem(state: state, logic: logic, controllers: (
-        packageQty: tecBatchSetPackageQty,
-        labelCount: tecBatchSetLabelCount,
-      ));
-
-  Widget _item(CreateLabelInfo data, Color backgroundColor) =>
-      _CreateLabelItem(
-        data: data,
-        backgroundColor: backgroundColor,
-        state: state,
-        logic: logic,
-        tecLabelCount: tecLabelCount,
-      );
-
-  Widget _totalItem() =>
-      _CreateLabelTotalItem(state: state, logic: logic);
+  Widget _totalItem() => _CreateLabelTotalItem(state: state, logic: logic);
 
   @override
   void initState() {
-    state.needRefreshPartList=false;
+    state.needRefreshPartList = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       tecBatchSetPackageQty.text =
           logic.getSaveBatchSetItemPackQty().toString();
@@ -97,10 +81,19 @@ class _PartDispatchOrderCreateLabelPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            textSpan(hint: 'part_dispatch_create_label_type_body'.tr, text: state.typeBody.value),
-            textSpan(hint: 'part_dispatch_create_label_part'.tr, text: state.part.value),
-            textSpan(hint: 'part_dispatch_create_label_instruction'.tr, text: state.instructions.value),
-            _titleItem(),
+            textSpan(
+                hint: 'part_dispatch_create_label_type_body'.tr,
+                text: state.typeBody.value),
+            textSpan(
+                hint: 'part_dispatch_create_label_part'.tr,
+                text: state.part.value),
+            textSpan(
+                hint: 'part_dispatch_create_label_instruction'.tr,
+                text: state.instructions.value),
+            _CreateLabelTitleItem(state: state, logic: logic, controllers: (
+              packageQty: tecBatchSetPackageQty,
+              labelCount: tecBatchSetLabelCount,
+            )),
             Expanded(
               child: Obx(() => ListView.builder(
                     itemCount: state.createSizeList.isNotEmpty
@@ -108,11 +101,14 @@ class _PartDispatchOrderCreateLabelPageState
                         : 0,
                     itemBuilder: (c, i) => i == state.createSizeList.length
                         ? _totalItem()
-                        : _item(
-                            state.createSizeList[i],
-                            i % 2 == 0
+                        : _CreateLabelItem(
+                            data: state.createSizeList[i],
+                            backgroundColor: i % 2 == 0
                                 ? Colors.blue.shade50
                                 : Colors.grey.shade50,
+                            isSingleSize: state.isSingleSize,
+                            logic: logic,
+                            tecLabelCount: tecLabelCount,
                           ),
                   )),
             ),
@@ -126,8 +122,10 @@ class _PartDispatchOrderCreateLabelPageState
 class _CreateLabelTitleItem extends StatelessWidget {
   final PartDispatchLabelManageState state;
   final PartDispatchLabelManageLogic logic;
-  final ({TextEditingController packageQty, TextEditingController labelCount})
-      controllers;
+  final ({
+    TextEditingController packageQty,
+    TextEditingController labelCount
+  }) controllers;
 
   const _CreateLabelTitleItem({
     required this.state,
@@ -187,24 +185,18 @@ class _CreateLabelTitleItem extends StatelessWidget {
                 const SizedBox(width: 5),
                 Expanded(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 5, bottom: 5),
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
                     child: TextField(
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(3),
                         ),
-                        contentPadding:
-                            const EdgeInsets.only(bottom: 3),
-                        labelText:
-                            'part_dispatch_create_label_packing_qty'
-                                .tr,
-                        labelStyle: const TextStyle(
-                            fontWeight: FontWeight.bold),
+                        contentPadding: const EdgeInsets.only(bottom: 3),
+                        labelText: 'part_dispatch_create_label_packing_qty'.tr,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       controller: controllers.packageQty,
                       style: const TextStyle(color: Colors.blue),
@@ -215,8 +207,7 @@ class _CreateLabelTitleItem extends StatelessWidget {
                 Obx(() => CombinationButton(
                       isEnabled: logic.isCanSet(),
                       combination: Combination.left,
-                      text: 'part_dispatch_create_label_batch_setting'
-                          .tr,
+                      text: 'part_dispatch_create_label_batch_setting'.tr,
                       click: () {
                         logic.batchSetItemPackQty(
                           controllers.packageQty.text.toIntTry(),
@@ -227,8 +218,7 @@ class _CreateLabelTitleItem extends StatelessWidget {
                 Obx(() => CombinationButton(
                       isEnabled: logic.isCanSet(),
                       combination: Combination.right,
-                      text: 'part_dispatch_create_label_max_number'
-                          .tr,
+                      text: 'part_dispatch_create_label_max_number'.tr,
                       click: () {
                         logic.batchSetItemMaxPackQty();
                       },
@@ -253,8 +243,7 @@ class _CreateLabelTitleItem extends StatelessWidget {
                   const SizedBox(width: 5),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -262,15 +251,12 @@ class _CreateLabelTitleItem extends StatelessWidget {
                         ],
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(3),
                           ),
-                          contentPadding:
-                              const EdgeInsets.only(bottom: 3),
-                          labelText:
-                              'part_dispatch_create_label_qty'.tr,
-                          labelStyle: const TextStyle(
-                              fontWeight: FontWeight.bold),
+                          contentPadding: const EdgeInsets.only(bottom: 3),
+                          labelText: 'part_dispatch_create_label_qty'.tr,
+                          labelStyle:
+                              const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         controller: controllers.labelCount,
                         style: const TextStyle(color: Colors.blue),
@@ -281,9 +267,7 @@ class _CreateLabelTitleItem extends StatelessWidget {
                   Obx(() => CombinationButton(
                         isEnabled: logic.isCanSet(),
                         combination: Combination.left,
-                        text:
-                            'part_dispatch_create_label_batch_setting'
-                                .tr,
+                        text: 'part_dispatch_create_label_batch_setting'.tr,
                         click: () => logic.batchSetItemLabelCount(
                           controllers.labelCount.text.toIntTry(),
                         ),
@@ -291,11 +275,8 @@ class _CreateLabelTitleItem extends StatelessWidget {
                   Obx(() => CombinationButton(
                         isEnabled: logic.isCanSet(),
                         combination: Combination.right,
-                        text:
-                            'part_dispatch_create_label_max_number'
-                                .tr,
-                        click: () =>
-                            logic.batchSetItemMaxLabelCount(),
+                        text: 'part_dispatch_create_label_max_number'.tr,
+                        click: () => logic.batchSetItemMaxLabelCount(),
                       )),
                   const SizedBox(width: 5),
                 ],
@@ -320,28 +301,25 @@ class _CreateLabelTitleItem extends StatelessWidget {
 class _CreateLabelItem extends StatelessWidget {
   final CreateLabelInfo data;
   final Color backgroundColor;
-  final PartDispatchLabelManageState state;
+  final bool isSingleSize;
   final PartDispatchLabelManageLogic logic;
   final TextEditingController tecLabelCount;
 
   const _CreateLabelItem({
     required this.data,
     required this.backgroundColor,
-    required this.state,
     required this.logic,
+    required this.isSingleSize,
     required this.tecLabelCount,
   });
 
   @override
   Widget build(BuildContext context) {
     var packQtyController = TextEditingController(
-      text: data.packageQty.value > 0
-          ? data.packageQty.value.toString()
-          : '',
+      text: data.packageQty.value > 0 ? data.packageQty.value.toString() : '',
     );
     var countController = TextEditingController(
-      text:
-          data.labelCount.value > 0 ? data.labelCount.value.toString() : '',
+      text: data.labelCount.value > 0 ? data.labelCount.value.toString() : '',
     );
     return Row(
       children: [
@@ -376,15 +354,13 @@ class _CreateLabelItem extends StatelessWidget {
           text: data.remainingQty().toString(),
         ),
         Expanded(
-          flex: state.isSingleSize ? 6 : 4,
+          flex: isSingleSize ? 6 : 4,
           child: Container(
             height: 35,
             color: backgroundColor,
             child: TextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              decoration:  InputDecoration(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
@@ -404,17 +380,15 @@ class _CreateLabelItem extends StatelessWidget {
             ),
           ),
         ),
-        if (state.isSingleSize)
+        if (isSingleSize)
           Expanded(
             flex: 6,
             child: Container(
               height: 35,
               color: backgroundColor,
               child: TextField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                decoration:  InputDecoration(
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(0),
                     ),
@@ -528,8 +502,7 @@ class _CreateLabelTotalItem extends StatelessWidget {
             alignment: Alignment.center,
             child: Obx(() => Checkbox(
                   value: state.createSizeList.isNotEmpty &&
-                      state.createSizeList
-                          .every((v) => v.isSelected.value),
+                      state.createSizeList.every((v) => v.isSelected.value),
                   onChanged: (c) {
                     for (var v in state.createSizeList) {
                       v.isSelected.value = c!;

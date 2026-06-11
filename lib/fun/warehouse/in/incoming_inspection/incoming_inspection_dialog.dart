@@ -6,6 +6,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
@@ -281,8 +282,12 @@ void addOrModifyMaterialDialog({
 void applyInspectionDialog({
   required Function(WorkerInfo) submit,
 }) {
-  WorkerInfo? worker;
+  if(!checkUserPermission('1051002')){
+    errorDialog(content: 'incoming_inspection_no_apply_inspection_permission_tips'.tr);
+    return;
+  }
 
+  WorkerInfo? worker;
   Get.dialog(
     PopScope(
       canPop: false,

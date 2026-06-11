@@ -63,14 +63,11 @@ class _PartDispatchLabelManagePageState
       ),
     );
   }
-
-  Widget _imageItem(int i) => _PartDispatchOrderImageItem(
-        index: i,
-        state: state,
-      );
-
-  Widget _partItem(PartDispatchOrderPartInfo data) =>
-      _PartDispatchOrderPartGridItem(data: data);
+  @override
+  void initState() {
+    pdaScanner(scan: (code)=>_query(code: code));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +92,7 @@ class _PartDispatchLabelManagePageState
                     state.partList.where((v) => v.isSelected.value).length == 1
                         ? Combination.right
                         : Combination.intact,
-                click: () => logic.toCreateLabel(()=>_query()),
+                click: () => logic.toCreateLabel(() => _query()),
               )
             : Container()),
       ],
@@ -161,12 +158,18 @@ class _PartDispatchLabelManagePageState
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          textSpan(hint: 'part_dispatch_order_dispatch_order_no'.tr, text: state.orderNo.value),
-                          textSpan(hint: 'part_dispatch_order_instruction'.tr, text: state.instructions.value),
+                          textSpan(
+                              hint: 'part_dispatch_order_dispatch_order_no'.tr,
+                              text: state.orderNo.value),
+                          textSpan(
+                              hint: 'part_dispatch_order_instruction'.tr,
+                              text: state.instructions.value),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              textSpan(hint: 'part_dispatch_order_type_body'.tr, text: state.typeBody.value),
+                              textSpan(
+                                  hint: 'part_dispatch_order_type_body'.tr,
+                                  text: state.typeBody.value),
                               textSpan(
                                   hint: 'part_dispatch_order_batch_number'.tr,
                                   text: state.dispatchBatchNo.value),
@@ -176,7 +179,8 @@ class _PartDispatchLabelManagePageState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               textSpan(
-                                  hint: 'part_dispatch_order_size'.tr, text: state.sizeListText.value),
+                                  hint: 'part_dispatch_order_size'.tr,
+                                  text: state.sizeListText.value),
                               Text(
                                 state.total.value,
                                 style: const TextStyle(
@@ -200,7 +204,10 @@ class _PartDispatchLabelManagePageState
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: Obx(() => Swiper(
-                            itemBuilder: (c, i) => _imageItem(i),
+                            itemBuilder: (c, i) => _PartDispatchOrderImageItem(
+                              index: i,
+                              productUrlList: state.productUrlList,
+                            ),
                             itemCount: state.productUrlList.length,
                             pagination: const SwiperPagination(),
                           )),
@@ -217,7 +224,8 @@ class _PartDispatchLabelManagePageState
                     crossAxisCount: 6,
                     childAspectRatio: 7 / 5,
                   ),
-                  itemBuilder: (c, i) => _partItem(state.partList[i]),
+                  itemBuilder: (c, i) =>
+                      _PartDispatchOrderPartGridItem(data: state.partList[i]),
                 )),
           )
         ],
@@ -234,21 +242,21 @@ class _PartDispatchLabelManagePageState
 
 class _PartDispatchOrderImageItem extends StatelessWidget {
   final int index;
-  final PartDispatchLabelManageState state;
+  final RxList<String> productUrlList;
 
   const _PartDispatchOrderImageItem({
     required this.index,
-    required this.state,
+    required this.productUrlList,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => ViewNetPhoto(photos: state.productUrlList)),
+      onTap: () => Get.to(() => ViewNetPhoto(photos: productUrlList)),
       child: Hero(
-        tag: state.productUrlList[index],
+        tag:productUrlList[index],
         child: CachedNetworkImage(
-          imageUrl: state.productUrlList[index],
+          imageUrl:productUrlList[index],
           fit: BoxFit.cover,
           errorWidget: (ctx, err, st) => Image.asset(
             'assets/images/ic_logo.png',
@@ -294,7 +302,9 @@ class _PartDispatchOrderPartGridItem extends StatelessWidget {
               badgeCornerRadius: const Radius.circular(8),
               badgeSize: const Size(45, 45),
               textSpan: TextSpan(
-                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
+                text: data.packTypeID == 478
+                    ? 'part_dispatch_order_singe'.tr
+                    : 'part_dispatch_order_mix'.tr,
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -317,11 +327,13 @@ class _PartDispatchOrderPartGridItem extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(child: Text(
-                      data.materialName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),),
+                    Expanded(
+                      child: Text(
+                        data.materialName ?? '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
                     Text(
                       '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
                       overflow: TextOverflow.ellipsis,

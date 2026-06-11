@@ -68,7 +68,6 @@ class ProcessReportStoreLogic extends GetxController {
         ..isUsed = state.usedList.contains(code)
         ..save(callback: (newBarCode) {
           state.barCodeList.add(newBarCode);
-          state.barCodeList.refresh();
         });
     }
   }
@@ -79,6 +78,7 @@ class ProcessReportStoreLogic extends GetxController {
       state.barCodeList.remove(barCodeList);
     });
   }
+
   // SAP升级期间临时使用
   // void checkPallet({
   //   required String pallet,
@@ -161,7 +161,9 @@ class ProcessReportStoreLogic extends GetxController {
         }
         refresh.call();
       } else {
-        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
+        showSnackBar(
+            title: 'dialog_default_title_information'.tr,
+            message: response.message ?? '');
         refresh.call();
       }
     });
@@ -263,7 +265,8 @@ class ProcessReportStoreLogic extends GetxController {
               onPressed: () {
                 if (textNumber.text.toString().isEmpty) {
                   showSnackBar(
-                      message: 'process_report_store_modify_input_real_number'.tr);
+                      message:
+                          'process_report_store_modify_input_real_number'.tr);
                 } else {
                   Get.back();
                   confirm?.call(textNumber.text.toString());
@@ -290,7 +293,7 @@ class ProcessReportStoreLogic extends GetxController {
 
   //获取工序汇报入库的条码信息
   void modifyAdd(String code) {
-    if(code.isNotEmpty){
+    if (code.isNotEmpty) {
       httpPost(
         method: webApiGetBarCodeInfo,
         loading: 'process_report_store_modify_reading_database'.tr,
@@ -309,7 +312,7 @@ class ProcessReportStoreLogic extends GetxController {
           errorDialog(content: response.message);
         }
       });
-    }else{
+    } else {
       showSnackBar(message: 'process_report_store_modify_scan_real_barcode'.tr);
     }
   }
@@ -349,4 +352,5 @@ class ProcessReportStoreLogic extends GetxController {
       }
     }
   }
+
 }

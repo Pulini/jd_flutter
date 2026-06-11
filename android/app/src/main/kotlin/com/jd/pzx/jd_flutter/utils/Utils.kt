@@ -18,6 +18,8 @@ import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import androidx.core.content.FileProvider
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.math.BigDecimal
@@ -755,7 +757,7 @@ fun getDeviceInfo(context: Context): Map<String, String> {
     }
 
     val version = if (isHarmony) {
-        Regex("\\s+([\\d.]+)\\(").find(Build.DISPLAY)?.groupValues[1]?:Build.DISPLAY
+        Regex("\\s+([\\d.]+)\\(").find(Build.DISPLAY)?.groupValues[1] ?: Build.DISPLAY
     } else {
         Build.VERSION.RELEASE
     }
@@ -794,4 +796,21 @@ private fun getAndroidId(context: Context): String {
     } catch (e: Exception) {
         "e"
     }
+}
+
+fun jsonToList(json: String): List<String> =
+    Gson().fromJson(json, AkxJsonData::class.java).labels.map { it.results.result_0 }.toList()
+
+
+data class AkxJsonData(
+    var labels: MutableList<LabelInfo>,
+) {
+    data class LabelInfo(
+        var template_name: String,
+        var results: ResultInfo
+    )
+
+    data class ResultInfo(
+        var result_0: String,
+    )
 }

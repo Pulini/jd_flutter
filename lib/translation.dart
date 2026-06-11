@@ -1881,6 +1881,8 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery': '清空表单',
           'incoming_inspection_clean_delivery_tips': '确定要清空表单吗？',
           'incoming_inspection_apply_inspection': '发起稽查',
+          'incoming_inspection_no_apply_inspection_permission_tips': '没有发起稽查的权限！',
+          'incoming_inspection_no_inspection_permission_tips': '没有稽查的权限！',
           'incoming_inspection_querying_delivery_list_tips': '正在查询来料列表...',
           'incoming_inspection_submitting_inspection_apply_tips': '正在提交稽查申请...',
           'incoming_inspection_querying_inspection_list_tips': '正在查询稽查单列表...',
@@ -3493,7 +3495,7 @@ class Translation extends Translations {
           'part_dispatch_pack_order_deleting_pack_order': '正在删除包装清单...',
           'part_dispatch_pack_order_modifying_pack_profile': '正在修改包装方案...',
           'part_dispatch_label_type_body': '型体：',
-          'part_dispatch_label_material': '%s/部件',
+          'part_dispatch_label_material': '%s/部件 - %s',
           'part_dispatch_label_part': '部位：',
           'part_dispatch_label_instruction': '指令：',
           'part_dispatch_label_size': '尺码：',
@@ -3504,6 +3506,8 @@ class Translation extends Translations {
           'part_dispatch_label_delete_label': '删除贴标',
           'part_dispatch_label_print_lock': '打印锁定',
           'part_dispatch_label_print_unlock': '打印解锁',
+          'part_dispatch_label_select_all': '全选',
+          'part_dispatch_label_search_label': '搜索标签',
           'part_dispatch_label_select_all_printed': '全选已印',
           'part_dispatch_label_select_all_not_printed': '全选未印',
           'part_dispatch_label_cancel_select': '取消选择',
@@ -3514,6 +3518,7 @@ class Translation extends Translations {
           'part_dispatch_label_push_finished': '完成%s张, 失败%s张',
           'part_dispatch_label_getting_label_list': '正在获取标签列表...',
           'part_dispatch_label_deleting_label': '正在删除贴标...',
+          'part_dispatch_label_updating_label': '正在修改贴标状态...',
           'part_dispatch_label_print_locking': '正在锁定贴标...',
           'part_dispatch_label_print_unlocking': '正在解锁贴标...',
           'part_dispatch_label_delete_error_tips': '取消选择已打印的贴标后或解锁已打印的贴标后再删除！',
@@ -5870,6 +5875,8 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery_tips':
               'Are you sure you want to clear the form ?',
           'incoming_inspection_apply_inspection': 'Apply inspection',
+          'incoming_inspection_no_apply_inspection_permission_tips': 'No apply inspection permission !',
+          'incoming_inspection_no_inspection_permission_tips': 'No inspection permission !',
           'incoming_inspection_querying_delivery_list_tips':
               'Querying_delivery_list_tips Querying the incoming material list...',
           'incoming_inspection_submitting_inspection_apply_tips':
@@ -7819,7 +7826,7 @@ class Translation extends Translations {
           'part_dispatch_pack_order_modifying_pack_profile':
               'Modifying packing profile...',
           'part_dispatch_label_type_body': 'Style: ',
-          'part_dispatch_label_material': '%s/Part',
+          'part_dispatch_label_material': '%s/Part - %s',
           'part_dispatch_label_part': 'Part: ',
           'part_dispatch_label_instruction': 'Instruction: ',
           'part_dispatch_label_size': 'Size: ',
@@ -7830,6 +7837,8 @@ class Translation extends Translations {
           'part_dispatch_label_delete_label': 'Delete Label',
           'part_dispatch_label_print_lock': 'Print Lock',
           'part_dispatch_label_print_unlock': 'Print Unlock',
+          'part_dispatch_label_select_all': 'Select All',
+          'part_dispatch_label_search_label': 'Search Label',
           'part_dispatch_label_select_all_printed': 'Select All Printed',
           'part_dispatch_label_select_all_not_printed': 'Select All Unprinted',
           'part_dispatch_label_cancel_select': 'Deselect',
@@ -7840,6 +7849,7 @@ class Translation extends Translations {
           'part_dispatch_label_push_finished': '%s completed, %s failed',
           'part_dispatch_label_getting_label_list': 'Loading label list...',
           'part_dispatch_label_deleting_label': 'Deleting label...',
+          'part_dispatch_label_updating_label': 'Updating label...',
           'part_dispatch_label_print_locking': 'Locking label print...',
           'part_dispatch_label_print_unlocking': 'Unlocking label print...',
           'part_dispatch_label_delete_error_tips':
@@ -10334,6 +10344,8 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery_tips':
               'Apakah Anda yakin ingin mengosongkan formulir?',
           'incoming_inspection_apply_inspection': 'Ajukan Pemeriksaan',
+          'incoming_inspection_no_apply_inspection_permission_tips': 'Tidak ada izin untuk memulai audit!',
+          'incoming_inspection_no_inspection_permission_tips': 'Tidak ada izin audit!',
           'incoming_inspection_querying_delivery_list_tips':
               'Mengkueri daftar material masuk...',
           'incoming_inspection_submitting_inspection_apply_tips':
@@ -12362,7 +12374,7 @@ class Translation extends Translations {
           'part_dispatch_pack_order_modifying_pack_profile':
               'Mengubah profil kemas...',
           'part_dispatch_label_type_body': 'Model: ',
-          'part_dispatch_label_material': '%s/Bagian',
+          'part_dispatch_label_material': '%s/Bagian - %s',
           'part_dispatch_label_part': 'Bagian: ',
           'part_dispatch_label_instruction': 'Instruksi: ',
           'part_dispatch_label_size': 'Ukuran: ',
@@ -12373,6 +12385,8 @@ class Translation extends Translations {
           'part_dispatch_label_delete_label': 'Hapus Label',
           'part_dispatch_label_print_lock': 'Kunci Cetak',
           'part_dispatch_label_print_unlock': 'Buka Kunci Cetak',
+          'part_dispatch_label_select_all': 'Pilih Semua',
+          'part_dispatch_label_search_label': 'Cari Label',
           'part_dispatch_label_select_all_printed': 'Pilih Semua Tercetak',
           'part_dispatch_label_select_all_not_printed':
               'Pilih Semua Belum Cetak',
@@ -12384,6 +12398,7 @@ class Translation extends Translations {
           'part_dispatch_label_push_finished': '%s selesai, %s gagal',
           'part_dispatch_label_getting_label_list': 'Mengambil daftar label...',
           'part_dispatch_label_deleting_label': 'Menghapus label...',
+          'part_dispatch_label_updating_label': 'Memperbarui status tab...',
           'part_dispatch_label_print_locking': 'Mengunci cetak label...',
           'part_dispatch_label_print_unlocking': 'Membuka kunci cetak label...',
           'part_dispatch_label_delete_error_tips':

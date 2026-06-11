@@ -49,6 +49,21 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   }
 
   @override
+  void initState() {
+    pdaScanner(scan: (code) {
+      tecDispatchOrderNo.text = code;
+      _query();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(Get.arguments != null){
+        tecDispatchOrderNo.text= Get.arguments['barCode'];
+        _query();
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
@@ -121,6 +136,7 @@ class _PackOrderItem extends StatelessWidget {
   final PackOrderListState state;
   final PackOrderListLogic logic;
   final VoidCallback onQuery;
+
   const _PackOrderItem({
     required this.data,
     required this.state,
@@ -148,7 +164,9 @@ class _PackOrderItem extends StatelessWidget {
               onTap: () => selectPackProfileDialog(
                 orderPackProfileID: data.packProfileID ?? 0,
                 capacityQty: data.capacityQty ?? 0,
-                packProfileList: state.packProfileList,
+                packProfileList: state.packProfileList
+                    .map((v) => [v.packProfileID, v.packProfileName,v.boxCapacity])
+                    .toList(),
                 callback: (int packProfileID, double capacityQty) =>
                     logic.modifyOrderPackProfile(
                   packOrderID: data.packProfileID ?? 0,
@@ -232,8 +250,7 @@ class _PackOrderItem extends StatelessWidget {
                         children: [
                           expandedTextSpan(
                             flex: 5,
-                            hint:
-                                'part_dispatch_pack_order_type_body_tips'.tr,
+                            hint: 'part_dispatch_pack_order_type_body_tips'.tr,
                             text: data.productName ?? '',
                             textColor: Colors.black54,
                           ),

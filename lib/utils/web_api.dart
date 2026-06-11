@@ -32,12 +32,13 @@ bool isTestUrl() => mesBaseUrl != BaseUrl.baseUrlMes.value;
 enum BaseUrl {
   ///MES正式库
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
+  // baseUrlMes('MES正式库', 'https://apptest.goldemperor.com:1207/', 'MES'),
 
   baseUrlSpringBoot('Spring Boot正式库', 'https://geapp.goldemperor.com:1299/', 'Spring Boot'),
 
   ///SAP正式库
-  // baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
-  baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
+  baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
+  // baseUrlSap('SAP正式库', 'https://s4devapp01.goldemperor.com:8005/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
   mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
@@ -1603,6 +1604,12 @@ const webApiGetProductNameByWorkCardNo =
 //通过型体、派工日期起止获取获取指令单批次信息
 const webApiGetWorkCardMtoNoList = 'api/WorkCard/GetWorkCardMtoNoList';
 
+//获取派工单部件及包装方案
+const webApiGetWorkCardMtoNoListByQrCode = 'api/WorkCard/GetWorkCardMtoNoListByQrCode';
+
+//修改派工单包装方案
+const webApiCreatePackageByWorkCardIDAndQty = 'api/WorkCard/CreatePackageByWorkCardIDAndQty';
+
 //通过选中的派工单分录自增长ID获取派工单列表
 const webApiGetPartWorkCardListNew = 'api/WorkCard/GetPartWorkCardListNew';
 
@@ -1611,6 +1618,12 @@ const webApiGetOrderPackageList = 'api/WorkCard/GetOrderPackageList';
 
 //获得包装清单中的标签列表
 const webApiGetLargeCardNoList = 'api/WorkCard/GetLargeCardNoList';
+
+//获得包装清单中的标签列表
+const webApiGetOrderPackageDetail = 'api/Package/GetOrderPackageDetail';
+
+//修改标签打印次数
+const webApiUpdatePrintData = 'api/Package/UpdatePrintData';
 
 //锁定或者解锁标签
 const webApiPackageLabelLockOrUnLock = 'api/WorkCard/PackageLabelLockOrUnLock';

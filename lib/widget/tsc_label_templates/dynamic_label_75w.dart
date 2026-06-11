@@ -240,6 +240,118 @@ Widget _dynamicLabelTemplate75xN({
   );
 }
 
+///动态格式标签模版
+///75 x N（高度由内容决定）
+Widget _dynamicPartLabelTemplate75xN({
+  required String qrCode,
+  String? qrCodeTips,
+  Widget? title,
+  Widget? subTitle,
+  Widget? header,
+  Widget? table,
+  Widget? footer,
+}) {
+  var bs = const BorderSide(color: Colors.black, width: 1.5);
+  var titleWidget = Container(
+    decoration: BoxDecoration(border: Border(bottom: bs)),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: BoxDecoration(border: Border(bottom: bs)),
+                child: Center(
+                  child: Text(
+                    qrCode,
+                    style: const TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  decoration: BoxDecoration(border: Border(bottom: bs)),
+                  child: title ?? const Text(''),
+                ),
+              ),
+              Expanded(
+                flex: 8,
+                child: subTitle ?? const Text(''),
+              ),
+            ],
+          ),
+        ),
+        Container(
+            decoration: BoxDecoration(border: Border(left: bs)),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20 * 5.5,
+                  child: QrImageView(
+                    data: qrCode,
+                    padding: const EdgeInsets.all(5),
+                    version: QrVersions.auto,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: 20 * 5.5,
+                    decoration: BoxDecoration(border: Border(top: bs)),
+                    child: Center(
+                      child: Text(
+                        qrCodeTips ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      ],
+    ),
+  );
+
+  return Container(
+    color: Colors.white,
+    width: 75 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 25 * 5.5,
+              child: titleWidget,
+            ),
+            if (header != null) header,
+            if (table != null) ...[
+              const SizedBox(height: 5),
+              table,
+              const SizedBox(height: 5),
+            ],
+            if (footer != null) ...[footer, const SizedBox(height: 5)],
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 ///标签维护尺码物料中文标
 Widget maintainLabelSizeMaterialChineseDynamicLabel({
   required String barCode,
@@ -301,7 +413,8 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
           ],
         ),
       ),
-      table: _createTableWidget(titleText: titleText, totalText: totalText, map: map),
+      table: _createTableWidget(
+          titleText: titleText, totalText: totalText, map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Row(
@@ -653,3 +766,75 @@ Widget maintainLabelMixEnglishDynamicLabel({
         ),
       ),
     );
+
+///部件动态标
+Widget partDynamicLabel({
+  required String qrCode,
+  required String qrCodeTips,
+  required String title,
+  required List<String> subTitleList,
+  required String tableFirstLineTitle,
+  required String tableLastLineTitle,
+  required Map<String, List<List<String>>> map,
+  required String pageNumber,
+  required String deliveryDate,
+}) {
+  var subTitle = <String>[];
+  var header = <String>[];
+  if (subTitleList.length > 4) {
+    subTitle = subTitleList.sublist(0, 4);
+    header = subTitleList.sublist(4, subTitleList.length);
+  } else {
+    subTitle = subTitleList;
+  }
+
+  return _dynamicPartLabelTemplate75xN(
+    qrCode: qrCode,
+    qrCodeTips: qrCodeTips,
+    title: Padding(
+      padding: const EdgeInsets.only(left: 3, right: 3),
+      child: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      ),
+    ),
+    subTitle: Padding(
+      padding: const EdgeInsets.only(left: 3, right: 3),
+      child: Text(
+        subTitle.join('\n'),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      ),
+    ),
+    header: Padding(
+      padding: const EdgeInsets.only(left: 3, right: 3),
+      child: Text(
+        header.join('\n'),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      ),
+    ),
+    table: _createTableWidget(
+      titleText: tableFirstLineTitle,
+      totalText: tableLastLineTitle,
+      map: map,
+    ),
+    footer: Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              pageNumber,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              deliveryDate,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

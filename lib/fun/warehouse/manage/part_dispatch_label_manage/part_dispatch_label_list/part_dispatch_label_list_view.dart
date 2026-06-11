@@ -296,11 +296,11 @@ class _PartDispatchLabelListItem extends StatelessWidget {
           ),
           foregroundDecoration: RotatedCornerDecoration.withColor(
             badgePosition: BadgePosition.topStart,
-            color: data.isPrint == true ? Colors.green : Colors.red,
+            color: (data.printCount!>0) == true ? Colors.green : Colors.red,
             badgeCornerRadius: const Radius.circular(7),
             badgeSize: const Size(50, 50),
             textSpan: TextSpan(
-              text: data.isPrint == true
+              text: (data.printCount!>0) == true
                   ? 'part_dispatch_label_printed'.tr
                   : 'part_dispatch_label_not_printed'.tr,
               style: const TextStyle(fontSize: 12),

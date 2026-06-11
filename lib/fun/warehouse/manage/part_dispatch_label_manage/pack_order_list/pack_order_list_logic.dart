@@ -8,6 +8,8 @@ import 'pack_order_list_state.dart';
 class PackOrderListLogic extends GetxController {
   final PackOrderListState state = PackOrderListState();
 
+
+
   void queryPackOrders({
     required String dispatchOrderNo,
     required String typeBody,
@@ -23,7 +25,6 @@ class PackOrderListLogic extends GetxController {
       typeBody: typeBody,
       startDate: startDate,
       endDate: endDate,
-      success: () {},
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -46,11 +47,14 @@ class PackOrderListLogic extends GetxController {
     }
   }
 
-  String getOrderPackProfile(int? orderPackProfileID) =>
-      state.packProfileList
-          .firstWhere((v) => v.packProfileID == orderPackProfileID)
-          .packProfileName ??
-      '';
+  String getOrderPackProfile(int? orderPackProfileID) => orderPackProfileID != 0
+      ? state.packProfileList.isEmpty
+          ? '包装方案列表为空'
+          : state.packProfileList
+                  .firstWhere((v) => v.packProfileID == orderPackProfileID)
+                  .packProfileName ??
+              ''
+      : '当前包装清单尚未配置方案';
 
   void modifyOrderPackProfile({
     required int packOrderID,
@@ -62,7 +66,7 @@ class PackOrderListLogic extends GetxController {
       packOrderID: packOrderID,
       packProfileID: packProfileID,
       capacityQty: capacityQty,
-      success: (msg) => successDialog(content: msg,back: refresh),
+      success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }

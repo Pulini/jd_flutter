@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspect
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_orders_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -146,7 +147,13 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
           icon: const Icon(Icons.search),
         ),
         IconButton(
-          onPressed: () => Get.to(() => const IncomingInspectionOrdersPage()),
+          onPressed: () {
+            if(checkUserPermission('1051003')){
+              Get.to(() => const IncomingInspectionOrdersPage());
+            }else{
+              errorDialog(content: 'incoming_inspection_no_inspection_permission_tips'.tr);
+            }
+          },
           icon: const Icon(Icons.menu),
         ),
       ],

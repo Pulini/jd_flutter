@@ -118,6 +118,7 @@ class _CartonLabelScanProgressDetailViewState
                             text: item.outBoxBarCode ?? '',
                             textColor: item.stateColor(),
                           ),
+                          Text(item.getScanProgress()),
                         ],
                       ),
                     ),

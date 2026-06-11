@@ -28,6 +28,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
   Container _item(BarCodeInfo code) {
     return Container(
       height: 40,
+      margin: const EdgeInsets.only(bottom: 5),
       padding: const EdgeInsets.only(left: 5, right: 5),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -176,7 +177,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                           child: CombinationButton(
                         text: 'process_report_store_change'.tr,
                         click: () {
-                          Get.to(() => const ProcessReportModifyPage());
+                          Get.to(() => const ProcessReportModifyPage())?.then((_)=>_scan());
                         },
                         combination: Combination.left,
                       )),
@@ -230,6 +231,15 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
       ),
     );
   }
+  void _scan(){
+    pdaScanner(
+      scan: (code) {
+        if (code.isNotEmpty && code != 'null') {
+          logic.scanCode(code);
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -237,11 +247,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
       refreshController.finishRefresh();
       refreshController.resetFooter();
     });
-    pdaScanner(scan: (code) {
-      if (code.isNotEmpty && code != 'null') {
-        logic.scanCode(code);
-      }
-    });
+    _scan();
     super.initState();
   }
 

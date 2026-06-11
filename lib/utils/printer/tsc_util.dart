@@ -1333,7 +1333,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
 
   if (subTitleList.isNotEmpty) {
     for (var i = 0; i < subTitleList.length; ++i) {
-      //只允许行数为2
+      //只允许行数为4
       if (i >= 4) break;
       //行高
       var lineHeight = 4;

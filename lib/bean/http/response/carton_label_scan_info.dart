@@ -20,6 +20,7 @@ class CartonLabelScanInfo {
     custOrderNumber = json['CustOrderNumber'];
     outBoxBarCode = json['OutBoxBarCode'];
     mix = json['Mix'];
+    dispatchNumber = json['DispatchNumber'];
     isSoleBarCode = json['IsSoleBarCode'];
     if (json['LinkDataSizeList'] != null) {
       linkDataSizeList = [];
@@ -33,6 +34,7 @@ class CartonLabelScanInfo {
   String? custOrderNumber;
   String? outBoxBarCode;
   int? mix;
+  String? dispatchNumber;
   int? isSoleBarCode;
   List<LinkDataSizeList>? linkDataSizeList;
 
@@ -42,6 +44,7 @@ class CartonLabelScanInfo {
     map['CustOrderNumber'] = custOrderNumber;
     map['OutBoxBarCode'] = outBoxBarCode;
     map['Mix'] = mix;
+    map['DispatchNumber'] = dispatchNumber;
     map['IsSoleBarCode'] = isSoleBarCode;
     if (linkDataSizeList != null) {
       map['LinkDataSizeList'] =

@@ -31,11 +31,11 @@ class PartDispatchLabelListLogic extends GetxController {
 
   void deleteLabel({required Function() refresh}) {
     var selectedUnPrintList = state.labelList
-        .where((v) => v.isSelected.value && !v.isPrint!)
+        .where((v) => v.isSelected.value && !(v.printCount!>0))
         .toList();
 
     var selectedPrintedList =
-        state.labelList.where((v) => v.isSelected.value && v.isPrint!).toList();
+        state.labelList.where((v) => v.isSelected.value && (v.printCount!>0)).toList();
 
     if (selectedUnPrintList.isNotEmpty && selectedPrintedList.isNotEmpty) {
       errorDialog(content: 'part_dispatch_label_delete_error_tips'.tr);
@@ -60,10 +60,10 @@ class PartDispatchLabelListLogic extends GetxController {
     required Function() refresh,
   }) {
     var selectedPrintedList =
-        state.labelList.where((v) => v.isSelected.value && v.isPrint!).toList();
+        state.labelList.where((v) => v.isSelected.value && (v.printCount!>0)).toList();
 
     var selectedUnPrintList = state.labelList
-        .where((v) => v.isSelected.value && !v.isPrint!)
+        .where((v) => v.isSelected.value && !(v.printCount!>0))
         .toList();
 
     if (isLock && selectedUnPrintList.isEmpty) {
@@ -90,15 +90,14 @@ class PartDispatchLabelListLogic extends GetxController {
 
   void selectAllPrintedItem() {
     for (var v in state.labelList) {
-      v.isSelected.value = v.isPrint == true;
+      v.isSelected.value = v.printCount! >0;
     }
   }
 
-  //40016125
 
   void selectAllNotPrintItem() {
     for (var v in state.labelList) {
-      v.isSelected.value = v.isPrint == false;
+      v.isSelected.value = v.printCount ==0;
     }
   }
 
@@ -114,7 +113,7 @@ class PartDispatchLabelListLogic extends GetxController {
   ) async =>
       await labelMultipurposeDynamic2(
         qrCode: label.largeCardNo ?? '',
-        qrCodeTips:'${label.materialList!.first.totalQty()}${label.materialList!.first.unitName} Pr/pc',
+        qrCodeTips:'${label.materialList!.first.totalQty()} Pr/pc',
         title: label.productName ?? '',
         subTitleList:label.partList,
         tableFirstLineTitle: 'part_dispatch_label_print_size'.tr,
@@ -146,7 +145,7 @@ class PartDispatchLabelListLogic extends GetxController {
   Future<List<List<Uint8List>>> getLabelListData() async => [
         ...await Future.wait(
           state.labelList
-              .where((v) => v.isSelected.value && !v.isPrint!)
+              .where((v) => v.isSelected.value && !(v.printCount!>0))
               .toList()
               .map((label) => _createLabelData(label))
               .toList(),

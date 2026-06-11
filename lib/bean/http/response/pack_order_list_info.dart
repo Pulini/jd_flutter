@@ -15,10 +15,12 @@ import 'package:get/get.dart';
 class PackOrderInfo {
   List<OrderPackageInfo> orderPackageList;
   List<PackProfileInfo> packageProfileList;
+
   PackOrderInfo({
     required this.orderPackageList,
     required this.packageProfileList,
   });
+
   factory PackOrderInfo.fromJson(dynamic json) {
     return PackOrderInfo(
       orderPackageList: [
@@ -33,7 +35,6 @@ class PackOrderInfo {
       ],
     );
   }
-
 }
 
 class OrderPackageInfo {
@@ -80,21 +81,37 @@ class OrderPackageInfo {
   }
 }
 
+//"packProfileID": 24,
+// "packProfileNumber": "Package26000053",
+// "packProfileName": "单部件单码装",
+// "BoxCapacity": 50.0
 class PackProfileInfo {
-  int packProfileID;
+  int? packProfileID;
+  String? packProfileNumber;
   String? packProfileName;
+  double? boxCapacity;
 
   PackProfileInfo({
-    required this.packProfileID,
+    this.packProfileID,
+    this.packProfileNumber,
     this.packProfileName,
+    this.boxCapacity,
   });
 
   factory PackProfileInfo.fromJson(dynamic json) {
     return PackProfileInfo(
-      packProfileID: json['ItemID'],
-      packProfileName: json['Name'],
+      packProfileID: json['packProfileID'],
+      packProfileNumber: json['packProfileNumber'],
+      packProfileName: json['packProfileName'],
+      boxCapacity: json['BoxCapacity'],
     );
   }
+  Map<String, dynamic> toJson() => {
+        'packProfileID': packProfileID,
+        'packProfileNumber': packProfileNumber,
+        'packProfileName': packProfileName,
+        'BoxCapacity': boxCapacity,
+      };
 }
 
 // "InterID": 68157,
@@ -125,7 +142,7 @@ class PartLabelInfo {
   String? packageType;
   String? packageUnitName;
   int? pieceNo;
-  bool? isPrint;
+  int? printCount;
   bool? isInStock;
   bool? isOutStock;
   List<PartLabelMaterialInfo>? materialList;
@@ -148,7 +165,7 @@ class PartLabelInfo {
     this.packageType,
     this.packageUnitName,
     this.pieceNo,
-    this.isPrint,
+    this.printCount,
     this.isInStock,
     this.isOutStock,
     this.materialList,
@@ -187,7 +204,7 @@ class PartLabelInfo {
       packageType: json['PackageType'],
       packageUnitName: json['PackageUnitName'],
       pieceNo: json['PieceNo'],
-      isPrint: json['IsPrint'],
+      printCount: json['PrintCount'],
       isInStock: json['IsInStock'],
       isOutStock: json['IsOutStock'],
       materialList: [
@@ -200,7 +217,7 @@ class PartLabelInfo {
 
   String getPartsName() => partList.join(',');
 
-  String getSize() => sizeList.map((v) => '${v.size}/${v.auxQty}').join(',');
+  String getSize() => sizeList.map((v) => '${v.size}/${v.auxQty}').join(' , ');
 
   int totalQty() => (sumQty! / partList.length).toInt();
 }

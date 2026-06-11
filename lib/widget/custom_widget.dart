@@ -451,8 +451,7 @@ Widget getLinkCupertinoPicker({
   final groupChildren =
       groupItems.map((data) => Text(data)).toList(growable: false);
   final subChildrenList = subItems
-      .map((items) =>
-          items.map((data) => Text(data)).toList(growable: false))
+      .map((items) => items.map((data) => Text(data)).toList(growable: false))
       .toList(growable: false);
   return Obx(() => Row(
         children: [
@@ -1011,7 +1010,7 @@ class RatioBarChart extends StatelessWidget {
               ? Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius:  BorderRadius.only(
+                    borderRadius: BorderRadius.only(
                       topLeft: radius,
                       bottomLeft: radius,
                     ),
@@ -1023,7 +1022,7 @@ class RatioBarChart extends StatelessWidget {
                   ? Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        borderRadius:  BorderRadius.only(
+                        borderRadius: BorderRadius.only(
                           topRight: radius,
                           bottomRight: radius,
                         ),
@@ -1057,9 +1056,8 @@ void changeLanguagePopup({required Function() changed}) {
   var localeIndex =
       locales.indexWhere((v) => v.languageCode == Get.locale!.languageCode);
   var controller = FixedExtentScrollController(initialItem: localeIndex);
-  final languageLabels = languages
-      .map((s) => Center(child: Text(s)))
-      .toList(growable: false);
+  final languageLabels =
+      languages.map((s) => Center(child: Text(s))).toList(growable: false);
   String getCancel(int index) => locales[index] == localeChinese
       ? '取消'
       : locales[index] == localeIndonesian
@@ -1129,4 +1127,55 @@ void changeLanguagePopup({required Function() changed}) {
       ),
     ),
   );
+}
+
+class RadioItem<T> extends StatelessWidget {
+  final String title;
+  final T value;
+
+  const RadioItem({
+    super.key,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final row = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Radio(
+          value: value,
+          visualDensity: const VisualDensity(horizontal: -4),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        Text(title),
+      ],
+    );
+    // 自动查找 RadioGroup 祖先，整行点击都能触发 RadioGroup.onChanged
+    final radioGroup = _findRadioGroup(context);
+    if (radioGroup != null) {
+      return GestureDetector(
+        onTap: () => radioGroup.onChanged(value),
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsetsGeometry.only(left: 5, right: 5),
+          child: row,
+        ),
+      );
+    }
+    return row;
+  }
+
+  RadioGroup<T>? _findRadioGroup(BuildContext context) {
+    RadioGroup<T>? result;
+    context.visitAncestorElements((ancestor) {
+      if (ancestor.widget is RadioGroup<T>) {
+        result = ancestor.widget as RadioGroup<T>;
+        return false;
+      }
+      return true;
+    });
+    return result;
+  }
 }

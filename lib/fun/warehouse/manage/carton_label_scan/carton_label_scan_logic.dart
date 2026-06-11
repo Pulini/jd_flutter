@@ -20,6 +20,7 @@ class CartonLabelScanLogic extends GetxController {
       code: code,
       success: (data) {
         state.priorityCartonLabelInfo =data;
+        state.dispatchNumber.value=data.dispatchNumber??'';
         state.priorityCartonLabel.value = state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
         state.priorityPo.value = state.priorityCartonLabelInfo?.custOrderNumber ?? '';
         state.priorityCartonInsideLabelList.value = state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
@@ -37,6 +38,7 @@ class CartonLabelScanLogic extends GetxController {
       code: code,
       success: (data) {
        state.cartonLabelInfo = data;
+       state.dispatchNumber.value=data.dispatchNumber??'';
        state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
        state.cartonInsideLabelList.value = state.cartonLabelInfo!.linkDataSizeList ?? [];
        state.labelTotal.value = state.cartonInsideLabelList.fold(0, (total, next) => total + next.labelCount!);
@@ -75,10 +77,10 @@ class CartonLabelScanLogic extends GetxController {
       state.dispatchNumber.value=code;
       return;
     }
-    if(state.dispatchNumber.value.isEmpty){
-      errorDialog(content: 'carton_label_scan_label_scan_dispatch_no_empty_tips'.tr);
-      return;
-    }
+    // if(state.dispatchNumber.value.isEmpty){
+    //   errorDialog(content: 'carton_label_scan_label_scan_dispatch_no_empty_tips'.tr);
+    //   return;
+    // }
     if (isSubmitting) return;
     if (state.cartonLabel.value.isEmpty) {
       outsideCode.call(code);

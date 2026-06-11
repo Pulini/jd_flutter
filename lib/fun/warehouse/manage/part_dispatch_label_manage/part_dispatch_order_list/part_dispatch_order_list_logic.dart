@@ -44,8 +44,6 @@ class PartDispatchLabelManageLogic extends GetxController {
       });
       show.call(group);
     }
-    // success(List<PartDispatchInstructionInfo> list) => show.call(
-    //     groupBy(list, (v) => '${v.seOrderNo} - ${v.batchNo}').values.toList());
 
     error(String msg) => errorDialog(content: msg);
 

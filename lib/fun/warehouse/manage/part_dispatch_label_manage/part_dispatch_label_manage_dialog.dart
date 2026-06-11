@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -17,17 +16,19 @@ import 'package:photo_view/photo_view_gallery.dart';
 void selectPackProfileDialog({
   required int orderPackProfileID,
   required double capacityQty,
-  required List<PackProfileInfo> packProfileList,
+  required List<List> packProfileList,
   required Function(int, double) callback,
 }) {
+  var tecQty=TextEditingController(text: capacityQty.toShowString());
   var selectIndex = (-1).obs;
-  var qty = (0.0).obs;
-  qty.value = capacityQty;
   selectIndex.value =
-      packProfileList.indexWhere((v) => v.packProfileID == orderPackProfileID);
+      packProfileList.indexWhere((v) => v[0] == orderPackProfileID);
 
   item(int i) => Obx(() => GestureDetector(
-        onTap: () => selectIndex.value = i,
+        onTap: () {
+          selectIndex.value = i;
+          tecQty.text=(packProfileList[i][2] as double).toShowString();
+        },
         child: Container(
           margin: const EdgeInsets.only(bottom: 5),
           padding: const EdgeInsets.all(5),
@@ -49,7 +50,7 @@ void selectPackProfileDialog({
             ),
           ),
           child: Text(
-            packProfileList[i].packProfileName ?? '',
+            packProfileList[i][1] ?? '',
             style: TextStyle(
               color: selectIndex.value == i ? Colors.green : Colors.black54,
               fontWeight: FontWeight.bold,
@@ -63,11 +64,13 @@ void selectPackProfileDialog({
       children: [
         Text('part_dispatch_select_pack_profile_dialog_title'.tr),
         Expanded(child: Container()),
-        SizedBox(width: 130,child: NumberDecimalEditText(
-          hint: 'part_dispatch_select_pack_profile_dialog_capacity_qty'.tr,
-          controller: TextEditingController(text: capacityQty.toShowString()),
-          onChanged: (v) => qty.value = v.toDouble(),
-        ),),
+        SizedBox(
+          width: 130,
+          child:NumberDecimalEditText(
+            hint: 'part_dispatch_select_pack_profile_dialog_capacity_qty'.tr,
+            controller: tecQty,
+          ),
+        ),
       ],
     ),
     content: SizedBox(
@@ -79,20 +82,23 @@ void selectPackProfileDialog({
     actions: [
       TextButton(
         onPressed: () {
-          if (packProfileList[selectIndex.value].packProfileID !=
-                  orderPackProfileID ||
-              qty.value != capacityQty) {
+          var qty=tecQty.text.toDoubleTry();
+          if (packProfileList[selectIndex.value][0] != orderPackProfileID ||
+              (qty != capacityQty && qty > 0)) {
             askDialog(
-                content: 'part_dispatch_select_pack_profile_dialog_modify_tips'.tr,
+                content:
+                    'part_dispatch_select_pack_profile_dialog_modify_tips'.tr,
                 confirm: () {
                   Get.back();
                   callback.call(
-                    packProfileList[selectIndex.value].packProfileID,
-                    qty.value,
+                    packProfileList[selectIndex.value][0],
+                    qty,
                   );
                 });
           } else {
-            errorDialog(content: 'part_dispatch_select_pack_profile_dialog_no_change'.tr);
+            errorDialog(
+                content:
+                    'part_dispatch_select_pack_profile_dialog_no_change'.tr);
           }
         },
         child: Text('dialog_default_confirm'.tr),
@@ -163,7 +169,8 @@ void selectInstructionsDialog({
             ),
             ExpandedFrameText(
               alignment: Alignment.center,
-              text: 'part_dispatch_select_instruction_dialog_total_dispatch_qty'.tr,
+              text: 'part_dispatch_select_instruction_dialog_total_dispatch_qty'
+                  .tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
             ),
@@ -257,11 +264,15 @@ void selectInstructionsDialog({
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textSpan(
-                          hint: 'part_dispatch_select_instruction_dialog_batch_qty'.tr,
+                          hint:
+                              'part_dispatch_select_instruction_dialog_batch_qty'
+                                  .tr,
                           text: data.batchNo,
                         ),
                         textSpan(
-                          hint: 'part_dispatch_select_instruction_dialog_total_qty'.tr,
+                          hint:
+                              'part_dispatch_select_instruction_dialog_total_qty'
+                                  .tr,
                           text: data.totalQty.toShowString(),
                         ),
                       ],
@@ -287,7 +298,8 @@ void selectInstructionsDialog({
   }
 
   Get.dialog(AlertDialog(
-    title: Text('part_dispatch_select_instruction_dialog_type_body'.trArgs([batchGroups.first.typeBody])),
+    title: Text('part_dispatch_select_instruction_dialog_type_body'
+        .trArgs([batchGroups.first.typeBody])),
     content: SizedBox(
       width: getScreenWidth() * 0.7,
       height: getScreenHeight() * 0.7,
@@ -310,7 +322,10 @@ void selectInstructionsDialog({
                   1,
             );
           } else {
-            errorDialog(content: 'part_dispatch_select_instruction_dialog_no_select_instruction'.tr);
+            errorDialog(
+                content:
+                    'part_dispatch_select_instruction_dialog_no_select_instruction'
+                        .tr);
           }
         },
         child: Text('dialog_default_confirm'.tr),
@@ -395,7 +410,8 @@ void createLabelDialog({
   var errorMsg = '';
   for (var v in selectedList) {
     if (!v.isLegal()) {
-      errorMsg += 'part_dispatch_create_label_dialog_msg'.trArgs([v.size(),v.partCount.toString()]);
+      errorMsg += 'part_dispatch_create_label_dialog_msg'
+          .trArgs([v.size(), v.partCount.toString()]);
     }
   }
   if (errorMsg.isNotEmpty) {
@@ -413,7 +429,9 @@ void createLabelDialog({
   Get.dialog(AlertDialog(
     titlePadding: const EdgeInsets.all(5),
     contentPadding: const EdgeInsets.all(10),
-    title: Padding(padding: const EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
+    title: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -430,7 +448,8 @@ void createLabelDialog({
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
                       child: avatar.isNotEmpty
-                          ? CachedNetworkImage(imageUrl: avatar.value, fit: BoxFit.fill)
+                          ? CachedNetworkImage(
+                              imageUrl: avatar.value, fit: BoxFit.fill)
                           : Icon(
                               Icons.account_circle,
                               size: 150,
@@ -440,7 +459,8 @@ void createLabelDialog({
                   ),
                 ),
                 WorkerCheck(
-                  hint: 'part_dispatch_create_label_dialog_input_create_worker'.tr,
+                  hint: 'part_dispatch_create_label_dialog_input_create_worker'
+                      .tr,
                   onChanged: (w) {
                     worker = w;
                     avatar.value = w?.picUrl ?? '';
@@ -451,7 +471,8 @@ void createLabelDialog({
                     padding: const EdgeInsets.only(bottom: 10),
                     child: NumberEditText(
                       controller: controller,
-                      hint: 'part_dispatch_create_label_dialog_input_create_qty'.tr,
+                      hint: 'part_dispatch_create_label_dialog_input_create_qty'
+                          .tr,
                       onChanged: (s) {
                         var labelCount = s.toIntTry();
                         if (labelCount > max) {
@@ -479,11 +500,17 @@ void createLabelDialog({
                         combination: Combination.right,
                         click: () {
                           if (worker == null) {
-                            errorDialog(content: 'part_dispatch_create_label_dialog_input_create_worker_tips'.tr);
+                            errorDialog(
+                                content:
+                                    'part_dispatch_create_label_dialog_input_create_worker_tips'
+                                        .tr);
                             return;
                           }
                           if (!isSingleSize && controller.text.isEmpty) {
-                            errorDialog(content: 'part_dispatch_create_label_dialog_input_create_qty_tips'.tr);
+                            errorDialog(
+                                content:
+                                    'part_dispatch_create_label_dialog_input_create_qty_tips'
+                                        .tr);
                             return;
                           }
                           _createLabel(

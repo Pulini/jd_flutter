@@ -12,12 +12,11 @@ class PackOrderListState {
     required String typeBody,
     required String startDate,
     required String endDate,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
       method: webApiGetOrderPackageList,
-      loading: 'part_dispatch_pack_order_no_input_tips'.tr,
+      loading: 'part_dispatch_pack_order_getting_pack_order_list'.tr,
       body: {
         'workCardNo': dispatchOrderNo,
         'productName': typeBody,
@@ -29,7 +28,6 @@ class PackOrderListState {
         var data = PackOrderInfo.fromJson(response.data);
         packOrderList.value = data.orderPackageList;
         packProfileList.value = data.packageProfileList;
-        success.call();
       } else {
         packOrderList.value = [];
         packProfileList.value = [];
@@ -45,7 +43,7 @@ class PackOrderListState {
   }) {
     httpPost(
       method: webApiCleanLabelFormPackID,
-      loading: 'part_dispatch_pack_order_delete_order_tips'.tr,
+      loading: 'part_dispatch_pack_order_deleting_pack_order'.tr,
       params: {'InterID': id},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -65,7 +63,7 @@ class PackOrderListState {
   }) {
     httpPost(
       method: webApiModifyPackProfile,
-      loading: 'part_dispatch_pack_order_no_delete_permission'.tr,
+      loading: 'part_dispatch_pack_order_modifying_pack_profile'.tr,
       params: {
         'PackOrderID': packOrderID,
         'PackProfileID': packProfileID,
