@@ -32,13 +32,11 @@ bool isTestUrl() => mesBaseUrl != BaseUrl.baseUrlMes.value;
 enum BaseUrl {
   ///MES正式库
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
-  // baseUrlMes('MES正式库', 'https://apptest.goldemperor.com:1207/', 'MES'),
 
   baseUrlSpringBoot('Spring Boot正式库', 'https://geapp.goldemperor.com:1299/', 'Spring Boot'),
 
   ///SAP正式库
-  baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
-  // baseUrlSap('SAP正式库', 'https://s4devapp01.goldemperor.com:8005/', 'SAP'),
+  baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
   mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
