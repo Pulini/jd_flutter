@@ -52,6 +52,8 @@ const val ACTION_ID4 = "android.intent.ACTION_DECODE_DATA"
 const val BarCode4 = "barcode_string"
 const val ACTION_ID5 = "com.action.ai.x1"
 const val BarCode5 = "decoded_json_results"
+const val ACTION_ID6 = "com.action.ai.x1.broadcast"
+const val BarCode6 = "decoded results"
 const val WEIGHT_DEVICE_DETACHED = "tw.PL2303MultiUSBMessage"
 const val WEIGHT_DEVICE_NAME = "com.prolific.pl2300G_multisimpletest.USB_PERMISSION"
 
@@ -103,6 +105,7 @@ class ReceiverUtil(
                 ACTION_ID3 -> scanCode.invoke(intent.getStringExtra(BarCode3).toString())
                 ACTION_ID4 -> scanCode.invoke(intent.getStringExtra(BarCode4).toString())
                 ACTION_ID5 -> scanCodeList.invoke(jsonToList(intent.getStringExtra(BarCode5).toString()))
+                ACTION_ID6 -> scanCode.invoke(intent.getStringExtra(BarCode6).toString())
                 ACTION_USB_PERMISSION -> {
                     Log.e("Pan", "USB设备权限申请结果")
                     synchronized(this) {
@@ -275,6 +278,7 @@ class ReceiverUtil(
                 addAction(ACTION_ID3)
                 addAction(ACTION_ID4)
                 addAction(ACTION_ID5)
+                addAction(ACTION_ID6)
                 addAction(WEIGHT_DEVICE_DETACHED)
             }, Context.RECEIVER_EXPORTED)
         } else {
@@ -296,6 +300,7 @@ class ReceiverUtil(
                 addAction(ACTION_ID3)
                 addAction(ACTION_ID4)
                 addAction(ACTION_ID5)
+                addAction(ACTION_ID6)
                 addAction(WEIGHT_DEVICE_DETACHED)
             })
         }

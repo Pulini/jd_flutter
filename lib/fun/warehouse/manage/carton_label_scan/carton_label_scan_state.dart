@@ -8,6 +8,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 
 class CartonLabelScanState {
+  var isCheckingCartonBarCode=false;
   var cartonInsideLabelList = <LinkDataSizeList>[].obs;
   var cartonLabel = ''.obs;
   CartonLabelScanInfo? cartonLabelInfo;
@@ -27,6 +28,10 @@ class CartonLabelScanState {
     required Function(CartonLabelScanInfo) success,
     required Function(String) error,
   }) {
+    if(isCheckingCartonBarCode){
+      return;
+    }
+    isCheckingCartonBarCode=true;
     httpGet(
       loading:'carton_label_scan_querying_outside_label_detail'.tr  ,
       method: webApiGetCartonLabelInfo,
@@ -40,6 +45,7 @@ class CartonLabelScanState {
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
+      isCheckingCartonBarCode=false;
     });
   }
 
