@@ -798,8 +798,14 @@ private fun getAndroidId(context: Context): String {
     }
 }
 
-fun jsonToList(json: String): List<String> =
-    Gson().fromJson(json, AkxJsonData::class.java).labels.map { it.results.result_0 }.toList()
+fun jsonToList(json: String): List<String> {
+    return try {
+        Gson().fromJson(json, AkxJsonData::class.java).labels.map { it.results.result_0 }.toList()
+    } catch (e: Exception) {
+        listOf()
+    }
+}
+
 
 
 data class AkxJsonData(
