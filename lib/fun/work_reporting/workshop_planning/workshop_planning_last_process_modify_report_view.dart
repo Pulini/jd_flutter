@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -172,7 +173,7 @@ class _LastProcessModifyReportPageState
   }
 }
 
-class _ModifyReportMaterialItem extends StatelessWidget {
+class _ModifyReportMaterialItem extends StatefulWidget {
   final LastProcessReportMaterialInfo data;
   final WorkshopPlanningLogic logic;
 
@@ -180,6 +181,15 @@ class _ModifyReportMaterialItem extends StatelessWidget {
     required this.data,
     required this.logic,
   });
+
+  @override
+  State<_ModifyReportMaterialItem> createState() =>
+      _ModifyReportMaterialItemState();
+}
+
+class _ModifyReportMaterialItemState
+    extends State<_ModifyReportMaterialItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +211,7 @@ class _ModifyReportMaterialItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Text(
-                  '(${data.number}) ${data.name}'.allowWordTruncation(),
+                  '(${widget.data.number}) ${widget.data.name}'.allowWordTruncation(),
                   maxLines: 4,
                 ),
               ),
@@ -218,7 +228,7 @@ class _ModifyReportMaterialItem extends StatelessWidget {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () => logic.modifyReportDeleteMaterial(data),
+                onPressed: () => debouncer.run(() => widget.logic.modifyReportDeleteMaterial(widget.data)),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -318,7 +328,7 @@ class _ModifyReportProcessItem extends StatelessWidget {
   }
 }
 
-class _ModifyReportWorkerItem extends StatelessWidget {
+class _ModifyReportWorkerItem extends StatefulWidget {
   final WorkshopPlanningWorkerInfo data;
   final WorkshopPlanningLogic logic;
 
@@ -328,9 +338,17 @@ class _ModifyReportWorkerItem extends StatelessWidget {
   });
 
   @override
+  State<_ModifyReportWorkerItem> createState() =>
+      _ModifyReportWorkerItemState();
+}
+
+class _ModifyReportWorkerItemState extends State<_ModifyReportWorkerItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => logic.modifyReportModifyWorker(data),
+      onTap: () => debouncer.run(() => widget.logic.modifyReportModifyWorker(widget.data)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -354,13 +372,13 @@ class _ModifyReportWorkerItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${data.name}(${data.number})<${data.typeOfWork}>',
+                              '${widget.data.name}(${widget.data.number})<${widget.data.typeOfWork}>',
                             ),
                           ),
                           Text(
-                            data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            widget.data.attendanceStatus == true ? '已考勤' : '未考勤',
                             style: TextStyle(
-                              color: data.attendanceStatus == true
+                              color: widget.data.attendanceStatus == true
                                   ? Colors.green
                                   : Colors.red,
                             ),
@@ -373,17 +391,17 @@ class _ModifyReportWorkerItem extends StatelessWidget {
                               textSpan(
                                 isBold: false,
                                 hint: '系数：',
-                                text: data.base.toShowString(),
+                                text: widget.data.base.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '工时：',
-                                text: data.dayWorkTime.toShowString(),
+                                text: widget.data.dayWorkTime.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '金额：',
-                                text: data.money.value.toShowString(),
+                                text: widget.data.money.value.toShowString(),
                               ),
                             ],
                           ))
@@ -403,10 +421,10 @@ class _ModifyReportWorkerItem extends StatelessWidget {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: '确定要删除该组员数据吗？',
-                    confirm: () => logic.modifyReportDeleteReportWorker(data),
-                  ),
+                    confirm: () => widget.logic.modifyReportDeleteReportWorker(widget.data),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

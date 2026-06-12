@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -20,6 +21,7 @@ class _SapSalesShipmentPalletViewState
     extends State<SapSalesShipmentPalletView> {
   final SapSalesShipmentLogic logic = Get.find<SapSalesShipmentLogic>();
   final SapSalesShipmentState state = Get.find<SapSalesShipmentLogic>().state;
+  final debouncer = ClickDebouncer();
   int index = Get.arguments['index'];
 
   Container _item(List<SapPalletDetailInfo> p) {
@@ -102,10 +104,10 @@ class _SapSalesShipmentPalletViewState
     return pageBody(
       actions: [
         IconButton(
-          onPressed: () => askDialog(
+          onPressed: () => debouncer.run(() => askDialog(
             content: 'sap_sales_shipment_pallet_reset_label_status_tips'.tr,
             confirm: () => logic.refreshPallet(index),
-          ),
+          )),
           icon: const Icon(Icons.refresh, color: Colors.blue),
         )
       ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -17,6 +18,7 @@ void modifyDetailPickingQtyDialog({
   required WaitPickingMaterialOrderInfo order,
   required List<WaitPickingMaterialOrderModelInfo> data,
 }) {
+  final debouncer = ClickDebouncer();
   double proportion = order.getProportion();
   String basicUnit = order.basicUnit ?? '';
   String commonUnits = order.commonUnits ?? '';
@@ -89,7 +91,7 @@ void modifyDetailPickingQtyDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 var qty = basicQty;
                 for (var v in data) {
                   var unreceivedQty = v.getUnreceivedQty();
@@ -112,7 +114,7 @@ void modifyDetailPickingQtyDialog({
                       data.last.pickingQty.value.add(qty);
                 }
                 Get.back();
-              },
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -397,6 +399,7 @@ void realTimeInventoryDialog({
 }
 
 void checkPickerDialog({required Function(WorkerInfo) confirm}) {
+  final debouncer = ClickDebouncer();
   WorkerInfo? worker;
   var avatar = ''.obs;
   Get.dialog(
@@ -438,7 +441,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
           contentPadding: const EdgeInsets.all(10),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 if (worker == null) {
                   showSnackBar(
                     message: 'picking_material_order_dialog_number_error'.tr,
@@ -456,7 +459,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
                     confirm.call(worker!);
                   }
                 }
-              },
+              }),
               child: Text(
                 'dialog_default_confirm'.tr,
               ),
@@ -535,6 +538,7 @@ void modifyLocationDialog({
   required List<WaitPickingMaterialOrderInfo> list,
   required Function() back,
 }) {
+  final debouncer = ClickDebouncer();
   Get.dialog(
     PopScope(
       canPop: false,
@@ -551,7 +555,7 @@ void modifyLocationDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 _modifyLocation(
                   materialList: list,
                   success: () {
@@ -566,7 +570,7 @@ void modifyLocationDialog({
                   },
                   error: (msg) => errorDialog(content: msg),
                 );
-              },
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

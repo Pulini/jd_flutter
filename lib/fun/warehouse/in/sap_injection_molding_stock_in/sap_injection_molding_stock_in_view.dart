@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -20,6 +21,7 @@ class SapInjectionMoldingStockInPage extends StatefulWidget {
 
 class _SapInjectionMoldingStockInPageState
     extends State<SapInjectionMoldingStockInPage> {
+  final debouncer = ClickDebouncer();
   final SapInjectionMoldingStockInLogic logic =
       Get.put(SapInjectionMoldingStockInLogic());
   final SapInjectionMoldingStockInState state =
@@ -68,7 +70,7 @@ class _SapInjectionMoldingStockInPageState
     return pageBody(
       actions: [
         TextButton(
-          onPressed: () => logic.clearBarCodeList(),
+          onPressed: () => debouncer.run(() => logic.clearBarCodeList()),
           child: Text('sap_injection_molding_stock_in_clear'.tr),
         )
       ],
@@ -92,7 +94,7 @@ class _SapInjectionMoldingStockInPageState
                           SlidableAction(
                             flex: 2,
                             onPressed: (c) =>
-                                logic.deleteItem(state.barCodeList[i]),
+                                debouncer.run(() => logic.deleteItem(state.barCodeList[i])),
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete_forever,

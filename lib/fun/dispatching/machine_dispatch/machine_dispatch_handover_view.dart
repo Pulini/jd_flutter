@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -20,6 +21,7 @@ class MachineDispatchHandoverPage extends StatefulWidget {
 class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage> {
   final logic = Get.find<MachineDispatchLogic>();
   final state = Get.find<MachineDispatchLogic>().state;
+  final debouncer = ClickDebouncer();
 
   SizedBox itemTitle() => SizedBox(
         width: 100,
@@ -133,7 +135,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => addHandoverWorker(data, () => setState(() {})),
+                  onTap: () => debouncer.run(() => addHandoverWorker(data, () => setState(() {}))),
                   child: Container(
                     width: 50,
                     height: double.infinity,
@@ -163,8 +165,8 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
       child: avatarPhoto(data.workerAvatar),
     );
     return GestureDetector(
-      onTap: () => workerSignature(
-          context, data, () => logic.signatureIdenticalWorker(data)),
+      onTap: () => debouncer.run(() => workerSignature(
+          context, data, () => logic.signatureIdenticalWorker(data))),
       child: Container(
         width: 300,
         margin: const EdgeInsets.only(right: 15),
@@ -201,7 +203,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
               ),
             ),
             GestureDetector(
-              onTap: () {
+              onTap: () => debouncer.run(() {
                 if (data.signature == null) {
                   dpi.handoverInfoDispatchList.removeAt(index);
                   setState(() {});
@@ -217,7 +219,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
                     },
                   );
                 }
-              },
+              }),
               child: Container(
                 width: 30,
                 decoration: const BoxDecoration(

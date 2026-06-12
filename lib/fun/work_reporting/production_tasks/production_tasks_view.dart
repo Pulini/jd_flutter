@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/mqtt.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -435,7 +436,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
   }
 }
 
-class _ProductionTasksOrderItem extends StatelessWidget {
+class _ProductionTasksOrderItem extends StatefulWidget {
   final ProductionTasksSubInfo data;
   final Animation<double> animation;
   final int index;
@@ -458,10 +459,28 @@ class _ProductionTasksOrderItem extends StatelessWidget {
     required this.onMoveTop,
   });
 
-  bool _isSelected() => state.selected == index;
+  @override
+  State<_ProductionTasksOrderItem> createState() =>
+      _ProductionTasksOrderItemState();
+}
+
+class _ProductionTasksOrderItemState
+    extends State<_ProductionTasksOrderItem> {
+  final debouncer = ClickDebouncer();
+
+  bool _isSelected() => widget.state.selected == widget.index;
 
   @override
   Widget build(BuildContext context) {
+    var data = widget.data;
+    var logic = widget.logic;
+    var state = widget.state;
+    var index = widget.index;
+    var animation = widget.animation;
+    var onSelected = widget.onSelected;
+    var onMoveUp = widget.onMoveUp;
+    var onMoveDown = widget.onMoveDown;
+    var onMoveTop = widget.onMoveTop;
     var duration = const Duration(milliseconds: 500);
     var errorImage = Image.asset(
       'assets/images/ic_logo.png',
@@ -505,10 +524,10 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: () => logic.changeSort(
+          onPressed: () => debouncer.run(() => logic.changeSort(
               oldIndex: index,
               newIndex: index - 1,
-              refresh: () => onMoveUp(index)),
+              refresh: () => onMoveUp(index))),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.blueAccent,
@@ -526,14 +545,14 @@ class _ProductionTasksOrderItem extends StatelessWidget {
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: () {
+          onPressed: () => debouncer.run(() {
             if (index < state.orderList.length - 1) {
               logic.changeSort(
                   oldIndex: index,
                   newIndex: index + 1,
                   refresh: () => onMoveDown(index));
             }
-          },
+          }),
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
             color: Colors.blueAccent,
@@ -558,10 +577,10 @@ class _ProductionTasksOrderItem extends StatelessWidget {
     var mtoNo = TextButton(
       onPressed: () {
         if (_isSelected() || index == 0) {
-          logic.getDetail(
+          debouncer.run(() => logic.getDetail(
             ins: data.mtoNo ?? '',
             imageUrl: data.itemImage ?? '',
-          );
+          ));
         } else {
           onSelected(index);
         }
@@ -618,7 +637,7 @@ class _ProductionTasksOrderItem extends StatelessWidget {
                   isDefaultAction: true,
                   onPressed: () {
                     Get.back();
-                    logic.getOrderPackMaterialInfo(data.mtoNo ?? '');
+                    debouncer.run(() => logic.getOrderPackMaterialInfo(data.mtoNo ?? ''));
                   },
                   child: Text('production_tasks_pack_material_info'.tr),
                 ),
@@ -657,10 +676,10 @@ class _ProductionTasksOrderItem extends StatelessWidget {
       child: TextButton(
         onPressed: () {
           if (_isSelected() || index == 0) {
-            logic.getDetail(
+            debouncer.run(() => logic.getDetail(
               po: data.clientOrderNumber ?? '',
               imageUrl: data.itemImage ?? '',
-            );
+            ));
           } else {
             onSelected(index);
           }

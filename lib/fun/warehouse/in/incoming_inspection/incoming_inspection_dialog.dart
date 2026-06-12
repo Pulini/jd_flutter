@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -14,6 +15,7 @@ void modifySubItemMaterialDialog({
   required InspectionDeliveryInfo item,
   required Function() modify,
 }) {
+  final debouncer = ClickDebouncer();
   var qty = item.qty ?? 0;
   var numberPage = item.numPage ?? 1;
   var unit = item.unitName ?? 'incoming_inspection_dialog_metre'.tr;
@@ -54,7 +56,7 @@ void modifySubItemMaterialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 if (qty <= 0) {
                   showSnackBar(
                     message:
@@ -82,7 +84,7 @@ void modifySubItemMaterialDialog({
                 item.numPage = numberPage;
                 Get.back();
                 modify.call();
-              },
+              }),
               child: Text('incoming_inspection_dialog_modify'.tr),
             ),
             TextButton(
@@ -104,6 +106,7 @@ void addOrModifyMaterialDialog({
   InspectionDeliveryInfo? item,
   Function()? modify,
 }) {
+  final debouncer = ClickDebouncer();
   var materialList = <String>[
     '帆布',
     '柔软布',
@@ -200,7 +203,7 @@ void addOrModifyMaterialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 if (orderNumber.trim().isEmpty) {
                   showSnackBar(
                     message:
@@ -258,7 +261,7 @@ void addOrModifyMaterialDialog({
                   item.numPage = numberPage;
                   modify?.call();
                 }
-              },
+              }),
               child: Text(
                 item != null
                     ? 'incoming_inspection_dialog_modify'.tr
@@ -282,6 +285,7 @@ void addOrModifyMaterialDialog({
 void applyInspectionDialog({
   required Function(WorkerInfo) submit,
 }) {
+  final debouncer = ClickDebouncer();
   if(!checkUserPermission('1051002')){
     errorDialog(content: 'incoming_inspection_no_apply_inspection_permission_tips'.tr);
     return;
@@ -301,7 +305,7 @@ void applyInspectionDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 if (worker == null) {
                   showSnackBar(
                       message:
@@ -314,7 +318,7 @@ void applyInspectionDialog({
                   Get.back();
                   submit.call(worker!);
                 }
-              },
+              }),
               child: Text('incoming_inspection_dialog_submit'.tr),
             ),
             TextButton(
@@ -334,6 +338,7 @@ void applyInspectionDialog({
 void submitInspectionDialog({
   required Function(WorkerInfo, String) submit,
 }) {
+  final debouncer = ClickDebouncer();
   WorkerInfo? worker;
   TextEditingController controller = TextEditingController();
   Get.dialog(
@@ -381,7 +386,7 @@ void submitInspectionDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 if (worker == null) {
                   showSnackBar(
                     message:
@@ -404,7 +409,7 @@ void submitInspectionDialog({
                     spSaveIncomingInspectionInspector, worker!.empCode ?? '');
                 Get.back();
                 submit.call(worker!, results);
-              },
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

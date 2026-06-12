@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_orders_view.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -241,11 +242,18 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
   }
 }
 
-class _InspectionDeliveryItem extends StatelessWidget {
+class _InspectionDeliveryItem extends StatefulWidget {
   final List<List<InspectionDeliveryInfo>> group;
   final IncomingInspectionLogic logic;
 
   const _InspectionDeliveryItem({required this.group, required this.logic});
+
+  @override
+  State<_InspectionDeliveryItem> createState() => _InspectionDeliveryItemState();
+}
+
+class _InspectionDeliveryItemState extends State<_InspectionDeliveryItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -258,33 +266,33 @@ class _InspectionDeliveryItem extends StatelessWidget {
         ),
         title: textSpan(
           hint: 'incoming_inspection_order_no'.tr,
-          text: group.first.first.billNo ?? '',
+          text: widget.group.first.first.billNo ?? '',
           textColor: Colors.green,
         ),
         subtitle: textSpan(
           hint: 'incoming_inspection_delivery_qty'.tr,
           text: 'incoming_inspection_delivery_detail'.trArgs([
-            group.first.first.numPage.toString(),
-            logic.getItemQty(group).toShowString(),
-            group.first.first.unitName ?? '',
+            widget.group.first.first.numPage.toString(),
+            widget.logic.getItemQty(widget.group).toShowString(),
+            widget.group.first.first.unitName ?? '',
           ]),
           textColor: Colors.green,
         ),
         leading: IconButton(
-          onPressed: () => askDialog(
+          onPressed: () => debouncer.run(() => askDialog(
             content: 'incoming_inspection_delete_order_tips'.tr,
-            confirm: () => logic.deleteDeliveryOrder(group),
-          ),
+            confirm: () => widget.logic.deleteDeliveryOrder(widget.group),
+          )),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
           ),
         ),
         children: [
-          for (var item in group)
+          for (var item in widget.group)
             _InspectionSubItem(
               item: item,
-              logic: logic,
+              logic: widget.logic,
             ),
         ],
       ),
@@ -292,11 +300,18 @@ class _InspectionDeliveryItem extends StatelessWidget {
   }
 }
 
-class _InspectionSubItem extends StatelessWidget {
+class _InspectionSubItem extends StatefulWidget {
   final List<InspectionDeliveryInfo> item;
   final IncomingInspectionLogic logic;
 
   const _InspectionSubItem({required this.item, required this.logic});
+
+  @override
+  State<_InspectionSubItem> createState() => _InspectionSubItemState();
+}
+
+class _InspectionSubItemState extends State<_InspectionSubItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -322,31 +337,31 @@ class _InspectionSubItem extends StatelessWidget {
         title: textSpan(
           maxLines: 2,
           hint: 'incoming_inspection_material'.tr,
-          text: '(${item.first.materialCode}) ${item.first.materialName}'
+          text: '(${widget.item.first.materialCode}) ${widget.item.first.materialName}'
               .allowWordTruncation(),
         ),
         subtitle: textSpan(
             hint: 'incoming_inspection_material_delivery_qty'.tr,
             text:
-                '${logic.getItemMaterialQty(item).toShowString()} ${item.first.unitName}'),
+                '${widget.logic.getItemMaterialQty(widget.item).toShowString()} ${widget.item.first.unitName}'),
         leading: IconButton(
-          onPressed: () => askDialog(
+          onPressed: () => debouncer.run(() => askDialog(
             content: 'incoming_inspection_delete_material_tips'.tr,
-            confirm: () => logic.deleteDeliveryMaterialGroupOrder(item),
-          ),
+            confirm: () => widget.logic.deleteDeliveryMaterialGroupOrder(widget.item),
+          )),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
           ),
         ),
         children: [
-          for (var subItem in item)
+          for (var subItem in widget.item)
             Column(
               children: [
                 const Divider(indent: 10, endIndent: 10),
                 InkWell(
                   onTap: () => modifySubItemMaterialDialog(
-                      item: subItem, modify: () => logic.modify()),
+                      item: subItem, modify: () => widget.logic.modify()),
                   child: Row(
                     children: [
                       const SizedBox(width: 10),
@@ -359,10 +374,10 @@ class _InspectionSubItem extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => askDialog(
+                        onPressed: () => debouncer.run(() => askDialog(
                           content: 'incoming_inspection_delete_item_tips'.tr,
-                          confirm: () => logic.deleteDeliveryItem(subItem),
-                        ),
+                          confirm: () => widget.logic.deleteDeliveryItem(subItem),
+                        )),
                         icon: const Icon(
                           Icons.delete_forever,
                           color: Colors.red,
@@ -379,7 +394,7 @@ class _InspectionSubItem extends StatelessWidget {
   }
 }
 
-class _InspectionAddMaterialItem extends StatelessWidget {
+class _InspectionAddMaterialItem extends StatefulWidget {
   final InspectionDeliveryInfo item;
   final VoidCallback onDelete;
   final VoidCallback onModify;
@@ -391,11 +406,18 @@ class _InspectionAddMaterialItem extends StatelessWidget {
   });
 
   @override
+  State<_InspectionAddMaterialItem> createState() => _InspectionAddMaterialItemState();
+}
+
+class _InspectionAddMaterialItemState extends State<_InspectionAddMaterialItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => addOrModifyMaterialDialog(
-        item: item,
-        modify: () => onModify(),
+        item: widget.item,
+        modify: () => widget.onModify(),
       ),
       child: Container(
         padding: const EdgeInsets.all(5),
@@ -417,7 +439,7 @@ class _InspectionAddMaterialItem extends StatelessWidget {
           children: [
             textSpan(
               hint: 'incoming_inspection_material'.tr,
-              text: item.materialName.allowWordTruncation(),
+              text: widget.item.materialName.allowWordTruncation(),
               maxLines: 3,
             ),
             Row(
@@ -428,15 +450,15 @@ class _InspectionAddMaterialItem extends StatelessWidget {
                     children: [
                       textSpan(
                         hint: 'incoming_inspection_order_no'.tr,
-                        text: item.billNo ?? '',
+                        text: widget.item.billNo ?? '',
                         textColor: Colors.black54,
                       ),
                       textSpan(
                         hint: 'incoming_inspection_delivery_detail_tips'.tr,
                         text: 'incoming_inspection_delivery_detail'.trArgs([
-                          item.numPage.toString(),
-                          item.qty.toShowString(),
-                          item.unitName ?? '',
+                          widget.item.numPage.toString(),
+                          widget.item.qty.toShowString(),
+                          widget.item.unitName ?? '',
                         ]),
                         textColor: Colors.black54,
                       ),
@@ -444,10 +466,10 @@ class _InspectionAddMaterialItem extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: 'incoming_inspection_delete_item_tips'.tr,
-                    confirm: () => onDelete(),
-                  ),
+                    confirm: () => widget.onDelete(),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

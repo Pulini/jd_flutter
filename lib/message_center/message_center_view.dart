@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -14,6 +15,7 @@ class MessageCenterPage extends StatefulWidget {
 }
 
 class _MessageCenterPageState extends State<MessageCenterPage> {
+  final debouncer = ClickDebouncer();
   final MessageCenterLogic logic = Get.put(MessageCenterLogic());
   final MessageCenterState state = Get.find<MessageCenterLogic>().state;
 
@@ -27,10 +29,10 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
             Icons.cleaning_services,
             color: Colors.red,
           ),
-          onPressed: () => askDialog(
+          onPressed: () => debouncer.run(() => askDialog(
             content: '确定要清空所有信息吗？',
             confirm: () => logic.cleanMessage(),
-          ),
+          )),
         ),
       ],
       body: Obx(() => ListView.builder(
@@ -52,10 +54,10 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
                 title: Text(state.messageList[i].message ?? ''),
                 subtitle: Text(state.messageList[i].getPushTime()),
                 trailing: IconButton(
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: '确定要删除该信息吗？',
                     confirm: () => logic.deleteItem(i),
-                  ),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

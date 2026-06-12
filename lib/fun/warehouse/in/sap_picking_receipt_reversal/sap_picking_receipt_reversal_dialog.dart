@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -23,6 +24,7 @@ void checkPickingReceiptReversalDialog({
     String postingDate,
   ) handoverCheck,
 }) {
+  final debouncer = ClickDebouncer();
   var dpcDate = DatePickerController(
     PickerType.date,
     saveKey: '${RouteConfig.sapPickingReceiptReversal.name}${PickerType.date}',
@@ -80,7 +82,7 @@ void checkPickingReceiptReversalDialog({
             actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: () => debouncer.run(() {
                   if (leader != null) {
                     spSave(checkPickingReceiptReversalDialogNumber,
                         leader!.empCode ?? '');
@@ -103,7 +105,7 @@ void checkPickingReceiptReversalDialog({
                           },
                         ));
                   }
-                },
+                }),
                 child: Text('dialog_default_confirm'.tr),
               ),
               TextButton(

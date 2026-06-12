@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -431,7 +432,7 @@ class _ProductionDispatchItem1 extends StatelessWidget {
   }
 }
 
-class _ProductionDispatchItem2 extends StatelessWidget {
+class _ProductionDispatchItem2 extends StatefulWidget {
   final List<ProductionDispatchOrderInfo> list;
   final ProductionDispatchLogic logic;
   final TextStyle itemTitleStyle;
@@ -447,26 +448,34 @@ class _ProductionDispatchItem2 extends StatelessWidget {
   });
 
   @override
+  State<_ProductionDispatchItem2> createState() =>
+      _ProductionDispatchItem2State();
+}
+
+class _ProductionDispatchItem2State extends State<_ProductionDispatchItem2> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
-    var data = list[0];
+    var data = widget.list[0];
     var buttonStyle = ButtonStyle(
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       ),
       side: WidgetStateProperty.all(
         BorderSide(
-          color: printTextColor(data.printStatus),
+          color: widget.printTextColor(data.printStatus),
           width: 2,
         ),
       ),
     );
 
-    var sumOfStockInQty = list
+    var sumOfStockInQty = widget.list
         .map((item) => item.stockInQty)
         .reduce((value, current) => value! + current!)
         .toShowString();
 
-    var sumOfWorkNumberTotal = list
+    var sumOfWorkNumberTotal = widget.list
         .map((item) => item.workNumberTotal)
         .reduce((value, current) => value! + current!)
         .toShowString();
@@ -489,7 +498,7 @@ class _ProductionDispatchItem2 extends StatelessWidget {
                   'production_dispatch_dispatch_order_no'.trArgs([
                     data.sapOrderBill?.ifEmpty(data.orderBill ?? '') ?? '',
                   ]),
-                  style: itemTitleStyle,
+                  style: widget.itemTitleStyle,
                 ),
               ),
               if (data.plantBody?.isNotEmpty == true)
@@ -497,7 +506,7 @@ class _ProductionDispatchItem2 extends StatelessWidget {
                   'production_dispatch_type_body'.trArgs([
                     data.plantBody ?? '',
                   ]),
-                  style: itemTitleStyle,
+                  style: widget.itemTitleStyle,
                 ),
             ],
           ),
@@ -521,11 +530,11 @@ class _ProductionDispatchItem2 extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => logic.materialLabelMaintenance(data),
+                onPressed: () => debouncer.run(() => widget.logic.materialLabelMaintenance(data)),
                 style: buttonStyle,
                 child: Text(
-                  printStatusText(data.printStatus ?? ''),
-                  style: TextStyle(color: printTextColor(data.printStatus)),
+                  widget.printStatusText(data.printStatus ?? ''),
+                  style: TextStyle(color: widget.printTextColor(data.printStatus)),
                 ),
               )
             ],
@@ -554,17 +563,17 @@ class _ProductionDispatchItem2 extends StatelessWidget {
             ],
           ),
         ),
-        for (var i = 0; i < list.length; ++i)
+        for (var i = 0; i < widget.list.length; ++i)
           Container(
             padding: const EdgeInsets.only(left: 5, right: 5),
             color: Colors.white,
             child: Row(
               children: [
-                _buildDispatchText(list[i].planBill ?? '', Colors.white),
-                _buildDispatchText(list[i].orderDate ?? '', Colors.white),
-                _buildDispatchText(list[i].planStartTime ?? '', Colors.white),
-                _buildDispatchText(list[i].planEndTime ?? '', Colors.white),
-                _buildDispatchText(list[i].getProgress(), Colors.white),
+                _buildDispatchText(widget.list[i].planBill ?? '', Colors.white),
+                _buildDispatchText(widget.list[i].orderDate ?? '', Colors.white),
+                _buildDispatchText(widget.list[i].planStartTime ?? '', Colors.white),
+                _buildDispatchText(widget.list[i].planEndTime ?? '', Colors.white),
+                _buildDispatchText(widget.list[i].getProgress(), Colors.white),
               ],
             ),
           ),

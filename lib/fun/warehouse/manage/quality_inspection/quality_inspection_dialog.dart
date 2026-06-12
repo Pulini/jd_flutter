@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
+  final debouncer = ClickDebouncer();
   var controller = TextEditingController(text: data.tag.value);
   Get.dialog(
     PopScope(
@@ -21,7 +23,7 @@ void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               if (controller.text.isEmpty) {
                 showSnackBar(
                   message: 'product_quality_inspection_dialog_input_key'.tr,
@@ -33,7 +35,7 @@ void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
                     controller.text);
                 Get.back();
               }
-            },
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

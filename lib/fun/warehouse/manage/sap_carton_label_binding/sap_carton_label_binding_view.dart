@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_dialog.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -85,16 +86,23 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
   }
 }
 
-class _CartonLabelItem extends StatelessWidget {
+class _CartonLabelItem extends StatefulWidget {
   final List<SapLabelBindingInfo> labelList;
   final SapCartonLabelBindingLogic logic;
   const _CartonLabelItem({required this.labelList, required this.logic});
 
   @override
+  State<_CartonLabelItem> createState() => _CartonLabelItemState();
+}
+
+class _CartonLabelItemState extends State<_CartonLabelItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     SapLabelBindingInfo? boxLabel;
     try {
-      boxLabel = labelList.firstWhere((v) => v.isBoxLabel);
+      boxLabel = widget.labelList.firstWhere((v) => v.isBoxLabel);
     } on StateError catch (_) {}
 
     if (boxLabel == null) {
@@ -109,16 +117,16 @@ class _CartonLabelItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            for (var sub in labelList.where((v) => !v.isBoxLabel)) ...[
+            for (var sub in widget.labelList.where((v) => !v.isBoxLabel)) ...[
               Row(
                 children: [
                   expandedTextSpan(
                       hint: 'carton_label_binding_piece_no'.tr,
                       text: sub.pieceNo ?? ''),
                   IconButton(
-                    onPressed: () => askDialog(
+                    onPressed: () => debouncer.run(() => askDialog(
                         content: 'carton_label_binding_delete_label_tips'.tr,
-                        confirm: () => logic.deleteLabel(sub)),
+                        confirm: () => widget.logic.deleteLabel(sub))),
                     icon: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
@@ -126,7 +134,7 @@ class _CartonLabelItem extends StatelessWidget {
                   )
                 ],
               ),
-              if (labelList.last != sub) const Divider(),
+              if (widget.labelList.last != sub) const Divider(),
             ],
           ],
         ),
@@ -149,10 +157,10 @@ class _CartonLabelItem extends StatelessWidget {
                     hint: 'carton_label_binding_out_box_label_piece_no'.tr,
                     text: boxLabel.pieceNo ?? ''),
                 IconButton(
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: 'carton_label_binding_delete_label_tips'.tr,
-                    confirm: () => logic.deleteLabel(boxLabel!),
-                  ),
+                    confirm: () => widget.logic.deleteLabel(boxLabel!),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,
@@ -170,11 +178,11 @@ class _CartonLabelItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  for (var sub in labelList.where((v) => !v.isBoxLabel)) ...[
+                  for (var sub in widget.labelList.where((v) => !v.isBoxLabel)) ...[
                     textSpan(
                         hint: 'carton_label_binding_piece_no'.tr,
                         text: sub.pieceNo ?? ''),
-                    if (labelList.last != sub) const Divider(),
+                    if (widget.labelList.last != sub) const Divider(),
                   ],
                 ],
               ),

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class HomeSubItem extends StatelessWidget {
+class HomeSubItem extends StatefulWidget {
   const HomeSubItem({
     super.key,
     required this.isGroup,
@@ -193,6 +194,13 @@ class HomeSubItem extends StatelessWidget {
   final bool isGroup;
   final HomeButton item;
   final Function() checkUpData;
+
+  @override
+  State<HomeSubItem> createState() => _HomeSubItemState();
+}
+
+class _HomeSubItemState extends State<HomeSubItem> {
+  final debouncer = ClickDebouncer();
 
   Color _color(HomeButton item) {
     return item.hasUpdate
@@ -205,27 +213,27 @@ class HomeSubItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: isGroup ? 40 : 0),
+      padding: EdgeInsets.only(left: widget.isGroup ? 40 : 0),
       child: ListTile(
-        onTap: () => item.hasUpdate
-            ? upData()
-            : item.route.isEmpty
+        onTap: () => widget.item.hasUpdate
+            ? debouncer.run(() => upData())
+            : widget.item.route.isEmpty
                 ? showSnackBar(
                     title: 'home_no_route'.tr,
                     message: 'home_this_function_is_not_open'.tr,
                     isWarning: true,
                   )
-                : item.toFunction(checkUpData: checkUpData),
-        enabled: item.hasUpdate ? true : item.hasPermission,
+                : widget.item.toFunction(checkUpData: widget.checkUpData),
+        enabled: widget.item.hasUpdate ? true : widget.item.hasPermission,
         leading: cachedNetworkImage(
-          item.icon,
-          width: isGroup ? 30 : 40,
-          height: isGroup ? 30 : 40,
-          color: _color(item),
+          widget.item.icon,
+          width: widget.isGroup ? 30 : 40,
+          height: widget.isGroup ? 30 : 40,
+          color: _color(widget.item),
         ),
-        title: Text(item.name, style: const TextStyle(fontSize: 14)),
-        subtitle: Text(item.description, style: const TextStyle(fontSize: 12)),
-        trailing: item.hasUpdate
+        title: Text(widget.item.name, style: const TextStyle(fontSize: 14)),
+        subtitle: Text(widget.item.description, style: const TextStyle(fontSize: 12)),
+        trailing: widget.item.hasUpdate
             ? Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,
                 direction: Axis.vertical,
@@ -234,13 +242,13 @@ class HomeSubItem extends StatelessWidget {
                   Text(
                     'home_button_has_update'.tr,
                     style: TextStyle(
-                      color: _color(item),
+                      color: _color(widget.item),
                       fontSize: 10,
                     ),
                   ),
                 ],
               )
-            : item.hasPermission
+            : widget.item.hasPermission
                 ? const Icon(Icons.arrow_forward_ios, size: 15)
                 : Text('home_button_no_permission'.tr),
       ),

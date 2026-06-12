@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -18,6 +19,7 @@ void stockInDialog({
   List<DeliveryOrderLabelInfo>? labelList,
   required Function() refresh,
 }) {
+  final debouncer = ClickDebouncer();
   var leaderEnable = false.obs;
   var errorMsg = ''.obs;
   var leaderList = <LeaderInfo>[].obs;
@@ -160,7 +162,7 @@ void stockInDialog({
             () => errorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-                    onPressed: stockIn,
+                    onPressed: () => debouncer.run(stockIn),
                     child: Text('dialog_default_confirm'.tr),
                   ),
           ),

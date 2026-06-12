@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -168,7 +169,7 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
   }
 }
 
-class _IncomingInspectionPhotoItem extends StatelessWidget {
+class _IncomingInspectionPhotoItem extends StatefulWidget {
   final File f;
   final IncomingInspectionState state;
   final IncomingInspectionLogic logic;
@@ -180,13 +181,22 @@ class _IncomingInspectionPhotoItem extends StatelessWidget {
   });
 
   @override
+  State<_IncomingInspectionPhotoItem> createState() =>
+      _IncomingInspectionPhotoItemState();
+}
+
+class _IncomingInspectionPhotoItemState
+    extends State<_IncomingInspectionPhotoItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         GestureDetector(
           onTap: () {
             Get.to(() => ViewFilePhoto(
-                  photos: state.inspectionPhotoList,
+                  photos: widget.state.inspectionPhotoList,
                 ));
           },
           child: Padding(
@@ -195,7 +205,8 @@ class _IncomingInspectionPhotoItem extends StatelessWidget {
               aspectRatio: 1 / 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(7),
-                child: Hero(tag: f.path, child: Image.file(f)),
+                child: Hero(
+                    tag: widget.f.path, child: Image.file(widget.f)),
               ),
             ),
           ),
@@ -204,7 +215,8 @@ class _IncomingInspectionPhotoItem extends StatelessWidget {
           right: 0,
           top: 0,
           child: IconButton(
-            onPressed: () => logic.deleteInspectionPhoto(f),
+            onPressed: () =>
+                debouncer.run(() => widget.logic.deleteInspectionPhoto(widget.f)),
             icon: const Icon(
               Icons.cancel_outlined,
               color: Colors.red,

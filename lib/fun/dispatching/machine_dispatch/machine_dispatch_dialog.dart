@@ -7,6 +7,7 @@ import 'package:hand_signature/signature.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -23,6 +24,7 @@ void generateAndPrintDialog({
   required Function() printLast,
   required Function() print,
 }) {
+  final debouncer = ClickDebouncer();
   Get.dialog(
     PopScope(
       //拦截返回键
@@ -32,17 +34,17 @@ void generateAndPrintDialog({
         content: Text('machine_dispatch_dialog_print_tips'.tr),
         actions: <Widget>[
           TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               Get.back();
               printLast.call();
-            },
+            }),
             child: Text('machine_dispatch_dialog_print_last_label'.tr),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               Get.back();
               print.call();
-            },
+            }),
             child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
@@ -7,6 +8,7 @@ void inputLocationDialog({
   required TextEditingController controller,
   required Function() location,
 }) {
+  final debouncer = ClickDebouncer();
   Get.dialog(
     PopScope(
       canPop: false,
@@ -25,7 +27,7 @@ void inputLocationDialog({
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               if (controller.text.isEmpty) {
                 showSnackBar(
                   message:
@@ -37,7 +39,7 @@ void inputLocationDialog({
               }
 
               Get.back();
-            },
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

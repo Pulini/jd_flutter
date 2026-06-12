@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 class BarCodeListPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
   final SapProductionPickingLogic logic = Get.find<SapProductionPickingLogic>();
   final SapProductionPickingState state =
       Get.find<SapProductionPickingLogic>().state;
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +48,9 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
                     ),
                     Text('${data.qty}${data.unitName}'),
                     IconButton(
-                      onPressed: () {
+                      onPressed: () => debouncer.run(() {
                         data.scanned = false;
-                      },
+                      }),
                       icon: const Icon(
                         Icons.delete_forever,
                         color: Colors.red,

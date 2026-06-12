@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -14,6 +15,7 @@ void checkBarCodeProcessDialog({
   required List<BarCodeInfo> list,
   required Function(WorkerInfo, BarCodeProcessInfo) submit,
 }) {
+  final debouncer = ClickDebouncer();
   getProcessFlowInfoByBarCode(
     list: list,
     callback: (list) {
@@ -51,7 +53,7 @@ void checkBarCodeProcessDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: () {
+                  onPressed: () => debouncer.run(() {
                     if (worker == null) {
                       showSnackBar(
                           message: 'process_report_store_input_operator_id'.tr,
@@ -74,7 +76,7 @@ void checkBarCodeProcessDialog({
                     spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-                  },
+                  }),
                   child: Text('process_report_store_submit'.tr),
                 ),
                 TextButton(

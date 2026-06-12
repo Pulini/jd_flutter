@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_detail_info.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_view.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -21,6 +22,7 @@ class PartLabelPage extends StatefulWidget {
 class _PartLabelPageState extends State<PartLabelPage> {
   final logic = Get.find<WorkOrderListLogic>();
   final state = Get.find<WorkOrderListLogic>().state;
+  final debouncer = ClickDebouncer();
 
   void _salesOrderListDialog(List<String> labels) {
     Get.dialog(
@@ -100,12 +102,12 @@ class _PartLabelPageState extends State<PartLabelPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => logic.createPartLabel(
+              onPressed: () => debouncer.run(() => logic.createPartLabel(
                 boxCapacity,
                 createQty,
                 data.size ?? '',
                 empID,
-              ),
+              )),
               child: Text(
                 'part_label_create'.tr,
               ),
@@ -250,9 +252,9 @@ class _PartLabelPageState extends State<PartLabelPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                      logic.printLabel( list: data);
-                  },
+                  onPressed: () => debouncer.run(() {
+                    logic.printLabel(list: data);
+                  }),
                   child: Text(
                     'part_label_print'.tr,
                   ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -177,11 +178,18 @@ class _SplitOriginalItem extends StatelessWidget {
   }
 }
 
-class _SplitLabelSubItem extends StatelessWidget {
+class _SplitLabelSubItem extends StatefulWidget {
   final SapLabelSplitInfo newLabel;
   final void Function(SapLabelSplitInfo) onDelete;
 
   const _SplitLabelSubItem({required this.newLabel, required this.onDelete});
+
+  @override
+  State<_SplitLabelSubItem> createState() => _SplitLabelSubItemState();
+}
+
+class _SplitLabelSubItemState extends State<_SplitLabelSubItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +217,7 @@ class _SplitLabelSubItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () => onDelete(newLabel),
+                onPressed: () => debouncer.run(() => widget.onDelete(widget.newLabel)),
                 icon: const Icon(Icons.delete_forever, color: Colors.red),
               )
             ],
@@ -226,25 +234,25 @@ class _SplitLabelSubItem extends StatelessWidget {
             children: [
               Expanded(
                 child: NumberDecimalEditText(
-                  initQty: newLabel.long.value,
-                  onChanged: (v) => newLabel.long.value = v,
+                  initQty: widget.newLabel.long.value,
+                  onChanged: (v) => widget.newLabel.long.value = v,
                 ),
               ),
               Expanded(
                 child: NumberDecimalEditText(
-                  initQty: newLabel.width.value,
-                  onChanged: (v) => newLabel.width.value = v,
+                  initQty: widget.newLabel.width.value,
+                  onChanged: (v) => widget.newLabel.width.value = v,
                 ),
               ),
               Expanded(
                 child: NumberDecimalEditText(
-                  initQty: newLabel.height.value,
-                  onChanged: (v) => newLabel.height.value = v,
+                  initQty: widget.newLabel.height.value,
+                  onChanged: (v) => widget.newLabel.height.value = v,
                 ),
               )
             ],
           ),
-          for (SapLabelSplitMaterialInfo sub in newLabel.materials) ...[
+          for (SapLabelSplitMaterialInfo sub in widget.newLabel.materials) ...[
             const Divider(),
             Row(
               children: [

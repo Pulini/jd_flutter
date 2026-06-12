@@ -5,6 +5,7 @@ import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_logic.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_priority_view.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -29,6 +30,7 @@ class _FormingBarcodeCollectionPageState
       Get.put(FormingBarcodeCollectionLogic());
   final FormingBarcodeCollectionState state =
       Get.find<FormingBarcodeCollectionLogic>().state;
+  final debouncer = ClickDebouncer();
 
   //tab控制器
   late TabController tabController = TabController(length: 2, vsync: this);
@@ -460,7 +462,7 @@ class _FormingBarcodeCollectionPageState
       actions: [
         TextButton(
           onPressed: () =>
-              logic.getProductionOrderST(first: '0', shoeBoxBillNo: ''),
+              debouncer.run(() => logic.getProductionOrderST(first: '0', shoeBoxBillNo: '')),
           child: Text(
             'forming_code_collection_refresh'.tr,
             style: const TextStyle(fontWeight: FontWeight.bold),

@@ -3,6 +3,7 @@ import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_posting_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_picking_posting/sap_picking_posting_dialog.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -22,6 +23,7 @@ class SapPickingPostingPage extends StatefulWidget {
 class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   final SapPickingPostingLogic logic = Get.put(SapPickingPostingLogic());
   final SapPickingPostingState state = Get.find<SapPickingPostingLogic>().state;
+  final debouncer = ClickDebouncer();
   var tecSemiFinishedProduct = TextEditingController();
   var tecFinishedProduct = TextEditingController();
 
@@ -89,13 +91,13 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
           ),
         ),
         suffixIcon: IconButton(
-          onPressed: () => logic.getMaterialDetail(
+          onPressed: () => debouncer.run(() => logic.getMaterialDetail(
             code: tecSemiFinishedProduct.text,
             semiFinishedProduct: () {
               tecSemiFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          ),
+          )),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -137,13 +139,13 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
           ),
         ),
         suffixIcon: IconButton(
-          onPressed: () => logic.getMaterialDetail(
+          onPressed: () => debouncer.run(() => logic.getMaterialDetail(
             code: tecFinishedProduct.text,
             finishedProduct: () {
               tecFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          ),
+          )),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -286,11 +288,11 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () => askDialog(
+                                        onPressed: () => debouncer.run(() => askDialog(
                                           content: '确定要删除该物料吗？',
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
-                                        ),
+                                        )),
                                         icon: const Icon(
                                           Icons.delete_forever,
                                           color: Colors.red,
@@ -353,7 +355,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   }
 }
 
-class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
+class _SapPickingPostingSemiFinishedItem extends StatefulWidget {
   final SapPickingPostingGroup data;
   final SapPickingPostingLogic logic;
 
@@ -361,6 +363,15 @@ class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
     required this.data,
     required this.logic,
   });
+
+  @override
+  State<_SapPickingPostingSemiFinishedItem> createState() =>
+      _SapPickingPostingSemiFinishedItemState();
+}
+
+class _SapPickingPostingSemiFinishedItemState
+    extends State<_SapPickingPostingSemiFinishedItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +386,7 @@ class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: AutoSizeText(
-                    data.material(),
+                    widget.data.material(),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                     maxLines: 2,
                     minFontSize: 8,
@@ -383,10 +394,10 @@ class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: '确定要删除该物料吗？',
-                    confirm: () => logic.deleteSemiFinishedProductItem(data),
-                  ),
+                    confirm: () => widget.logic.deleteSemiFinishedProductItem(widget.data),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.red),
                 ),
               ],
@@ -400,12 +411,12 @@ class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
                   child: textSpan(
                     hint: '累积数：',
                     hintColor: Colors.grey.shade700,
-                    text: data.cumulativeQty().toShowString(),
+                    text: widget.data.cumulativeQty().toShowString(),
                     isBold: false,
                   ),
                 ),
                 Expanded(
-                  child: data.dataList.first.label.isNullOrEmpty()
+                  child: widget.data.dataList.first.label.isNullOrEmpty()
                       ? Text(
                           '手动添加物料',
                           style: TextStyle(color: Colors.green.shade700),
@@ -413,12 +424,12 @@ class _SapPickingPostingSemiFinishedItem extends StatelessWidget {
                       : textSpan(
                           hint: '扫码次数：',
                           hintColor: Colors.grey.shade700,
-                          text: data.scanCount().toString(),
+                          text: widget.data.scanCount().toString(),
                           isBold: false,
                         ),
                 ),
                 IconButton(
-                  onPressed: () => semiFinishedProductDetailsDialog(data),
+                  onPressed: () => semiFinishedProductDetailsDialog(widget.data),
                   icon: const Icon(Icons.arrow_forward_ios, color: Colors.blue),
                 ),
               ],

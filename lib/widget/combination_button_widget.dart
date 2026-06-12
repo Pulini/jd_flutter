@@ -4,7 +4,7 @@ import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 enum Combination { left, middle, right, intact }
 
 //自定义按钮
-class CombinationButton extends StatelessWidget {
+class CombinationButton extends StatefulWidget {
   final Combination combination;
   final Color backgroundColor;
   final Color foregroundColor;
@@ -13,6 +13,7 @@ class CombinationButton extends StatelessWidget {
   final String text;
   final Widget? icon;
   final Function() click;
+  final int debounceDuration;
 
   const CombinationButton(
       {super.key,
@@ -23,11 +24,19 @@ class CombinationButton extends StatelessWidget {
       this.backgroundColor = Colors.blue,
       this.foregroundColor = Colors.white,
       this.isEnabled = true,
-      this.hasPadding = true});
+      this.hasPadding = true,
+      this.debounceDuration = 500});
+
+  @override
+  State<CombinationButton> createState() => _CombinationButtonState();
+}
+
+class _CombinationButtonState extends State<CombinationButton> {
+  DateTime _lastClickTime = DateTime(2000);
 
   EdgeInsets getPadding() {
     EdgeInsets padding;
-    switch (combination) {
+    switch (widget.combination) {
       case Combination.left:
         padding = const EdgeInsets.only(left: 4, top: 4, right: 1, bottom: 4);
         break;
@@ -46,7 +55,7 @@ class CombinationButton extends StatelessWidget {
 
   BorderRadius getRadius() {
     BorderRadius borderRadius;
-    switch (combination) {
+    switch (widget.combination) {
       case Combination.left:
         borderRadius = const BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -72,41 +81,49 @@ class CombinationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textStyle = TextStyle(
-      color: isEnabled == true ? foregroundColor : Colors.grey[800],
+      color: widget.isEnabled == true
+          ? widget.foregroundColor
+          : Colors.grey[800],
     );
     return Container(
       height: 40,
-      padding: hasPadding ? getPadding() : const EdgeInsets.all(0),
+      padding: widget.hasPadding ? getPadding() : const EdgeInsets.all(0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           overlayColor: Colors.white,
           padding: const EdgeInsets.only(left: 8, right: 8),
-          backgroundColor: isEnabled == true ? backgroundColor : Colors.grey,
+          backgroundColor:
+              widget.isEnabled == true ? widget.backgroundColor : Colors.grey,
           shape: RoundedRectangleBorder(
             borderRadius: getRadius(),
           ),
         ),
         onPressed: () {
-          if (isEnabled == true) {
-            click.call();
+          if (widget.isEnabled == true) {
+            var now = DateTime.now();
+            if (now.difference(_lastClickTime).inMilliseconds <
+                widget.debounceDuration) {
+              return;
+            }
+            _lastClickTime = now;
+            widget.click.call();
           }
         },
-        child: icon != null
+        child: widget.icon != null
             ? Text.rich(
                 TextSpan(
                   style: textStyle,
                   children: [
                     WidgetSpan(
-                      child: icon!,
+                      child: widget.icon!,
                       alignment: PlaceholderAlignment.middle,
                     ),
-                    TextSpan(text: text),
+                    TextSpan(text: widget.text),
                   ],
                 ),
               )
-            // : Text(text, style: textStyle),
             : AutoSizeText(
-                text,
+                widget.text,
                 style: textStyle,
                 maxLines: 1,
                 minFontSize: 8,

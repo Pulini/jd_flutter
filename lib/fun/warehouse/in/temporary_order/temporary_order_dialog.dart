@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -17,6 +18,7 @@ void testApplicationDialog({
   required String temporaryOrderNumber,
   required List<TemporaryOrderDetailReceiptInfo> selectedList,
 }) {
+  final debouncer = ClickDebouncer();
   if (groupBy(selectedList, (v) => v.materialCode).length > 1) {
     errorDialog(content: 'temporary_order_dialog_different_material'.tr);
     return;
@@ -157,7 +159,7 @@ void testApplicationDialog({
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               if (inspectionQty <= 0) {
                 errorDialog(content: 'temporary_order_dialog_inspection_qty_error'.tr);
                 return;
@@ -180,7 +182,7 @@ void testApplicationDialog({
                 ),
                 error: (msg) => errorDialog(content: msg),
               );
-            },
+            }),
             child: Text(
               'temporary_order_dialog_application_test'.tr,
               style: const TextStyle(fontWeight: FontWeight.bold),

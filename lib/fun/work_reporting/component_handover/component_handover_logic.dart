@@ -7,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/scan_handover_info.dart';
 import 'package:jd_flutter/bean/http/response/show_handover_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -17,7 +18,7 @@ import 'component_handover_state.dart';
 
 class ComponentHandoverLogic extends GetxController {
   final ComponentHandoverState state = ComponentHandoverState();
-
+  final debouncer = ClickDebouncer();
   late final LinkOptionsPickerController pickerController;
 
   void addCode(String code) {
@@ -83,8 +84,9 @@ class ComponentHandoverLogic extends GetxController {
             ),
           );
           //创建确认按钮
+          final debouncer = ClickDebouncer();
           var confirm = TextButton(
-            onPressed: () {
+            onPressed: () => debouncer.run(() {
               Get.back();
               state.process.value =
                   list[controller.selectedItem].processFlowName ?? '';
@@ -92,7 +94,7 @@ class ComponentHandoverLogic extends GetxController {
                   list[controller.selectedItem].processFlowID ?? 0;
               spSave(spSaveComponentHandoverProcessName, state.process.value);
               spSave(spSaveComponentHandoverProcessID, state.processId);
-            },
+            }),
             child: Text(
               'dialog_default_confirm'.tr,
               style: const TextStyle(
@@ -202,7 +204,7 @@ class ComponentHandoverLogic extends GetxController {
                         ),
                         Expanded(child: Container()),
                         TextButton(
-                          onPressed: () {
+                          onPressed: () => debouncer.run(() {
                             Get.back();
                             state.outProcess
                                 .value = list[groupController.selectedItem]
@@ -217,7 +219,7 @@ class ComponentHandoverLogic extends GetxController {
                                     .processNames![subController.selectedItem]
                                     .processName
                                     .toString());
-                          },
+                          }),
                           child: Text(
                             'dialog_default_confirm'.tr,
                             style: const TextStyle(

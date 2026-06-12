@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -230,7 +231,7 @@ class _WorkshopPlanningLastProcessPageState
   }
 }
 
-class _LastProcessMaterialItem extends StatelessWidget {
+class _LastProcessMaterialItem extends StatefulWidget {
   final WorkshopPlanningMaterialInfo data;
   final WorkshopPlanningLogic logic;
 
@@ -238,6 +239,14 @@ class _LastProcessMaterialItem extends StatelessWidget {
     required this.data,
     required this.logic,
   });
+
+  @override
+  State<_LastProcessMaterialItem> createState() =>
+      _LastProcessMaterialItemState();
+}
+
+class _LastProcessMaterialItemState extends State<_LastProcessMaterialItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +268,8 @@ class _LastProcessMaterialItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Text(
-                  '(${data.number}) ${data.name}'.allowWordTruncation(),
+                  '(${widget.data.number}) ${widget.data.name}'
+                      .allowWordTruncation(),
                   maxLines: 4,
                 ),
               ),
@@ -276,7 +286,8 @@ class _LastProcessMaterialItem extends StatelessWidget {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () => logic.deleteMaterial(data),
+                onPressed: () =>
+                    debouncer.run(() => widget.logic.deleteMaterial(widget.data)),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -376,7 +387,7 @@ class _LastProcessProcessItem extends StatelessWidget {
   }
 }
 
-class _LastProcessWorkerItem extends StatelessWidget {
+class _LastProcessWorkerItem extends StatefulWidget {
   final WorkshopPlanningWorkerInfo data;
   final WorkshopPlanningLogic logic;
   final OptionsPickerController opcProcessFlow;
@@ -390,12 +401,21 @@ class _LastProcessWorkerItem extends StatelessWidget {
   });
 
   @override
+  State<_LastProcessWorkerItem> createState() => _LastProcessWorkerItemState();
+}
+
+class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => logic.lastProcessModifyWorker(
-        data,
-        opcProcessFlow.getPickItem().pickerId(),
-        dpcDate.getDateFormatYMD(),
+      onTap: () => debouncer.run(
+        () => widget.logic.lastProcessModifyWorker(
+          widget.data,
+          widget.opcProcessFlow.getPickItem().pickerId(),
+          widget.dpcDate.getDateFormatYMD(),
+        ),
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -420,13 +440,13 @@ class _LastProcessWorkerItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${data.name}(${data.number})<${data.typeOfWork}>',
+                              '${widget.data.name}(${widget.data.number})<${widget.data.typeOfWork}>',
                             ),
                           ),
                           Text(
-                            data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            widget.data.attendanceStatus == true ? '已考勤' : '未考勤',
                             style: TextStyle(
-                              color: data.attendanceStatus == true
+                              color: widget.data.attendanceStatus == true
                                   ? Colors.green
                                   : Colors.red,
                             ),
@@ -439,17 +459,17 @@ class _LastProcessWorkerItem extends StatelessWidget {
                               textSpan(
                                 isBold: false,
                                 hint: '系数：',
-                                text: data.base.toShowString(),
+                                text: widget.data.base.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '工时：',
-                                text: data.dayWorkTime.toShowString(),
+                                text: widget.data.dayWorkTime.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '金额：',
-                                text: data.money.value.toShowString(),
+                                text: widget.data.money.value.toShowString(),
                               ),
                             ],
                           ))
@@ -469,9 +489,12 @@ class _LastProcessWorkerItem extends StatelessWidget {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => askDialog(
-                    content: '确定要删除该组员数据吗？',
-                    confirm: () => logic.deleteReportWorker(data),
+                  onPressed: () => debouncer.run(
+                    () => askDialog(
+                      content: '确定要删除该组员数据吗？',
+                      confirm: () =>
+                          widget.logic.deleteReportWorker(widget.data),
+                    ),
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),

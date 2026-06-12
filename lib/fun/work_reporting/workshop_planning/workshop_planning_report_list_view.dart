@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -19,6 +20,7 @@ class _WorkshopPlanningReportListPageState
     extends State<WorkshopPlanningReportListPage> {
   final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,8 @@ class _WorkshopPlanningReportListPageState
             itemCount: state.reportList.length,
             itemBuilder: (c, i) => _WorkshopReportListItem(
               data: state.reportList[i],
-              onTap: () => logic.getReportDetailInfo(state.reportList[i].groupPayInterID ?? -1),
-              onDelete: () => logic.deleteReportInfo(state.reportList[i].groupPayInterID ?? -1),
+              onTap: () => debouncer.run(() => logic.getReportDetailInfo(state.reportList[i].groupPayInterID ?? -1)),
+              onDelete: () => debouncer.run(() => logic.deleteReportInfo(state.reportList[i].groupPayInterID ?? -1)),
             ),
           )),
     );

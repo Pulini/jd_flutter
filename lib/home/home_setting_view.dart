@@ -5,6 +5,7 @@ import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -19,6 +20,7 @@ class UserSetting extends StatefulWidget {
 }
 
 class _UserSettingState extends State<UserSetting> {
+  final debouncer = ClickDebouncer();
   final logic = Get.find<HomeLogic>();
   final state = Get.find<HomeLogic>().state;
 
@@ -149,9 +151,9 @@ class _UserSettingState extends State<UserSetting> {
                 ),
               ),
               TextButton(
-                onPressed: () => logic.changeDepartment(
+                onPressed: () => debouncer.run(() => logic.changeDepartment(
                   list[controller.selectedItem],
-                ),
+                )),
                 child: Text(
                   'dialog_default_confirm'.tr,
                   style: const TextStyle(
@@ -284,10 +286,10 @@ class _UserSettingState extends State<UserSetting> {
         ),
         actions: [
           TextButton(
-            onPressed: () => logic.changePassword(
+            onPressed: () => debouncer.run(() => logic.changePassword(
               oldPassword.text,
               newPassword.text,
-            ),
+            )),
             child: Text('change_password_dialog_submit'.tr),
           ),
           TextButton(
@@ -387,12 +389,12 @@ class _UserSettingState extends State<UserSetting> {
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
         ),
-        onPressed: () {
+        onPressed: () => debouncer.run(() {
           spSave(spSaveUserInfo, '');
           spSave(spSaveFeishuUserWikiTokenData, '');
           spSave(spSaveFeishuUserCloudDocTokenData, '');
           Get.offAll(() => const LoginPage());
-        },
+        }),
         child: Text('home_user_setting_logout'.tr,
             style: const TextStyle(fontSize: 20)),
       );

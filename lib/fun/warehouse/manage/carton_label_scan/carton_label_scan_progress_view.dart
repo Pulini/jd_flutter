@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import 'carton_label_scan_logic.dart';
@@ -17,6 +18,7 @@ class _CartonLabelScanProgressPageState
     extends State<CartonLabelScanProgressPage> {
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
+  final debouncer = ClickDebouncer();
 
   String customerPO = Get.arguments['CustomerPO'];
   TextEditingController controller = TextEditingController();
@@ -70,8 +72,8 @@ class _CartonLabelScanProgressPageState
                   ),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: () =>
-                      logic.queryScanHistory(controller.text),
+                  onPressed: () => debouncer.run(() =>
+                      logic.queryScanHistory(controller.text)),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
@@ -111,7 +113,7 @@ class _CartonLabelScanProgressPageState
                         ),
                       ),
                     ),
-                    onTap: () => logic.getProgressDetail(state.progress[index]),
+                    onTap: () => debouncer.run(() => logic.getProgressDetail(state.progress[index])),
                   ),
                 )),
           )

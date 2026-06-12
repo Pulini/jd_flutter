@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_list/part_dispatch_label_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_dialog.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -131,7 +132,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   }
 }
 
-class _PackOrderItem extends StatelessWidget {
+class _PackOrderItem extends StatefulWidget {
   final OrderPackageInfo data;
   final PackOrderListState state;
   final PackOrderListLogic logic;
@@ -143,6 +144,13 @@ class _PackOrderItem extends StatelessWidget {
     required this.logic,
     required this.onQuery,
   });
+
+  @override
+  State<_PackOrderItem> createState() => _PackOrderItemState();
+}
+
+class _PackOrderItemState extends State<_PackOrderItem> {
+  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -161,20 +169,20 @@ class _PackOrderItem extends StatelessWidget {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () => selectPackProfileDialog(
-                orderPackProfileID: data.packProfileID ?? 0,
-                capacityQty: data.capacityQty ?? 0,
-                packProfileList: state.packProfileList
-                    .map((v) => [v.packProfileID, v.packProfileName,v.boxCapacity])
+              onTap: () => debouncer.run(() => selectPackProfileDialog(
+                orderPackProfileID: widget.data.packProfileID ?? 0,
+                capacityQty: widget.data.capacityQty ?? 0,
+                packProfileList: widget.state.packProfileList
+                    .map((v) => [v.packProfileID, v.packProfileName, v.boxCapacity])
                     .toList(),
                 callback: (int packProfileID, double capacityQty) =>
-                    logic.modifyOrderPackProfile(
-                  packOrderID: data.packProfileID ?? 0,
+                    widget.logic.modifyOrderPackProfile(
+                  packOrderID: widget.data.packProfileID ?? 0,
                   packProfileID: packProfileID,
                   capacityQty: capacityQty,
-                  refresh: () => onQuery(),
+                  refresh: () => widget.onQuery(),
                 ),
-              ),
+              )),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(
@@ -199,7 +207,7 @@ class _PackOrderItem extends StatelessWidget {
                 onTap: () {
                   if (checkUserPermission('601080111')) {
                     Get.to(() => PartDispatchLabelListPage(
-                          packOrderId: data.packageId ?? 0,
+                          packOrderId: widget.data.packageId ?? 0,
                         ));
                   } else {
                     errorDialog(
@@ -218,31 +226,31 @@ class _PackOrderItem extends StatelessWidget {
                           expandedTextSpan(
                             flex: 5,
                             hint: 'part_dispatch_pack_order_organization'.tr,
-                            text: data.organizeName ?? '',
+                            text: widget.data.organizeName ?? '',
                             textColor: Colors.black54,
                           ),
                           expandedTextSpan(
                             flex: 5,
                             hint: 'part_dispatch_pack_order_pack_order_no'.tr,
-                            text: data.packageNo ?? '',
+                            text: widget.data.packageNo ?? '',
                             textColor: Colors.black54,
                           ),
                           expandedTextSpan(
                             flex: 2,
                             hint: 'part_dispatch_pack_order_make_date'.tr,
-                            text: data.date ?? '',
+                            text: widget.data.date ?? '',
                             textColor: Colors.black54,
                           ),
                         ],
                       ),
                       textSpan(
                         hint: 'part_dispatch_pack_order_dispatch_order_no'.tr,
-                        text: data.workCardNo ?? '',
+                        text: widget.data.workCardNo ?? '',
                         textColor: Colors.black54,
                       ),
                       textSpan(
                         hint: 'part_dispatch_pack_order_instruction'.tr,
-                        text: data.billNO ?? '',
+                        text: widget.data.billNO ?? '',
                         textColor: Colors.black54,
                       ),
                       Row(
@@ -251,27 +259,27 @@ class _PackOrderItem extends StatelessWidget {
                           expandedTextSpan(
                             flex: 5,
                             hint: 'part_dispatch_pack_order_type_body_tips'.tr,
-                            text: data.productName ?? '',
+                            text: widget.data.productName ?? '',
                             textColor: Colors.black54,
                           ),
                           expandedTextSpan(
                             flex: 5,
                             hint: 'part_dispatch_pack_order_process'.tr,
-                            text: data.processName ?? '',
+                            text: widget.data.processName ?? '',
                             textColor: Colors.black54,
                           ),
                           expandedTextSpan(
                             flex: 2,
                             hint: 'part_dispatch_pack_order_maker'.tr,
-                            text: data.userName ?? '',
+                            text: widget.data.userName ?? '',
                             textColor: Colors.black54,
                           ),
                         ],
                       ),
                       Text(
                         'part_dispatch_pack_order_pack_profile'.trArgs([
-                          logic.getOrderPackProfile(data.packProfileID),
-                          data.capacityQty.toShowString()
+                          widget.logic.getOrderPackProfile(widget.data.packProfileID),
+                          widget.data.capacityQty.toShowString()
                         ]),
                         style: const TextStyle(
                           color: Colors.green,
@@ -284,8 +292,8 @@ class _PackOrderItem extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () =>
-                  logic.deletePackOrder(data: data, refresh: () => onQuery()),
+              onTap: () => debouncer.run(() =>
+                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(

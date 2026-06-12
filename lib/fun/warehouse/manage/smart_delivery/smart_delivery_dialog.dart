@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/smart_delivery_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -11,6 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 
 void modifyShoeTreeDialog(String typeBody, int departmentID) {
+  final debouncer = ClickDebouncer();
   _getShoeTreeList(
     typeBody: typeBody,
     departmentID: departmentID,
@@ -52,13 +54,15 @@ void modifyShoeTreeDialog(String typeBody, int departmentID) {
             ),
             actions: [
               TextButton(
-                onPressed: () => _saveShoeTree(
-                  sti: sti,
-                  shoeTreeNo: sti.shoeTreeNo ?? '',
-                  departmentID: departmentID,
-                  success: (msg) => successDialog(
-                    content: msg,
-                    back: () => Get.back(),
+                onPressed: () => debouncer.run(
+                  () => _saveShoeTree(
+                    sti: sti,
+                    shoeTreeNo: sti.shoeTreeNo ?? '',
+                    departmentID: departmentID,
+                    success: (msg) => successDialog(
+                      content: msg,
+                      back: () => Get.back(),
+                    ),
                   ),
                 ),
                 child: Text('smart_delivery_dialog_save'.tr),
@@ -131,6 +135,7 @@ void reserveShoeTreeDialog(
   List<PartsSizeList> shoeTreeList,
   Function(List<PartsSizeList>) set,
 ) {
+  final debouncer = ClickDebouncer();
   var setList = <PartsSizeList>[
     for (var v in shoeTreeList)
       PartsSizeList(
@@ -179,10 +184,10 @@ void reserveShoeTreeDialog(
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 Get.back();
                 set.call(setList);
-              },
+              }),
               child: Text('smart_delivery_dialog_save'.tr),
             ),
             TextButton(
@@ -313,6 +318,7 @@ void createDeliveryTaskDialog({
   required List<WorkData> mergeOrderRoundList,
   required Function(String taskId, String agvNumber) success,
 }) {
+  final debouncer = ClickDebouncer();
   if (nowOrderRoundList.isEmpty) {
     errorDialog(content: 'smart_delivery_dialog_select_delivery_round'.tr);
     return;
@@ -419,39 +425,42 @@ void createDeliveryTaskDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    agvSelect =
-                        agvList.length > 1 ? agvController.selectedItem : 0;
-                    typeSelect = taskTypeList.length > 1
-                        ? agvTypeController.selectedItem
-                        : 0;
-                    startSelect =
-                        startList.length > 1 ? startController.selectedItem : 0;
-                    endSelect =
-                        endList.length > 1 ? endController.selectedItem : 0;
-                    spSave(agvDeviceSelect, agvSelect);
-                    spSave(agvTaskTypeSelect, typeSelect);
-                    spSave(agvTaskStartSelect, startSelect);
-                    spSave(agvTaskEndSelect, endSelect);
-                    _createAgvTask(
-                      agvNumber: agvList[agvSelect].agvNumber ?? '',
-                      nowOrderId: nowOrderId,
-                      nowOrderPartsId: nowOrderPartsId,
-                      nowOrderRoundList: nowOrderRoundList,
-                      mergeOrderId: mergeOrderId,
-                      mergeOrderPartsId: mergeOrderPartsId,
-                      mergeOrderRoundList: mergeOrderRoundList,
-                      start: startList[startSelect].positionCode ?? '',
-                      end: endList[endSelect].positionCode ?? '',
-                      isScheduling: isScheduling,
-                      success: (taskId, agvNumber, msg) {
-                        Get.back();
-                        success.call(taskId, agvNumber);
-                        successDialog(content: msg);
-                      },
-                      fail: (msg) => errorDialog(content: msg),
-                    );
-                  },
+                  onPressed: () => debouncer.run(
+                    () {
+                      agvSelect =
+                          agvList.length > 1 ? agvController.selectedItem : 0;
+                      typeSelect = taskTypeList.length > 1
+                          ? agvTypeController.selectedItem
+                          : 0;
+                      startSelect = startList.length > 1
+                          ? startController.selectedItem
+                          : 0;
+                      endSelect =
+                          endList.length > 1 ? endController.selectedItem : 0;
+                      spSave(agvDeviceSelect, agvSelect);
+                      spSave(agvTaskTypeSelect, typeSelect);
+                      spSave(agvTaskStartSelect, startSelect);
+                      spSave(agvTaskEndSelect, endSelect);
+                      _createAgvTask(
+                        agvNumber: agvList[agvSelect].agvNumber ?? '',
+                        nowOrderId: nowOrderId,
+                        nowOrderPartsId: nowOrderPartsId,
+                        nowOrderRoundList: nowOrderRoundList,
+                        mergeOrderId: mergeOrderId,
+                        mergeOrderPartsId: mergeOrderPartsId,
+                        mergeOrderRoundList: mergeOrderRoundList,
+                        start: startList[startSelect].positionCode ?? '',
+                        end: endList[endSelect].positionCode ?? '',
+                        isScheduling: isScheduling,
+                        success: (taskId, agvNumber, msg) {
+                          Get.back();
+                          success.call(taskId, agvNumber);
+                          successDialog(content: msg);
+                        },
+                        fail: (msg) => errorDialog(content: msg),
+                      );
+                    },
+                  ),
                   child: Text('smart_delivery_dialog_creat'.tr),
                 ),
                 TextButton(
@@ -475,6 +484,7 @@ void checkAgvTask({
   required String agvNumber,
   required Function(String) cancelTask,
 }) {
+  final debouncer = ClickDebouncer();
   _getAgvTaskInfo(
     taskId: taskId,
     success: (task) {
@@ -517,12 +527,14 @@ void checkAgvTask({
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 IconButton(
-                                  onPressed: () => _cancelAgvTask(
-                                    taskId: taskId,
-                                    success: () {
-                                      Get.back();
-                                      cancelTask.call(taskId);
-                                    },
+                                  onPressed: () => debouncer.run(
+                                    () => _cancelAgvTask(
+                                      taskId: taskId,
+                                      success: () {
+                                        Get.back();
+                                        cancelTask.call(taskId);
+                                      },
+                                    ),
                                   ),
                                   icon: const Icon(
                                     Icons.stop_circle,
@@ -531,10 +543,12 @@ void checkAgvTask({
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () => _stopAgvTask(
-                                    agvNumber: agvNumber,
-                                    success: () => dialogSetState(
-                                      () => taskType = 3,
+                                  onPressed: () => debouncer.run(
+                                    () => _stopAgvTask(
+                                      agvNumber: agvNumber,
+                                      success: () => dialogSetState(
+                                        () => taskType = 3,
+                                      ),
                                     ),
                                   ),
                                   icon: const Icon(
@@ -544,10 +558,12 @@ void checkAgvTask({
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () => _resumeAgvTask(
-                                    agvNumber: agvNumber,
-                                    success: () => dialogSetState(
-                                      () => taskType = 1,
+                                  onPressed: () => debouncer.run(
+                                    () => _resumeAgvTask(
+                                      agvNumber: agvNumber,
+                                      success: () => dialogSetState(
+                                        () => taskType = 1,
+                                      ),
                                     ),
                                   ),
                                   icon: const Icon(

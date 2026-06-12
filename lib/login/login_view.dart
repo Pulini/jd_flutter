@@ -4,6 +4,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_state.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -135,7 +136,7 @@ TextField _buildLoginTextField({
       maxLength: maxLength,
     );
 
-class _PhoneLoginWidget extends StatelessWidget {
+class _PhoneLoginWidget extends StatefulWidget {
   final LoginLogic logic;
   final LoginState state;
   final TextEditingController phoneController;
@@ -151,18 +152,25 @@ class _PhoneLoginWidget extends StatelessWidget {
   });
 
   @override
+  State<_PhoneLoginWidget> createState() => _PhoneLoginWidgetState();
+}
+
+class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return _buildLoginBox(
       child: Column(
         children: [
           _buildLoginTextField(
-            controller: phoneController,
+            controller: widget.phoneController,
             hint: 'login_hint_phone'.tr,
             leftIcon: const Icon(Icons.phone, color: Colors.white),
             maxLength: 11,
           ),
           _buildLoginTextField(
-            controller: passwordController,
+            controller: widget.passwordController,
             hint: 'login_hint_password'.tr,
             leftIcon: const Icon(Icons.lock_outline, color: Colors.white),
             maxLength: 10,
@@ -175,7 +183,7 @@ class _PhoneLoginWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: NumberTextField(
-                    numberController: vCodeController,
+                    numberController: widget.vCodeController,
                     maxLength: 6,
                     textStyle: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -190,17 +198,18 @@ class _PhoneLoginWidget extends StatelessWidget {
                 const SizedBox(width: 20),
                 Obx(() => ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: state.countTimer.value == 0
+                        backgroundColor: widget.state.countTimer.value == 0
                             ? Colors.white
                             : Colors.grey.shade400,
                       ),
-                      onPressed: () => logic.getVerifyCode(
-                        phoneController.text,
-                      ),
+                      onPressed: () => debouncer.run(() =>
+                          widget.logic.getVerifyCode(
+                            widget.phoneController.text,
+                          )),
                       child: Text(
-                        state.countTimer.value == 0
+                        widget.state.countTimer.value == 0
                             ? 'get_verify_code'.tr
-                            : (60 - state.countTimer.value).toString(),
+                            : (60 - widget.state.countTimer.value).toString(),
                         style: const TextStyle(
                           color: Color.fromARGB(255, 213, 41, 42),
                         ),
@@ -310,6 +319,7 @@ class LoginPick extends StatefulWidget {
 
 class _LoginPickState extends State<LoginPick>
     with SingleTickerProviderStateMixin {
+  final debouncer = ClickDebouncer();
   var logic = Get.put(LoginLogic());
   var state = Get.find<LoginLogic>().state;
   var isShowLoginButton = false.obs;
@@ -512,7 +522,7 @@ class _LoginPickState extends State<LoginPick>
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () => debouncer.run(() {
                 var mes = mesInputController.text;
                 var sap = sapInputController.text;
                 if (mes.isNotEmpty && sap.isNotEmpty) {
@@ -524,7 +534,7 @@ class _LoginPickState extends State<LoginPick>
                 } else {
                   errorDialog(content: 'URL 不能为空');
                 }
-              },
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -669,7 +679,7 @@ class _LoginPickState extends State<LoginPick>
                       onLongPress: () => logic.handleLongPressStart(
                         changeBaseUrl: () => _changeBaseUrlDialog(),
                       ),
-                      onPressed: () {
+                      onPressed: () => debouncer.run(() {
                         if (tabController.index == 1) {
                           logic.phoneLogin(
                             phoneLoginPhoneController.text,
@@ -710,7 +720,7 @@ class _LoginPickState extends State<LoginPick>
                           );
                           return;
                         }
-                      },
+                      }),
                       child: Text(
                         'login'.tr,
                         style: const TextStyle(fontSize: 20),

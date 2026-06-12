@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -18,6 +19,7 @@ class CartonLabelScanPriorityPage extends StatefulWidget {
 class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPage> {
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
+  final debouncer = ClickDebouncer();
 
   @override
   void initState() {
@@ -64,8 +66,8 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                   ),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: () =>
-                      logic.queryCartonLabelInfo(logic.scanController.text),
+                  onPressed: () => debouncer.run(() =>
+                      logic.queryCartonLabelInfo(logic.scanController.text)),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/component_code_info.dart';
 import 'package:jd_flutter/fun/work_reporting/part_report_scan/part_report_scan_logic.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -16,14 +17,15 @@ class PartReportScanPage extends StatefulWidget {
 }
 
 class _PartReportScanPageState extends State<PartReportScanPage> {
+  final debouncer = ClickDebouncer();
   final logic = Get.put(PartReportScanLogic());
   final state = Get.find<PartReportScanLogic>().state;
 var tecCode=TextEditingController();
   GestureDetector _item1(ComponentCodeInfo info) {
     return GestureDetector(
-        onLongPress: ()  {
+        onLongPress: () => debouncer.run(() {
           logic.deleteCode(info);
-        },
+        }),
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(left: 5,bottom: 2,right: 5,top: 2),
@@ -48,15 +50,14 @@ var tecCode=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [TextButton(onPressed: ()=>{
+      actions: [TextButton(onPressed: () => debouncer.run(() =>
         askDialog(
           content: 'part_report_sure_clear'.tr,
           confirm: () {
             logic.clearData();
           },
         ),
-
-      }, child: Text('part_report_clear'.tr))],
+      ), child: Text('part_report_clear'.tr))],
         title: 'part_report_title'.tr,
         body: Column(
           children: [
@@ -71,13 +72,13 @@ var tecCode=TextEditingController();
                 ),
                 Expanded(
                   child: IconButton(
-                    onPressed: ()  {
+                    onPressed: () => debouncer.run(() {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
                           logic.addCode(v.toString());
                         }
                       });
-                    },
+                    }),
                     icon: const Icon(
                       Icons.qr_code_scanner_outlined,
                       color: Colors.grey,

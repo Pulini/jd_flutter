@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -18,6 +19,7 @@ class PrintPalletPage extends StatefulWidget {
 }
 
 class _PrintPalletPageState extends State<PrintPalletPage> {
+  final debouncer = ClickDebouncer();
   final PrintPalletLogic logic = Get.put(PrintPalletLogic());
   final PrintPalletState state = Get.find<PrintPalletLogic>().state;
   var controller = TextEditingController();
@@ -34,7 +36,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       actions: [
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
-                onPressed: () => logic.printPalletSizeMaterial(),
+                onPressed: () => debouncer.run(() => logic.printPalletSizeMaterial()),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
@@ -43,10 +45,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
             : Container()),
         Obx(() => state.palletList.any((v) => v.any((v2) => v2.isSelect.value))
             ? IconButton(
-                onPressed: () => askDialog(
+                onPressed: () => debouncer.run(() => askDialog(
                   content: '确定要从托盘移除该标签吗？',
                   confirm: () => logic.deleteLabel(),
-                ),
+                )),
                 icon: const Icon(
                   Icons.link_off_outlined,
                   color: Colors.red,
@@ -130,7 +132,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   }
 }
 
-class _PalletItem extends StatelessWidget {
+class _PalletItem extends StatefulWidget {
   final int index;
   final PrintPalletState state;
   final PrintPalletLogic logic;
@@ -141,9 +143,16 @@ class _PalletItem extends StatelessWidget {
   });
 
   @override
+  State<_PalletItem> createState() => _PalletItemState();
+}
+
+class _PalletItemState extends State<_PalletItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
-    var pallet = state.palletList[index];
-    var isSelected = state.selectedList[index];
+    var pallet = widget.state.palletList[widget.index];
+    var isSelected = widget.state.selectedList[widget.index];
     var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -169,17 +178,17 @@ class _PalletItem extends StatelessWidget {
                   text: pallet.first.palletNumber ?? '',
                 ),
                 IconButton(
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                       content: '确定要删除该托盘码？',
-                      confirm: () => logic.deletePallet(index)),
+                      confirm: () => widget.logic.deletePallet(widget.index))),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,
                   ),
                 ),
                 Obx(() => Checkbox(
-                      value: logic.isSelectedAllItem(index),
-                      onChanged: (v) => logic.selectAllSubItem(index, v!),
+                      value: widget.logic.isSelectedAllItem(widget.index),
+                      onChanged: (v) => widget.logic.selectAllSubItem(widget.index, v!),
                     ))
               ],
             ),

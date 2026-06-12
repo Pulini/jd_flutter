@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_dialog.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -20,6 +21,7 @@ class SapRelocationPickingPage extends StatefulWidget {
 }
 
 class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
+  final debouncer = ClickDebouncer();
   final SapRelocationPickingLogic logic = Get.put(SapRelocationPickingLogic());
   final SapRelocationPickingState state =
       Get.find<SapRelocationPickingLogic>().state;
@@ -79,7 +81,8 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => state.materialList.remove(data),
+                  onPressed: () =>
+                      debouncer.run(() => state.materialList.remove(data)),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,
@@ -107,7 +110,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
           actions: [
             if (state.materialList.isNotEmpty)
               TextButton(
-                onPressed: () => state.materialList.clear(),
+                onPressed: () => debouncer.run(() => state.materialList.clear()),
                 child: Text('sap_relocation_pick_clean'.tr),
               ),
           ],

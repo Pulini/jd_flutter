@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
+import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -26,6 +27,7 @@ class _WorkshopPlanningSalaryCountPageState
     with SingleTickerProviderStateMixin {
   final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
+  final debouncer = ClickDebouncer();
   late DatePickerController dpcDate;
   late TabController tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
@@ -135,7 +137,7 @@ class _WorkshopPlanningSalaryCountPageState
       actions: [
         Obx(() => state.workersCache.isNotEmpty
             ? IconButton(
-                onPressed: () => logic.useWorkersCache(),
+                onPressed: () => debouncer.run(() => logic.useWorkersCache()),
                 icon: const Icon(Icons.save, color: Colors.blue),
               )
             : Container()),
@@ -421,7 +423,7 @@ class _SalaryCountProcessItem extends StatelessWidget {
   }
 }
 
-class _SalaryCountWorkerItem extends StatelessWidget {
+class _SalaryCountWorkerItem extends StatefulWidget {
   final WorkshopPlanningWorkerInfo data;
   final WorkshopPlanningLogic logic;
 
@@ -431,9 +433,16 @@ class _SalaryCountWorkerItem extends StatelessWidget {
   });
 
   @override
+  State<_SalaryCountWorkerItem> createState() => _SalaryCountWorkerItemState();
+}
+
+class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
+  final debouncer = ClickDebouncer();
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => logic.modifyWorker(data),
+      onTap: () => debouncer.run(() => widget.logic.modifyWorker(widget.data)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -463,13 +472,13 @@ class _SalaryCountWorkerItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${data.name}(${data.number})<${data.typeOfWork}>',
+                              '${widget.data.name}(${widget.data.number})<${widget.data.typeOfWork}>',
                             ),
                           ),
                           Text(
-                            data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            widget.data.attendanceStatus == true ? '已考勤' : '未考勤',
                             style: TextStyle(
-                              color: data.attendanceStatus == true
+                              color: widget.data.attendanceStatus == true
                                   ? Colors.green
                                   : Colors.red,
                             ),
@@ -482,17 +491,17 @@ class _SalaryCountWorkerItem extends StatelessWidget {
                               textSpan(
                                 isBold: false,
                                 hint: '系数：',
-                                text: data.base.toShowString(),
+                                text: widget.data.base.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '工时：',
-                                text: data.dayWorkTime.toShowString(),
+                                text: widget.data.dayWorkTime.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
                                 hint: '金额：',
-                                text: data.money.value.toShowString(),
+                                text: widget.data.money.value.toShowString(),
                               ),
                             ],
                           ))
@@ -512,10 +521,10 @@ class _SalaryCountWorkerItem extends StatelessWidget {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => askDialog(
+                  onPressed: () => debouncer.run(() => askDialog(
                     content: '确定要删除该组员数据吗？',
-                    confirm: () => logic.deleteReportWorker(data),
-                  ),
+                    confirm: () => widget.logic.deleteReportWorker(widget.data),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),
