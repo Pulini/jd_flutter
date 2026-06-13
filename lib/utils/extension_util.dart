@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -313,5 +314,27 @@ extension ListExt on List? {
   bool isNullOrEmpty() {
     if (this == null) return true;
     return this!.isEmpty;
+  }
+}
+
+/// 点击节流：首次点击立即执行，[milliseconds] 内后续点击被忽略。
+/// 适用于按钮防重复点击（submit、delete、print 等场景）。
+///
+/// 用法：直接替换原生 onPressed / onTap：
+/// ```dart
+/// onPressed: (() => logic.submit()).throttle(),
+/// onTap: (() => logic.deleteItem(data)).throttle(),
+/// ```
+extension ClickThrottle on VoidCallback {
+  VoidCallback throttle([int milliseconds = 1000]) {
+    bool canClick = true;
+    Timer? timer;
+    return () {
+      if (!canClick) return;
+      canClick = false;
+      this();
+      timer?.cancel();
+      timer = Timer(Duration(milliseconds: milliseconds), () => canClick = true);
+    };
   }
 }

@@ -7,7 +7,7 @@ import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/app_init.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -19,7 +19,6 @@ void stockInDialog({
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
-  final debouncer = ClickDebouncer();
   var notScanList = <String>[];
   submitList
       .where((v) => v.isScanPieces == 'X' && v.deliJbq?.isEmpty == true)
@@ -320,7 +319,7 @@ void stockInDialog({
             () => faceErrorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-                    onPressed: () => debouncer.run(stockIn),
+                    onPressed: () => (stockIn).throttle(),
                     child: Text('dialog_default_confirm'.tr),
                   ),
           ),
@@ -342,7 +341,6 @@ void stockOutDialog({
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
-  final debouncer = ClickDebouncer();
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
@@ -366,21 +364,19 @@ void stockOutDialog({
     ),
     actions: [
       TextButton(
-        onPressed: () => debouncer.run(
-          () => _stockOutDeliveryOrder(
-            workerCenterId: workerCenterId,
-            factory: locationController.selectedId.value,
-            department: departmentController.selectedId.value,
-            data: submitList,
-            success: (msg) => successDialog(
-              content: msg,
-              back: () {
-                Get.back();
-                refresh.call();
-              },
-            ),
+        onPressed: (() => _stockOutDeliveryOrder(
+          workerCenterId: workerCenterId,
+          factory: locationController.selectedId.value,
+          department: departmentController.selectedId.value,
+          data: submitList,
+          success: (msg) => successDialog(
+            content: msg,
+            back: () {
+              Get.back();
+              refresh.call();
+            },
           ),
-        ),
+        )).throttle(),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -421,7 +417,6 @@ void createTemporaryDialog({
       ),
     );
   } else {
-    final debouncer = ClickDebouncer();
     _checkFaceInfo(
       billType: '暂收单',
       sapFactoryNumber: submitList[0].factoryNO ?? '',
@@ -459,13 +454,11 @@ void createTemporaryDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: () => debouncer.run(
-                    () => _checkLeader(
-                      submitList: submitList,
-                      leader: leaders[leaderController.selectedItem],
-                      refresh: refresh,
-                    ),
-                  ),
+                  onPressed: (() => _checkLeader(
+                    submitList: submitList,
+                    leader: leaders[leaderController.selectedItem],
+                    refresh: refresh,
+                  )).throttle(),
                   child: Text('dialog_default_confirm'.tr),
                 ),
                 TextButton(

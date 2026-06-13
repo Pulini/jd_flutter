@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
@@ -9,7 +9,6 @@ void checkWorkerDialog({
   required String msg,
   required void Function(WorkerInfo) success,
 }) {
-  final debouncer = ClickDebouncer();
   WorkerInfo? worker;
   Get.dialog(
     PopScope(
@@ -35,14 +34,14 @@ void checkWorkerDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () => debouncer.run(() {
+              onPressed: (() {
                 if (worker == null) {
                   showSnackBar(
                       message: 'part_cross_docking_worker_number_hint'.tr);
                 } else {
                   success.call(worker!);
                 }
-              }),
+              }).throttle(),
               child: Text('part_cross_docking_submit'.tr),
             ),
             TextButton(

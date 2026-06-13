@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/mqtt.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -466,7 +466,6 @@ class _ProductionTasksOrderItem extends StatefulWidget {
 
 class _ProductionTasksOrderItemState
     extends State<_ProductionTasksOrderItem> {
-  final debouncer = ClickDebouncer();
 
   bool _isSelected() => widget.state.selected == widget.index;
 
@@ -524,10 +523,10 @@ class _ProductionTasksOrderItemState
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: () => debouncer.run(() => logic.changeSort(
+          onPressed: (() => logic.changeSort(
               oldIndex: index,
               newIndex: index - 1,
-              refresh: () => onMoveUp(index))),
+              refresh: () => onMoveUp(index))).throttle(),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.blueAccent,
@@ -545,14 +544,14 @@ class _ProductionTasksOrderItemState
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: () => debouncer.run(() {
+          onPressed: (() {
             if (index < state.orderList.length - 1) {
               logic.changeSort(
                   oldIndex: index,
                   newIndex: index + 1,
                   refresh: () => onMoveDown(index));
             }
-          }),
+          }).throttle(),
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
             color: Colors.blueAccent,
@@ -577,10 +576,10 @@ class _ProductionTasksOrderItemState
     var mtoNo = TextButton(
       onPressed: () {
         if (_isSelected() || index == 0) {
-          debouncer.run(() => logic.getDetail(
+          (() => logic.getDetail(
             ins: data.mtoNo ?? '',
             imageUrl: data.itemImage ?? '',
-          ));
+          )).throttle()();
         } else {
           onSelected(index);
         }
@@ -637,7 +636,7 @@ class _ProductionTasksOrderItemState
                   isDefaultAction: true,
                   onPressed: () {
                     Get.back();
-                    debouncer.run(() => logic.getOrderPackMaterialInfo(data.mtoNo ?? ''));
+                    (() => logic.getOrderPackMaterialInfo(data.mtoNo ?? '')).throttle()();
                   },
                   child: Text('production_tasks_pack_material_info'.tr),
                 ),
@@ -676,10 +675,10 @@ class _ProductionTasksOrderItemState
       child: TextButton(
         onPressed: () {
           if (_isSelected() || index == 0) {
-            debouncer.run(() => logic.getDetail(
+            (() => logic.getDetail(
               po: data.clientOrderNumber ?? '',
               imageUrl: data.itemImage ?? '',
-            ));
+            )).throttle()();
           } else {
             onSelected(index);
           }

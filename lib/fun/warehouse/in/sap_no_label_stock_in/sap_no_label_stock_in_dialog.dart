@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -21,7 +21,6 @@ void modifyMaterialStockInQtyDialog({
   required double qty,
   required Function(double) callback,
 }) {
-  final debouncer = ClickDebouncer();
   var controller = TextEditingController(
     text: qty.toShowString(),
   );
@@ -44,10 +43,10 @@ void modifyMaterialStockInQtyDialog({
         ),
         actions: [
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               Get.back();
               callback.call(controller.text.toDoubleTry());
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -72,7 +71,6 @@ void checkStockInHandoverDialog({
     String postingDate,
   ) handoverCheck,
 }) {
-  final debouncer = ClickDebouncer();
   var dpcDate = DatePickerController(PickerType.date,
       saveKey: '${RouteConfig.sapNoLabelStockIn.name}${PickerType.date}',
       buttonName: 'sap_no_label_stock_in_dialog_posting_date'.tr);
@@ -121,7 +119,7 @@ void checkStockInHandoverDialog({
             actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
             actions: [
               TextButton(
-                onPressed: () => debouncer.run(() {
+                onPressed: (() {
                   if (leader != null) {
                     spSave(checkStockInHandoverDialogNumber,
                         leader!.empCode ?? '');
@@ -144,7 +142,7 @@ void checkStockInHandoverDialog({
                           },
                         )                    );
                   }
-                }),
+                }).throttle(),
                 child: Text('dialog_default_confirm'.tr),
               ),
               TextButton(

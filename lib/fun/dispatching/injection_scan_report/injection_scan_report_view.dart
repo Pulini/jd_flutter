@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -25,7 +24,6 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
   final state = Get
       .find<InjectionScanReportLogic>()
       .state;
-  final debouncer = ClickDebouncer();
 
   Widget _item1(ShowProcessPlanDetailInfo data) =>
       _InjectionScanReportItem1(data: data, logic: logic);
@@ -42,7 +40,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           TextButton(
             //查询具体订单
             onPressed: () =>
-                debouncer.run(() => logic.getScWorkCardDetail()),
+                (() => logic.getScWorkCardDetail()).throttle(),
             child: Text('injection_scan_query'.tr),
           ),
         ],

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/show_handover_info.dart';
 import 'package:jd_flutter/fun/work_reporting/component_handover/component_handover_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -24,7 +24,6 @@ class ComponentHandoverPage extends StatefulWidget {
 class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
   final logic = Get.put(ComponentHandoverLogic());
   final state = Get.find<ComponentHandoverLogic>().state;
-  final debouncer = ClickDebouncer();
 
   Row _item1(ShowHandoverInfo data, int position) {
     return Row(
@@ -181,7 +180,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.process.value),
                   Expanded(
                       child: InkWell(
-                          onTap: () => debouncer.run(() => logic.getHandoverProcessFlow()),
+                          onTap: (() => logic.getHandoverProcessFlow()).throttle(),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,
@@ -216,7 +215,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.outProcess.value),
                   Expanded(
                       child: InkWell(
-                          onTap: () => debouncer.run(() => logic.getProcessList()),
+                          onTap: (() => logic.getProcessList()).throttle(),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,

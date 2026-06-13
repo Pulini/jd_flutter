@@ -9,7 +9,7 @@ import 'package:jd_flutter/widget/scanner.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:jd_flutter/utils/app_init.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 
 import 'carton_label_scan_logic.dart';
@@ -23,7 +23,6 @@ class CartonLabelScanPage extends StatefulWidget {
 }
 
 class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
-  final debouncer = ClickDebouncer();
   final CartonLabelScanLogic logic = Get.put(CartonLabelScanLogic());
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
@@ -133,8 +132,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                       ),
                     ),
                     suffixIcon: IconButton(
-                      onPressed: () => debouncer.run(() =>
-                          logic.queryCartonLabelInfo(controller.text)),
+                      onPressed: (() =>
+                          logic.queryCartonLabelInfo(controller.text)).throttle(),
                       icon: const Icon(
                         Icons.loupe_rounded,
                         color: Colors.green,

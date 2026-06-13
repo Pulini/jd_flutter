@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_orders_view.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -253,7 +253,6 @@ class _InspectionDeliveryItem extends StatefulWidget {
 }
 
 class _InspectionDeliveryItemState extends State<_InspectionDeliveryItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -279,10 +278,10 @@ class _InspectionDeliveryItemState extends State<_InspectionDeliveryItem> {
           textColor: Colors.green,
         ),
         leading: IconButton(
-          onPressed: () => debouncer.run(() => askDialog(
+          onPressed: (() => askDialog(
             content: 'incoming_inspection_delete_order_tips'.tr,
             confirm: () => widget.logic.deleteDeliveryOrder(widget.group),
-          )),
+          )).throttle(),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
@@ -311,7 +310,6 @@ class _InspectionSubItem extends StatefulWidget {
 }
 
 class _InspectionSubItemState extends State<_InspectionSubItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -345,10 +343,10 @@ class _InspectionSubItemState extends State<_InspectionSubItem> {
             text:
                 '${widget.logic.getItemMaterialQty(widget.item).toShowString()} ${widget.item.first.unitName}'),
         leading: IconButton(
-          onPressed: () => debouncer.run(() => askDialog(
+          onPressed: (() => askDialog(
             content: 'incoming_inspection_delete_material_tips'.tr,
             confirm: () => widget.logic.deleteDeliveryMaterialGroupOrder(widget.item),
-          )),
+          )).throttle(),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
@@ -374,10 +372,10 @@ class _InspectionSubItemState extends State<_InspectionSubItem> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => debouncer.run(() => askDialog(
+                        onPressed: (() => askDialog(
                           content: 'incoming_inspection_delete_item_tips'.tr,
                           confirm: () => widget.logic.deleteDeliveryItem(subItem),
-                        )),
+                        )).throttle(),
                         icon: const Icon(
                           Icons.delete_forever,
                           color: Colors.red,
@@ -410,7 +408,6 @@ class _InspectionAddMaterialItem extends StatefulWidget {
 }
 
 class _InspectionAddMaterialItemState extends State<_InspectionAddMaterialItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -466,10 +463,10 @@ class _InspectionAddMaterialItemState extends State<_InspectionAddMaterialItem> 
                   ),
                 ),
                 IconButton(
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: 'incoming_inspection_delete_item_tips'.tr,
                     confirm: () => widget.onDelete(),
-                  )),
+                  )).throttle(),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

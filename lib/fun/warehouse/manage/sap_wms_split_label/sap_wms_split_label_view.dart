@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_wms_reprint_label_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -24,7 +24,6 @@ class SapWmsSplitLabelPage extends StatefulWidget {
 }
 
 class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
-  final debouncer = ClickDebouncer();
   final SapWmsSplitLabelLogic logic = Get.put(SapWmsSplitLabelLogic());
   final SapWmsSplitLabelState state = Get.find<SapWmsSplitLabelLogic>().state;
 
@@ -59,10 +58,10 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
     return pageBody(
       actions: [
         TextButton(
-          onPressed: () => debouncer.run(() => askDialog(
+          onPressed: (() => askDialog(
             content: 'sap_wms_split_label_submit_split_info_tips'.tr,
             confirm: () => logic.submitSplit(),
-          )),
+          )).throttle(),
           child: Text('sap_wms_split_label_submit'.tr),
         ),
       ],

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -21,7 +21,6 @@ class SapPrintPickingBarCodeListPage extends StatefulWidget {
 
 class _SapPrintPickingBarCodeListPageState
     extends State<SapPrintPickingBarCodeListPage> {
-  final debouncer = ClickDebouncer();
   final SapPrintPickingLogic logic = Get.find<SapPrintPickingLogic>();
   final SapPrintPickingState state = Get.find<SapPrintPickingLogic>().state;
   int dataID = Get.arguments['id'];
@@ -93,12 +92,12 @@ class _SapPrintPickingBarCodeListPageState
               ),
               if (label.distribution.isNotEmpty)
                 IconButton(
-                  onPressed: () => debouncer.run(
-                    () => askDialog(
+                  onPressed: (() {
+                    askDialog(
                       content: 'sap_print_picking_barcode_list_delete_label_tips'.tr,
                       confirm: () => logic.scannedLabelDelete(label),
-                    ),
-                  ),
+                    );
+                  }).throttle(),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

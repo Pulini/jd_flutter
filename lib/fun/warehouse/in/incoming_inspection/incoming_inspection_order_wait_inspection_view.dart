@@ -6,7 +6,7 @@ import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -187,7 +187,6 @@ class _IncomingInspectionPhotoItem extends StatefulWidget {
 
 class _IncomingInspectionPhotoItemState
     extends State<_IncomingInspectionPhotoItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +215,7 @@ class _IncomingInspectionPhotoItemState
           top: 0,
           child: IconButton(
             onPressed: () =>
-                debouncer.run(() => widget.logic.deleteInspectionPhoto(widget.f)),
+                (() => widget.logic.deleteInspectionPhoto(widget.f)).throttle(),
             icon: const Icon(
               Icons.cancel_outlined,
               color: Colors.red,

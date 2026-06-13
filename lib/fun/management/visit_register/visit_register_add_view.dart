@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -25,7 +25,6 @@ class VisitRegisterAddPage extends StatefulWidget {
 class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   final logic = Get.find<VisitRegisterLogic>();
   final state = Get.find<VisitRegisterLogic>().state;
-  final debouncer = ClickDebouncer();
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
@@ -443,9 +442,9 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               logic.addVisitRecord();
-            }),
+            }).throttle(),
             child: Text(
               'visit_newly_added'.tr,
               style: const TextStyle(color: Colors.white),

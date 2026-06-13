@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -20,7 +20,6 @@ void selectPackProfileDialog({
   required List<List> packProfileList,
   required Function(int, double) callback,
 }) {
-  final debouncer = ClickDebouncer();
   var tecQty=TextEditingController(text: capacityQty.toShowString());
   var selectIndex = (-1).obs;
   selectIndex.value =
@@ -83,7 +82,7 @@ void selectPackProfileDialog({
     ),
     actions: [
       TextButton(
-        onPressed: () => debouncer.run(() {
+        onPressed: (() {
           var qty=tecQty.text.toDoubleTry();
           if (packProfileList[selectIndex.value][0] != orderPackProfileID ||
               (qty != capacityQty && qty > 0)) {
@@ -102,7 +101,7 @@ void selectPackProfileDialog({
                 content:
                     'part_dispatch_select_pack_profile_dialog_no_change'.tr);
           }
-        }),
+        }).throttle(),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -120,7 +119,6 @@ void selectInstructionsDialog({
   required List<PartDispatchOrderBatchGroupInfo> batchGroups,
   required Function(List<int>, bool) selected,
 }) {
-  final debouncer = ClickDebouncer();
   var selectIndex = (-1).obs;
 
   void clearOtherItem(int index) {
@@ -313,7 +311,7 @@ void selectInstructionsDialog({
     ),
     actions: [
       TextButton(
-        onPressed: () => debouncer.run(() {
+        onPressed: (() {
           if (selectIndex.value >= 0) {
             Get.back();
             selected.call(
@@ -330,7 +328,7 @@ void selectInstructionsDialog({
                     'part_dispatch_select_instruction_dialog_no_select_instruction'
                         .tr);
           }
-        }),
+        }).throttle(),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(

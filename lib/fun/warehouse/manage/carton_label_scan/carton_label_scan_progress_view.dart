@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
+
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import 'carton_label_scan_logic.dart';
@@ -18,7 +19,6 @@ class _CartonLabelScanProgressPageState
     extends State<CartonLabelScanProgressPage> {
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
-  final debouncer = ClickDebouncer();
 
   String customerPO = Get.arguments['CustomerPO'];
   TextEditingController controller = TextEditingController();
@@ -72,8 +72,8 @@ class _CartonLabelScanProgressPageState
                   ),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: () => debouncer.run(() =>
-                      logic.queryScanHistory(controller.text)),
+                  onPressed: (() =>
+                      logic.queryScanHistory(controller.text)).throttle(),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
@@ -87,6 +87,7 @@ class _CartonLabelScanProgressPageState
                   padding: const EdgeInsets.all(8),
                   itemCount: state.progress.length,
                   itemBuilder: (context, index) => InkWell(
+                    onTap: (() => logic.getProgressDetail(state.progress[index])).throttle(),
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8),
@@ -113,7 +114,6 @@ class _CartonLabelScanProgressPageState
                         ),
                       ),
                     ),
-                    onTap: () => debouncer.run(() => logic.getProgressDetail(state.progress[index])),
                   ),
                 )),
           )

@@ -8,7 +8,7 @@ import 'package:jd_flutter/bean/http/response/photo_bean.dart';
 import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -25,7 +25,6 @@ class VisitRegisterDetailPage extends StatefulWidget {
 class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
   final logic = Get.find<VisitRegisterLogic>();
   final state = Get.find<VisitRegisterLogic>().state;
-  final debouncer = ClickDebouncer();
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
@@ -146,9 +145,9 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               logic.updateLeaveFVisit();
-            }),
+            }).throttle(),
             child: Text(
               'visit_departure'.tr,
               style: const TextStyle(color: Colors.white),

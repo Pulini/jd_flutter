@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/show_handover_report_list.dart';
 import 'package:jd_flutter/fun/work_reporting/handover_report_list/handover_report_list_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -20,7 +20,6 @@ class HandoverReportListPage extends StatefulWidget {
 }
 
 class _HandoverReportListPageState extends State<HandoverReportListPage> {
-  final debouncer = ClickDebouncer();
   final logic = Get.put(HandoverReportListLogic());
   final state = Get.find<HandoverReportListLogic>().state;
 
@@ -232,7 +231,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         title: 'handover_report_title'.tr,
         actions: [
           TextButton(
-              onPressed: () => debouncer.run(() => logic.getInstructionDetailsFile()),
+              onPressed: (() => logic.getInstructionDetailsFile()).throttle(),
               child: Text('handover_report_query'.tr))
         ],
         body: Column(

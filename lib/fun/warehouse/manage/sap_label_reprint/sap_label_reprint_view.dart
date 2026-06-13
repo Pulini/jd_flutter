@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -18,7 +18,6 @@ class SapLabelReprintPage extends StatefulWidget {
 }
 
 class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
-  final debouncer = ClickDebouncer();
   final SapLabelReprintLogic logic = Get.put(SapLabelReprintLogic());
   final SapLabelReprintState state = Get.find<SapLabelReprintLogic>().state;
 
@@ -35,7 +34,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
     return pageBody(
       actions: [
         IconButton(
-          onPressed: () => debouncer.run(() => logic.cleanLabels()),
+          onPressed: (() => logic.cleanLabels()).throttle(),
           icon: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
@@ -58,7 +57,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
               ),
             )),
         IconButton(
-          onPressed: () => debouncer.run(() => logic.printLabel()),
+          onPressed: (() => logic.printLabel()).throttle(),
           icon: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(

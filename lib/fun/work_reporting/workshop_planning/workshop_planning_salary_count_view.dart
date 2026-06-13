@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -27,7 +27,6 @@ class _WorkshopPlanningSalaryCountPageState
     with SingleTickerProviderStateMixin {
   final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
-  final debouncer = ClickDebouncer();
   late DatePickerController dpcDate;
   late TabController tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
@@ -137,7 +136,7 @@ class _WorkshopPlanningSalaryCountPageState
       actions: [
         Obx(() => state.workersCache.isNotEmpty
             ? IconButton(
-                onPressed: () => debouncer.run(() => logic.useWorkersCache()),
+                onPressed: (() => logic.useWorkersCache()).throttle(),
                 icon: const Icon(Icons.save, color: Colors.blue),
               )
             : Container()),
@@ -437,12 +436,11 @@ class _SalaryCountWorkerItem extends StatefulWidget {
 }
 
 class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => debouncer.run(() => widget.logic.modifyWorker(widget.data)),
+      onTap: (() => widget.logic.modifyWorker(widget.data)).throttle(),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -521,10 +519,10 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: '确定要删除该组员数据吗？',
                     confirm: () => widget.logic.deleteReportWorker(widget.data),
-                  )),
+                  )).throttle(),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

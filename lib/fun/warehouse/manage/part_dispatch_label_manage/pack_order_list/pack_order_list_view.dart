@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_list/part_dispatch_label_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_dialog.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -150,7 +150,6 @@ class _PackOrderItem extends StatefulWidget {
 }
 
 class _PackOrderItemState extends State<_PackOrderItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +168,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () => debouncer.run(() => selectPackProfileDialog(
+              onTap: (() => selectPackProfileDialog(
                 orderPackProfileID: widget.data.packProfileID ?? 0,
                 capacityQty: widget.data.capacityQty ?? 0,
                 packProfileList: widget.state.packProfileList
@@ -182,7 +181,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
                   capacityQty: capacityQty,
                   refresh: () => widget.onQuery(),
                 ),
-              )),
+              )).throttle(),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(
@@ -292,8 +291,8 @@ class _PackOrderItemState extends State<_PackOrderItem> {
               ),
             ),
             GestureDetector(
-              onTap: () => debouncer.run(() =>
-                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())),
+              onTap: (() =>
+                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())).throttle(),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(

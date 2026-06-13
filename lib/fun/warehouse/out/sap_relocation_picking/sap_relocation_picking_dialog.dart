@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -21,7 +21,6 @@ void checkPickerAndWarehouseDialog({
     String warehouse,
   ) pickerCheck,
 }) {
-  final debouncer = ClickDebouncer();
   String saveNumber = spGet(checkPickerAndWarehouseDialogNumber) ?? '';
   var avatar = ''.obs;
   WorkerInfo? picker;
@@ -73,7 +72,7 @@ void checkPickerAndWarehouseDialog({
           actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
           actions: [
             TextButton(
-              onPressed: () => debouncer.run(() {
+              onPressed: (() {
                 if (picker != null) {
                   spSave(checkPickerAndWarehouseDialogNumber, picker!.empCode ?? '');
                   Get.to(() => SignaturePage(
@@ -95,7 +94,7 @@ void checkPickerAndWarehouseDialog({
                         },
                       )                  );
                 }
-              }),
+              }).throttle(),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

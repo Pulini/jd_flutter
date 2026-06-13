@@ -3,7 +3,7 @@ import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_posting_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_picking_posting/sap_picking_posting_dialog.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -23,7 +23,6 @@ class SapPickingPostingPage extends StatefulWidget {
 class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   final SapPickingPostingLogic logic = Get.put(SapPickingPostingLogic());
   final SapPickingPostingState state = Get.find<SapPickingPostingLogic>().state;
-  final debouncer = ClickDebouncer();
   var tecSemiFinishedProduct = TextEditingController();
   var tecFinishedProduct = TextEditingController();
 
@@ -91,13 +90,13 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
           ),
         ),
         suffixIcon: IconButton(
-          onPressed: () => debouncer.run(() => logic.getMaterialDetail(
+          onPressed: (() => logic.getMaterialDetail(
             code: tecSemiFinishedProduct.text,
             semiFinishedProduct: () {
               tecSemiFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          )),
+          )).throttle(),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -139,13 +138,13 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
           ),
         ),
         suffixIcon: IconButton(
-          onPressed: () => debouncer.run(() => logic.getMaterialDetail(
+          onPressed: (() => logic.getMaterialDetail(
             code: tecFinishedProduct.text,
             finishedProduct: () {
               tecFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          )),
+          )).throttle(),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -288,11 +287,11 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                         ),
                                       ),
                                       IconButton(
-                                        onPressed: () => debouncer.run(() => askDialog(
+                                        onPressed: (() => askDialog(
                                           content: '确定要删除该物料吗？',
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
-                                        )),
+                                        )).throttle(),
                                         icon: const Icon(
                                           Icons.delete_forever,
                                           color: Colors.red,
@@ -371,7 +370,6 @@ class _SapPickingPostingSemiFinishedItem extends StatefulWidget {
 
 class _SapPickingPostingSemiFinishedItemState
     extends State<_SapPickingPostingSemiFinishedItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -394,10 +392,10 @@ class _SapPickingPostingSemiFinishedItemState
                   ),
                 ),
                 IconButton(
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: '确定要删除该物料吗？',
                     confirm: () => widget.logic.deleteSemiFinishedProductItem(widget.data),
-                  )),
+                  )).throttle(),
                   icon: const Icon(Icons.delete_forever, color: Colors.red),
                 ),
               ],

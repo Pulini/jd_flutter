@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -20,7 +20,6 @@ void selectSupplierAndDepartmentDialog({
     PickerSapDepartment?,
   ) submit,
 }) {
-  final debouncer = ClickDebouncer();
   getSapSupplierAndDepartment(callback: (sList, sError, dList, dError) {
     WorkerInfo? worker;
     var sSelect = spGet(spSaveProductionScanPickingMaterialSupplier)
@@ -99,7 +98,7 @@ void selectSupplierAndDepartmentDialog({
             ),
             actions: [
               TextButton(
-                onPressed: () => debouncer.run(() {
+                onPressed: (() {
                   if (worker == null) {
                     showSnackBar(
                       message:
@@ -143,7 +142,7 @@ void selectSupplierAndDepartmentDialog({
                     isSupplier ? sList[sSelect] : null,
                     isSupplier ? null : dList[dSelect],
                   );
-                }),
+                }).throttle(),
                 child: Text('production_scan_picking_material_submit'.tr),
               ),
               TextButton(
