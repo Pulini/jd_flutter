@@ -327,14 +327,12 @@ extension ListExt on List? {
 /// ```
 extension ClickThrottle on VoidCallback {
   VoidCallback throttle([int milliseconds = 1000]) {
-    bool canClick = true;
-    Timer? timer;
+    int lastClick = 0;
     return () {
-      if (!canClick) return;
-      canClick = false;
+      final now = DateTime.now().millisecondsSinceEpoch;
+      if (now - lastClick < milliseconds) return;
+      lastClick = now;
       this();
-      timer?.cancel();
-      timer = Timer(Duration(milliseconds: milliseconds), () => canClick = true);
     };
   }
 }
