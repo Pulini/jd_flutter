@@ -32,7 +32,7 @@ BoxDecoration backgroundColor() => BoxDecoration(
       ),
     );
 
-//带缓存的网络图片
+//带缓存的网络图片（自动限制内存中的解码尺寸，降低内存占用）
 Widget cachedNetworkImage(
   String? url, {
   double? width,
@@ -42,6 +42,17 @@ Widget cachedNetworkImage(
   Widget? errorWidget,
   Widget? loadingWidget,
 }) {
+  // 根据Widget显示尺寸计算内存缓存中的解码尺寸
+  // 默认按3x像素比计算，避免为小缩略图解码整张大图浪费内存
+  int? memCacheWidth;
+  int? memCacheHeight;
+  if (width != null) {
+    memCacheWidth = (width * 3.0).round();
+  }
+  if (height != null) {
+    memCacheHeight = (height * 3.0).round();
+  }
+
   if (url.isNullOrEmpty()) {
     return errorWidget ??
         Image.asset(
@@ -57,6 +68,8 @@ Widget cachedNetworkImage(
     height: height,
     fit: fit,
     color: color,
+    memCacheWidth: memCacheWidth,
+    memCacheHeight: memCacheHeight,
     errorWidget: (ctx, err, st) =>
         errorWidget ??
         Image.asset(

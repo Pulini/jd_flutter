@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/confirm_packing_method/confirm_packing_method_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -11,10 +11,10 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 
-import 'part_label_manage_state.dart';
+import 'part_label_print_state.dart';
 
-class PartLabelManageLogic extends GetxController {
-  final PartLabelManageState state = PartLabelManageState();
+class PartLabelPrintLogic extends GetxController {
+  final PartLabelPrintState state = PartLabelPrintState();
 
   /// 已选中 + 符合打印状态筛选的标签列表
   List<PartLabelInfo> get _selectedFilteredList => state.labelList

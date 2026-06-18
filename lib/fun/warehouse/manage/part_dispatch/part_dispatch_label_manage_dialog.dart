@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 
@@ -20,15 +21,15 @@ void selectPackProfileDialog({
   required List<List> packProfileList,
   required Function(int, double) callback,
 }) {
-  var tecQty=TextEditingController(text: capacityQty.toShowString());
+  var tecQty = TextEditingController(text: capacityQty.toShowString());
   var selectIndex = (-1).obs;
   selectIndex.value =
       packProfileList.indexWhere((v) => v[0] == orderPackProfileID);
 
   item(int i) => Obx(() => GestureDetector(
         onTap: () {
-          selectIndex.value = i;
-          tecQty.text=(packProfileList[i][2] as double).toShowString();
+          /*       selectIndex.value = i;
+          tecQty.text=(packProfileList[i][2] as double).toShowString();*/
         },
         child: Container(
           margin: const EdgeInsets.only(bottom: 5),
@@ -67,7 +68,7 @@ void selectPackProfileDialog({
         Expanded(child: Container()),
         SizedBox(
           width: 130,
-          child:NumberDecimalEditText(
+          child: NumberDecimalEditText(
             hint: 'part_dispatch_select_pack_profile_dialog_capacity_qty'.tr,
             controller: tecQty,
           ),
@@ -83,7 +84,7 @@ void selectPackProfileDialog({
     actions: [
       TextButton(
         onPressed: (() {
-          var qty=tecQty.text.toDoubleTry();
+          var qty = tecQty.text.toDoubleTry();
           if (packProfileList[selectIndex.value][0] != orderPackProfileID ||
               (qty != capacityQty && qty > 0)) {
             askDialog(
@@ -608,4 +609,53 @@ void _createLabel({
       error.call(response.message ?? '');
     }
   });
+}
+
+void inputSplitQtyDialog({
+  required PartLabelInfo label,
+  required Function(PartLabelInfo,int) split,
+}) {
+  var max = label.materialList!.first.totalQty();
+  var controller = TextEditingController();
+  Get.dialog(
+    barrierDismissible: false,
+    PopScope(
+      canPop: false,
+      child: AlertDialog(
+          title: Text('part_dispatch_split_label_dialog_input_qty'.tr),
+          content: SizedBox(
+            width: 300,
+            child: NumberEditText(
+              hint: '$max Pr/pc',
+              controller: controller,
+              onChanged: (s) {
+                if (s.toIntTry() > max) {
+                  controller.text = max.toString();
+                }
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                var qty=controller.text.toIntTry();
+                if(qty<=0){
+                  errorDialog(content: 'part_dispatch_split_label_qty_zero_tips'.tr);
+                }else{
+                  Get.back();
+                  split.call(label,qty);
+                }
+              },
+              child: Text('dialog_default_confirm'.tr),
+            ),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'dialog_default_cancel'.tr,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+          ]),
+    ),
+  );
 }

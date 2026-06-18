@@ -38,6 +38,7 @@ class CartonLabelScanState {
       params: {
         'CartonBarCode': code,
         'DispatchNumber':dispatchNumber.value,
+        'OrganizeID': userInfo?.organizeID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

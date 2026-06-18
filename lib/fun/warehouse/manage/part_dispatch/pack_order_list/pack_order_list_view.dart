@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_list/part_dispatch_label_list_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_dialog.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_label_list/part_dispatch_label_list_view.dart';
 import 'package:jd_flutter/route.dart';
 
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -167,7 +166,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            GestureDetector(
+/*            GestureDetector(
               onTap: (() => selectPackProfileDialog(
                 orderPackProfileID: widget.data.packProfileID ?? 0,
                 capacityQty: widget.data.capacityQty ?? 0,
@@ -200,7 +199,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
                   ),
                 ),
               ),
-            ),
+            ),*/
             Expanded(
               child: GestureDetector(
                 onTap: () {

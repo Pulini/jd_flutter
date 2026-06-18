@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_order_list/part_dispatch_order_create_label_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_order_list/part_dispatch_order_create_label_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
