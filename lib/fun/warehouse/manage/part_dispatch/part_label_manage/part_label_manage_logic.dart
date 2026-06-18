@@ -13,6 +13,10 @@ class PartLabelManageLogic extends GetxController {
   final PartLabelManageState state = PartLabelManageState();
 
   void queryLabels(String barCode) {
+    if(state.labelList.any((v)=>v.largeCardNo==barCode)){
+      errorDialog(content: 'part_label_manage_label_already_exists'.tr);
+      return;
+    }
     state.getLabelList(
       barCode: barCode,
       error: (msg) => errorDialog(content: msg),
@@ -47,10 +51,13 @@ class PartLabelManageLogic extends GetxController {
       splitQty: qty,
       success: (label, msg) => successDialog(
         content: msg,
-        back: () => state.getLabelList(
-          barCode: label,
-          error: (msg) => errorDialog(content: msg),
-        ),
+        back: () {
+          state.labelList.clear();
+          state.getLabelList(
+            barCode: label,
+            error: (msg) => errorDialog(content: msg),
+          );
+        },
       ),
       error: (msg) => errorDialog(content: msg),
     );
@@ -65,10 +72,13 @@ class PartLabelManageLogic extends GetxController {
       splitQty: 0,
       success: (label, msg) => successDialog(
         content: msg,
-        back: () => state.getLabelList(
-          barCode: label,
-          error: (msg) => errorDialog(content: msg),
-        ),
+        back: () {
+          state.labelList.clear();
+          state.getLabelList(
+            barCode: label,
+            error: (msg) => errorDialog(content: msg),
+          );
+        },
       ),
       error: (msg) => errorDialog(content: msg),
     );

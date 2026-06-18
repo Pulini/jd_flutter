@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
@@ -16,7 +17,11 @@ class PartLabelManageState {
       body: {'CardNo': barCode},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        labelList.value =  [for (var item in response.data) PartLabelInfo.fromJson(item)];
+        labelList.addAll(
+          response.data
+              .map<PartLabelInfo>((item) => PartLabelInfo.fromJson(item))
+              .where((l) => labelList.none((v) => v.largeCardNo == l.largeCardNo)),
+        );
       } else {
         error.call(response.message ?? '');
       }
@@ -26,11 +31,11 @@ class PartLabelManageState {
   void splitOrMergeLabel({
     required List<String> labels,
     required int splitQty,
-    required Function(String,String) success,
+    required Function(String, String) success,
     required Function(String) error,
   }) {
     httpPost(
-      method: webApiCreatePartProductionDispatchLabels,
+      method: webApiSplitOrMergePackageLabel,
       loading: labels.length > 1
           ? 'part_label_manage_merging_label'.tr
           : 'part_label_manage_splitting_label'.tr,
@@ -41,7 +46,7 @@ class PartLabelManageState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.data['CardNo'],response.message ?? '');
+        success.call(response.data['CardNo'], response.message ?? '');
       } else {
         error.call(response.message ?? '');
       }

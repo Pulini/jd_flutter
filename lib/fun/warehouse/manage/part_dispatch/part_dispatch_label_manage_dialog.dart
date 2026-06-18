@@ -641,6 +641,8 @@ void inputSplitQtyDialog({
                 var qty=controller.text.toIntTry();
                 if(qty<=0){
                   errorDialog(content: 'part_dispatch_split_label_qty_zero_tips'.tr);
+                }else if(qty==max){
+                  errorDialog(content: 'part_dispatch_split_label_qty_max_tips'.tr);
                 }else{
                   Get.back();
                   split.call(label,qty);

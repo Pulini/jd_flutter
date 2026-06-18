@@ -31,11 +31,6 @@ class _PartLabelManagePageState extends State<PartLabelManagePage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        // IconButton(
-        //   onPressed: () =>
-        //       logic.queryLabels('570DA244-DCF4-469A-A59C-42987FA06F31'),
-        //   icon: Icon(Icons.label),
-        // ),
         IconButton(
           onPressed: () => scannerDialog(
             detect: (code) => logic.queryLabels(code),
@@ -113,6 +108,7 @@ class _LabelItem extends StatelessWidget {
     return Obx(() => GestureDetector(
           onTap: () => label.isSelected.value = !label.isSelected.value,
           child: Container(
+            margin: const EdgeInsets.only(bottom: 20),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(

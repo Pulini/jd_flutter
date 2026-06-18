@@ -1605,6 +1605,9 @@ const webApiGetWorkCardMtoNoList = 'api/WorkCard/GetWorkCardMtoNoList';
 //扫码获取标签明细
 const webApiGetCardDetail = 'api/Package/GetCardDetail';
 
+//拆分标签
+const webApiSplitOrMergePackageLabel = 'api/Package/SplitOrMergePackageLabel';
+
 //获取派工单部件及包装方案
 const webApiGetWorkCardMtoNoListByQrCode = 'api/WorkCard/GetWorkCardMtoNoListByQrCode';
 

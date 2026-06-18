@@ -3594,6 +3594,7 @@ class Translation extends Translations {
               '请输入创建人工号',
           'part_dispatch_create_label_dialog_input_create_qty_tips': '请输入创建标签数',
           'part_dispatch_create_label_dialog_creating_label': '正在创建贴标...',
+          'part_label_manage_label_already_exists': '标签已存在',
           'part_label_manage_print': '打印',
           'part_label_manage_split': '拆分',
           'part_label_manage_merge': '合并',
@@ -3601,6 +3602,7 @@ class Translation extends Translations {
           'part_label_manage_splitting_label': '正在拆分标签...',
           'part_label_manage_merging_label': '正在合并标签...',
           'part_dispatch_split_label_qty_zero_tips': '拆分数量不能为0！',
+          'part_dispatch_split_label_qty_max_tips': '拆分数量不能等于原标数量！',
           'part_dispatch_split_label_dialog_input_qty': '请输入拆分数量',
           'part_dispatch_merge_label_tips': '确定要合并这些标签吗？',
           'part_dispatch_confirm_packing_method_select_packing_method':
@@ -7962,6 +7964,7 @@ class Translation extends Translations {
               'Please enter label qty',
           'part_dispatch_create_label_dialog_creating_label':
               'Creating labels...',
+          'part_label_manage_label_already_exists': 'Label already exists',
           'part_label_manage_print': 'Print',
           'part_label_manage_split': 'Split',
           'part_label_manage_merge': 'Merge',
@@ -7969,6 +7972,7 @@ class Translation extends Translations {
           'part_label_manage_splitting_label': 'Splitting Label...',
           'part_label_manage_merging_label': 'Merging Label...',
           'part_dispatch_split_label_qty_zero_tips': 'Split quantity cannot be 0!',
+          'part_dispatch_split_label_qty_max_tips': 'Split quantity cannot be equal to the original label quantity!',
           'part_dispatch_split_label_dialog_input_qty': 'Input Split Quantity',
           'part_dispatch_merge_label_tips': 'Are you sure to merge these labels?',
           'part_dispatch_confirm_packing_method_select_packing_method':'Select Packing Method',
@@ -12530,6 +12534,7 @@ class Translation extends Translations {
               'Silakan masukkan jumlah label',
           'part_dispatch_create_label_dialog_creating_label':
               'Membuat label...',
+          'part_label_manage_label_already_exists': 'Label sudah ada',
           'part_label_manage_print': 'Cetak',
           'part_label_manage_split': 'Menggabungkan',
           'part_label_manage_merge': 'Membagi',
@@ -12537,6 +12542,7 @@ class Translation extends Translations {
           'part_label_manage_splitting_label': 'Menggabungkan label...',
           'part_label_manage_merging_label': 'Membagi label...',
           'part_dispatch_split_label_qty_zero_tips': 'Jumlah pembagian tidak boleh 0!',
+          'part_dispatch_split_label_qty_max_tips': 'Jumlah pembagian tidak boleh sama dengan jumlah label asli!',
           'part_dispatch_split_label_dialog_input_qty': 'Masukkan jumlah pembagian',
           'part_dispatch_merge_label_tips': 'Yakin ingin menggabungkan label ini?',
           'part_dispatch_confirm_packing_method_select_packing_method':'Pilih Metode Kemas',
