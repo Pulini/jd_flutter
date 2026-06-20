@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -26,7 +26,6 @@ class _ProductionScanWarehousePageState
       Get.put(ProductionScanWarehouseLogic());
   final ProductionScanWarehouseState state =
       Get.find<ProductionScanWarehouseLogic>().state;
-  final debouncer = ClickDebouncer();
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var tecCode = TextEditingController();
@@ -149,8 +148,7 @@ class _ProductionScanWarehousePageState
         Padding(
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
-            child: Text('production_scan_clear'.tr),
-            onTap: () => debouncer.run(() {
+            onTap: (() {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'production_scan_clear_the_barcode'.tr,
@@ -158,7 +156,8 @@ class _ProductionScanWarehousePageState
                   logic.clearBarCodeList();
                 },
               );
-            }),
+            }).throttle(),
+            child: Text('production_scan_clear'.tr),
           ),
         )
       ],

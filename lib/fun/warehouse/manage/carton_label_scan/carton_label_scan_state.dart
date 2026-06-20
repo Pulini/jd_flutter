@@ -49,6 +49,8 @@ class CartonLabelScanState {
       params: {
         'CartonBarCode': code,
         'DispatchNumber': dispatchNumber.value,
+        'DispatchNumber':dispatchNumber.value,
+        'OrganizeID': userInfo?.organizeID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -56,15 +58,15 @@ class CartonLabelScanState {
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
-      isCheckingCartonBarCode = false;
+      isCheckingCartonBarCode=false;
     });
   }
 
   //清理优先级界面数据
-  void clearPriority() {
+  void clearPriority(){
     priorityCartonLabelInfo = CartonLabelScanInfo();
     priorityCartonLabel.value = '';
-    priorityPo.value = '';
+    priorityPo.value='';
     priorityCartonInsideLabelList.value = [];
   }
 
@@ -81,8 +83,7 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success
-            .call(response.message ?? 'carton_label_scan_change_successful'.tr);
+       success.call(response.message ?? 'carton_label_scan_change_successful'.tr);
       } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
@@ -114,14 +115,16 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        labelTotal.value = 0;
-        scannedLabelTotal.value = 0;
+        labelTotal.value=0;
+        scannedLabelTotal.value=0;
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
+
+
 
   void getCartonLabelScanHistory({
     required String orderNo,
@@ -156,7 +159,7 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <CartonLabelScanProgressDetailInfo>[
+        var list =<CartonLabelScanProgressDetailInfo> [
           for (var json in response.data)
             CartonLabelScanProgressDetailInfo.fromJson(json)
         ];
@@ -164,7 +167,7 @@ class CartonLabelScanState {
         groupBy(list, (v) => v.size ?? '').forEach((k, v) {
           group.add(v);
         });
-        progressDetail.value = group;
+        progressDetail.value=group;
         success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -453,7 +453,6 @@ class _ProductionDispatchItem2 extends StatefulWidget {
 }
 
 class _ProductionDispatchItem2State extends State<_ProductionDispatchItem2> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -530,7 +529,7 @@ class _ProductionDispatchItem2State extends State<_ProductionDispatchItem2> {
                 ),
               ),
               TextButton(
-                onPressed: () => debouncer.run(() => widget.logic.materialLabelMaintenance(data)),
+                onPressed: (() => widget.logic.materialLabelMaintenance(data)).throttle(),
                 style: buttonStyle,
                 child: Text(
                   widget.printStatusText(data.printStatus ?? ''),

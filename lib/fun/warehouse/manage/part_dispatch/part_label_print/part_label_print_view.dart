@@ -10,19 +10,19 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:jd_flutter/widget/view_photo.dart';
 
-import 'part_label_manage_logic.dart';
-import 'part_label_manage_state.dart';
+import 'part_label_print_logic.dart';
+import 'part_label_print_state.dart';
 
-class PartLabelManagePage extends StatefulWidget {
-  const PartLabelManagePage({super.key});
+class PartLabelPrintPage extends StatefulWidget {
+  const PartLabelPrintPage({super.key});
 
   @override
-  State<PartLabelManagePage> createState() => _PartLabelManagePageState();
+  State<PartLabelPrintPage> createState() => _PartLabelPrintPageState();
 }
 
-class _PartLabelManagePageState extends State<PartLabelManagePage> {
-  final PartLabelManageLogic logic = Get.put(PartLabelManageLogic());
-  final PartLabelManageState state = Get.find<PartLabelManageLogic>().state;
+class _PartLabelPrintPageState extends State<PartLabelPrintPage> {
+  final PartLabelPrintLogic logic = Get.put(PartLabelPrintLogic());
+  final PartLabelPrintState state = Get.find<PartLabelPrintLogic>().state;
   var pu = PrintUtil();
   var controller = TextEditingController();
 
@@ -210,7 +210,7 @@ class _PartLabelManagePageState extends State<PartLabelManagePage> {
 
   @override
   void dispose() {
-    Get.delete<PartLabelManageLogic>();
+    Get.delete<PartLabelPrintLogic>();
     super.dispose();
   }
 }

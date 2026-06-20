@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -19,7 +19,6 @@ class PrintPalletPage extends StatefulWidget {
 }
 
 class _PrintPalletPageState extends State<PrintPalletPage> {
-  final debouncer = ClickDebouncer();
   final PrintPalletLogic logic = Get.put(PrintPalletLogic());
   final PrintPalletState state = Get.find<PrintPalletLogic>().state;
   var controller = TextEditingController();
@@ -36,7 +35,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       actions: [
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
-                onPressed: () => debouncer.run(() => logic.printPalletSizeMaterial()),
+                onPressed: (() => logic.printPalletSizeMaterial()).throttle(),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
@@ -45,10 +44,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
             : Container()),
         Obx(() => state.palletList.any((v) => v.any((v2) => v2.isSelect.value))
             ? IconButton(
-                onPressed: () => debouncer.run(() => askDialog(
+                onPressed: (() => askDialog(
                   content: '确定要从托盘移除该标签吗？',
                   confirm: () => logic.deleteLabel(),
-                )),
+                )).throttle(),
                 icon: const Icon(
                   Icons.link_off_outlined,
                   color: Colors.red,
@@ -147,7 +146,6 @@ class _PalletItem extends StatefulWidget {
 }
 
 class _PalletItemState extends State<_PalletItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -178,9 +176,9 @@ class _PalletItemState extends State<_PalletItem> {
                   text: pallet.first.palletNumber ?? '',
                 ),
                 IconButton(
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                       content: '确定要删除该托盘码？',
-                      confirm: () => widget.logic.deletePallet(widget.index))),
+                      confirm: () => widget.logic.deletePallet(widget.index))).throttle(),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

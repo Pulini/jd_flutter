@@ -37,8 +37,8 @@ class ConfirmPackingMethodLogic extends GetxController {
           ? successDialog(content: msg, back: () => Get.back(result: true))
           : askDialog(
               content: msg,
-              title: '修改成功',
-              confirmText: '进入包装清单列表',
+              title: 'part_dispatch_confirm_packing_method_modify_success'.tr,
+              confirmText: 'part_dispatch_confirm_packing_method_to_pack_order_list'.tr,
               confirm: () => Get.offAndToNamed(
                 RouteConfig.packOrderList.name,
                 arguments: {'barCode': state.barCode},

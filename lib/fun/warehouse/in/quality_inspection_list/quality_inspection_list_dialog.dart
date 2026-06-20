@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -12,7 +12,6 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 void qualityInspectionListLocationDialog({
   required Function(String) success,
 }) {
-  final debouncer = ClickDebouncer();
   var storeWarehouse = LinkOptionsPickerController(
     hasAll: true,
     PickerType.sapFactoryWarehouse,
@@ -35,7 +34,7 @@ void qualityInspectionListLocationDialog({
         actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
         actions: [
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               if (storeWarehouse.getPickItem1().pickerId().isEmpty ||
                   storeWarehouse.getPickItem2().pickerId().isEmpty) {
                 showSnackBar(
@@ -44,7 +43,7 @@ void qualityInspectionListLocationDialog({
               }
               Get.back();
               success.call(storeWarehouse.getPickItem2().pickerId());
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -63,7 +62,6 @@ void qualityInspectionListLocationDialog({
 void qualityInspectionListStoreDialog({
   required Function(String, String) success,
 }) {
-  final debouncer = ClickDebouncer();
   //过账日期
   var postAccountDate = DatePickerController(
     PickerType.startDate,
@@ -97,7 +95,7 @@ void qualityInspectionListStoreDialog({
         actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
         actions: [
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               if (postAccountDate.getDateFormatSapYMD().isEmpty) {
                 showSnackBar(message: 'quality_inspection_empty'.tr);
                 return;
@@ -110,7 +108,7 @@ void qualityInspectionListStoreDialog({
               Get.back();
               success.call(postAccountDate.getDateFormatSapYMD(),
                   storeWarehouse.getPickItem2().pickerId());
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -195,7 +193,6 @@ void showInputDialog({
   required double allQty,
   required Function(double) callback,
 }) {
-  final debouncer = ClickDebouncer();
   var qty = 0.0;
   Get.dialog(
     PopScope(
@@ -214,10 +211,10 @@ void showInputDialog({
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               Get.back();
               callback.call(qty);
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

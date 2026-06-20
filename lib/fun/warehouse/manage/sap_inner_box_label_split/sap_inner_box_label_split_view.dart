@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -189,7 +189,6 @@ class _SplitLabelSubItem extends StatefulWidget {
 }
 
 class _SplitLabelSubItemState extends State<_SplitLabelSubItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +216,7 @@ class _SplitLabelSubItemState extends State<_SplitLabelSubItem> {
                 ),
               ),
               IconButton(
-                onPressed: () => debouncer.run(() => widget.onDelete(widget.newLabel)),
+                onPressed: (() => widget.onDelete(widget.newLabel)).throttle(),
                 icon: const Icon(Icons.delete_forever, color: Colors.red),
               )
             ],

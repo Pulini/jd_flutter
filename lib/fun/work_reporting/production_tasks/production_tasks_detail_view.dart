@@ -5,6 +5,7 @@ import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -104,7 +105,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
         child: Column(
           children: [
             SizedBox(
-              height: (getScreenSize().width * 0.5)/16*9,
+              height: (getScreenSize().width * 0.5) / 16 * 9,
               child: Row(
                 children: [
                   Container(
@@ -193,18 +194,29 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      isInstruction
-                                          ? state.detailCustomerPO.value
-                                          : state.detailInstructionNo.value,
-                                      style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24,
+                                  child: Row(children: [
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          isInstruction
+                                              ? state.detailCustomerPO.value
+                                              : state.detailInstructionNo.value,
+                                          style: const TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    Expanded(
+                                      child: QrImageView(
+                                        data: '',
+                                        padding: const EdgeInsets.all(5),
+                                        version: QrVersions.auto,
+                                      ),
+                                    )
+                                  ]),
                                 )
                               ],
                             ),

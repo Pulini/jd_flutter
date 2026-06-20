@@ -18,10 +18,11 @@ class LoadingController {
      return;
     }
     _isShowing = true;
+    // 在 overlay 弹出前同步注册返回键拦截，避免时序竞态
+    BackButtonInterceptor.add(myInterceptor);
 
     Get.showOverlay(
       asyncFunction: () async {
-        BackButtonInterceptor.add(myInterceptor);
         // 保持显示直到手动关闭
         final completer = Completer();
         _currentCompleter = completer;

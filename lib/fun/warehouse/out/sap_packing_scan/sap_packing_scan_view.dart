@@ -6,7 +6,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_delivery_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_label_view.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -28,7 +28,6 @@ class SapPackingScanPage extends StatefulWidget {
 }
 
 class _SapPackingScanPageState extends State<SapPackingScanPage> {
-  final debouncer = ClickDebouncer();
   final SapPackingScanLogic logic = Get.put(SapPackingScanLogic());
   final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
 
@@ -265,7 +264,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       actions: [
         IconButton(
           icon: const Icon(Icons.lock_outline),
-          onPressed: () => debouncer.run(() => logic.sealingCabinet()),
+          onPressed: (() => logic.sealingCabinet()).throttle(),
         ),
         IconButton(
           icon: const Icon(Icons.settings_outlined),

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -189,7 +189,6 @@ class _ModifyReportMaterialItem extends StatefulWidget {
 
 class _ModifyReportMaterialItemState
     extends State<_ModifyReportMaterialItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +227,7 @@ class _ModifyReportMaterialItemState
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () => debouncer.run(() => widget.logic.modifyReportDeleteMaterial(widget.data)),
+                onPressed: (() => widget.logic.modifyReportDeleteMaterial(widget.data)).throttle(),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -343,12 +342,11 @@ class _ModifyReportWorkerItem extends StatefulWidget {
 }
 
 class _ModifyReportWorkerItemState extends State<_ModifyReportWorkerItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => debouncer.run(() => widget.logic.modifyReportModifyWorker(widget.data)),
+      onTap: (() => widget.logic.modifyReportModifyWorker(widget.data)).throttle(),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -421,10 +419,10 @@ class _ModifyReportWorkerItemState extends State<_ModifyReportWorkerItem> {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: '确定要删除该组员数据吗？',
                     confirm: () => widget.logic.modifyReportDeleteReportWorker(widget.data),
-                  )),
+                  )).throttle(),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

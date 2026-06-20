@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_dispatch_view.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -23,7 +23,6 @@ class _PartProcessScanQuickDispatchPageState
     extends State<PartProcessScanQuickDispatchPage> {
   final logic = Get.find<PartProcessScanLogic>();
   final state = Get.find<PartProcessScanLogic>().state;
-  final debouncer = ClickDebouncer();
 
   Column _workerItem(WorkerInfo wi, Distribution dis) {
     return Column(
@@ -128,7 +127,7 @@ class _PartProcessScanQuickDispatchPageState
       title: 'part_process_scan_quick_dispatch_quick_allocation'.tr,
       actions: [
         TextButton(
-          onPressed: () => debouncer.run(() => logic.quickPercentage()),
+          onPressed: (() => logic.quickPercentage()).throttle(),
           child: Text('part_process_scan_quick_dispatch_allocation'.tr),
         )
       ],

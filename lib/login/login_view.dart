@@ -4,7 +4,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_state.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -156,7 +156,6 @@ class _PhoneLoginWidget extends StatefulWidget {
 }
 
 class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -202,10 +201,10 @@ class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
                             ? Colors.white
                             : Colors.grey.shade400,
                       ),
-                      onPressed: () => debouncer.run(() =>
+                      onPressed: (() =>
                           widget.logic.getVerifyCode(
                             widget.phoneController.text,
-                          )),
+                          )).throttle(),
                       child: Text(
                         widget.state.countTimer.value == 0
                             ? 'get_verify_code'.tr
@@ -319,7 +318,6 @@ class LoginPick extends StatefulWidget {
 
 class _LoginPickState extends State<LoginPick>
     with SingleTickerProviderStateMixin {
-  final debouncer = ClickDebouncer();
   var logic = Get.put(LoginLogic());
   var state = Get.find<LoginLogic>().state;
   var isShowLoginButton = false.obs;
@@ -522,7 +520,7 @@ class _LoginPickState extends State<LoginPick>
           ),
           actions: [
             TextButton(
-              onPressed: () => debouncer.run(() {
+              onPressed: (() {
                 var mes = mesInputController.text;
                 var sap = sapInputController.text;
                 if (mes.isNotEmpty && sap.isNotEmpty) {
@@ -534,7 +532,7 @@ class _LoginPickState extends State<LoginPick>
                 } else {
                   errorDialog(content: 'URL 不能为空');
                 }
-              }),
+              }).throttle(),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -679,7 +677,7 @@ class _LoginPickState extends State<LoginPick>
                       onLongPress: () => logic.handleLongPressStart(
                         changeBaseUrl: () => _changeBaseUrlDialog(),
                       ),
-                      onPressed: () => debouncer.run(() {
+                      onPressed: (() {
                         if (tabController.index == 1) {
                           logic.phoneLogin(
                             phoneLoginPhoneController.text,
@@ -720,7 +718,7 @@ class _LoginPickState extends State<LoginPick>
                           );
                           return;
                         }
-                      }),
+                      }).throttle(),
                       child: Text(
                         'login'.tr,
                         style: const TextStyle(fontSize: 20),

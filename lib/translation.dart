@@ -1501,7 +1501,8 @@ class Translation extends Translations {
           'carton_label_scan_submitting_change_priority': '正在修改优先级...',
           'carton_label_scan_label_scan_completed_tips':
               '条码[%s]已扫满，请确认是否放错或重复扫码。',
-          'carton_label_scan_label_scan_dispatch_no_empty_tips':'请先扫描生产派工单二维码！',
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':
+              '请先扫描生产派工单二维码！',
           'carton_label_scan_label_placement_error_tips':
               '条码[%s]不是外箱对应数据，请检查是否放错。',
           'carton_label_scan_success': '操作成功',
@@ -1897,7 +1898,8 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery': '清空表单',
           'incoming_inspection_clean_delivery_tips': '确定要清空表单吗？',
           'incoming_inspection_apply_inspection': '发起稽查',
-          'incoming_inspection_no_apply_inspection_permission_tips': '没有发起稽查的权限！',
+          'incoming_inspection_no_apply_inspection_permission_tips':
+              '没有发起稽查的权限！',
           'incoming_inspection_no_inspection_permission_tips': '没有稽查的权限！',
           'incoming_inspection_querying_delivery_list_tips': '正在查询来料列表...',
           'incoming_inspection_submitting_inspection_apply_tips': '正在提交稽查申请...',
@@ -2857,12 +2859,12 @@ class Translation extends Translations {
           'delivery_order_label_check_qty_insufficient': '数量不足本次提交下限，请继续扫描标签。',
           'delivery_order_label_check_delete_tips': '确定要删除本条标签吗？',
           'delivery_order_label_check_title': '送货清点',
-        'delivery_order_label_check_material':'物料：',
-        'delivery_order_label_check_pallet':'托盘：',
-        'delivery_order_label_check_piece':'件数：',
-        'delivery_order_label_check_tab_progress':'清点进度',
-        'delivery_order_label_check_tab_pallet_detail':'托盘明细',
-        'delivery_order_label_check_this_pallet':'当前托盘：',
+          'delivery_order_label_check_material': '物料：',
+          'delivery_order_label_check_pallet': '托盘：',
+          'delivery_order_label_check_piece': '件数：',
+          'delivery_order_label_check_tab_progress': '清点进度',
+          'delivery_order_label_check_tab_pallet_detail': '托盘明细',
+          'delivery_order_label_check_this_pallet': '当前托盘：',
           'delivery_order_label_check_exit_tips': '确定要退出送货清点吗？',
           'delivery_order_label_check_clear_tips': '确定要清空已扫标签吗？',
           'delivery_order_label_check_clear': '清空',
@@ -3608,6 +3610,24 @@ class Translation extends Translations {
               '请输入创建人工号',
           'part_dispatch_create_label_dialog_input_create_qty_tips': '请输入创建标签数',
           'part_dispatch_create_label_dialog_creating_label': '正在创建贴标...',
+          'part_label_manage_label_already_exists': '标签已存在',
+          'part_label_manage_print': '打印',
+          'part_label_manage_split': '拆分',
+          'part_label_manage_merge': '合并',
+          'part_label_manage_querying_label_info': '正在查询标签信息...',
+          'part_label_manage_splitting_label': '正在拆分标签...',
+          'part_label_manage_merging_label': '正在合并标签...',
+          'part_dispatch_split_label_qty_zero_tips': '拆分数量不能为0！',
+          'part_dispatch_split_label_qty_max_tips': '拆分数量不能等于原标数量！',
+          'part_dispatch_split_label_dialog_input_qty': '请输入拆分数量',
+          'part_dispatch_merge_label_tips': '确定要合并这些标签吗？',
+          'part_dispatch_confirm_packing_method_select_packing_method':
+              '请选择包装方案',
+          'part_dispatch_confirm_packing_method_tips': '方案：%s / 箱容：%s',
+          'part_dispatch_confirm_packing_method_modify_packing_method':
+              '修改包装方案',
+          'part_dispatch_confirm_packing_method_modify_success': '修改成功',
+          'part_dispatch_confirm_packing_method_to_pack_order_list': '进入包装清单列表',
           'http_api_tip_prefix': '接口提示：',
           'http_network_error': '网络异常',
           'http_connection_timeout': '连接服务器超时',
@@ -5431,7 +5451,8 @@ class Translation extends Translations {
               'Modifying priority...',
           'carton_label_scan_label_scan_completed_tips':
               'Barcode [ %s ] has been scanned to capacity. Please confirm if it has been placed incorrectly or scanned repeatedly.',
-          'carton_label_scan_label_scan_dispatch_no_empty_tips':'Please scan the production dispatch order QR code first！',
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':
+              'Please scan the production dispatch order QR code first！',
           'carton_label_scan_label_placement_error_tips':
               'Barcode [ %s ] is not the corresponding data for the outer box, please check if it is placed incorrectly.',
           'carton_label_scan_success': 'Operation successful',
@@ -5907,8 +5928,10 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery_tips':
               'Are you sure you want to clear the form ?',
           'incoming_inspection_apply_inspection': 'Apply inspection',
-          'incoming_inspection_no_apply_inspection_permission_tips': 'No apply inspection permission !',
-          'incoming_inspection_no_inspection_permission_tips': 'No inspection permission !',
+          'incoming_inspection_no_apply_inspection_permission_tips':
+              'No apply inspection permission !',
+          'incoming_inspection_no_inspection_permission_tips':
+              'No inspection permission !',
           'incoming_inspection_querying_delivery_list_tips':
               'Querying_delivery_list_tips Querying the incoming material list...',
           'incoming_inspection_submitting_inspection_apply_tips':
@@ -6962,7 +6985,8 @@ class Translation extends Translations {
               'Are you sure you want to exit the delivery list？',
           'delivery_order_select_all_checked': 'Select all checked',
           'delivery_order_stock_in': 'Stock in',
-          'delivery_order_stock_in_not_allowed': 'Cannot be directly stored, please click on temporary receipt',
+          'delivery_order_stock_in_not_allowed':
+              'Cannot be directly stored, please click on temporary receipt',
           'delivery_order_stock_in_reverse': 'Stock in reverse',
           'delivery_order_stock_out': 'Stock out',
           'delivery_order_stock_out_reverse': 'Stock out reverse',
@@ -7036,7 +7060,8 @@ class Translation extends Translations {
               'Selected contains exempt and not exempt ！',
           'delivery_order_dialog_factory_different':
               'Different work orders from the factory cannot be operated simultaneously ！',
-          'delivery_order_dialog_model_different': 'Status aktifitas cetakan yang berbeda tidak dapat dimasukkan ke perpustakaan secara bersamaan！',
+          'delivery_order_dialog_model_different':
+              'Status aktifitas cetakan yang berbeda tidak dapat dimasukkan ke perpustakaan secara bersamaan！',
           'delivery_order_dialog_match_code_different':
               'Different codes cannot be stored simultaneously！',
           'delivery_order_dialog_post_date': 'Post date',
@@ -7971,6 +7996,22 @@ class Translation extends Translations {
               'Please enter label qty',
           'part_dispatch_create_label_dialog_creating_label':
               'Creating labels...',
+          'part_label_manage_label_already_exists': 'Label already exists',
+          'part_label_manage_print': 'Print',
+          'part_label_manage_split': 'Split',
+          'part_label_manage_merge': 'Merge',
+          'part_label_manage_querying_label_info': 'Querying Label Info...',
+          'part_label_manage_splitting_label': 'Splitting Label...',
+          'part_label_manage_merging_label': 'Merging Label...',
+          'part_dispatch_split_label_qty_zero_tips': 'Split quantity cannot be 0!',
+          'part_dispatch_split_label_qty_max_tips': 'Split quantity cannot be equal to the original label quantity!',
+          'part_dispatch_split_label_dialog_input_qty': 'Input Split Quantity',
+          'part_dispatch_merge_label_tips': 'Are you sure to merge these labels?',
+          'part_dispatch_confirm_packing_method_select_packing_method':'Select Packing Method',
+          'part_dispatch_confirm_packing_method_tips': 'Scheme：%s / Box Capacity：%s',
+          'part_dispatch_confirm_packing_method_modify_packing_method': 'Modify Packing Method',
+          'part_dispatch_confirm_packing_method_modify_success': 'Modify Success',
+          'part_dispatch_confirm_packing_method_to_pack_order_list': 'To Packing Order List',
           'http_api_tip_prefix': 'API Message: ',
           'http_network_error': 'Network error',
           'http_connection_timeout': 'Server connection timeout',
@@ -9892,8 +9933,9 @@ class Translation extends Translations {
               'Mengubah prioritas...',
           'carton_label_scan_label_scan_completed_tips':
               'Kode batang [%s] telah penuh dipindai, harap konfirmasi apakah salah tempat atau duplikat pemindaian.',
-          'carton_label_scan_label_scan_dispatch_no_empty_tips':'Nomor Order Penugasan tidak boleh kosong !',
-        'carton_label_scan_label_placement_error_tips':
+          'carton_label_scan_label_scan_dispatch_no_empty_tips':
+              'Nomor Order Penugasan tidak boleh kosong !',
+          'carton_label_scan_label_placement_error_tips':
               'Kode batang [%s] bukan data yang sesuai dengan kotak luar, harap periksa apakah salah tempat.',
           'carton_label_scan_success': 'Operasi Berhasil',
           'carton_label_scan_progress_title':
@@ -10392,8 +10434,10 @@ class Translation extends Translations {
           'incoming_inspection_clean_delivery_tips':
               'Apakah Anda yakin ingin mengosongkan formulir?',
           'incoming_inspection_apply_inspection': 'Ajukan Pemeriksaan',
-          'incoming_inspection_no_apply_inspection_permission_tips': 'Tidak ada izin untuk memulai audit!',
-          'incoming_inspection_no_inspection_permission_tips': 'Tidak ada izin audit!',
+          'incoming_inspection_no_apply_inspection_permission_tips':
+              'Tidak ada izin untuk memulai audit!',
+          'incoming_inspection_no_inspection_permission_tips':
+              'Tidak ada izin audit!',
           'incoming_inspection_querying_delivery_list_tips':
               'Mengkueri daftar material masuk...',
           'incoming_inspection_submitting_inspection_apply_tips':
@@ -11490,7 +11534,8 @@ class Translation extends Translations {
               'Apakah Anda yakin ingin keluar dari daftar order pengiriman?',
           'delivery_order_select_all_checked': 'Pilih Semua yang Sudah Dicek',
           'delivery_order_stock_in': 'Masuk Gudang',
-          'delivery_order_stock_in_not_allowed': 'Tidak dapat langsung masuk gudang, silakan pilih terima sementara',
+          'delivery_order_stock_in_not_allowed':
+              'Tidak dapat langsung masuk gudang, silakan pilih terima sementara',
           'delivery_order_stock_in_reverse': 'Pembalikan Masuk Gudang',
           'delivery_order_stock_out': 'Keluar Gudang',
           'delivery_order_stock_out_reverse': 'Pembalikan Keluar Gudang',
@@ -11566,7 +11611,8 @@ class Translation extends Translations {
               'Item yang dipilih termasuk bebas inspeksi dan tidak bebas inspeksi!',
           'delivery_order_dialog_factory_different':
               'Pabrik yang berbeda tidak dapat beroperasi secara bersamaan ！',
-          'delivery_order_dialog_model_different': 'Mold activation status is different and cannot be stored simultaneously！',
+          'delivery_order_dialog_model_different':
+              'Mold activation status is different and cannot be stored simultaneously！',
           'delivery_order_dialog_match_code_different':
               'Material dengan kode yang cocok berbeda tidak dapat masuk gudang bersamaan!',
           'delivery_order_dialog_post_date': 'Tanggal Posting',
@@ -11614,12 +11660,12 @@ class Translation extends Translations {
           'delivery_order_label_check_delete_tips':
               'Apakah Anda yakin ingin menghapus label ini?',
           'delivery_order_label_check_title': 'Penghitungan Pengiriman',
-          'delivery_order_label_check_material':'Bahan：',
-          'delivery_order_label_check_pallet':'Pallet：',
-          'delivery_order_label_check_piece':'Jumlah：',
-          'delivery_order_label_check_tab_progress':'Kemajuan daftar',
-          'delivery_order_label_check_tab_pallet_detail':'Rincian Pallet',
-          'delivery_order_label_check_this_pallet':'Pallet saat ini：',
+          'delivery_order_label_check_material': 'Bahan：',
+          'delivery_order_label_check_pallet': 'Pallet：',
+          'delivery_order_label_check_piece': 'Jumlah：',
+          'delivery_order_label_check_tab_progress': 'Kemajuan daftar',
+          'delivery_order_label_check_tab_pallet_detail': 'Rincian Pallet',
+          'delivery_order_label_check_this_pallet': 'Pallet saat ini：',
           'delivery_order_label_check_exit_tips':
               'Apakah Anda yakin ingin keluar dari penghitungan pengiriman?',
           'delivery_order_label_check_clear_tips':
@@ -12536,6 +12582,22 @@ class Translation extends Translations {
               'Silakan masukkan jumlah label',
           'part_dispatch_create_label_dialog_creating_label':
               'Membuat label...',
+          'part_label_manage_label_already_exists': 'Label sudah ada',
+          'part_label_manage_print': 'Cetak',
+          'part_label_manage_split': 'Menggabungkan',
+          'part_label_manage_merge': 'Membagi',
+          'part_label_manage_querying_label_info': 'Mengambil informasi label...',
+          'part_label_manage_splitting_label': 'Menggabungkan label...',
+          'part_label_manage_merging_label': 'Membagi label...',
+          'part_dispatch_split_label_qty_zero_tips': 'Jumlah pembagian tidak boleh 0!',
+          'part_dispatch_split_label_qty_max_tips': 'Jumlah pembagian tidak boleh sama dengan jumlah label asli!',
+          'part_dispatch_split_label_dialog_input_qty': 'Masukkan jumlah pembagian',
+          'part_dispatch_merge_label_tips': 'Yakin ingin menggabungkan label ini?',
+          'part_dispatch_confirm_packing_method_select_packing_method':'Pilih Metode Kemas',
+          'part_dispatch_confirm_packing_method_tips': 'Program：%s / Kapasitas kotak：%s',
+          'part_dispatch_confirm_packing_method_modify_packing_method': 'Ubah Metode Kemas',
+          'part_dispatch_confirm_packing_method_modify_success': 'Ubah Berhasil',
+          'part_dispatch_confirm_packing_method_to_pack_order_list': 'Ke Daftar Perintah Kemas',
           'http_api_tip_prefix': 'Pesan API: ',
           'http_network_error': 'Kesalahan jaringan',
           'http_connection_timeout': 'Waktu koneksi server habis',

@@ -3,7 +3,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_dialog.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_label_manage_dialog.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -55,8 +55,8 @@ class _ConfirmPackingMethodPageState extends State<ConfirmPackingMethodPage> {
             children: [
               GestureDetector(
                 onTap: () => scannerDialog(
-                  detect: (code) => logic.queryDispatchOrderInfo(barCode: code)
-                ),
+                    detect: (code) =>
+                        logic.queryDispatchOrderInfo(barCode: code)),
                 child: Container(
                   padding: const EdgeInsets.only(left: 18, right: 18),
                   height: 40,
@@ -85,12 +85,17 @@ class _ConfirmPackingMethodPageState extends State<ConfirmPackingMethodPage> {
                     alignment: Alignment.center,
                     child: Text(
                       state.packingMethodName.value.isEmpty
-                          ? '请选择包装方案'
-                          : '方案：${state.packingMethodName.value} / 箱容：${state.packingMethodCapacityQty.value.toShowString()}',
+                          ? 'part_dispatch_confirm_packing_method_select_packing_method'
+                              .tr
+                          : 'part_dispatch_confirm_packing_method_tips'.trArgs([
+                              state.packingMethodName.value,
+                              state.packingMethodCapacityQty.value
+                                  .toShowString()
+                            ]),
                     ),
                   )),
               CombinationButton(
-                text: '修改包装方案',
+                text: 'part_dispatch_confirm_packing_method_modify_packing_method'.tr,
                 combination: Combination.right,
                 click: () => selectPackProfileDialog(
                   orderPackProfileID: state.packingMethodID.value,

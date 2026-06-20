@@ -5,7 +5,7 @@ import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_modify_view.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -20,7 +20,6 @@ class ProcessReportStorePage extends StatefulWidget {
 }
 
 class _ProcessReportPageState extends State<ProcessReportStorePage> {
-  final debouncer = ClickDebouncer();
   final logic = Get.put(ProcessReportStoreLogic());
   final state = Get.find<ProcessReportStoreLogic>().state;
 
@@ -82,10 +81,10 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 IconButton(
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: 'sale_scan_out_warehouse_delete_tips'.tr,
                     confirm: () => logic.deleteCode(code),
-                  )),
+                  )).throttle(),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

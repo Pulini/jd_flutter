@@ -3,7 +3,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-class PartLabelManageState {
+class PartLabelPrintState {
   var barCode = '';
   var selectAll = false.obs;
   var isPrinted = false.obs;

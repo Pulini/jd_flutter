@@ -47,10 +47,11 @@ import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/confirm_packing_method/confirm_packing_method_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/pack_order_list/pack_order_list_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_order_list/part_dispatch_order_list_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_label_manage/part_label_manage_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/pack_order_list/pack_order_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_order_list/part_dispatch_order_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_label_manage/part_label_manage_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_label_print/part_label_print_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
@@ -262,7 +263,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    205,
+    206,
     const CartonLabelScanPage(),
   );
 
@@ -721,6 +722,13 @@ class RouteConfig {
     const PartReplenishRequestPage(),
   );
 
+  //部件标签打印
+  static Routes partLabelPrintPage = Routes(
+    '/part_label_print',
+    200,
+    const PartLabelPrintPage(),
+  );
+
   //部件标签管理
   static Routes partLabelManagePage = Routes(
     '/part_label_manage',
@@ -818,6 +826,7 @@ class RouteConfig {
     sapPickingPostingPage,
     partReplenishRequestPage,
     confirmPackingMethod,
+    partLabelPrintPage,
     partLabelManagePage,
   ];
 
@@ -1186,6 +1195,10 @@ class RouteConfig {
     GetPage(
       name: confirmPackingMethod.name,
       page: () => confirmPackingMethod.page,
+    ),
+    GetPage(
+      name: partLabelPrintPage.name,
+      page: () => partLabelPrintPage.page,
     ),
     GetPage(
       name: partLabelManagePage.name,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_dialog.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -96,7 +96,6 @@ class _CartonLabelItem extends StatefulWidget {
 }
 
 class _CartonLabelItemState extends State<_CartonLabelItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +123,9 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                       hint: 'carton_label_binding_piece_no'.tr,
                       text: sub.pieceNo ?? ''),
                   IconButton(
-                    onPressed: () => debouncer.run(() => askDialog(
+                    onPressed: (() => askDialog(
                         content: 'carton_label_binding_delete_label_tips'.tr,
-                        confirm: () => widget.logic.deleteLabel(sub))),
+                        confirm: () => widget.logic.deleteLabel(sub))).throttle(),
                     icon: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
@@ -157,10 +156,10 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                     hint: 'carton_label_binding_out_box_label_piece_no'.tr,
                     text: boxLabel.pieceNo ?? ''),
                 IconButton(
-                  onPressed: () => debouncer.run(() => askDialog(
+                  onPressed: (() => askDialog(
                     content: 'carton_label_binding_delete_label_tips'.tr,
                     confirm: () => widget.logic.deleteLabel(boxLabel!),
-                  )),
+                  )).throttle(),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

@@ -5,7 +5,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -246,7 +246,6 @@ class _LastProcessMaterialItem extends StatefulWidget {
 }
 
 class _LastProcessMaterialItemState extends State<_LastProcessMaterialItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +286,7 @@ class _LastProcessMaterialItemState extends State<_LastProcessMaterialItem> {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () =>
-                    debouncer.run(() => widget.logic.deleteMaterial(widget.data)),
+                    (() => widget.logic.deleteMaterial(widget.data)).throttle(),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -405,18 +404,17 @@ class _LastProcessWorkerItem extends StatefulWidget {
 }
 
 class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
-  final debouncer = ClickDebouncer();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => debouncer.run(
-        () => widget.logic.lastProcessModifyWorker(
+      onTap: (() {
+        widget.logic.lastProcessModifyWorker(
           widget.data,
           widget.opcProcessFlow.getPickItem().pickerId(),
           widget.dpcDate.getDateFormatYMD(),
-        ),
-      ),
+        );
+      }).throttle(),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -489,13 +487,13 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: () => debouncer.run(
-                    () => askDialog(
+                  onPressed: (() {
+                    askDialog(
                       content: '确定要删除该组员数据吗？',
                       confirm: () =>
                           widget.logic.deleteReportWorker(widget.data),
-                    ),
-                  ),
+                    );
+                  }).throttle(),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

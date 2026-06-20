@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
@@ -17,7 +17,6 @@ void modifyPickingQty({
   required String commonUnit,
   required Function(double) callback,
 }) {
-  final debouncer = ClickDebouncer();
   double ratio = coefficient <= 0 ? 2 : coefficient;
   var baseUnitController = TextEditingController(
     text: quantity.toShowString(),
@@ -139,10 +138,10 @@ void modifyPickingQty({
         ),
         actions: [
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               Get.back();
               callback.call(baseUnitController.text.toDoubleTry());
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -168,7 +167,6 @@ void checkPickerDialog({
     ByteData userSignature,
   ) pickerCheck,
 }) {
-  final debouncer = ClickDebouncer();
   String saveNumber = spGet(checkPickerDialogNumber) ?? '';
   var avatar = ''.obs;
   WorkerInfo? picker;
@@ -214,7 +212,7 @@ void checkPickerDialog({
           actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
           actions: [
             TextButton(
-              onPressed: () => debouncer.run(() {
+              onPressed: (() {
                 if (picker != null) {
                   spSave(checkPickerDialogNumber, picker!.empCode ?? '');
                   Get.to(() => SignaturePage(
@@ -235,7 +233,7 @@ void checkPickerDialog({
                         },
                       )                    );
                 }
-              }),
+              }).throttle(),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

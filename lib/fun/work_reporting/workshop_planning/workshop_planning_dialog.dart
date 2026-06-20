@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -11,7 +11,6 @@ void materialDialog({
   required List<WorkshopPlanningMaterialInfo> materialList,
   required Function(List<WorkshopPlanningMaterialInfo>) addMaterial,
 }) {
-  final debouncer = ClickDebouncer();
   var showList = <WorkshopPlanningMaterialInfo>[];
   var select = <bool>[].obs;
   for (var m in materialList) {
@@ -61,7 +60,7 @@ void materialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: () => debouncer.run(() {
+              onPressed: (() {
                 if (select.every((v) => !v)) {
                   errorDialog(content: '请选择要添加的物料');
                 } else {
@@ -74,7 +73,7 @@ void materialDialog({
                   Get.back();
                   addMaterial.call(newList);
                 }
-              }),
+              }).throttle(),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

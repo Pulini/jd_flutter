@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -200,7 +200,6 @@ class HomeSubItem extends StatefulWidget {
 }
 
 class _HomeSubItemState extends State<HomeSubItem> {
-  final debouncer = ClickDebouncer();
 
   Color _color(HomeButton item) {
     return item.hasUpdate
@@ -215,15 +214,19 @@ class _HomeSubItemState extends State<HomeSubItem> {
     return Padding(
       padding: EdgeInsets.only(left: widget.isGroup ? 40 : 0),
       child: ListTile(
-        onTap: () => widget.item.hasUpdate
-            ? debouncer.run(() => upData())
-            : widget.item.route.isEmpty
-                ? showSnackBar(
-                    title: 'home_no_route'.tr,
-                    message: 'home_this_function_is_not_open'.tr,
-                    isWarning: true,
-                  )
-                : widget.item.toFunction(checkUpData: widget.checkUpData),
+        onTap: () {
+          if (widget.item.hasUpdate) {
+            (() => upData()).throttle();
+          } else if (widget.item.route.isEmpty) {
+            showSnackBar(
+              title: 'home_no_route'.tr,
+              message: 'home_this_function_is_not_open'.tr,
+              isWarning: true,
+            );
+          } else {
+            widget.item.toFunction(checkUpData: widget.checkUpData);
+          }
+        },
         enabled: widget.item.hasUpdate ? true : widget.item.hasPermission,
         leading: cachedNetworkImage(
           widget.item.icon,

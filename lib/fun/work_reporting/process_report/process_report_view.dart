@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/work_reporting/process_report/process_report_logic.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
+
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -20,14 +20,12 @@ class ProcessReportPage extends StatefulWidget {
 }
 
 class _ProcessReportPageState extends State<ProcessReportPage> {
-  final debouncer = ClickDebouncer();
   final logic = Get.put(ProcessReportLogic());
   final state = Get.find<ProcessReportLogic>().state;
 
   void addWorkerDialog({
     required Function(WorkerInfo wi) callback,
   }) {
-    final debouncer = ClickDebouncer();
     var name = ''.obs;
     WorkerInfo? newWorker;
     Get.dialog(PopScope(
@@ -68,12 +66,12 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => debouncer.run(() {
+            onPressed: (() {
               if (newWorker != null) {
                 callback.call(newWorker!);
                 Get.back();
               }
-            }),
+            }).throttle(),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -90,6 +88,18 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
 
   InkWell _item1(DispatchInfo data, int position) {
     return InkWell(
+      onLongPress: (() {
+        askDialog(
+            content: 'process_report_sure_delete_data'.tr,
+            confirm: () {
+              logic.removeItem(position);
+            });
+      }).throttle(),
+      onTap: () {
+        addWorkerDialog(callback: (WorkerInfo wi) {
+            logic.setPeople(wi,position);
+        });
+      },
       child: Container(
         margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
         padding: const EdgeInsets.all(5),
@@ -156,18 +166,6 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
           ],
         ),
       ),
-      onLongPress: () => debouncer.run(() {
-        askDialog(
-            content: 'process_report_sure_delete_data'.tr,
-            confirm: () {
-              logic.removeItem(position);
-            });
-      }),
-      onTap: () {
-        addWorkerDialog(callback: (WorkerInfo wi) {
-            logic.setPeople(wi,position);
-        });
-      },
     );
   }
 
