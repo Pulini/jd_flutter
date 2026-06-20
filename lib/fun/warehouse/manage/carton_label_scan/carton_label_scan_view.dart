@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_clear_tail_report.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -12,6 +13,7 @@ import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
+import 'carton_label_scan_clear_tail.dart';
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
 
@@ -80,7 +82,17 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      title: 'carton_label_scan_order_production_collection'.tr,
       actions: [
+        IconButton(
+          onPressed: (){
+            Get.to(() => const CartonLabelScanClearTail());
+          },
+          icon: const Icon(
+            Icons.published_with_changes_sharp,
+            color: Colors.blue,
+          ),
+        ),
         IconButton(
           onPressed: () => Get.to(
             () => const CartonLabelScanProgressPage(),

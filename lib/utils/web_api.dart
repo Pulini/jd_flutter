@@ -1659,3 +1659,6 @@ const webApiUpsertDeviceInfo = 'api/shared/device/upsertDeviceInfo';
 //品检获取ng类型 收货/退货
 const webApiForSapGetType = 'sap/zapp/ZMM_GET_YZ';
 
+//外箱鞋盒贴标 - 查尾数详情
+const webApiGetMantissaData = 'api/OutBoxScan/GetMantissaData';
+

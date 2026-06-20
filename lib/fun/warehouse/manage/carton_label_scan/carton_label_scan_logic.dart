@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_s
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
+import 'carton_label_scan_clear_tail.dart';
 import 'carton_label_scan_state.dart';
 
 class CartonLabelScanLogic extends GetxController {
@@ -172,5 +173,10 @@ class CartonLabelScanLogic extends GetxController {
       success: () => Get.to(() => const CartonLabelScanProgressDetailView()),
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  void setTailDetail(int index){
+    state.outBoxDetail.value = state.outBoxList[index].linkDataSizeList!;
+    Get.to(() => const CartonLabelScanClearTail());
   }
 }
