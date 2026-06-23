@@ -12,6 +12,7 @@ import 'package:jd_flutter/utils/app_init.dart';
 
 import 'package:jd_flutter/utils/extension_util.dart';
 
+import 'carton_label_scan_clear_tail.dart';
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
 
@@ -79,7 +80,20 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      title: 'carton_label_scan_order_production_collection'.tr,
       actions: [
+        IconButton(
+          onPressed: (){
+            Get.to(() => const CartonLabelScanClearTail())
+                ?.then((v) {
+              _scan();
+            });
+          },
+          icon: const Icon(
+            Icons.published_with_changes_sharp,
+            color: Colors.blue,
+          ),
+        ),
         IconButton(
           onPressed: () => Get.to(
             () => const CartonLabelScanProgressPage(),
