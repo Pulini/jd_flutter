@@ -127,7 +127,8 @@ class PartDispatchLabelListLogic extends GetxController {
                 [v2.size ?? '', v2.auxQty.toString()]
             ]
         },
-        bottomLeftText: 'part_dispatch_label_print_piece_no'.trArgs([label.pieceNo.toString()]),
+        // bottomLeftText: 'part_dispatch_label_print_piece_no'.trArgs([label.pieceNo.toString()]),
+        bottomLeftText: label.batchNo??'',
         bottomRightText: 'part_dispatch_label_print_fetch_date'.trArgs([label.fetchDate??'']),
       );
 

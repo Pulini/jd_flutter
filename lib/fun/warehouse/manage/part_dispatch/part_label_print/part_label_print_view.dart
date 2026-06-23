@@ -30,7 +30,7 @@ class _PartLabelPrintPageState extends State<PartLabelPrintPage> {
   void initState() {
     pdaScanner(scan: (code) => logic.query(barCode: code));
     // WidgetsBinding.instance
-    //     .addPostFrameCallback((_) => logic.query(barCode: 'GXPG250102613/1'));
+    //     .addPostFrameCallback((_) => logic.query(barCode: 'GXPG250102784/1'));
     super.initState();
   }
 

@@ -13,7 +13,7 @@ class PartLabelManageLogic extends GetxController {
   final PartLabelManageState state = PartLabelManageState();
 
   void queryLabels(String barCode) {
-    if(state.labelList.any((v)=>v.largeCardNo==barCode)){
+    if (state.labelList.any((v) => v.largeCardNo == barCode)) {
       errorDialog(content: 'part_label_manage_label_already_exists'.tr);
       return;
     }
@@ -100,9 +100,10 @@ Widget createPartLabel(PartLabelInfo label) => partDynamicLabel(
               [v2.size ?? '', v2.auxQty.toString()]
           ]
       },
-      pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
-        [label.pieceNo.toString()],
-      ),
+      // pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
+      //   [label.pieceNo.toString()],
+      // ),
+      pageNumber: label.batchNo ?? '',
       deliveryDate: 'part_dispatch_label_print_fetch_date'.trArgs(
         [label.fetchDate ?? ''],
       ),

@@ -24,6 +24,8 @@ class _PartLabelManagePageState extends State<PartLabelManagePage> {
   @override
   void initState() {
     pdaScanner(scan: (code) => logic.queryLabels(code));
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //     (_) => logic.queryLabels('339C5142-1767-400A-B75A-A56677C662F0'));
     super.initState();
   }
 
@@ -41,13 +43,21 @@ class _PartLabelManagePageState extends State<PartLabelManagePage> {
       body: Column(
         children: [
           Expanded(
-            child: Obx(() => ListView.builder(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  itemCount: state.labelList.length,
-                  itemBuilder: (c, i) => UnconstrainedBox(
-                      child: _LabelItem(label: state.labelList[i])),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Obx(()=>Column(
+                  children: [
+                    for (var v in state.labelList)
+                      SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        scrollDirection: Axis.horizontal,
+                        child: _LabelItem(label: v),
+                      )
+                  ],
                 )),
+              ),
+            ),
           ),
           Row(
             children: [
