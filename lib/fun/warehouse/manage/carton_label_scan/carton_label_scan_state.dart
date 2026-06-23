@@ -178,38 +178,36 @@ class CartonLabelScanState {
     });
   }
 
-  // void getMantissaData({
-  //   required String barCode,
-  //   required String dispatchNumber,
-  //   required Function(String) success,
-  //   required Function(String) error,
-  // }) {
-  //   httpGet(
-  //     loading: 'carton_label_scan_order_get_last_detail'.tr,
-  //     method: webApiGetMantissaData,
-  //     params: {
-  //       'CartonBarCode': barCode,
-  //       'DispatchNumber': dispatchNumber,
-  //     },
-  //   ).then((response) {
-  //     if (response.resultCode == resultSuccess) {
-  //       cartonLabelScanClearTailInfo =
-  //           CartonLabelScanClearTailInfo.fromJson(response.data);
-  //       factoryBody.value =
-  //           cartonLabelScanClearTailInfo!.factoryBody.toString();
-  //       groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
-  //       salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
-  //       customerOrderNumber.value =
-  //           cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
-  //     } else {
-  //       factoryBody.value = '';
-  //       groupName.value = '';
-  //       salesOrder.value = '';
-  //       customerOrderNumber.value = '';
-  //       errorDialog(content: response.message ?? 'query_default_error'.tr);
-  //     }
-  //   });
-  // }
+  void getTailNumberReportData({
+    required String barCode,
+    required String dispatchNumber,
+  }) {
+    httpGet(
+      loading: 'carton_label_scan_order_get_last_detail'.tr,
+      method: webApiGetTailNumberReportData,
+      params: {
+        'CartonBarCode': barCode,
+        'DispatchNumber': dispatchNumber,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        cartonLabelScanClearTailInfo =
+            CartonLabelScanClearTailInfo.fromJson(response.data);
+        factoryBody.value =
+            cartonLabelScanClearTailInfo!.factoryBody.toString();
+        groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
+        salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
+        customerOrderNumber.value =
+            cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
+      } else {
+        factoryBody.value = '';
+        groupName.value = '';
+        salesOrder.value = '';
+        customerOrderNumber.value = '';
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
 
   //为每一个工单添加合计行
   // void setDataList() {

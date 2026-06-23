@@ -1671,5 +1671,8 @@ const webApiGetMantissaData = 'api/OutBoxScan/GetMantissaData';
 //外箱鞋盒贴标 - 清尾数提交
 const webApiSubMantissaData = 'api/OutBoxScan/SubMantissaData';
 
+//外箱鞋盒贴标 - 查尾数详情
+const webApiGetTailNumberReportData = 'api/OutBoxScan/GetTailNumberReportData';
+
 
 

@@ -125,6 +125,18 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTail> {
     return pageBody(
         title: 'carton_label_scan_order_order_clearance'.tr,
         actions: [
+          // IconButton(
+          //   onPressed: (){
+          //     Get.to(() => const CartonLabelScanClearTailReportPage())
+          //         ?.then((v) {
+          //       _scan();
+          //     });
+          //   },
+          //   icon: const Icon(
+          //     Icons.margin_rounded,
+          //     color: Colors.blue,
+          //   ),
+          // ),
           Obx(() => SwitchButton(
                 onChanged: (s) {
                   state.add.value = s;
