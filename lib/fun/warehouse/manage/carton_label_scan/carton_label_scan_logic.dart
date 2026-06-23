@@ -227,18 +227,23 @@ class CartonLabelScanLogic extends GetxController {
               final currentShortQty = a.thisShortQty ?? 0;
               final currentLabelCount = a.labelCount ?? 0;
 
-              if (currentShortQty < currentLabelCount - 1) {
-                a.thisShortQty = currentShortQty + 1;
+              if (currentShortQty < currentLabelCount){
+                if(state.tailScannedLabelTotal.value +1<state.tailLabelTotal.value){
+                  a.thisShortQty = currentShortQty + 1;
 
-                showScanTips();
-                state.tailScannedLabelTotal.value += 1;
-                add.call();
-              } else {
+                  showScanTips();
+                  state.tailScannedLabelTotal.value += 1;
+                  add.call();
+
+                }else{
+                  full.call();
+                  if (Get.isDialogOpen == true) Get.back();
+                  errorDialog(
+                    content: 'carton_label_scan_order_not_full'.tr,
+                  );
+                }
+              }else{
                 full.call();
-                if (Get.isDialogOpen == true) Get.back();
-                errorDialog(
-                  content: 'carton_label_scan_order_not_full'.tr,
-                );
               }
             } else {
               final currentShortQty = a.thisShortQty ?? 0;
