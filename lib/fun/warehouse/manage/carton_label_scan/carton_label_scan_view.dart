@@ -85,7 +85,10 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
       actions: [
         IconButton(
           onPressed: (){
-            Get.to(() => const CartonLabelScanClearTail());
+            Get.to(() => const CartonLabelScanClearTail())
+                ?.then((v) {
+              _scan();
+            });
           },
           icon: const Icon(
             Icons.published_with_changes_sharp,
