@@ -161,7 +161,7 @@ void stockInDialog({
             () => errorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-                    onPressed: () => (stockIn).throttle(),
+                    onPressed:stockIn.throttle(),
                     child: Text('dialog_default_confirm'.tr),
                   ),
           ),
