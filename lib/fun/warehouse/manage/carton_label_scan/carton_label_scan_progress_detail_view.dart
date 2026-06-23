@@ -25,24 +25,7 @@ class _CartonLabelScanProgressDetailViewState
               padding: const EdgeInsets.all(8),
               child: Row(
                 children: [
-                  Container(
-                    height: 20,
-                    padding: const EdgeInsets.only(left: 3, right: 3),
-                    margin: const EdgeInsets.only(right: 5),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.blueAccent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        list[0].cartonNo ?? '',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                  cartonNo(list.first.isOnlyOne, list.first.cartonNo ?? ''),
                   expandedTextSpan(
                     hint: 'carton_label_scan_progress_detail_outside_label'.tr,
                     text: list[0].outBoxBarCode ?? '',
@@ -92,25 +75,7 @@ class _CartonLabelScanProgressDetailViewState
                       padding: const EdgeInsets.all(8),
                       child: Row(
                         children: [
-                          Container(
-                            height: 20,
-                            padding: const EdgeInsets.only(left: 3, right: 3),
-                            margin: const EdgeInsets.only(right: 5),
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              color: Colors.green,
-                            ),
-                            child: Center(
-                              child: Text(
-                                item.cartonNo ?? '',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
+                          cartonNo(item.isOnlyOne, item.cartonNo ?? ''),
                           expandedTextSpan(
                             hint:
                                 'carton_label_scan_progress_detail_outside_label'
@@ -128,14 +93,61 @@ class _CartonLabelScanProgressDetailViewState
     );
   }
 
+  Widget cartonNo(bool isOnlyOne, String no) => Container(
+        height: 25,
+        padding: const EdgeInsets.only(left: 3, right: 3),
+        margin: const EdgeInsets.only(right: 5),
+        constraints: const BoxConstraints(minWidth: 25),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          color: isOnlyOne ? Colors.blue : Colors.green,
+        ),
+        child: Center(
+          child: Text(
+            no,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'carton_label_scan_progress_detail_title'.tr,
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: state.progressDetail.length,
-        itemBuilder: (context, index) => _item(state.progressDetail[index]),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    cartonNo(true, '99'),
+                    Text('carton_label_scan_progress_detail_label_type_only'.tr),
+                  ],
+                ),
+                Row(
+                  children: [
+                    cartonNo(false, '1'),
+                    Text('carton_label_scan_progress_detail_label_type_not_only'.tr),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: state.progressDetail.length,
+              itemBuilder: (context, index) =>
+                  _item(state.progressDetail[index]),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -263,7 +263,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    206,
+    207,
     const CartonLabelScanPage(),
   );
 
@@ -417,7 +417,7 @@ class RouteConfig {
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    201,
+    202,
     const ProductionTasksPage(),
   );
 
@@ -536,7 +536,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    209,
+    210,
     const DeliveryOrderPage(),
   );
 
@@ -564,7 +564,7 @@ class RouteConfig {
   //采购订单入库
   static Routes purchaseOrderWarehousing = Routes(
     '/purchase_order_warehousing',
-    201,
+    202,
     const PurchaseOrderWarehousingPage(),
   );
 

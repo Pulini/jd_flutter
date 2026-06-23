@@ -1515,6 +1515,8 @@ class Translation extends Translations {
           'carton_label_scan_progress_detail_outside_label': '外箱标：',
           'carton_label_scan_progress_detail_size': '尺码：',
           'carton_label_scan_progress_detail_title': '扫码明细',
+          'carton_label_scan_progress_detail_label_type_only': '标签唯一',
+          'carton_label_scan_progress_detail_label_type_not_only': '标签不唯一',
           'carton_label_scan_change_priority': '更改优先级',
           'carton_label_scan_please_input': '请输入外箱标号或PO号',
           'carton_label_scan_change_successful': '更改成功',
@@ -5449,6 +5451,8 @@ class Translation extends Translations {
           'carton_label_scan_progress_detail_outside_label': 'Outside barcode：',
           'carton_label_scan_progress_detail_size': 'Size：',
           'carton_label_scan_progress_detail_title': 'Scan detail',
+          'carton_label_scan_progress_detail_label_type_only': 'Label is unique',
+          'carton_label_scan_progress_detail_label_type_not_only': 'Label is not unique',
           'carton_label_scan_change_priority': 'Change Priority',
           'carton_label_scan_please_input':
               'Please enter the outer box number or PO number',
@@ -9917,6 +9921,8 @@ class Translation extends Translations {
               'Label Kotak Luar:',
           'carton_label_scan_progress_detail_size': 'Ukuran:',
           'carton_label_scan_progress_detail_title': 'Detail Pemindaian',
+          'carton_label_scan_progress_detail_label_type_only': 'Label Hanya Satu',
+          'carton_label_scan_progress_detail_label_type_not_only': 'Label Bukan Hanya Satu',
           'carton_label_scan_change_priority': 'Ubah Prioritas',
           'carton_label_scan_please_input':
               'Masukkan nomor label kotak luar atau nomor PO',

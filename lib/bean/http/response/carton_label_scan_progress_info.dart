@@ -60,6 +60,7 @@ class CartonLabelScanProgressDetailInfo {
     sendCustomSystemState = json['SendCustomSystemState'];
     totalPiece = json['TotalPiece'];
     scanPiece = json['ScanPiece'];
+    isOnlyOne = (totalPiece == scanPiece && totalPiece == 1);
   }
 
   String? cartonNo;
@@ -68,6 +69,7 @@ class CartonLabelScanProgressDetailInfo {
   int? sendCustomSystemState;
   int? totalPiece;
   int? scanPiece;
+  bool isOnlyOne = false;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -87,6 +89,6 @@ class CartonLabelScanProgressDetailInfo {
             ? Colors.green
             : Colors.grey;
   }
-  String getScanProgress()=>'$scanPiece / $totalPiece';
 
+  String getScanProgress() => '$scanPiece / $totalPiece';
 }

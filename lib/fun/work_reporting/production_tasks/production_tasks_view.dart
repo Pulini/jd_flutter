@@ -576,10 +576,10 @@ class _ProductionTasksOrderItemState
     var mtoNo = TextButton(
       onPressed: () {
         if (_isSelected() || index == 0) {
-          (() => logic.getDetail(
+          logic.getDetail(
             ins: data.mtoNo ?? '',
             imageUrl: data.itemImage ?? '',
-          )).throttle()();
+          );
         } else {
           onSelected(index);
         }
@@ -636,7 +636,7 @@ class _ProductionTasksOrderItemState
                   isDefaultAction: true,
                   onPressed: () {
                     Get.back();
-                    (() => logic.getOrderPackMaterialInfo(data.mtoNo ?? '')).throttle()();
+                    logic.getOrderPackMaterialInfo(data.mtoNo ?? '');
                   },
                   child: Text('production_tasks_pack_material_info'.tr),
                 ),
@@ -675,10 +675,10 @@ class _ProductionTasksOrderItemState
       child: TextButton(
         onPressed: () {
           if (_isSelected() || index == 0) {
-            (() => logic.getDetail(
+            logic.getDetail(
               po: data.clientOrderNumber ?? '',
               imageUrl: data.itemImage ?? '',
-            )).throttle()();
+            );
           } else {
             onSelected(index);
           }
