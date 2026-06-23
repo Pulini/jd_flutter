@@ -4,8 +4,6 @@ import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.da
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_detail_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-
-import 'carton_label_scan_clear_tail.dart';
 import 'carton_label_scan_state.dart';
 
 class CartonLabelScanLogic extends GetxController {
@@ -20,29 +18,35 @@ class CartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-        state.priorityCartonLabelInfo =data;
-        state.dispatchNumber.value=data.dispatchNumber??'';
-        state.priorityCartonLabel.value = state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
-        state.priorityPo.value = state.priorityCartonLabelInfo?.custOrderNumber ?? '';
-        state.priorityCartonInsideLabelList.value = state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
+        state.priorityCartonLabelInfo = data;
+        state.dispatchNumber.value = data.dispatchNumber ?? '';
+        state.priorityCartonLabel.value =
+            state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
+        state.priorityPo.value =
+            state.priorityCartonLabelInfo?.custOrderNumber ?? '';
+        state.priorityCartonInsideLabelList.value =
+            state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
       },
-      error: (msg){
+      error: (msg) {
         state.clearPriority();
-        errorDialog(content: msg);},
+        errorDialog(content: msg);
+      },
     );
   }
 
   void queryCartonLabelInfo(String code) {
-    state.labelTotal.value=0;
-    state.scannedLabelTotal.value=0;
+    state.labelTotal.value = 0;
+    state.scannedLabelTotal.value = 0;
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-       state.cartonLabelInfo = data;
-       state.dispatchNumber.value=data.dispatchNumber??'';
-       state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
-       state.cartonInsideLabelList.value = state.cartonLabelInfo!.linkDataSizeList ?? [];
-       state.labelTotal.value = state.cartonInsideLabelList.fold(0, (total, next) => total + next.labelCount!);
+        state.cartonLabelInfo = data;
+        state.dispatchNumber.value = data.dispatchNumber ?? '';
+        state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
+        state.cartonInsideLabelList.value =
+            state.cartonLabelInfo!.linkDataSizeList ?? [];
+        state.labelTotal.value = state.cartonInsideLabelList
+            .fold(0, (total, next) => total + next.labelCount!);
       },
       error: (msg) => errorDialog(content: msg),
     );
@@ -52,8 +56,8 @@ class CartonLabelScanLogic extends GetxController {
     state.cartonInsideLabelList.value = [];
     state.cartonLabel.value = '';
     state.cartonLabelInfo = null;
-    state.labelTotal.value=0;
-    state.scannedLabelTotal.value=0;
+    state.labelTotal.value = 0;
+    state.scannedLabelTotal.value = 0;
     refresh.call();
   }
 
@@ -74,8 +78,8 @@ class CartonLabelScanLogic extends GetxController {
     required Function() submitSuccess,
     required Function() submitError,
   }) {
-    if(code.startsWith('P')&&code.length>5){
-      state.dispatchNumber.value=code;
+    if (code.startsWith('P') && code.length > 5) {
+      state.dispatchNumber.value = code;
       return;
     }
     // if(state.dispatchNumber.value.isEmpty){
@@ -89,7 +93,7 @@ class CartonLabelScanLogic extends GetxController {
     } else {
       try {
         var exist = state.cartonInsideLabelList.singleWhere(
-          (v) => v.priceBarCode == code,
+              (v) => v.priceBarCode == code,
         );
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
@@ -149,14 +153,21 @@ class CartonLabelScanLogic extends GetxController {
   }
 
   void changePriority() {
-    if(scanController.text.isEmpty && state.priorityCartonLabelInfo==null){
-      showSnackBar(message:'carton_label_scan_input_or_scan'.tr  );
-    }else{
-      state.changePOPriority(success: (mes) {
-        successDialog(content: mes, back: () {
-          scanController.clear();
-          state.clearPriority();});
-      }, poNumber: scanController.text.length!=20? scanController.text.toString() : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
+    if (scanController.text.isEmpty && state.priorityCartonLabelInfo == null) {
+      showSnackBar(message: 'carton_label_scan_input_or_scan'.tr);
+    } else {
+      state.changePOPriority(
+          success: (mes) {
+            successDialog(
+                content: mes,
+                back: () {
+                  scanController.clear();
+                  state.clearPriority();
+                });
+          },
+          poNumber: scanController.text.length != 20
+              ? scanController.text.toString()
+              : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
     }
   }
 
@@ -175,8 +186,109 @@ class CartonLabelScanLogic extends GetxController {
     );
   }
 
-  void setTailDetail(int index){
-    state.outBoxDetail.value = state.outBoxList[index].linkDataSizeList!;
-    Get.to(() => const CartonLabelScanClearTail());
+
+  void setTailDetail({
+    required int index,
+    required Function goActivity,
+  }) {
+    state.showIndex = index;
+    if (state.outBoxList[index].mantissaDataSizeList!.isNotEmpty) {
+      setTotalQty();
+      goActivity.call();
+    } else {
+      errorDialog(content: 'carton_label_scan_order_no_last_data'.tr);
+    }
+  }
+
+  void tailDetailScan({
+    required String barCode,
+    required Function() full,
+    required Function() add,
+  }) {
+    if (barCode.isNotEmpty) {
+      bool found = false;
+      for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+        if (a.priceBarCode == barCode) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        if (Get.isDialogOpen == true) Get.back();
+        errorDialog(
+          content: 'carton_label_scan_label_placement_error_tips'.trArgs(
+            [barCode],
+          ),
+        );
+      } else {
+        for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+          if (a.priceBarCode == barCode) {
+            if (state.outBoxList[state.showIndex].guid!.isEmpty) {
+              final currentShortQty = a.thisShortQty ?? 0;
+              final currentLabelCount = a.labelCount ?? 0;
+
+              if (currentShortQty < currentLabelCount - 1) {
+                a.thisShortQty = currentShortQty + 1;
+
+                showScanTips();
+                state.tailScannedLabelTotal.value += 1;
+                add.call();
+              } else {
+                full.call();
+                if (Get.isDialogOpen == true) Get.back();
+                errorDialog(
+                  content: 'carton_label_scan_order_not_full'.tr,
+                );
+              }
+            } else {
+              final currentShortQty = a.thisShortQty ?? 0;
+              final currentLabelCount = a.labelCount ?? 0;
+
+              if (currentShortQty < currentLabelCount) {
+                a.thisShortQty = currentShortQty + 1;
+
+                showScanTips();
+                state.tailScannedLabelTotal.value += 1;
+                add.call();
+              } else {
+                full.call();
+              }
+            }
+          }
+        }
+      }
+    } else {
+      showSnackBar(message: 'carton_label_scan_order_real_code'.tr);
+    }
+  }
+
+  void setTotalQty() {
+    int totalLabelCount = 0;
+    int totalShortQty = 0;
+    for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+      totalLabelCount += a.labelCount ?? 0;
+      totalShortQty += a.thisShortQty ?? 0;
+    }
+    state.tailLabelTotal.value = totalLabelCount;
+    state.tailScannedLabelTotal.value = totalShortQty;
+  }
+
+  void subMantissa(Function refresh) {
+    state.subMantissaData(
+      success: (msg) {
+        refresh.call(msg);
+      },
+      error: (msg) {
+        errorDialog(content: msg);
+      },
+    );
+  }
+
+  Future<void> cleanDetailScanned() async {
+    for (var v in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+      v.thisShortQty = v.shortQty;
+    }
+    setTotalQty();
+    state.outBoxList.refresh();
   }
 }

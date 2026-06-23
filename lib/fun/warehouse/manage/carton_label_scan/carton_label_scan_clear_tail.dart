@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/out_box_labels_info.dart';
-import 'package:jd_flutter/utils/click_debounce.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
-
+import 'carton_label_scan_clear_tail_detail.dart';
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
 
@@ -19,82 +19,103 @@ class CartonLabelScanClearTail extends StatefulWidget {
 
 class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTail> {
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
-  final CartonLabelScanState state = Get
-      .find<CartonLabelScanLogic>()
-      .state;
-  final debouncer = ClickDebouncer();
+  final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
-  var controller = TextEditingController();
-
-  Row _item(OutBoxLabelsInfo data, int index) {
+  Widget _item(OutBoxLabelsInfo data, int position) {
     var mes = '';
-    data.linkDataSizeList?.forEach((a) {
-      '$mes${a.size}#:${(a.labelCount! - a.shotQty!).toString()}';
+    data.mantissaDataSizeList?.forEach((a) {
+      final labelCount = a.labelCount ?? 0;
+      final shortQty = a.shortQty ?? 0;
+      if(labelCount-shortQty!=0){
+        mes += '${a.size}#: ${(labelCount - shortQty)},';
+      }
     });
-    return Row(
-      children: [
-        Expanded(
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.blue.shade200, width: 2),
+      ),
+      child: Row(
+        children: [
+          Expanded(
             flex: 3,
             child: InkWell(
-              child: _text(
-                  mes: data.outBoxBarCode.toString(),
-                  backColor: Colors.white,
-                  head: false,
-                  paddingNumber: 5),
               onTap: () {
-                logic.setTailDetail(index);
+                logic.setTailDetail(
+                    index: position,
+                    goActivity: () {
+                      Get.to(() => const CartonLabelScanClearTailDetailPage())
+                          ?.then((v) {
+                        if (v == true) {
+                          state.queryNotFullBox(
+                            barCode: state.tailController.text
+                          );
+                        }
+                        _scan();
+                      });
+                    });
               },
-            )),
-        Expanded(
-            child: _text(
-                mes: data.mix.toString(),
-                backColor: Colors.white,
-                head: false,
-                paddingNumber: 5)),
-        Expanded(
-            child: InkWell(
-              child: _text(
-                  mes: mes,
-                  backColor: Colors.white,
-                  head: false,
-                  paddingNumber: 5),
-              onTap: () {
-                showSnackBar(message: mes);
-              },
-            )),
-      ],
-    );
-  }
-
-  Container _text({
-    required String mes,
-    required Color backColor,
-    required bool head,
-    required double paddingNumber,
-  }) {
-    var textColor = Colors.white;
-    if (head) {
-      textColor = Colors.white;
-    } else {
-      textColor = Colors.black;
-    }
-    return Container(
-      height: 35,
-      decoration: BoxDecoration(
-        color: backColor, // 背景颜色
-        border: Border.all(
-          color: Colors.grey, // 边框颜色
-          width: 1.0, // 边框宽度
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(top: paddingNumber, bottom: paddingNumber),
-        child: Center(
-          child: Text(
-            mes,
-            style: TextStyle(color: textColor),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+                child: Text(
+                  data.outBoxBarCode.toString(),
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 13,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
-        ),
+          VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: Colors.blue.shade300,
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+              child: Text(
+                data.tailCartonCode.toString(),
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 13,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: Colors.blue.shade300,
+          ),
+          Expanded(
+            flex: 2,
+            child: InkWell(
+              onTap: () {
+                msgDialog(content: mes);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+                child: Text(
+                  mes,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 13,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -103,122 +124,157 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTail> {
   Widget build(BuildContext context) {
     return pageBody(
         title: 'carton_label_scan_order_order_clearance'.tr,
+        actions: [
+          Obx(() => SwitchButton(
+                onChanged: (s) {
+                  state.add.value = s;
+                  if(state.tailController.text.isNotEmpty){
+                    state.queryNotFullBox(barCode:state.tailController.text);
+                  }
+                },
+                name: state.add.value == true
+                    ? 'carton_label_scan_order_clear_add'.tr
+                    : 'carton_label_scan_order_clear_change'.tr,
+                value: state.add.value,
+              ))
+        ],
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Obx(() =>
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SwitchButton(
-                      onChanged: (s) {
-                        if (s == true) {
-                          state.add.value = s;
-                          state.change.value = false;
-                        } else {
-                          state.add.value = s;
-                          state.change.value = true;
-                        }
-                      },
-                      name: 'carton_label_scan_order_clear_add'.tr,
-                      value: state.add.value,
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: SizedBox(
+                  height: 40,
+                  child: TextField(
+                    controller: state.tailController,
+                    decoration: InputDecoration(
+                      contentPadding:
+                          const EdgeInsets.only(left: 15, right: 10),
+                      filled: true,
+                      fillColor: Colors.white54,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      hintText:
+                          'carton_label_scan_scan_code_or_input_outside_code'
+                              .tr,
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      prefixIcon: IconButton(
+                        onPressed: () => state.tailController.clear(),
+                        icon: const Icon(
+                          Icons.replay_circle_filled,
+                          color: Colors.red,
+                        ),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          state.queryNotFullBox(barCode:state.tailController.text);
+                        },
+                        icon: const Icon(
+                          Icons.loupe_rounded,
+                          color: Colors.green,
+                        ),
+                      ),
                     ),
-                    SwitchButton(
-                      onChanged: (s) {
-                        if (s == true) {
-                          state.change.value = s;
-                          state.add.value = false;
-                        } else {
-                          state.change.value = s;
-                          state.add.value = true;
-                        }
-                      },
-                      name: 'carton_label_scan_order_clear_change'.tr,
-                      value: state.change.value,
-                    )
-                  ],
+                  ),
                 )),
+            const SizedBox(height: 5),
             Container(
-              margin: const EdgeInsets.all(5),
-              height: 40,
-              child: TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 15, right: 10),
-                  filled: true,
-                  fillColor: Colors.white54,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.transparent),
-                  ),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  hintText:
-                  'carton_label_scan_scan_code_or_input_outside_code'.tr,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon: IconButton(
-                    onPressed: () => controller.clear(),
-                    icon: const Icon(
-                      Icons.replay_circle_filled,
-                      color: Colors.red,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () =>
-                        debouncer
-                            .run(() =>
-                            logic.queryCartonLabelInfo(controller.text)),
-                    icon: const Icon(
-                      Icons.loupe_rounded,
-                      color: Colors.green,
-                    ),
-                  ),
+              height: 35,
+              margin: const EdgeInsets.symmetric(horizontal: 2),
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(3),
+                border: Border(
+                  top: BorderSide(color: Colors.blue.shade300, width: 2),
+                  left: BorderSide(color: Colors.blue.shade300, width: 2),
+                  right: BorderSide(color: Colors.blue.shade300, width: 2),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      'carton_label_scan_order_label'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  VerticalDivider(
+                    width: 1,
+                    thickness: 1,
+                    color: Colors.blue.shade300,
+                    indent: 5,
+                    endIndent: 5,
+                  ),
+                  Expanded(
+                    child: Text(
+                      'carton_label_scan_order_last_number'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  VerticalDivider(
+                    width: 1,
+                    thickness: 1,
+                    color: Colors.blue.shade300,
+                    indent: 5,
+                    endIndent: 5,
+                  ),
+                  Expanded(
                     flex: 2,
-                    child: _text(
-                        mes: 'carton_label_scan_order_label'.tr,
-                        backColor: Colors.blueAccent,
-                        head: true,
-                        paddingNumber: 5)),
-                Expanded(
-                    child: _text(
-                        mes: 'carton_label_scan_order_last_number'.tr,
-                        backColor: Colors.blueAccent,
-                        head: true,
-                        paddingNumber: 5)),
-                Expanded(
-                    child: _text(
-                        mes: 'carton_label_scan_order_last_number_detail'.tr,
-                        backColor: Colors.blueAccent,
-                        head: true,
-                        paddingNumber: 5)),
-              ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: state.outBoxList.length,
-                itemBuilder: (c, i) => _item(state.outBoxList[i], i),
+                    child: Text(
+                      'carton_label_scan_order_last_number_detail'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
             ),
+            Obx(() => Expanded(
+                  child: ListView.builder(
+                    itemCount: state.outBoxList.length,
+                    itemBuilder: (c, i) => _item(state.outBoxList[i], i),
+                  ),
+                )),
+            Obx(() => textSpan(
+                  hint: 'carton_label_scan_dispatch_no'.tr,
+                  text: state.tailDispatchNumber.value,
+                ))
           ],
         ));
   }
 
-
-
   void _scan() {
     pdaScanner(scan: (barCode) {
       if (barCode.isNotEmpty) {
-        if(barCode.startsWith('P')){
-          state.queryNotFullBox(barCode:'', dispatchNumber:barCode);
-        }else{
-          state.queryNotFullBox(barCode:barCode, dispatchNumber:'');
+        if (barCode.startsWith('P') && barCode.length > 5) {
+          state.tailDispatchNumber.value = barCode;
+          if(state.tailController.text.isNotEmpty){
+            state.queryNotFullBox(barCode:state.tailController.text);
+          }
+        } else {
+          state.tailController.text = barCode;
+          state.queryNotFullBox(barCode: barCode);
         }
       }
     });
@@ -228,5 +284,13 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTail> {
   void initState() {
     _scan();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    state.tailController.clear();
+    state.tailDispatchNumber.value='';
+    state.outBoxList.clear();
+    super.dispose();
   }
 }

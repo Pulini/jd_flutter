@@ -1,22 +1,31 @@
-// InterID : "574066"
-// CustOrderNumber : "4602886122"
-// OutBoxBarCode : "00340486681721457255"
-// TailCartonCode : "1"
-// Mix : 1
-// DispatchNumber : "P26116320"
-// GUID : "E7C7D28D-1F52-4ECF-B409-00407651EB63"
-// LinkDataSizeList : [{"PriceBarCode":"4070032733678","Size":"4.5","LabelCount":6,"ShotQty":2},{"PriceBarCode":"4070032733623","Size":"5","LabelCount":3,"ShotQty":2},{"PriceBarCode":"4070032733685","Size":"5.5","LabelCount":1,"ShotQty":1}]
-
+// {
+// "InterID": "178329",
+// "CustOrderNumber": "12345649",
+// "OutBoxBarCode": "00340486681370041355",
+// "Mix": 0,
+// "DispatchNumber": "P2604612",
+// "GUID": "",
+// "TailCartonCode": "",
+// "MantissaDataSizeList": [
+// {
+// "PriceBarCode": "4070034901921",
+// "Size": "10",
+// "LabelCount": 10,
+// "ShortQty": 0
+// }
+// ]
+// }
 class OutBoxLabelsInfo {
   OutBoxLabelsInfo({
-      this.interID, 
-      this.custOrderNumber, 
-      this.outBoxBarCode, 
-      this.tailCartonCode, 
-      this.mix, 
-      this.dispatchNumber, 
-      this.guid, 
-      this.linkDataSizeList,});
+    this.interID,
+    this.custOrderNumber,
+    this.outBoxBarCode,
+    this.tailCartonCode, //件号
+    this.mix,
+    this.dispatchNumber,
+    this.guid,
+    this.mantissaDataSizeList,
+  });
 
   OutBoxLabelsInfo.fromJson(dynamic json) {
     interID = json['InterID'];
@@ -26,13 +35,14 @@ class OutBoxLabelsInfo {
     mix = json['Mix'];
     dispatchNumber = json['DispatchNumber'];
     guid = json['GUID'];
-    if (json['LinkDataSizeList'] != null) {
-      linkDataSizeList = [];
-      json['LinkDataSizeList'].forEach((v) {
-        linkDataSizeList?.add(LinkDataSizeLists.fromJson(v));
+    if (json['MantissaDataSizeList'] != null) {
+      mantissaDataSizeList = [];
+      json['MantissaDataSizeList'].forEach((v) {
+        mantissaDataSizeList?.add(MantissaDataSizeList.fromJson(v));
       });
     }
   }
+
   String? interID;
   String? custOrderNumber;
   String? outBoxBarCode;
@@ -40,7 +50,7 @@ class OutBoxLabelsInfo {
   int? mix;
   String? dispatchNumber;
   String? guid;
-  List<LinkDataSizeLists>? linkDataSizeList;
+  List<MantissaDataSizeList>? mantissaDataSizeList;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -51,12 +61,13 @@ class OutBoxLabelsInfo {
     map['Mix'] = mix;
     map['DispatchNumber'] = dispatchNumber;
     map['GUID'] = guid;
-    if (linkDataSizeList != null) {
-      map['LinkDataSizeLists'] = linkDataSizeList?.map((v) => v.toJson()).toList();
+    map['TailCartonCode'] = tailCartonCode;
+    if (mantissaDataSizeList != null) {
+      map['MantissaDataSizeList'] =
+          mantissaDataSizeList?.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
 
 /// PriceBarCode : "4070032733678"
@@ -64,31 +75,35 @@ class OutBoxLabelsInfo {
 /// LabelCount : 6
 /// ShotQty : 2
 
-class LinkDataSizeLists {
-  LinkDataSizeLists({
-      this.priceBarCode, 
-      this.size, 
-      this.labelCount, 
-      this.shotQty,});
+class MantissaDataSizeList {
+  MantissaDataSizeList({
+    this.priceBarCode,
+    this.size,
+    this.labelCount,
+    this.shortQty,
+    int? thisShortQty,
+  }): thisShortQty = thisShortQty ?? shortQty;
 
-  LinkDataSizeLists.fromJson(dynamic json) {
+  MantissaDataSizeList.fromJson(dynamic json) {
     priceBarCode = json['PriceBarCode'];
     size = json['Size'];
     labelCount = json['LabelCount'];
-    shotQty = json['ShotQty'];
+    shortQty = json['ShortQty'];
+    thisShortQty = shortQty;
   }
+
   String? priceBarCode;
   String? size;
   int? labelCount;
-  int? shotQty;   //已扫
+  int? shortQty; //已扫
+  int? thisShortQty; //本次已扫
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['PriceBarCode'] = priceBarCode;
     map['Size'] = size;
     map['LabelCount'] = labelCount;
-    map['ShotQty'] = shotQty;
+    map['ShortQty'] = shortQty;
     return map;
   }
-
 }

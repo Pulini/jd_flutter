@@ -1668,3 +1668,8 @@ const webApiForSapGetType = 'sap/zapp/ZMM_GET_YZ';
 //外箱鞋盒贴标 - 查尾数详情
 const webApiGetMantissaData = 'api/OutBoxScan/GetMantissaData';
 
+//外箱鞋盒贴标 - 清尾数提交
+const webApiSubMantissaData = 'api/OutBoxScan/SubMantissaData';
+
+
+

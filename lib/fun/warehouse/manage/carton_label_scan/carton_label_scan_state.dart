@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_clear_tail_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
@@ -22,6 +23,7 @@ class CartonLabelScanState {
   var priorityCartonLabel = ''.obs;
   var priorityPo = ''.obs;
   var dispatchNumber = ''.obs;
+  var tailDispatchNumber = ''.obs;
   CartonLabelScanInfo? priorityCartonLabelInfo;
   CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
   var factoryBody = ''.obs; //型体
@@ -30,9 +32,12 @@ class CartonLabelScanState {
   var customerOrderNumber = ''.obs; //客户订单
 
   var outBoxList = <OutBoxLabelsInfo>[].obs; //外箱数据
-  var outBoxDetail = <LinkDataSizeLists>[].obs; //外箱数据内标数据
-  var add = false.obs; // 新增
-  var change = false.obs; // 修改
+  var showIndex = 0;
+  var add = true.obs; // 新增
+  var tailLabelTotal = 0.obs; //清尾用的到统计
+  var tailScannedLabelTotal = 0.obs; //清尾用的到扫了的统计
+  var tailController = TextEditingController();
+
 
   void queryCartonLabelInfo({
     required String code,
@@ -49,7 +54,6 @@ class CartonLabelScanState {
       params: {
         'CartonBarCode': code,
         'DispatchNumber': dispatchNumber.value,
-        'DispatchNumber':dispatchNumber.value,
         'OrganizeID': userInfo?.organizeID,
       },
     ).then((response) {
@@ -58,15 +62,15 @@ class CartonLabelScanState {
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
-      isCheckingCartonBarCode=false;
+      isCheckingCartonBarCode = false;
     });
   }
 
   //清理优先级界面数据
-  void clearPriority(){
+  void clearPriority() {
     priorityCartonLabelInfo = CartonLabelScanInfo();
     priorityCartonLabel.value = '';
-    priorityPo.value='';
+    priorityPo.value = '';
     priorityCartonInsideLabelList.value = [];
   }
 
@@ -83,7 +87,8 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-       success.call(response.message ?? 'carton_label_scan_change_successful'.tr);
+        success
+            .call(response.message ?? 'carton_label_scan_change_successful'.tr);
       } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
@@ -115,16 +120,14 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        labelTotal.value=0;
-        scannedLabelTotal.value=0;
+        labelTotal.value = 0;
+        scannedLabelTotal.value = 0;
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
-
-
 
   void getCartonLabelScanHistory({
     required String orderNo,
@@ -159,7 +162,7 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list =<CartonLabelScanProgressDetailInfo> [
+        var list = <CartonLabelScanProgressDetailInfo>[
           for (var json in response.data)
             CartonLabelScanProgressDetailInfo.fromJson(json)
         ];
@@ -167,7 +170,7 @@ class CartonLabelScanState {
         groupBy(list, (v) => v.size ?? '').forEach((k, v) {
           group.add(v);
         });
-        progressDetail.value=group;
+        progressDetail.value = group;
         success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -175,38 +178,38 @@ class CartonLabelScanState {
     });
   }
 
-  void getMantissaData({
-    required String barCode,
-    required String dispatchNumber,
-    required Function(String) success,
-    required Function(String) error,
-  }) {
-    httpGet(
-      loading: 'carton_label_scan_order_get_last_detail'.tr,
-      method: webApiGetMantissaData,
-      params: {
-        'CartonBarCode': barCode,
-        'DispatchNumber': dispatchNumber,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        cartonLabelScanClearTailInfo =
-            CartonLabelScanClearTailInfo.fromJson(response.data);
-        factoryBody.value =
-            cartonLabelScanClearTailInfo!.factoryBody.toString();
-        groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
-        salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
-        customerOrderNumber.value =
-            cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
-      } else {
-        factoryBody.value = '';
-        groupName.value = '';
-        salesOrder.value = '';
-        customerOrderNumber.value = '';
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
-  }
+  // void getMantissaData({
+  //   required String barCode,
+  //   required String dispatchNumber,
+  //   required Function(String) success,
+  //   required Function(String) error,
+  // }) {
+  //   httpGet(
+  //     loading: 'carton_label_scan_order_get_last_detail'.tr,
+  //     method: webApiGetMantissaData,
+  //     params: {
+  //       'CartonBarCode': barCode,
+  //       'DispatchNumber': dispatchNumber,
+  //     },
+  //   ).then((response) {
+  //     if (response.resultCode == resultSuccess) {
+  //       cartonLabelScanClearTailInfo =
+  //           CartonLabelScanClearTailInfo.fromJson(response.data);
+  //       factoryBody.value =
+  //           cartonLabelScanClearTailInfo!.factoryBody.toString();
+  //       groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
+  //       salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
+  //       customerOrderNumber.value =
+  //           cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
+  //     } else {
+  //       factoryBody.value = '';
+  //       groupName.value = '';
+  //       salesOrder.value = '';
+  //       customerOrderNumber.value = '';
+  //       errorDialog(content: response.message ?? 'query_default_error'.tr);
+  //     }
+  //   });
+  // }
 
   //为每一个工单添加合计行
   // void setDataList() {
@@ -229,15 +232,14 @@ class CartonLabelScanState {
   //查询不满箱
   void queryNotFullBox({
     required String barCode,
-    required String dispatchNumber,
   }) {
     httpGet(
       loading: 'carton_label_scan_order_get_last_detail'.tr,
       method: webApiGetMantissaData,
       params: {
         'CartonBarCode': barCode,
-        'DispatchNumber': dispatchNumber,
-        'IsAddData': add.value || !change.value,
+        'DispatchNumber': tailDispatchNumber.value,
+        'IsAddData': add.value,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -248,6 +250,42 @@ class CartonLabelScanState {
       } else {
         outBoxList.value = [];
         errorDialog(content: response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  //不满箱提交
+  void subMantissaData({
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    httpPost(
+      loading: 'carton_label_scan_order_submit_last_detail'.tr,
+      method: webApiSubMantissaData,
+      body: {
+        'GUID': outBoxList[showIndex].guid,
+        'InterID': outBoxList[showIndex].interID,
+        'CustOrderNumber': outBoxList[showIndex].custOrderNumber,
+        'CartonBarCode': outBoxList[showIndex].outBoxBarCode,
+        'Mix': outBoxList[showIndex].mix,
+        'UserID': getUserInfo()!.userID,
+        'DispatchNumber': outBoxList[showIndex].dispatchNumber,
+        'TailCartonCode': outBoxList[showIndex].tailCartonCode,
+        'InnerBoxSizeList': [
+          for (var list in outBoxList[showIndex].mantissaDataSizeList!)
+            {
+              'PriceBarCode': list.priceBarCode,
+              'Size': list.size,
+              'LabelCount': list.labelCount,
+              'ShortQty': outBoxList[showIndex].guid!.isNotEmpty? list.thisShortQty!-list.shortQty!: list.thisShortQty,
+            }
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? 'process_report_success_submit'.tr);
+      } else {
+        error.call(response.message ?? 'process_report_error_submit'.tr);
       }
     });
   }

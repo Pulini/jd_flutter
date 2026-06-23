@@ -263,7 +263,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    206,
+    207,
     const CartonLabelScanPage(),
   );
 
