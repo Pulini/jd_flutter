@@ -43,7 +43,7 @@ void qualityInspectionListLocationDialog({
               }
               Get.back();
               success.call(storeWarehouse.getPickItem2().pickerId());
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -108,7 +108,7 @@ void qualityInspectionListStoreDialog({
               Get.back();
               success.call(postAccountDate.getDateFormatSapYMD(),
                   storeWarehouse.getPickItem2().pickerId());
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -214,7 +214,7 @@ void showInputDialog({
             onPressed: (() {
               Get.back();
               callback.call(qty);
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

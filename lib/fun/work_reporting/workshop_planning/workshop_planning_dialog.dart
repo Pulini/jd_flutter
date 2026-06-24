@@ -73,7 +73,7 @@ void materialDialog({
                   Get.back();
                   addMaterial.call(newList);
                 }
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

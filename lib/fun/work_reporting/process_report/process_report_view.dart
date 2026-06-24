@@ -71,7 +71,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                 callback.call(newWorker!);
                 Get.back();
               }
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -94,7 +94,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
             confirm: () {
               logic.removeItem(position);
             });
-      }).throttle(),
+      }),
       onTap: () {
         addWorkerDialog(callback: (WorkerInfo wi) {
             logic.setPeople(wi,position);

@@ -80,7 +80,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: (() => state.materialList.remove(data)).throttle(),
+                  onPressed: (() => state.materialList.remove(data)),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,
@@ -108,7 +108,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
           actions: [
             if (state.materialList.isNotEmpty)
               TextButton(
-                onPressed: (() => state.materialList.clear()).throttle(),
+                onPressed: (() => state.materialList.clear()),
                 child: Text('sap_relocation_pick_clean'.tr),
               ),
           ],

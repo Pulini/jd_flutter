@@ -136,7 +136,7 @@ class _WorkshopPlanningSalaryCountPageState
       actions: [
         Obx(() => state.workersCache.isNotEmpty
             ? IconButton(
-                onPressed: (() => logic.useWorkersCache()).throttle(),
+                onPressed: (() => logic.useWorkersCache()),
                 icon: const Icon(Icons.save, color: Colors.blue),
               )
             : Container()),
@@ -440,7 +440,7 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (() => widget.logic.modifyWorker(widget.data)).throttle(),
+      onTap: (() => widget.logic.modifyWorker(widget.data)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -522,7 +522,7 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
                   onPressed: (() => askDialog(
                     content: '确定要删除该组员数据吗？',
                     confirm: () => widget.logic.deleteReportWorker(widget.data),
-                  )).throttle(),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

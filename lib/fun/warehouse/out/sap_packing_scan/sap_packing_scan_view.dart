@@ -264,7 +264,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       actions: [
         IconButton(
           icon: const Icon(Icons.lock_outline),
-          onPressed: (() => logic.sealingCabinet()).throttle(),
+          onPressed: (() => logic.sealingCabinet()),
         ),
         IconButton(
           icon: const Icon(Icons.settings_outlined),

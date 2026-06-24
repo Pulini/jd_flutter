@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/patrol_inspection_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -34,7 +33,7 @@ void changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Func
               onPressed: (() {
                 Get.back();
                 change.call(controllerLines.selectedItem);
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -77,7 +76,7 @@ void modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
                 spSave('PI-${data.abnormalItemId}-${userInfo?.number}', controller.text);
                 Get.back();
               }
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

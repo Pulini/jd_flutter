@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 
 import 'package:jd_flutter/widget/custom_widget.dart';
 
@@ -73,7 +72,7 @@ class _CartonLabelScanProgressPageState
                 ),
                 suffixIcon: IconButton(
                   onPressed: (() =>
-                      logic.queryScanHistory(controller.text)).throttle(),
+                      logic.queryScanHistory(controller.text)),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
@@ -87,7 +86,7 @@ class _CartonLabelScanProgressPageState
                   padding: const EdgeInsets.all(8),
                   itemCount: state.progress.length,
                   itemBuilder: (context, index) => InkWell(
-                    onTap: (() => logic.getProgressDetail(state.progress[index])).throttle(),
+                    onTap: (() => logic.getProgressDetail(state.progress[index])),
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8),

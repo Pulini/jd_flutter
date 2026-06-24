@@ -142,7 +142,7 @@ void selectSupplierAndDepartmentDialog({
                     isSupplier ? sList[sSelect] : null,
                     isSupplier ? null : dList[dSelect],
                   );
-                }).throttle(),
+                }),
                 child: Text('production_scan_picking_material_submit'.tr),
               ),
               TextButton(

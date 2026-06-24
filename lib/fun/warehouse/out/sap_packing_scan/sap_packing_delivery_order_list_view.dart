@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_state.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -60,7 +59,7 @@ class _SapPackingDeliveryOrderListPageState
                   deliveryOrderNo: data.orderNo ?? '',
                   modifyDate: epcDate.getDateFormatYMD(),
                   callback: () => Get.back(),
-                )).throttle(),
+                )),
                 child: const Text('提交修改'),
               ),
               TextButton(

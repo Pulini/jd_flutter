@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -69,7 +68,7 @@ class _SapInjectionMoldingStockInPageState
     return pageBody(
       actions: [
         TextButton(
-          onPressed: (() => logic.clearBarCodeList()).throttle(),
+          onPressed: (() => logic.clearBarCodeList()),
           child: Text('sap_injection_molding_stock_in_clear'.tr),
         )
       ],
@@ -93,7 +92,7 @@ class _SapInjectionMoldingStockInPageState
                           SlidableAction(
                             flex: 2,
                             onPressed: (c) =>
-                                (() => logic.deleteItem(state.barCodeList[i])).throttle(),
+                                (() => logic.deleteItem(state.barCodeList[i])),
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete_forever,

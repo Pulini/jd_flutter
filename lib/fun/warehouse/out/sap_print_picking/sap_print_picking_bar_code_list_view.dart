@@ -97,7 +97,7 @@ class _SapPrintPickingBarCodeListPageState
                       content: 'sap_print_picking_barcode_list_delete_label_tips'.tr,
                       confirm: () => logic.scannedLabelDelete(label),
                     );
-                  }).throttle(),
+                  }),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

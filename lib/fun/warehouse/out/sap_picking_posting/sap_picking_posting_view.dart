@@ -96,7 +96,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               tecSemiFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          )).throttle(),
+          )),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -144,7 +144,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               tecFinishedProduct.clear();
               FocusManager.instance.primaryFocus?.unfocus();
             },
-          )).throttle(),
+          )),
           icon: const Icon(
             Icons.add_circle,
             color: Colors.blue,
@@ -291,7 +291,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                           content: '确定要删除该物料吗？',
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
-                                        )).throttle(),
+                                        )),
                                         icon: const Icon(
                                           Icons.delete_forever,
                                           color: Colors.red,
@@ -395,7 +395,7 @@ class _SapPickingPostingSemiFinishedItemState
                   onPressed: (() => askDialog(
                     content: '确定要删除该物料吗？',
                     confirm: () => widget.logic.deleteSemiFinishedProductItem(widget.data),
-                  )).throttle(),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.red),
                 ),
               ],

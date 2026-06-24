@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -35,7 +34,7 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
           onPressed: (() => askDialog(
             content: 'part_process_scan_clean_tips'.tr,
             confirm: () => state.barCodeList.clear(),
-          )).throttle(),
+          )),
           child: Text(
             'part_process_scan_clean'.tr,
             style: const TextStyle(color: Colors.blueAccent),
@@ -49,7 +48,7 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
               IconButton(
                 onPressed: (() => scannerDialog(
                   detect: (code) => logic.addBarCode(code: code),
-                )).throttle(),
+                )),
                 icon: const Icon(
                   Icons.qr_code_scanner,
                   size: 40,
@@ -60,7 +59,7 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
                 onPressed: (() => logic.addBarCode(
                   code: controller.text,
                   callback: () => controller.clear(),
-                )).throttle(),
+                )),
                 icon: const Icon(
                   Icons.add_box_rounded,
                   size: 40,
@@ -84,7 +83,7 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
                           onPressed: (() => askDialog(
                             content: 'part_process_scan_delete_tips'.tr,
                             confirm: () => logic.deleteItem(index),
-                          )).throttle(),
+                          )),
                           icon: const Icon(
                             Icons.delete_forever,
                             color: Colors.red,

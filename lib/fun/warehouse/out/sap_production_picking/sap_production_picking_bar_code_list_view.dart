@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_state.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 class BarCodeListPage extends StatefulWidget {
@@ -49,7 +48,7 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
                     IconButton(
                       onPressed: (() {
                         data.scanned = false;
-                      }).throttle(),
+                      }),
                       icon: const Icon(
                         Icons.delete_forever,
                         color: Colors.red,

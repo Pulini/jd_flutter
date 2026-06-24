@@ -7,7 +7,6 @@ import 'package:jd_flutter/bean/http/response/scan_handover_info.dart';
 import 'package:jd_flutter/bean/http/response/show_handover_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -92,7 +91,7 @@ class ComponentHandoverLogic extends GetxController {
                   list[controller.selectedItem].processFlowID ?? 0;
               spSave(spSaveComponentHandoverProcessName, state.process.value);
               spSave(spSaveComponentHandoverProcessID, state.processId);
-            }).throttle(),
+            }),
             child: Text(
               'dialog_default_confirm'.tr,
               style: const TextStyle(
@@ -217,7 +216,7 @@ class ComponentHandoverLogic extends GetxController {
                                     .processNames![subController.selectedItem]
                                     .processName
                                     .toString());
-                          }).throttle(),
+                          }),
                           child: Text(
                             'dialog_default_confirm'.tr,
                             style: const TextStyle(

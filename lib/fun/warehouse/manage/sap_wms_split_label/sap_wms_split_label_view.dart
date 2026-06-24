@@ -61,7 +61,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
           onPressed: (() => askDialog(
             content: 'sap_wms_split_label_submit_split_info_tips'.tr,
             confirm: () => logic.submitSplit(),
-          )).throttle(),
+          )),
           child: Text('sap_wms_split_label_submit'.tr),
         ),
       ],

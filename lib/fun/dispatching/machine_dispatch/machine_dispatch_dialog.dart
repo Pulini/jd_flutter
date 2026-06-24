@@ -36,14 +36,14 @@ void generateAndPrintDialog({
             onPressed: (() {
               Get.back();
               printLast.call();
-            }).throttle(),
+            }),
             child: Text('machine_dispatch_dialog_print_last_label'.tr),
           ),
           TextButton(
             onPressed: (() {
               Get.back();
               print.call();
-            }).throttle(),
+            }),
             child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(
