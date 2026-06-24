@@ -61,7 +61,7 @@ void modifyShoeTreeDialog(String typeBody, int departmentID) {
                     content: msg,
                     back: () => Get.back(),
                   ),
-                )).throttle(),
+                )),
                 child: Text('smart_delivery_dialog_save'.tr),
               ),
               TextButton(
@@ -183,7 +183,7 @@ void reserveShoeTreeDialog(
               onPressed: (() {
                 Get.back();
                 set.call(setList);
-              }).throttle(),
+              }),
               child: Text('smart_delivery_dialog_save'.tr),
             ),
             TextButton(
@@ -453,7 +453,7 @@ void createDeliveryTaskDialog({
                       },
                       fail: (msg) => errorDialog(content: msg),
                     );
-                  }).throttle(),
+                  }),
                   child: Text('smart_delivery_dialog_creat'.tr),
                 ),
                 TextButton(
@@ -525,7 +525,7 @@ void checkAgvTask({
                                       Get.back();
                                       cancelTask.call(taskId);
                                     },
-                                  )).throttle(),
+                                  )),
                                   icon: const Icon(
                                     Icons.stop_circle,
                                     color: Colors.red,
@@ -538,7 +538,7 @@ void checkAgvTask({
                                     success: () => dialogSetState(
                                       () => taskType = 3,
                                     ),
-                                  )).throttle(),
+                                  )),
                                   icon: const Icon(
                                     Icons.pause_circle,
                                     color: Colors.orange,
@@ -551,7 +551,7 @@ void checkAgvTask({
                                     success: () => dialogSetState(
                                       () => taskType = 1,
                                     ),
-                                  )).throttle(),
+                                  )),
                                   icon: const Icon(
                                     Icons.replay_circle_filled_sharp,
                                     color: Colors.green,

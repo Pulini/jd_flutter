@@ -102,7 +102,7 @@ void selectPackProfileDialog({
                 content:
                     'part_dispatch_select_pack_profile_dialog_no_change'.tr);
           }
-        }).throttle(),
+        }),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -329,7 +329,7 @@ void selectInstructionsDialog({
                     'part_dispatch_select_instruction_dialog_no_select_instruction'
                         .tr);
           }
-        }).throttle(),
+        }),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(

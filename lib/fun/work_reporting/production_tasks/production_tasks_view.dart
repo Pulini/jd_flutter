@@ -526,7 +526,7 @@ class _ProductionTasksOrderItemState
           onPressed: (() => logic.changeSort(
               oldIndex: index,
               newIndex: index - 1,
-              refresh: () => onMoveUp(index))).throttle(),
+              refresh: () => onMoveUp(index))),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.blueAccent,
@@ -551,7 +551,7 @@ class _ProductionTasksOrderItemState
                   newIndex: index + 1,
                   refresh: () => onMoveDown(index));
             }
-          }).throttle(),
+          }),
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
             color: Colors.blueAccent,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/component_code_info.dart';
 import 'package:jd_flutter/fun/work_reporting/part_report_scan/part_report_scan_logic.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -24,7 +23,7 @@ var tecCode=TextEditingController();
     return GestureDetector(
         onLongPress: (() {
           logic.deleteCode(info);
-        }).throttle(),
+        }),
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(left: 5,bottom: 2,right: 5,top: 2),
@@ -56,7 +55,7 @@ var tecCode=TextEditingController();
             logic.clearData();
           },
         );
-      }).throttle(), child: Text('part_report_clear'.tr))],
+      }), child: Text('part_report_clear'.tr))],
         title: 'part_report_title'.tr,
         body: Column(
           children: [
@@ -77,7 +76,7 @@ var tecCode=TextEditingController();
                           logic.addCode(v.toString());
                         }
                       });
-                    }).throttle(),
+                    }),
                     icon: const Icon(
                       Icons.qr_code_scanner_outlined,
                       color: Colors.grey,

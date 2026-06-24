@@ -231,7 +231,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         title: 'handover_report_title'.tr,
         actions: [
           TextButton(
-              onPressed: (() => logic.getInstructionDetailsFile()).throttle(),
+              onPressed: (() => logic.getInstructionDetailsFile()),
               child: Text('handover_report_query'.tr))
         ],
         body: Column(

@@ -46,7 +46,7 @@ void modifyMaterialStockInQtyDialog({
             onPressed: (() {
               Get.back();
               callback.call(controller.text.toDoubleTry());
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -142,7 +142,7 @@ void checkStockInHandoverDialog({
                           },
                         )                    );
                   }
-                }).throttle(),
+                }),
                 child: Text('dialog_default_confirm'.tr),
               ),
               TextButton(

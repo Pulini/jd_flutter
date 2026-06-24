@@ -461,7 +461,7 @@ class _FormingBarcodeCollectionPageState
       actions: [
         TextButton(
           onPressed: () =>
-              (() => logic.getProductionOrderST(first: '0', shoeBoxBillNo: '')).throttle(),
+              (() => logic.getProductionOrderST(first: '0', shoeBoxBillNo: '')),
           child: Text(
             'forming_code_collection_refresh'.tr,
             style: const TextStyle(fontWeight: FontWeight.bold),

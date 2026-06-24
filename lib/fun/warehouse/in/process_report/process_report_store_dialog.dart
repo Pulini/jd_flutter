@@ -75,7 +75,7 @@ void checkBarCodeProcessDialog({
                     spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-                  }).throttle(),
+                  }),
                   child: Text('process_report_store_submit'.tr),
                 ),
                 TextButton(

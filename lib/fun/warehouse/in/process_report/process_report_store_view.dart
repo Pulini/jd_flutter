@@ -5,7 +5,6 @@ import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_modify_view.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -84,7 +83,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   onPressed: (() => askDialog(
                     content: 'sale_scan_out_warehouse_delete_tips'.tr,
                     confirm: () => logic.deleteCode(code),
-                  )).throttle(),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

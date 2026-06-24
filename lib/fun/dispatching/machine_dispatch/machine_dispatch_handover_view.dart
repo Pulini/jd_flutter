@@ -134,7 +134,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
                   ),
                 ),
                 GestureDetector(
-                  onTap: (() => addHandoverWorker(data, () => setState(() {}))).throttle(),
+                  onTap: (() => addHandoverWorker(data, () => setState(() {}))),
                   child: Container(
                     width: 50,
                     height: double.infinity,
@@ -165,7 +165,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
     );
     return GestureDetector(
       onTap: (() => workerSignature(
-          context, data, () => logic.signatureIdenticalWorker(data))).throttle(),
+          context, data, () => logic.signatureIdenticalWorker(data))),
       child: Container(
         width: 300,
         margin: const EdgeInsets.only(right: 15),
@@ -218,7 +218,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
                     },
                   );
                 }
-              }).throttle(),
+              }),
               child: Container(
                 width: 30,
                 decoration: const BoxDecoration(

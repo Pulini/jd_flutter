@@ -6,7 +6,6 @@ import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -161,7 +160,7 @@ void stockInDialog({
             () => errorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-                    onPressed:stockIn.throttle(),
+                    onPressed:stockIn,
                     child: Text('dialog_default_confirm'.tr),
                   ),
           ),

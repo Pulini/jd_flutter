@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'message_center_logic.dart';
 import 'message_center_state.dart';
 
@@ -31,7 +30,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
           onPressed: (() => askDialog(
             content: '确定要清空所有信息吗？',
             confirm: () => logic.cleanMessage(),
-          )).throttle(),
+          )),
         ),
       ],
       body: Obx(() => ListView.builder(
@@ -56,7 +55,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
                   onPressed: (() => askDialog(
                     content: '确定要删除该信息吗？',
                     confirm: () => logic.deleteItem(i),
-                  )).throttle(),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

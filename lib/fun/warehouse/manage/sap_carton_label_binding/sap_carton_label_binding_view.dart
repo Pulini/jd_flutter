@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_dialog.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -125,7 +124,7 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                   IconButton(
                     onPressed: (() => askDialog(
                         content: 'carton_label_binding_delete_label_tips'.tr,
-                        confirm: () => widget.logic.deleteLabel(sub))).throttle(),
+                        confirm: () => widget.logic.deleteLabel(sub))),
                     icon: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
@@ -159,7 +158,7 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                   onPressed: (() => askDialog(
                     content: 'carton_label_binding_delete_label_tips'.tr,
                     confirm: () => widget.logic.deleteLabel(boxLabel!),
-                  )).throttle(),
+                  )),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

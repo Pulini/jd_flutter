@@ -7,7 +7,6 @@ import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/app_init.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -319,7 +318,7 @@ void stockInDialog({
             () => faceErrorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-                    onPressed: stockIn.throttle(),
+                    onPressed: stockIn,
                     child: Text('dialog_default_confirm'.tr),
                   ),
           ),
@@ -376,7 +375,7 @@ void stockOutDialog({
               refresh.call();
             },
           ),
-        )).throttle(),
+        )),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -458,7 +457,7 @@ void createTemporaryDialog({
                     submitList: submitList,
                     leader: leaders[leaderController.selectedItem],
                     refresh: refresh,
-                  )).throttle(),
+                  )),
                   child: Text('dialog_default_confirm'.tr),
                 ),
                 TextButton(

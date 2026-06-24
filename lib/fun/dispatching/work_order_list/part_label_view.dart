@@ -106,7 +106,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 createQty,
                 data.size ?? '',
                 empID,
-              )).throttle(),
+              )),
               child: Text(
                 'part_label_create'.tr,
               ),
@@ -253,7 +253,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 TextButton(
                   onPressed: (() {
                     logic.printLabel(list: data);
-                  }).throttle(),
+                  }),
                   child: Text(
                     'part_label_print'.tr,
                   ),

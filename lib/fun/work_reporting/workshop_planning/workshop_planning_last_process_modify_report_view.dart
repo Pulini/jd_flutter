@@ -227,7 +227,7 @@ class _ModifyReportMaterialItemState
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: (() => widget.logic.modifyReportDeleteMaterial(widget.data)).throttle(),
+                onPressed: (() => widget.logic.modifyReportDeleteMaterial(widget.data)),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -346,7 +346,7 @@ class _ModifyReportWorkerItemState extends State<_ModifyReportWorkerItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (() => widget.logic.modifyReportModifyWorker(widget.data)).throttle(),
+      onTap: (() => widget.logic.modifyReportModifyWorker(widget.data)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -422,7 +422,7 @@ class _ModifyReportWorkerItemState extends State<_ModifyReportWorkerItem> {
                   onPressed: (() => askDialog(
                     content: '确定要删除该组员数据吗？',
                     confirm: () => widget.logic.modifyReportDeleteReportWorker(widget.data),
-                  )).throttle(),
+                  )),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

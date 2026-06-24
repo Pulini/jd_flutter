@@ -286,7 +286,7 @@ class _LastProcessMaterialItemState extends State<_LastProcessMaterialItem> {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () =>
-                    (() => widget.logic.deleteMaterial(widget.data)).throttle(),
+                    (() => widget.logic.deleteMaterial(widget.data)),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -414,7 +414,7 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
           widget.opcProcessFlow.getPickItem().pickerId(),
           widget.dpcDate.getDateFormatYMD(),
         );
-      }).throttle(),
+      }),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -493,7 +493,7 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                       confirm: () =>
                           widget.logic.deleteReportWorker(widget.data),
                     );
-                  }).throttle(),
+                  }),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

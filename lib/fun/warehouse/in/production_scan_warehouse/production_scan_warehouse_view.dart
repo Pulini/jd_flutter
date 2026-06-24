@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_state.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -156,7 +155,7 @@ class _ProductionScanWarehousePageState
                   logic.clearBarCodeList();
                 },
               );
-            }).throttle(),
+            }),
             child: Text('production_scan_clear'.tr),
           ),
         )

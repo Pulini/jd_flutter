@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
@@ -41,7 +40,7 @@ void checkWorkerDialog({
                 } else {
                   success.call(worker!);
                 }
-              }).throttle(),
+              }),
               child: Text('part_cross_docking_submit'.tr),
             ),
             TextButton(

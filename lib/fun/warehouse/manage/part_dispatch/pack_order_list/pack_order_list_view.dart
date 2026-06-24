@@ -180,7 +180,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
                   capacityQty: capacityQty,
                   refresh: () => widget.onQuery(),
                 ),
-              )).throttle(),
+              )),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(
@@ -291,7 +291,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
             ),
             GestureDetector(
               onTap: (() =>
-                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())).throttle(),
+                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(

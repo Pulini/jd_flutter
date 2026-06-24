@@ -141,7 +141,7 @@ void modifyPickingQty({
             onPressed: (() {
               Get.back();
               callback.call(baseUnitController.text.toDoubleTry());
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -233,7 +233,7 @@ void checkPickerDialog({
                         },
                       )                    );
                 }
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

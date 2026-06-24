@@ -44,3 +44,15 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/build/
+/android/app/.cxx/
+/android/build/
+/android/.gradle/
+
+# CodeBuddy
+/.codebuddy/
+
+# Flutter DevTools auto-generated config (developer-specific, per-machine)
+devtools_options.yaml
+
+

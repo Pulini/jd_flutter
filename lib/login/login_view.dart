@@ -4,7 +4,6 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_state.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -204,7 +203,7 @@ class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
                       onPressed: (() =>
                           widget.logic.getVerifyCode(
                             widget.phoneController.text,
-                          )).throttle(),
+                          )),
                       child: Text(
                         widget.state.countTimer.value == 0
                             ? 'get_verify_code'.tr
@@ -532,7 +531,7 @@ class _LoginPickState extends State<LoginPick>
                 } else {
                   errorDialog(content: 'URL 不能为空');
                 }
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -718,7 +717,7 @@ class _LoginPickState extends State<LoginPick>
                           );
                           return;
                         }
-                      }).throttle(),
+                      }),
                       child: Text(
                         'login'.tr,
                         style: const TextStyle(fontSize: 20),

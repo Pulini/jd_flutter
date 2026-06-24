@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -34,7 +33,7 @@ void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
                     controller.text);
                 Get.back();
               }
-            }).throttle(),
+            }),
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

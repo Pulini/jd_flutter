@@ -113,7 +113,7 @@ void modifyDetailPickingQtyDialog({
                       data.last.pickingQty.value.add(qty);
                 }
                 Get.back();
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -457,7 +457,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
                     confirm.call(worker!);
                   }
                 }
-              }).throttle(),
+              }),
               child: Text(
                 'dialog_default_confirm'.tr,
               ),
@@ -567,7 +567,7 @@ void modifyLocationDialog({
                   },
                   error: (msg) => errorDialog(content: msg),
                 );
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

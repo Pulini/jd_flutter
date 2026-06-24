@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -67,7 +66,7 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                 ),
                 suffixIcon: IconButton(
                   onPressed: (() =>
-                      logic.queryCartonLabelInfo(logic.scanController.text)).throttle(),
+                      logic.queryCartonLabelInfo(logic.scanController.text)),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,

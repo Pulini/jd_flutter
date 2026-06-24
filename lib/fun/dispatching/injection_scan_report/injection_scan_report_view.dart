@@ -40,7 +40,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           TextButton(
             //查询具体订单
             onPressed: () =>
-                (() => logic.getScWorkCardDetail()).throttle(),
+                (() => logic.getScWorkCardDetail()),
             child: Text('injection_scan_query'.tr),
           ),
         ],

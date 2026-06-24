@@ -444,7 +444,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
             ),
             onPressed: (() {
               logic.addVisitRecord();
-            }).throttle(),
+            }),
             child: Text(
               'visit_newly_added'.tr,
               style: const TextStyle(color: Colors.white),

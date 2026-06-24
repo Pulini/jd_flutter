@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/show_handover_info.dart';
 import 'package:jd_flutter/fun/work_reporting/component_handover/component_handover_logic.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -180,7 +179,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.process.value),
                   Expanded(
                       child: InkWell(
-                          onTap: (() => logic.getHandoverProcessFlow()).throttle(),
+                          onTap: (() => logic.getHandoverProcessFlow()),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,
@@ -215,7 +214,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.outProcess.value),
                   Expanded(
                       child: InkWell(
-                          onTap: (() => logic.getProcessList()).throttle(),
+                          onTap: (() => logic.getProcessList()),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,

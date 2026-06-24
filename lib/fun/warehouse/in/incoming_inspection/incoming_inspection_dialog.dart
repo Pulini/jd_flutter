@@ -83,7 +83,7 @@ void modifySubItemMaterialDialog({
                 item.numPage = numberPage;
                 Get.back();
                 modify.call();
-              }).throttle(),
+              }),
               child: Text('incoming_inspection_dialog_modify'.tr),
             ),
             TextButton(
@@ -259,7 +259,7 @@ void addOrModifyMaterialDialog({
                   item.numPage = numberPage;
                   modify?.call();
                 }
-              }).throttle(),
+              }),
               child: Text(
                 item != null
                     ? 'incoming_inspection_dialog_modify'.tr
@@ -315,7 +315,7 @@ void applyInspectionDialog({
                   Get.back();
                   submit.call(worker!);
                 }
-              }).throttle(),
+              }),
               child: Text('incoming_inspection_dialog_submit'.tr),
             ),
             TextButton(
@@ -405,7 +405,7 @@ void submitInspectionDialog({
                     spSaveIncomingInspectionInspector, worker!.empCode ?? '');
                 Get.back();
                 submit.call(worker!, results);
-              }).throttle(),
+              }),
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

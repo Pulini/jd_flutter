@@ -34,7 +34,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
     return pageBody(
       actions: [
         IconButton(
-          onPressed: (() => logic.cleanLabels()).throttle(),
+          onPressed: (() => logic.cleanLabels()),
           icon: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
@@ -57,7 +57,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
               ),
             )),
         IconButton(
-          onPressed: (() => logic.printLabel()).throttle(),
+          onPressed: (() => logic.printLabel()),
           icon: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
