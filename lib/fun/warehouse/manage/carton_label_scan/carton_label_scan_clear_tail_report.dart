@@ -3,6 +3,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:jd_flutter/bean/http/response/carton_label_scan_clear_tail_info.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import 'carton_label_scan_logic.dart';
@@ -20,55 +21,55 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTailRepor
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
-  // Row _item(ScWorkCardSizeInfos data) {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //           child: _text(
-  //               mes: ?? '',
-  //               backColor:
-  //               data.size == '合计' ? Colors.yellowAccent : Colors.white,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //       Expanded(
-  //           child: _text(
-  //               mes:,
-  //               backColor:
-  //               data.size == '合计' ? Colors.yellowAccent : Colors.white,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //       Expanded(
-  //           child: _text(
-  //               mes:,
-  //               backColor:
-  //               data.size == '合计' ? Colors.yellowAccent : Colors.white,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //       Expanded(
-  //           child: _text(
-  //               mes:,
-  //               backColor:
-  //               data.size == '合计' ? Colors.yellowAccent : Colors.white,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //       Expanded(
-  //           child: _text(
-  //               mes:,
-  //               backColor: data.size == '合计'
-  //                   ? Colors.yellowAccent
-  //                   : Colors.red.shade200,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //       Expanded(
-  //           child: _text(
-  //               mes:,
-  //               backColor:
-  //               data.size == '合计' ? Colors.yellowAccent : Colors.white,
-  //               head: false,
-  //               paddingNumber: 5)),
-  //     ],
-  //   );
-  // }
+  Row _item(ClearTailListInfo data) {
+    return Row(
+      children: [
+        Expanded(
+            child: _text(
+                mes: data.size ?? '',
+                backColor:
+                data.size == '合计' ? Colors.yellowAccent : Colors.white,
+                head: false,
+                paddingNumber: 5)),
+        Expanded(
+            child: _text(
+                mes: data.orderQty.toString(),
+                backColor:
+                data.size == '合计' ? Colors.yellowAccent : Colors.white,
+                head: false,
+                paddingNumber: 5)),
+        Expanded(
+            child: _text(
+                mes: data.fullBoxQty.toString(),
+                backColor:
+                data.size == '合计' ? Colors.yellowAccent : Colors.white,
+                head: false,
+                paddingNumber: 5)),
+        Expanded(
+            child: _text(
+                mes: data.unFullBoxQty.toString(),
+                backColor:
+                data.size == '合计' ? Colors.yellowAccent : Colors.white,
+                head: false,
+                paddingNumber: 5)),
+        Expanded(
+            child: _text(
+                mes: (data.fullBoxQty!+data.unFullBoxQty!).toString(),
+                backColor: data.size == '合计'
+                    ? Colors.yellowAccent
+                    : Colors.red.shade200,
+                head: false,
+                paddingNumber: 5)),
+        Expanded(
+            child: _text(
+                mes: data.arrears.toString(),
+                backColor:
+                data.size == '合计' ? Colors.yellowAccent : Colors.white,
+                head: false,
+                paddingNumber: 5)),
+      ],
+    );
+  }
 
   Container _text({
     required String mes,
@@ -187,55 +188,22 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTailRepor
                         paddingNumber: 5)),
               ],
             ),
-            // Expanded(
-            //   child: Obx(
-            //         () =>
-            //         ListView.builder(
-            //           itemCount: state.showDataList.length,
-            //           itemBuilder: (context, index) =>
-            //               _item(state.showDataList[index]),
-            //         ),
-            //   ),
-            // ),
+            Expanded(
+              child: Obx(
+                    () =>
+                    ListView.builder(
+                      itemCount: state.reportBoxList.length,
+                      itemBuilder: (context, index) =>
+                          _item(state.reportBoxList[index]),
+                    ),
+              ),
+            ),
           ],
         ));
   }
 
   @override
   void initState() {
-    // _scan();
     super.initState();
   }
-
-  // void _scan() {
-  //   pdaScanner(scan: (barCode) {
-  //     if (!checkUserPermission('1053603')) { //是否有查询权限
-  //       errorDialog(content: 'carton_label_scan_order_tail_box_permission'.tr);
-  //     } else {
-  //       if (barCode.isNotEmpty) {
-  //         if (state.showDataList.isEmpty) {
-  //
-  //         } else {
-  //           if (barCode.startsWith('P')) {
-  //             if (!checkUserPermission('1053604')) { //是否有查询权限
-  //               errorDialog(
-  //                   content: 'carton_label_scan_order_submit_permission'.tr);
-  //             } else {
-  //
-  //             }
-  //           } else {
-  //
-  //           }
-  //         }
-  //       }else{
-  //         if (!checkUserPermission('1053604')) { //是否有查询权限
-  //           errorDialog(
-  //               content: 'carton_label_scan_order_submit_permission'.tr);
-  //         } else {
-  //
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
 }

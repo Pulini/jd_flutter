@@ -31,13 +31,13 @@ class CartonLabelScanState {
   var salesOrder = ''.obs; //销售订单
   var customerOrderNumber = ''.obs; //客户订单
 
+  var reportBoxList = <ClearTailListInfo>[].obs; //
   var outBoxList = <OutBoxLabelsInfo>[].obs; //外箱数据
   var showIndex = 0;
   var add = true.obs; // 新增
   var tailLabelTotal = 0.obs; //清尾用的到统计
   var tailScannedLabelTotal = 0.obs; //清尾用的到扫了的统计
   var tailController = TextEditingController();
-
 
   void queryCartonLabelInfo({
     required String code,
@@ -193,6 +193,8 @@ class CartonLabelScanState {
       if (response.resultCode == resultSuccess) {
         cartonLabelScanClearTailInfo =
             CartonLabelScanClearTailInfo.fromJson(response.data);
+        reportBoxList.value = cartonLabelScanClearTailInfo!.sizeList!;
+        setDataList();
         factoryBody.value =
             cartonLabelScanClearTailInfo!.factoryBody.toString();
         groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
@@ -210,22 +212,26 @@ class CartonLabelScanState {
   }
 
   //为每一个工单添加合计行
-  // void setDataList() {
-  //   for (var data in showDataList) {
-  //     data.scWorkCardSizeInfos?.add(ScWorkCardSizeInfos(
-  //       size: '合计',
-  //       qty: data.scWorkCardSizeInfos
-  //           ?.map((v) => v.qty ?? 0.0)
-  //           .reduce((a, b) => a.add(b)),
-  //       scannedQty: data.scWorkCardSizeInfos
-  //           ?.map((v) => v.scannedQty ?? 0.0)
-  //           .reduce((a, b) => a.add(b)),
-  //       todayScannedQty: data.scWorkCardSizeInfos
-  //           ?.map((v) => v.todayScannedQty ?? 0.0)
-  //           .reduce((a, b) => a.add(b)),
-  //     ));
-  //   }
-  // }
+  void setDataList() {
+    for (var data in reportBoxList) {
+      reportBoxList.add(
+        ClearTailListInfo(
+          size: '合计',
+          arrears:
+              reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
+          fullBoxQty: reportBoxList
+              .map((v) => v.fullBoxQty ?? 0)
+              .reduce((a, b) => a + b),
+          unFullBoxQty: reportBoxList
+              .map((v) => v.unFullBoxQty ?? 0)
+              .reduce((a, b) => a + b),
+          orderQty:
+              reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
+          barCode: '',
+        ),
+      );
+    }
+  }
 
   //查询不满箱
   void queryNotFullBox({
@@ -275,7 +281,9 @@ class CartonLabelScanState {
               'PriceBarCode': list.priceBarCode,
               'Size': list.size,
               'LabelCount': list.labelCount,
-              'ShortQty': outBoxList[showIndex].guid!.isNotEmpty? list.thisShortQty!-list.shortQty!: list.thisShortQty,
+              'ShortQty': outBoxList[showIndex].guid!.isNotEmpty
+                  ? list.thisShortQty! - list.shortQty!
+                  : list.thisShortQty,
             }
         ]
       },
