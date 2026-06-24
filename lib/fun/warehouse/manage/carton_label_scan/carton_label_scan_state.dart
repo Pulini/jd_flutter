@@ -213,24 +213,22 @@ class CartonLabelScanState {
 
   //为每一个工单添加合计行
   void setDataList() {
-    for (var data in reportBoxList) {
-      reportBoxList.add(
-        ClearTailListInfo(
-          size: '合计',
-          arrears:
-              reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
-          fullBoxQty: reportBoxList
-              .map((v) => v.fullBoxQty ?? 0)
-              .reduce((a, b) => a + b),
-          unFullBoxQty: reportBoxList
-              .map((v) => v.unFullBoxQty ?? 0)
-              .reduce((a, b) => a + b),
-          orderQty:
-              reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
-          barCode: '',
-        ),
-      );
-    }
+    reportBoxList.add(
+      ClearTailListInfo(
+        size: '合计',
+        arrears:
+        reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
+        fullBoxQty: reportBoxList
+            .map((v) => v.fullBoxQty ?? 0)
+            .reduce((a, b) => a + b),
+        unFullBoxQty: reportBoxList
+            .map((v) => v.unFullBoxQty ?? 0)
+            .reduce((a, b) => a + b),
+        orderQty:
+        reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
+        barCode: '',
+      ),
+    );
   }
 
   //查询不满箱
