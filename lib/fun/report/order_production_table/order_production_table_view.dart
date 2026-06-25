@@ -63,11 +63,11 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           isEmoji: true,
           textSpan: TextSpan(
             text: item.searchType == 1
-                ? 'N'
+                ? 'C'
                 : item.searchType == 2
                     ? 'P'
                     : item.searchType == 3
-                        ? 'C'
+                        ? 'N'
                         : '',
             style: const TextStyle(fontSize: 16, height: 1.3),
           ),
