@@ -737,7 +737,7 @@ class RouteConfig {
     const PartLabelManagePage(),
   );
 
-  //部件标签管理
+  //生产订单执行情况表
   static Routes orderProductionTable = Routes(
     '/order_production_table',
     200,
