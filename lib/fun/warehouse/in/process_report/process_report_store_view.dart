@@ -80,10 +80,10 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 IconButton(
-                  onPressed: (() => askDialog(
+                  onPressed: () => askDialog(
                     content: 'sale_scan_out_warehouse_delete_tips'.tr,
                     confirm: () => logic.deleteCode(code),
-                  )),
+                  ),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

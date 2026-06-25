@@ -87,7 +87,7 @@ void checkSaveDialog({
               actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
               actions: [
                 TextButton(
-                  onPressed: (() {
+                  onPressed: () {
                     if (worker != null) {
                       var location =
                           '${locationList[locationController.selectedItem].storageLocationNumber}';
@@ -96,7 +96,7 @@ void checkSaveDialog({
                       callback.call(location, worker!.empCode ?? '');
                       Get.back();
                     }
-                  }),
+                  },
                   child: Text('dialog_default_confirm'.tr),
                 ),
                 TextButton(
@@ -164,7 +164,7 @@ void stockInDialog({
       stockNumber.value = locationList[0].storageLocationNumber ?? '';
 
       var submit = TextButton(
-        onPressed: (() {
+        onPressed: () {
           var location = locationList[locationIndex];
           if (isNeedFaceVerify.value) {
             var leader = leaderList[leaderIndex];
@@ -213,7 +213,7 @@ void stockInDialog({
               ),
             );
           }
-        }),
+        },
         child: Text('dialog_default_confirm'.tr),
       );
 
@@ -317,7 +317,7 @@ void stockInWriteOffDialog({
         actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (reasonController.text.trim().isEmpty) {
                 errorDialog(
                   content:
@@ -338,7 +338,7 @@ void stockInWriteOffDialog({
                   error: (msg) => errorDialog(content: msg),
                 );
               }
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -386,7 +386,7 @@ void temporaryDialog({
               actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
               actions: [
                 TextButton(
-                  onPressed: (() {
+                  onPressed: () {
                     var leader = leaders[leaderIndex];
                     Get.to(() => SignaturePage(
                           name: userInfo?.name ?? '',
@@ -412,7 +412,7 @@ void temporaryDialog({
                                 ));
                           },
                         ));
-                  }),
+                  },
                   child: Text('dialog_default_confirm'.tr),
                 ),
                 TextButton(

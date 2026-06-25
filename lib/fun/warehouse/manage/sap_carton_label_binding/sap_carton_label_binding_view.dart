@@ -122,9 +122,9 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                       hint: 'carton_label_binding_piece_no'.tr,
                       text: sub.pieceNo ?? ''),
                   IconButton(
-                    onPressed: (() => askDialog(
+                    onPressed: () => askDialog(
                         content: 'carton_label_binding_delete_label_tips'.tr,
-                        confirm: () => widget.logic.deleteLabel(sub))),
+                        confirm: () => widget.logic.deleteLabel(sub)),
                     icon: const Icon(
                       Icons.delete_forever,
                       color: Colors.red,
@@ -155,10 +155,10 @@ class _CartonLabelItemState extends State<_CartonLabelItem> {
                     hint: 'carton_label_binding_out_box_label_piece_no'.tr,
                     text: boxLabel.pieceNo ?? ''),
                 IconButton(
-                  onPressed: (() => askDialog(
+                  onPressed: () => askDialog(
                     content: 'carton_label_binding_delete_label_tips'.tr,
                     confirm: () => widget.logic.deleteLabel(boxLabel!),
-                  )),
+                  ),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

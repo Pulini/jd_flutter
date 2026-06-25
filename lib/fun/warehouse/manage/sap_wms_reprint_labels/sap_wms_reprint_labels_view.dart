@@ -47,7 +47,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
     return pageBody(
       actions: [
         TextButton(
-          onPressed: (() => logic.clean()),
+          onPressed: () => logic.clean(),
           child: Text('sap_wms_reprint_label_clean'.tr),
         ),
       ],

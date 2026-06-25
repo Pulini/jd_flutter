@@ -83,7 +83,7 @@ class ComponentHandoverLogic extends GetxController {
           );
           //创建确认按钮
           var confirm = TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               state.process.value =
                   list[controller.selectedItem].processFlowName ?? '';
@@ -91,7 +91,7 @@ class ComponentHandoverLogic extends GetxController {
                   list[controller.selectedItem].processFlowID ?? 0;
               spSave(spSaveComponentHandoverProcessName, state.process.value);
               spSave(spSaveComponentHandoverProcessID, state.processId);
-            }),
+            },
             child: Text(
               'dialog_default_confirm'.tr,
               style: const TextStyle(
@@ -201,7 +201,7 @@ class ComponentHandoverLogic extends GetxController {
                         ),
                         Expanded(child: Container()),
                         TextButton(
-                          onPressed: (() {
+                          onPressed: () {
                             Get.back();
                             state.outProcess
                                 .value = list[groupController.selectedItem]
@@ -216,7 +216,7 @@ class ComponentHandoverLogic extends GetxController {
                                     .processNames![subController.selectedItem]
                                     .processName
                                     .toString());
-                          }),
+                          },
                           child: Text(
                             'dialog_default_confirm'.tr,
                             style: const TextStyle(

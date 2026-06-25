@@ -200,10 +200,7 @@ class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
                             ? Colors.white
                             : Colors.grey.shade400,
                       ),
-                      onPressed: (() =>
-                          widget.logic.getVerifyCode(
-                            widget.phoneController.text,
-                          )),
+                      onPressed: () => widget.logic.getVerifyCode(widget.phoneController.text),
                       child: Text(
                         widget.state.countTimer.value == 0
                             ? 'get_verify_code'.tr
@@ -519,7 +516,7 @@ class _LoginPickState extends State<LoginPick>
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 var mes = mesInputController.text;
                 var sap = sapInputController.text;
                 if (mes.isNotEmpty && sap.isNotEmpty) {
@@ -531,7 +528,7 @@ class _LoginPickState extends State<LoginPick>
                 } else {
                   errorDialog(content: 'URL 不能为空');
                 }
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -676,7 +673,7 @@ class _LoginPickState extends State<LoginPick>
                       onLongPress: () => logic.handleLongPressStart(
                         changeBaseUrl: () => _changeBaseUrlDialog(),
                       ),
-                      onPressed: (() {
+                      onPressed: () {
                         if (tabController.index == 1) {
                           logic.phoneLogin(
                             phoneLoginPhoneController.text,
@@ -717,7 +714,7 @@ class _LoginPickState extends State<LoginPick>
                           );
                           return;
                         }
-                      }),
+                      },
                       child: Text(
                         'login'.tr,
                         style: const TextStyle(fontSize: 20),

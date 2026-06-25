@@ -30,10 +30,10 @@ void changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Func
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 Get.back();
                 change.call(controllerLines.selectedItem);
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -65,7 +65,7 @@ void modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (controller.text.isEmpty) {
                 showSnackBar(
                   message:'product_patrol_inspection_dialog_input_key'.tr,
@@ -76,7 +76,7 @@ void modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
                 spSave('PI-${data.abnormalItemId}-${userInfo?.number}', controller.text);
                 Get.back();
               }
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

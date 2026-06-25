@@ -523,10 +523,10 @@ class _ProductionTasksOrderItemState
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: (() => logic.changeSort(
+          onPressed: () => logic.changeSort(
               oldIndex: index,
               newIndex: index - 1,
-              refresh: () => onMoveUp(index))),
+              refresh: () => onMoveUp(index)),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.blueAccent,
@@ -544,14 +544,14 @@ class _ProductionTasksOrderItemState
         width: _isSelected() ? 50 : 0,
         height: _isSelected() ? 50 : 0,
         child: IconButton(
-          onPressed: (() {
+          onPressed: () {
             if (index < state.orderList.length - 1) {
               logic.changeSort(
                   oldIndex: index,
                   newIndex: index + 1,
                   refresh: () => onMoveDown(index));
             }
-          }),
+          },
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
             color: Colors.blueAccent,

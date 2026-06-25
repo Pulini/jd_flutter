@@ -149,9 +149,9 @@ class _UserSettingState extends State<UserSetting> {
                 ),
               ),
               TextButton(
-                onPressed: (() => logic.changeDepartment(
+                onPressed: () => logic.changeDepartment(
                   list[controller.selectedItem],
-                )),
+                ),
                 child: Text(
                   'dialog_default_confirm'.tr,
                   style: const TextStyle(
@@ -284,10 +284,10 @@ class _UserSettingState extends State<UserSetting> {
         ),
         actions: [
           TextButton(
-            onPressed: (() => logic.changePassword(
+            onPressed: () => logic.changePassword(
               oldPassword.text,
               newPassword.text,
-            )),
+            ),
             child: Text('change_password_dialog_submit'.tr),
           ),
           TextButton(
@@ -387,12 +387,12 @@ class _UserSettingState extends State<UserSetting> {
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
         ),
-        onPressed: (() {
+        onPressed: () {
           spSave(spSaveUserInfo, '');
           spSave(spSaveFeishuUserWikiTokenData, '');
           spSave(spSaveFeishuUserCloudDocTokenData, '');
           Get.offAll(() => const LoginPage());
-        }),
+        },
         child: Text('home_user_setting_logout'.tr,
             style: const TextStyle(fontSize: 20)),
       );

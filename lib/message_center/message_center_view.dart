@@ -27,10 +27,10 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
             Icons.cleaning_services,
             color: Colors.red,
           ),
-          onPressed: (() => askDialog(
+          onPressed: () => askDialog(
             content: '确定要清空所有信息吗？',
             confirm: () => logic.cleanMessage(),
-          )),
+          ),
         ),
       ],
       body: Obx(() => ListView.builder(
@@ -52,10 +52,10 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
                 title: Text(state.messageList[i].message ?? ''),
                 subtitle: Text(state.messageList[i].getPushTime()),
                 trailing: IconButton(
-                  onPressed: (() => askDialog(
+                  onPressed: () => askDialog(
                     content: '确定要删除该信息吗？',
                     confirm: () => logic.deleteItem(i),
-                  )),
+                  ),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

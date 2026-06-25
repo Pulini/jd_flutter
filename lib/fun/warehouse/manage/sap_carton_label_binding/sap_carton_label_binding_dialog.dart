@@ -94,7 +94,7 @@ void modifyBoxInfo({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (targetBoxLabel != null &&
                     targetBoxLabel.isTradeFactory == 'X') {
                   if (long <= 0 ||
@@ -110,7 +110,7 @@ void modifyBoxInfo({
                   Get.back();
                   modify.call(long, width, height, outWeight);
                 }
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

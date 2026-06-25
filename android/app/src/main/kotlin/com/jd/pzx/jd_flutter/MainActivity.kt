@@ -6,21 +6,18 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
-import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
-import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_DEVICE_INFO_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_ANDROID_TO_FLUTTER
-import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_TSC_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
-import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH
+import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION
+import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER
+import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN
+import com.jd.pzx.jd_flutter.utils.CHANNEL_USB
+import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_TSC
+import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_FAILED
 import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_SUCCESS
+import com.jd.pzx.jd_flutter.utils.CHANNEL_OTHER
 import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
@@ -34,21 +31,20 @@ import com.jd.pzx.jd_flutter.utils.locationOn
 import com.jd.pzx.jd_flutter.utils.openFile
 import com.jd.pzx.jd_flutter.utils.print.USBUtil
 import com.jd.pzx.jd_flutter.utils.print.printPdf
+import com.jd.pzx.jd_flutter.utils.getDeviceInfo
+import com.jd.pzx.jd_flutter.utils.getInstalledApps
+import com.jd.pzx.jd_flutter.utils.keyInterceptor
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
 import android.view.KeyEvent
-import com.jd.pzx.jd_flutter.utils.getDeviceInfo
-import com.jd.pzx.jd_flutter.utils.getInstalledApps
-import com.jd.pzx.jd_flutter.utils.keyInterceptor
+
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
@@ -56,49 +52,49 @@ class MainActivity : FlutterActivity() {
     private val receiverUtil = ReceiverUtil(
         this,
         usbAttached = {
-            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Attached")
+            sendFlutter(CHANNEL_USB, "UsbState", "Attached")
         },
         usbDetached = {
-            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Detached")
+            sendFlutter(CHANNEL_USB, "UsbState", "Detached")
         },
         weighbridgeState = {
-            sendFlutter(CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID, "WeighbridgeState", it.name)
+            sendFlutter(CHANNEL_WEIGHBRIDGE, "WeighbridgeState", it.name)
         },
         weighbridgeRead = {
-            sendFlutter(CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID, "WeighbridgeRead", it)
+            sendFlutter(CHANNEL_WEIGHBRIDGE, "WeighbridgeRead", it)
         },
         bleDisconnected = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Disconnected")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "Disconnected")
         },
         bleConnected = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Connected")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "Connected")
         },
         bleScanStart = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "StartScan")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "StartScan")
         },
         bleFindDevice = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothFind", it)
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothFind", it)
         },
         bleScanFinished = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "EndScan")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "EndScan")
         },
         bleStateOff = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Off")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "Off")
         },
         bleStateOn = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "On")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "On")
         },
         bleStateClose = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Close")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "Close")
         },
         bleStateOpen = {
-            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Open")
+            sendFlutter(CHANNEL_BLUETOOTH, "BluetoothState", "Open")
         },
         scanCode = {
-            sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
+            sendFlutter(CHANNEL_SCAN, "PdaScanner", it)
         },
         scanCodeList = {
-            sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "AkxPdaScanner", it)
+            sendFlutter(CHANNEL_SCAN, "AkxPdaScanner", it)
         }
     )
 
@@ -120,7 +116,7 @@ class MainActivity : FlutterActivity() {
         //人脸识别通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
+            CHANNEL_FACE_VERIFICATION
         ).setMethodCallHandler { call, result ->
             if (call.method == "StartDetect") {
                 startOneselfFaceVerification(
@@ -137,18 +133,11 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        //基础数据通道
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_USB_ANDROID_TO_FLUTTER
-        ).setMethodCallHandler { call, _ ->
-            if (call.method == "OpenFile") openFile(this, File(call.arguments.toString()))
-        }
 
         //蓝牙通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
+            CHANNEL_BLUETOOTH
         ).setMethodCallHandler { call, result ->
             Log.e("Pan", "method=${call.method} arguments=${call.arguments}")
             when (call.method) {
@@ -159,7 +148,7 @@ class MainActivity : FlutterActivity() {
                         result.success(
                             bluetoothStartScan(it, bondedDevices = { bonded ->
                                 sendFlutter(
-                                    CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID,
+                                    CHANNEL_BLUETOOTH,
                                     "BluetoothFind",
                                     bonded.getDeviceMap()
                                 )
@@ -219,16 +208,16 @@ class MainActivity : FlutterActivity() {
         //地磅设备通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
+            CHANNEL_WEIGHBRIDGE
         ).setMethodCallHandler { call, _ ->
             if (call.method == "WeighbridgeOpen") receiverUtil.weighbridgeOpen()
             if (call.method == "WeighbridgeDestroy") receiverUtil.weighbridgeDestroy()
-            if (call.method == "isStartKeyListener") isStartKeyListener = call.arguments as Boolean
+
         }
         //打印机通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_PRINTER_FLUTTER_TO_ANDROID
+            CHANNEL_PRINTER
         ).setMethodCallHandler { call, result ->
             if (call.method == "PrintFile") {
 //                printBitmap(context, base64ToBitmap(call.arguments.toString()),"物料列表"){
@@ -244,12 +233,14 @@ class MainActivity : FlutterActivity() {
         //设备信息通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_DEVICE_INFO_FLUTTER_TO_ANDROID
+            CHANNEL_OTHER
         ).setMethodCallHandler { call, result ->
             when (call.method) {
-                "GetXDpi" ->  result.success( resources.displayMetrics.xdpi)
+                "GetXDpi" -> result.success(resources.displayMetrics.xdpi)
                 "GetDeviceInfo" -> result.success(getDeviceInfo(this))
                 "GetInstalledApps" -> result.success(getInstalledApps(this))
+                "OpenFile" -> openFile(this, File(call.arguments.toString()))
+                "isStartKeyListener" -> isStartKeyListener = call.arguments as Boolean
                 else -> result.notImplemented()
             }
         }
@@ -257,7 +248,7 @@ class MainActivity : FlutterActivity() {
         //USB TSC
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_USB_TSC_FLUTTER_TO_ANDROID
+            CHANNEL_USB_TSC
         ).setMethodCallHandler { call, result ->
             if (call.method == "isAttached") {
                 // 直接检查当前是否有匹配的USB设备连接
@@ -308,7 +299,7 @@ class MainActivity : FlutterActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
             Log.e("Pan", "onActivityResult   蓝牙打开成功")
-            sendFlutter(CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER, "Bluetooth", 3)
+            sendFlutter(CHANNEL_BLUETOOTH, "Bluetooth", 3)
         }
     }
 
@@ -323,7 +314,7 @@ class MainActivity : FlutterActivity() {
         return if (isStartKeyListener) {
             event.keyInterceptor {
                 Log.e("Pan", "dispatchKeyEvent   $it")
-                sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
+                sendFlutter(CHANNEL_SCAN, "PdaScanner", it)
             }
         } else {
             super.dispatchKeyEvent(event)

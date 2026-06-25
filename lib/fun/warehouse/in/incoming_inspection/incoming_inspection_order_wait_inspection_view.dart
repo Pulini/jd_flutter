@@ -214,8 +214,7 @@ class _IncomingInspectionPhotoItemState
           right: 0,
           top: 0,
           child: IconButton(
-            onPressed: () =>
-                (() => widget.logic.deleteInspectionPhoto(widget.f)),
+            onPressed: () => widget.logic.deleteInspectionPhoto(widget.f),
             icon: const Icon(
               Icons.cancel_outlined,
               color: Colors.red,

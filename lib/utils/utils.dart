@@ -585,17 +585,16 @@ class KeyboardInterceptors {
 }
 
 Future<void> weighbridgeOpen() async {
-  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
-      .invokeMethod('WeighbridgeOpen');
+  await const MethodChannel(channelWeighbridge).invokeMethod('WeighbridgeOpen');
 }
 
 Future<void> weighbridgeDestroy() async {
-  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+  await const MethodChannel(channelWeighbridge)
       .invokeMethod('WeighbridgeDestroy');
 }
 
 Future<void> isStartKeyListener(bool isStartKeyListener) async {
-  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+  await const MethodChannel(channelOther)
       .invokeMethod('isStartKeyListener', isStartKeyListener);
 }
 
@@ -605,8 +604,7 @@ void weighbridgeListener({
   required Function(double) readWeight,
 }) {
   debugPrint('weighbridge 注册监听');
-  const MethodChannel(channelWeighbridgeFlutterToAndroid)
-      .setMethodCallHandler((call) {
+  const MethodChannel(channelWeighbridge).setMethodCallHandler((call) {
     switch (call.method) {
       case 'WeighbridgeState':
         {
@@ -621,7 +619,7 @@ void weighbridgeListener({
     }
     return Future.value(call);
   });
-  const MethodChannel(channelUsbFlutterToAndroid).setMethodCallHandler((call) {
+  const MethodChannel(channelUsb).setMethodCallHandler((call) {
     switch (call.method) {
       case 'UsbState':
         {
@@ -690,7 +688,7 @@ void livenFaceVerification({
           //   verifySuccess: (u8l) => verifySuccess.call(u8l.toBase64()),
           //   verifyError: (msg) => errorDialog(content: '人脸验证失败：$msg'),
           // );
-          const MethodChannel(channelFaceVerificationAndroidToFlutter)
+          const MethodChannel(channelFaceVerification)
               .invokeMethod('StartDetect', filePath)
               .then(
                 (v) => verifySuccess.call((v as Uint8List).toBase64()),
@@ -860,8 +858,7 @@ Future<Directory> deleteAllPdfFiles() async {
 }
 
 Future<double> getAndroidXDpi() async =>
-    await const MethodChannel(channelDeviceInfoFlutterToAndroid)
-        .invokeMethod('GetXDpi');
+    await const MethodChannel(channelOther).invokeMethod('GetXDpi');
 
 BaseUrl getMesBaseUrl() {
   var save = spGet(spSaveMesBaseUrl);
@@ -925,30 +922,28 @@ Future<void> getDeviceInstalledAppsInfo({
   required Function(Map, List<Map>) callback,
 }) async {
   if (GetPlatform.isAndroid) {
-    var apps = await const MethodChannel(channelDeviceInfoFlutterToAndroid)
+    var apps = await const MethodChannel(channelOther)
         .invokeMethod('GetInstalledApps');
 
-    var deviceInf = await const MethodChannel(channelDeviceInfoFlutterToAndroid)
-        .invokeMethod('GetDeviceInfo');
+    var deviceInf =
+        await const MethodChannel(channelOther).invokeMethod('GetDeviceInfo');
 
     callback.call(deviceInf, apps.cast<Map>());
   }
 }
-void upsertDeviceInfo(Map deviceInfo, List<Map> apps){
-  springBootPost(
-      method: webApiUpsertDeviceInfo,
-      body:{
-        'empNumber':userInfo?.number,
-        'empName':userInfo?.name,
-        'deviceId':deviceInfo['deviceId'],
-        'isHarmonyOs':deviceInfo['isHarmonyOS'],
-        'brand':deviceInfo['brand'],
-        'model':deviceInfo['model'],
-        'osVersion':deviceInfo['version'],
-        'sdkVersion':deviceInfo['sdkInt'],
-        'installedApps':jsonEncode(apps),
-      }
-  ).then((response) {
+
+void upsertDeviceInfo(Map deviceInfo, List<Map> apps) {
+  springBootPost(method: webApiUpsertDeviceInfo, body: {
+    'empNumber': userInfo?.number,
+    'empName': userInfo?.name,
+    'deviceId': deviceInfo['deviceId'],
+    'isHarmonyOs': deviceInfo['isHarmonyOS'],
+    'brand': deviceInfo['brand'],
+    'model': deviceInfo['model'],
+    'osVersion': deviceInfo['version'],
+    'sdkVersion': deviceInfo['sdkInt'],
+    'installedApps': jsonEncode(apps),
+  }).then((response) {
     logger.f(response.message);
   });
 }

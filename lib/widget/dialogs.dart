@@ -229,7 +229,7 @@ void doUpdate({
                         Downloader(
                           url: version.url!,
                           completed: (path) =>
-                              const MethodChannel(channelUsbAndroidToFlutter)
+                              const MethodChannel(channelOther)
                                   .invokeMethod('OpenFile', path),
                         );
                         return;

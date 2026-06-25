@@ -51,7 +51,7 @@ void checkBarCodeProcessDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: (() {
+                  onPressed: () {
                     if (worker == null) {
                       showSnackBar(
                         message: 'scan_picking_material_input_picker_number'.tr,
@@ -75,7 +75,7 @@ void checkBarCodeProcessDialog({
                         spSaveScanPickingMaterialWorker, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-                  }),
+                  },
                   child: Text('scan_picking_material_submit'.tr),
                 ),
                 TextButton(

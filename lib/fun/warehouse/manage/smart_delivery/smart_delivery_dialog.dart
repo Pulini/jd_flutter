@@ -53,7 +53,7 @@ void modifyShoeTreeDialog(String typeBody, int departmentID) {
             ),
             actions: [
               TextButton(
-                onPressed: (() => _saveShoeTree(
+                onPressed: () => _saveShoeTree(
                   sti: sti,
                   shoeTreeNo: sti.shoeTreeNo ?? '',
                   departmentID: departmentID,
@@ -61,7 +61,7 @@ void modifyShoeTreeDialog(String typeBody, int departmentID) {
                     content: msg,
                     back: () => Get.back(),
                   ),
-                )),
+                ),
                 child: Text('smart_delivery_dialog_save'.tr),
               ),
               TextButton(
@@ -180,10 +180,10 @@ void reserveShoeTreeDialog(
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 Get.back();
                 set.call(setList);
-              }),
+              },
               child: Text('smart_delivery_dialog_save'.tr),
             ),
             TextButton(
@@ -420,7 +420,7 @@ void createDeliveryTaskDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: (() {
+                  onPressed: () {
                     agvSelect =
                         agvList.length > 1 ? agvController.selectedItem : 0;
                     typeSelect = taskTypeList.length > 1
@@ -453,7 +453,7 @@ void createDeliveryTaskDialog({
                       },
                       fail: (msg) => errorDialog(content: msg),
                     );
-                  }),
+                  },
                   child: Text('smart_delivery_dialog_creat'.tr),
                 ),
                 TextButton(
@@ -519,13 +519,13 @@ void checkAgvTask({
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 IconButton(
-                                  onPressed: (() => _cancelAgvTask(
+                                  onPressed: () => _cancelAgvTask(
                                     taskId: taskId,
                                     success: () {
                                       Get.back();
                                       cancelTask.call(taskId);
                                     },
-                                  )),
+                                  ),
                                   icon: const Icon(
                                     Icons.stop_circle,
                                     color: Colors.red,
@@ -533,12 +533,12 @@ void checkAgvTask({
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: (() => _stopAgvTask(
+                                  onPressed: () => _stopAgvTask(
                                     agvNumber: agvNumber,
                                     success: () => dialogSetState(
                                       () => taskType = 3,
                                     ),
-                                  )),
+                                  ),
                                   icon: const Icon(
                                     Icons.pause_circle,
                                     color: Colors.orange,
@@ -546,12 +546,12 @@ void checkAgvTask({
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: (() => _resumeAgvTask(
+                                  onPressed: () => _resumeAgvTask(
                                     agvNumber: agvNumber,
                                     success: () => dialogSetState(
                                       () => taskType = 1,
                                     ),
-                                  )),
+                                  ),
                                   icon: const Icon(
                                     Icons.replay_circle_filled_sharp,
                                     color: Colors.green,

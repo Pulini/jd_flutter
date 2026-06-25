@@ -46,9 +46,9 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
                     ),
                     Text('${data.qty}${data.unitName}'),
                     IconButton(
-                      onPressed: (() {
+                      onPressed: () {
                         data.scanned = false;
-                      }),
+                      },
                       icon: const Icon(
                         Icons.delete_forever,
                         color: Colors.red,

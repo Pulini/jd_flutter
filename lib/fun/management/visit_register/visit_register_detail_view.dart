@@ -145,9 +145,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
-            onPressed: (() {
-              logic.updateLeaveFVisit();
-            }),
+            onPressed: ()=>logic.updateLeaveFVisit(),
             child: Text(
               'visit_departure'.tr,
               style: const TextStyle(color: Colors.white),

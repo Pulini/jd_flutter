@@ -90,7 +90,7 @@ void modifyDetailPickingQtyDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 var qty = basicQty;
                 for (var v in data) {
                   var unreceivedQty = v.getUnreceivedQty();
@@ -113,7 +113,7 @@ void modifyDetailPickingQtyDialog({
                       data.last.pickingQty.value.add(qty);
                 }
                 Get.back();
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
@@ -439,7 +439,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
           contentPadding: const EdgeInsets.all(10),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (worker == null) {
                   showSnackBar(
                     message: 'picking_material_order_dialog_number_error'.tr,
@@ -457,7 +457,7 @@ void checkPickerDialog({required Function(WorkerInfo) confirm}) {
                     confirm.call(worker!);
                   }
                 }
-              }),
+              },
               child: Text(
                 'dialog_default_confirm'.tr,
               ),
@@ -552,7 +552,7 @@ void modifyLocationDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 _modifyLocation(
                   materialList: list,
                   success: () {
@@ -567,7 +567,7 @@ void modifyLocationDialog({
                   },
                   error: (msg) => errorDialog(content: msg),
                 );
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

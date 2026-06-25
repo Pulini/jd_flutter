@@ -33,17 +33,17 @@ void generateAndPrintDialog({
         content: Text('machine_dispatch_dialog_print_tips'.tr),
         actions: <Widget>[
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               printLast.call();
-            }),
+            },
             child: Text('machine_dispatch_dialog_print_last_label'.tr),
           ),
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               print.call();
-            }),
+            },
             child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(

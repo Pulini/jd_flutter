@@ -147,7 +147,7 @@ class _ProductionScanWarehousePageState
         Padding(
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
-            onTap: (() {
+            onTap: () {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'production_scan_clear_the_barcode'.tr,
@@ -155,7 +155,7 @@ class _ProductionScanWarehousePageState
                   logic.clearBarCodeList();
                 },
               );
-            }),
+            },
             child: Text('production_scan_clear'.tr),
           ),
         )

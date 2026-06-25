@@ -32,7 +32,9 @@ class PumaAntiCounterfeitingLogic extends GetxController {
           }
         });
       } else {
-        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_box_label_error'.tr);
+        showSnackBar(
+            title: 'shack_bar_warm'.tr,
+            message: 'code_list_report_box_label_error'.tr);
       }
     }
   }
@@ -54,7 +56,10 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         successDialog(
             content: response.message,
-            back: () {state.clearData(); state.setScanNum();});
+            back: () {
+              state.clearData();
+              state.setScanNum();
+            });
       } else {
         errorDialog(content: response.message);
       }
@@ -71,7 +76,6 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-
         var list = <PumaCodeListInfo>[
           for (var i = 0; i < response.data.length; ++i)
             PumaCodeListInfo.fromJson(response.data[i])
@@ -90,10 +94,11 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     required String code,
     required Function() have,
   }) {
-
     if (state.sortingList.isNotEmpty) {
       if (code.isEmpty) {
-        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_barcode_is_empty'.tr);
+        showSnackBar(
+            title: 'shack_bar_warm'.tr,
+            message: 'code_list_report_barcode_is_empty'.tr);
       } else {
         for (int i = 0; i < state.sortingList.length; i++) {
           if (state.sortingList[i].fBarCode == code) {
@@ -108,10 +113,11 @@ class PumaAntiCounterfeitingLogic extends GetxController {
             break;
           }
         }
-
       }
     } else {
-      showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_sorting_empty'.tr);
+      showSnackBar(
+          title: 'shack_bar_warm'.tr,
+          message: 'code_list_report_sorting_empty'.tr);
     }
   }
 
@@ -132,8 +138,8 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-
-        List <PumaCodeListInfo> list =  state.sortingList.where((data)=> data.use!=true).toList();
+        List<PumaCodeListInfo> list =
+            state.sortingList.where((data) => data.use != true).toList();
         state.sortingList.value = list;
         state.setSortingScanNum();
       } else {

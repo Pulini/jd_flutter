@@ -34,7 +34,7 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
 
   Future<void> printA4Paper() async {
     if (a4PaperBase64List.isEmpty) return;
-    const MethodChannel(channelPrinterFlutterToAndroid)
+    const MethodChannel(channelPrinter)
         .invokeMethod('PrintFile', a4PaperBase64List)
         .then((detectCallback) {
       logger.i(detectCallback);

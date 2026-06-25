@@ -98,7 +98,7 @@ void selectSupplierAndDepartmentDialog({
             ),
             actions: [
               TextButton(
-                onPressed: (() {
+                onPressed: () {
                   if (worker == null) {
                     showSnackBar(
                       message:
@@ -142,7 +142,7 @@ void selectSupplierAndDepartmentDialog({
                     isSupplier ? sList[sSelect] : null,
                     isSupplier ? null : dList[dSelect],
                   );
-                }),
+                },
                 child: Text('production_scan_picking_material_submit'.tr),
               ),
               TextButton(

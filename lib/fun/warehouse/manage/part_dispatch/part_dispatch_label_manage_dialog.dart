@@ -83,7 +83,7 @@ void selectPackProfileDialog({
     ),
     actions: [
       TextButton(
-        onPressed: (() {
+        onPressed: () {
           var qty = tecQty.text.toDoubleTry();
           if (packProfileList[selectIndex.value][0] != orderPackProfileID ||
               (qty != capacityQty && qty > 0)) {
@@ -102,7 +102,7 @@ void selectPackProfileDialog({
                 content:
                     'part_dispatch_select_pack_profile_dialog_no_change'.tr);
           }
-        }),
+        },
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -312,7 +312,7 @@ void selectInstructionsDialog({
     ),
     actions: [
       TextButton(
-        onPressed: (() {
+        onPressed: () {
           if (selectIndex.value >= 0) {
             Get.back();
             selected.call(
@@ -329,7 +329,7 @@ void selectInstructionsDialog({
                     'part_dispatch_select_instruction_dialog_no_select_instruction'
                         .tr);
           }
-        }),
+        },
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(

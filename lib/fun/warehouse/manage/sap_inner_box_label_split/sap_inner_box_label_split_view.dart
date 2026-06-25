@@ -216,7 +216,7 @@ class _SplitLabelSubItemState extends State<_SplitLabelSubItem> {
                 ),
               ),
               IconButton(
-                onPressed: (() => widget.onDelete(widget.newLabel)),
+                onPressed: () => widget.onDelete(widget.newLabel),
                 icon: const Icon(Icons.delete_forever, color: Colors.red),
               )
             ],

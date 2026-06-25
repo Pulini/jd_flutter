@@ -442,9 +442,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
-            onPressed: (() {
-              logic.addVisitRecord();
-            }),
+            onPressed: ()=>logic.addVisitRecord(),
             child: Text(
               'visit_newly_added'.tr,
               style: const TextStyle(color: Colors.white),

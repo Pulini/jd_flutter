@@ -25,7 +25,7 @@ void inputLocationDialog({
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (controller.text.isEmpty) {
                 showSnackBar(
                   message:
@@ -37,7 +37,7 @@ void inputLocationDialog({
               }
 
               Get.back();
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

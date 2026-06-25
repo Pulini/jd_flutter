@@ -363,7 +363,7 @@ void stockOutDialog({
     ),
     actions: [
       TextButton(
-        onPressed: (() => _stockOutDeliveryOrder(
+        onPressed: () => _stockOutDeliveryOrder(
           workerCenterId: workerCenterId,
           factory: locationController.selectedId.value,
           department: departmentController.selectedId.value,
@@ -375,7 +375,7 @@ void stockOutDialog({
               refresh.call();
             },
           ),
-        )),
+        ),
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
@@ -453,11 +453,11 @@ void createTemporaryDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: (() => _checkLeader(
+                  onPressed: () => _checkLeader(
                     submitList: submitList,
                     leader: leaders[leaderController.selectedItem],
                     refresh: refresh,
-                  )),
+                  ),
                   child: Text('dialog_default_confirm'.tr),
                 ),
                 TextButton(

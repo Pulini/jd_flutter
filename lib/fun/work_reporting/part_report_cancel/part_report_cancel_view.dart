@@ -204,7 +204,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                   //取消报工
                   child: CombinationButton(
                     text: 'part_report_cancel_cancel_job'.tr,
-                    click: ()  {
+                    click: () {
                       askDialog(
                         content: 'part_report_cancel_sure_cancel'.tr,
                         confirm: () {
@@ -227,18 +227,17 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                           successDialog(
                               content: s, back: () => logic.cleanData());
                         });
-                      } else
-                        {
-                          askDialog(
-                            content: 'part_report_cancel_confirm_job'.tr,
-                            confirm: () {
-                              logic.submitPart(success: (s) {
-                                successDialog(
-                                    content: s, back: () => logic.cleanData());
-                              });
-                            },
-                          );
-                        }
+                      } else {
+                        askDialog(
+                          content: 'part_report_cancel_confirm_job'.tr,
+                          confirm: () {
+                            logic.submitPart(success: (s) {
+                              successDialog(
+                                  content: s, back: () => logic.cleanData());
+                            });
+                          },
+                        );
+                      }
                     },
                     combination: Combination.right,
                   ),
@@ -252,7 +251,10 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) {controller.text = code; logic.getReportSummary(code);},
+      scan: (code) {
+        controller.text = code;
+        logic.getReportSummary(code);
+      },
     );
     super.initState();
   }

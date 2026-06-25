@@ -26,33 +26,32 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     required Color backColor,
   }) {
     return Container(
-      height: 35,
-      decoration: BoxDecoration(
-        color: backColor, // 背景颜色
-        border: Border.all(
-          color: Colors.black, // 边框颜色
-          width: 1.0, // 边框宽度
-        ),
-      ),
-      child: InkWell(child: Padding(
-        padding: const EdgeInsets.all(7),
-        child: Center(
-          child: Text(
-            mes,
-            maxLines: 1,
-            style: TextStyle(
-              color: textColor,
-            ),
+        height: 35,
+        decoration: BoxDecoration(
+          color: backColor, // 背景颜色
+          border: Border.all(
+            color: Colors.black, // 边框颜色
+            width: 1.0, // 边框宽度
           ),
         ),
-      ),onTap: ()=>{
-        if(mes.isNotEmpty){
-          showSnackBar(message: mes)
-        }
-      },)
-    );
+        child: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(7),
+            child: Center(
+              child: Text(
+                mes,
+                maxLines: 1,
+                style: TextStyle(
+                  color: textColor,
+                ),
+              ),
+            ),
+          ),
+          onTap: () => {
+            if (mes.isNotEmpty) {showSnackBar(message: mes)}
+          },
+        ));
   }
-
 
   Row _item1(SummaryLists data) {
     var backColors = Colors.black;
@@ -86,7 +85,6 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
         }
       case 2:
         {
-
           backColors = Colors.blue.shade200;
           process = 'part_report_summary_total_components'.tr;
           processColors = Colors.black;
@@ -96,11 +94,10 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
         }
       case -1:
         {
-
           backColors = Colors.blue.shade200;
           process = '工序';
           processColors = Colors.black;
-          instruction =  '指令数';
+          instruction = '指令数';
           qty = '数量';
           break;
         }
@@ -118,38 +115,38 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
         Expanded(
             flex: 3,
             child: _text(
-                mes: process,
-                textColor: processColors,
-                backColor: backColors,
-             )),
+              mes: process,
+              textColor: processColors,
+              backColor: backColors,
+            )),
         Expanded(
             flex: 2,
             child: _text(
-                mes: data.size ?? '',
-                textColor: sizeColors,
-                backColor: backColors,
-                )),
+              mes: data.size ?? '',
+              textColor: sizeColors,
+              backColor: backColors,
+            )),
         Expanded(
             flex: 2,
             child: _text(
-                mes: instruction,
-                textColor: instructionColors,
-                backColor: backColors,
-                )),
+              mes: instruction,
+              textColor: instructionColors,
+              backColor: backColors,
+            )),
         Expanded(
             flex: 2,
             child: _text(
-                mes: qty,
-                textColor: qtyColors,
-                backColor: backColors,
-                )),
+              mes: qty,
+              textColor: qtyColors,
+              backColor: backColors,
+            )),
         Expanded(
             flex: 3,
             child: _text(
-                mes: data.empName ?? '',
-                textColor: textColors,
-                backColor: backColors,
-                )),
+              mes: data.empName ?? '',
+              textColor: textColors,
+              backColor: backColors,
+            )),
       ],
     );
   }
@@ -157,43 +154,43 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'part_report_summary_table'.tr,
+        title: 'part_report_summary_table'.tr,
         body: Column(
-      children: [
-        Expanded(
-          child: Obx(() => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: 600, // 设置合适的宽度以容纳所有列
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(0),
-                itemCount: state.reportInfo.length,
-                itemBuilder: (context, index) =>
-                    _item1(state.reportInfo[index]),
-              ),
+          children: [
+            Expanded(
+              child: Obx(() => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: 600, // 设置合适的宽度以容纳所有列
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(0),
+                        itemCount: state.reportInfo.length,
+                        itemBuilder: (context, index) =>
+                            _item1(state.reportInfo[index]),
+                      ),
+                    ),
+                  )),
             ),
-          )),
-        ),
-        SizedBox(
-          width: double.maxFinite,
-          child: CombinationButton(
-            //提交
-            text: 'part_report_submit'.tr,
-            click: () {
-              askDialog(
-                content: 'part_report_summary_sure_submit'.tr,
-                confirm: () {
-                  logic.submitBarCodeReport(submitSuccess: (mes) {
-                    successDialog(
-                        content: mes, back: (){Get.back(result: true);});
-                  });
+            SizedBox(
+              width: double.maxFinite,
+              child: CombinationButton(
+                //提交
+                text: 'part_report_submit'.tr,
+                click: () {
+                  askDialog(
+                    content: 'part_report_summary_sure_submit'.tr,
+                    confirm: () {
+                      logic.submitBarCodeReport(submitSuccess: (mes) {
+                        successDialog(
+                            content: mes, back: () => Get.back(result: true));
+                      });
+                    },
+                  );
                 },
-              );
-            },
-          ),
-        )
-      ],
-    ));
+              ),
+            )
+          ],
+        ));
   }
 }

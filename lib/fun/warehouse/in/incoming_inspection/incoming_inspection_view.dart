@@ -278,10 +278,10 @@ class _InspectionDeliveryItemState extends State<_InspectionDeliveryItem> {
           textColor: Colors.green,
         ),
         leading: IconButton(
-          onPressed: (() => askDialog(
+          onPressed: () => askDialog(
             content: 'incoming_inspection_delete_order_tips'.tr,
             confirm: () => widget.logic.deleteDeliveryOrder(widget.group),
-          )),
+          ),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
@@ -343,10 +343,10 @@ class _InspectionSubItemState extends State<_InspectionSubItem> {
             text:
                 '${widget.logic.getItemMaterialQty(widget.item).toShowString()} ${widget.item.first.unitName}'),
         leading: IconButton(
-          onPressed: (() => askDialog(
+          onPressed: () => askDialog(
             content: 'incoming_inspection_delete_material_tips'.tr,
             confirm: () => widget.logic.deleteDeliveryMaterialGroupOrder(widget.item),
-          )),
+          ),
           icon: const Icon(
             Icons.delete_forever,
             color: Colors.red,
@@ -372,10 +372,10 @@ class _InspectionSubItemState extends State<_InspectionSubItem> {
                         ),
                       ),
                       IconButton(
-                        onPressed: (() => askDialog(
+                        onPressed: () => askDialog(
                           content: 'incoming_inspection_delete_item_tips'.tr,
                           confirm: () => widget.logic.deleteDeliveryItem(subItem),
-                        )),
+                        ),
                         icon: const Icon(
                           Icons.delete_forever,
                           color: Colors.red,
@@ -463,10 +463,10 @@ class _InspectionAddMaterialItemState extends State<_InspectionAddMaterialItem> 
                   ),
                 ),
                 IconButton(
-                  onPressed: (() => askDialog(
+                  onPressed: () => askDialog(
                     content: 'incoming_inspection_delete_item_tips'.tr,
                     confirm: () => widget.onDelete(),
-                  )),
+                  ),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

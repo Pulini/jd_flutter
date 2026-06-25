@@ -179,11 +179,11 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.process.value),
                   Expanded(
                       child: InkWell(
-                          onTap: (() => logic.getHandoverProcessFlow()),
+                          onTap: () => logic.getHandoverProcessFlow(),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,
-                          ))),
+                          )),),
                   const SizedBox(width: 10),
                 ],
               ),
@@ -214,7 +214,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.outProcess.value),
                   Expanded(
                       child: InkWell(
-                          onTap: (() => logic.getProcessList()),
+                          onTap: () => logic.getProcessList(),
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,
@@ -297,7 +297,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) {logic.addCode(code);},
+      scan: (code) =>logic.addCode(code),
     );
     super.initState();
   }

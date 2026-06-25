@@ -138,10 +138,10 @@ void modifyPickingQty({
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               callback.call(baseUnitController.text.toDoubleTry());
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -212,7 +212,7 @@ void checkPickerDialog({
           actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (picker != null) {
                   spSave(checkPickerDialogNumber, picker!.empCode ?? '');
                   Get.to(() => SignaturePage(
@@ -233,7 +233,7 @@ void checkPickerDialog({
                         },
                       )                    );
                 }
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

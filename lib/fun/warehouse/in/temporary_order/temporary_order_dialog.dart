@@ -157,7 +157,7 @@ void testApplicationDialog({
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (inspectionQty <= 0) {
                 errorDialog(content: 'temporary_order_dialog_inspection_qty_error'.tr);
                 return;
@@ -180,7 +180,7 @@ void testApplicationDialog({
                 ),
                 error: (msg) => errorDialog(content: msg),
               );
-            }),
+            },
             child: Text(
               'temporary_order_dialog_application_test'.tr,
               style: const TextStyle(fontWeight: FontWeight.bold),

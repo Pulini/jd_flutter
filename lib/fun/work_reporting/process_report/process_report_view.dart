@@ -66,12 +66,12 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (newWorker != null) {
                 callback.call(newWorker!);
                 Get.back();
               }
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

@@ -68,7 +68,7 @@ class _SapInjectionMoldingStockInPageState
     return pageBody(
       actions: [
         TextButton(
-          onPressed: (() => logic.clearBarCodeList()),
+          onPressed: () => logic.clearBarCodeList(),
           child: Text('sap_injection_molding_stock_in_clear'.tr),
         )
       ],
@@ -91,8 +91,7 @@ class _SapInjectionMoldingStockInPageState
                         children: [
                           SlidableAction(
                             flex: 2,
-                            onPressed: (c) =>
-                                (() => logic.deleteItem(state.barCodeList[i])),
+                            onPressed: (c) => logic.deleteItem(state.barCodeList[i]),
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete_forever,

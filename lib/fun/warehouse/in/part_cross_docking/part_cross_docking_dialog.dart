@@ -33,14 +33,14 @@ void checkWorkerDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (worker == null) {
                   showSnackBar(
                       message: 'part_cross_docking_worker_number_hint'.tr);
                 } else {
                   success.call(worker!);
                 }
-              }),
+              },
               child: Text('part_cross_docking_submit'.tr),
             ),
             TextButton(

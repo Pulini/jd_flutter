@@ -71,7 +71,7 @@ void checkPickerAndWarehouseDialog({
           actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (picker != null) {
                   spSave(checkPickerAndWarehouseDialogNumber, picker!.empCode ?? '');
                   Get.to(() => SignaturePage(
@@ -93,7 +93,7 @@ void checkPickerAndWarehouseDialog({
                         },
                       )                  );
                 }
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

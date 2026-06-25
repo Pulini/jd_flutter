@@ -25,7 +25,7 @@ class _DeviceMaintenanceRecordViewState
 
   InkWell _item(DeviceMaintenanceListInfo data) {
     return InkWell(
-      onTap: () {logic.searchDeviceInfo(data.deviceNo.toString());},
+      onTap: () =>logic.searchDeviceInfo(data.deviceNo.toString()),
       onLongPress: (){
         if (checkUserPermission('705080113'))
           {

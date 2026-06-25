@@ -285,8 +285,7 @@ class _LastProcessMaterialItemState extends State<_LastProcessMaterialItem> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () =>
-                    (() => widget.logic.deleteMaterial(widget.data)),
+                onPressed: () =>widget.logic.deleteMaterial(widget.data),
                 icon: const Icon(Icons.delete_forever, color: Colors.white),
               ),
             ),
@@ -408,13 +407,13 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (() {
+      onTap: () {
         widget.logic.lastProcessModifyWorker(
           widget.data,
           widget.opcProcessFlow.getPickItem().pickerId(),
           widget.dpcDate.getDateFormatYMD(),
         );
-      }),
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -487,13 +486,13 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  onPressed: (() {
+                  onPressed: () {
                     askDialog(
                       content: '确定要删除该组员数据吗？',
                       confirm: () =>
                           widget.logic.deleteReportWorker(widget.data),
                     );
-                  }),
+                  },
                   icon: const Icon(Icons.delete_forever, color: Colors.white),
                 ),
               ),

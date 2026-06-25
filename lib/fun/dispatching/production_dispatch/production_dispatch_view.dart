@@ -529,7 +529,7 @@ class _ProductionDispatchItem2State extends State<_ProductionDispatchItem2> {
                 ),
               ),
               TextButton(
-                onPressed: (() => widget.logic.materialLabelMaintenance(data)),
+                onPressed: () => widget.logic.materialLabelMaintenance(data),
                 style: buttonStyle,
                 child: Text(
                   widget.printStatusText(data.printStatus ?? ''),

@@ -65,8 +65,8 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                   ),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: (() =>
-                      logic.queryCartonLabelInfo(logic.scanController.text)),
+                  onPressed: () =>
+                      logic.queryCartonLabelInfo(logic.scanController.text),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,

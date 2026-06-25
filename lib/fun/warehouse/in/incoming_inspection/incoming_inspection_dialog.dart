@@ -55,7 +55,7 @@ void modifySubItemMaterialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (qty <= 0) {
                   showSnackBar(
                     message:
@@ -83,7 +83,7 @@ void modifySubItemMaterialDialog({
                 item.numPage = numberPage;
                 Get.back();
                 modify.call();
-              }),
+              },
               child: Text('incoming_inspection_dialog_modify'.tr),
             ),
             TextButton(
@@ -201,7 +201,7 @@ void addOrModifyMaterialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (orderNumber.trim().isEmpty) {
                   showSnackBar(
                     message:
@@ -259,7 +259,7 @@ void addOrModifyMaterialDialog({
                   item.numPage = numberPage;
                   modify?.call();
                 }
-              }),
+              },
               child: Text(
                 item != null
                     ? 'incoming_inspection_dialog_modify'.tr
@@ -302,7 +302,7 @@ void applyInspectionDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (worker == null) {
                   showSnackBar(
                       message:
@@ -315,7 +315,7 @@ void applyInspectionDialog({
                   Get.back();
                   submit.call(worker!);
                 }
-              }),
+              },
               child: Text('incoming_inspection_dialog_submit'.tr),
             ),
             TextButton(
@@ -382,7 +382,7 @@ void submitInspectionDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (worker == null) {
                   showSnackBar(
                     message:
@@ -405,7 +405,7 @@ void submitInspectionDialog({
                     spSaveIncomingInspectionInspector, worker!.empCode ?? '');
                 Get.back();
                 submit.call(worker!, results);
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

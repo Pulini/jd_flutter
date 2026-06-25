@@ -28,8 +28,8 @@ class _WorkshopPlanningReportListPageState
             itemCount: state.reportList.length,
             itemBuilder: (c, i) => _WorkshopReportListItem(
               data: state.reportList[i],
-              onTap: (() => logic.getReportDetailInfo(state.reportList[i].groupPayInterID ?? -1)),
-              onDelete: (() => logic.deleteReportInfo(state.reportList[i].groupPayInterID ?? -1)),
+              onTap: () => logic.getReportDetailInfo(state.reportList[i].groupPayInterID ?? -1),
+              onDelete: () => logic.deleteReportInfo(state.reportList[i].groupPayInterID ?? -1),
             ),
           )),
     );

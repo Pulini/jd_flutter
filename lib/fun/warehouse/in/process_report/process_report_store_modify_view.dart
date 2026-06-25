@@ -61,7 +61,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       onTap: () {
         logic.showInputDialog(
             title: 'process_report_store_modify_input_real_number'.tr,
-            confirm: (v) {logic.setModifyList(v, data);});
+            confirm: (v) => logic.setModifyList(v, data));
       },
     );
   }
@@ -122,13 +122,12 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
                     askDialog(
                       content: 'process_report_store_modify_submit'.tr,
                       confirm: () {
-                        logic.updateBarCodeInfo(
-                            success: (s)  {
-                                  successDialog(
-                                    content: s,
-                                    back: () => Get.back(),
-                                  );
-                                });
+                        logic.updateBarCodeInfo(success: (s) {
+                          successDialog(
+                            content: s,
+                            back: () => Get.back(),
+                          );
+                        });
                       },
                     );
                   },
@@ -144,9 +143,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
 
   @override
   void initState() {
-    pdaScanner(
-      scan: (code) {logic.modifyAdd(code);},
-    );
+    pdaScanner(scan: (code) => logic.modifyAdd(code));
     super.initState();
   }
 

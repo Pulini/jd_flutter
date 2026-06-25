@@ -34,7 +34,7 @@ void qualityInspectionListLocationDialog({
         actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (storeWarehouse.getPickItem1().pickerId().isEmpty ||
                   storeWarehouse.getPickItem2().pickerId().isEmpty) {
                 showSnackBar(
@@ -43,7 +43,7 @@ void qualityInspectionListLocationDialog({
               }
               Get.back();
               success.call(storeWarehouse.getPickItem2().pickerId());
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -95,7 +95,7 @@ void qualityInspectionListStoreDialog({
         actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (postAccountDate.getDateFormatSapYMD().isEmpty) {
                 showSnackBar(message: 'quality_inspection_empty'.tr);
                 return;
@@ -108,7 +108,7 @@ void qualityInspectionListStoreDialog({
               Get.back();
               success.call(postAccountDate.getDateFormatSapYMD(),
                   storeWarehouse.getPickItem2().pickerId());
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -211,10 +211,10 @@ void showInputDialog({
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               callback.call(qty);
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

@@ -135,7 +135,7 @@ void scannerDialog({
 
 void pdaScanner({required Function(String) scan}) {
   debugPrint('PdaScanner 注册监听');
-  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
+  const MethodChannel(channelScan).setMethodCallHandler((call) {
     switch (call.method) {
       case 'PdaScanner':
         {
@@ -154,7 +154,8 @@ void pdaScanner({required Function(String) scan}) {
   });
 }
 
+
 void closePdaScanner() {
   debugPrint('PdaScanner 取消监听');
-  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler(null);
+  const MethodChannel(channelScan).setMethodCallHandler(null);
 }

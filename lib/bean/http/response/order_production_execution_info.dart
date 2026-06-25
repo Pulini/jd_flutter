@@ -5,7 +5,6 @@
 /// DepartmentName : "IDN_LastingLine_01"
 /// ProductName : "PNW25402632-02"
 /// SeOrderNo : "L2605324"
-
 class OrderProductionExecutionInfo {
   OrderProductionExecutionInfo({
       this.workCardInterID, 

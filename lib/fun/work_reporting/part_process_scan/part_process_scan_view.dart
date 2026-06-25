@@ -31,10 +31,10 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
     return pageBody(
       actions: [
         TextButton(
-          onPressed: (() => askDialog(
+          onPressed: () => askDialog(
             content: 'part_process_scan_clean_tips'.tr,
             confirm: () => state.barCodeList.clear(),
-          )),
+          ),
           child: Text(
             'part_process_scan_clean'.tr,
             style: const TextStyle(color: Colors.blueAccent),
@@ -46,9 +46,9 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
           Row(
             children: [
               IconButton(
-                onPressed: (() => scannerDialog(
+                onPressed: () => scannerDialog(
                   detect: (code) => logic.addBarCode(code: code),
-                )),
+                ),
                 icon: const Icon(
                   Icons.qr_code_scanner,
                   size: 40,
@@ -56,10 +56,10 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
               ),
               Expanded(child: EditText(controller: controller)),
               IconButton(
-                onPressed: (() => logic.addBarCode(
+                onPressed: () => logic.addBarCode(
                   code: controller.text,
                   callback: () => controller.clear(),
-                )),
+                ),
                 icon: const Icon(
                   Icons.add_box_rounded,
                   size: 40,
@@ -80,10 +80,10 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
                       children: [
                         Expanded(child: Text(state.barCodeList[index])),
                         IconButton(
-                          onPressed: (() => askDialog(
+                          onPressed: () => askDialog(
                             content: 'part_process_scan_delete_tips'.tr,
                             confirm: () => logic.deleteItem(index),
-                          )),
+                          ),
                           icon: const Icon(
                             Icons.delete_forever,
                             color: Colors.red,

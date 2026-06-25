@@ -55,11 +55,11 @@ class _SapPackingDeliveryOrderListPageState
             ),
             actions: [
               TextButton(
-                onPressed: (() => logic.modifyDeliveryOrderDate(
+                onPressed: () => logic.modifyDeliveryOrderDate(
                   deliveryOrderNo: data.orderNo ?? '',
                   modifyDate: epcDate.getDateFormatYMD(),
                   callback: () => Get.back(),
-                )),
+                ),
                 child: const Text('提交修改'),
               ),
               TextButton(

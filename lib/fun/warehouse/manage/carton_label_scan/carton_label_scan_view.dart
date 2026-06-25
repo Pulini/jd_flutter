@@ -146,8 +146,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                       ),
                     ),
                     suffixIcon: IconButton(
-                      onPressed: (() =>
-                          logic.queryCartonLabelInfo(controller.text)),
+                      onPressed: () =>
+                          logic.queryCartonLabelInfo(controller.text),
                       icon: const Icon(
                         Icons.loupe_rounded,
                         color: Colors.green,

@@ -24,11 +24,10 @@ import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_DETACHED
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.util.Log
 import com.jd.pzx.jd_flutter.utils.BDevice
 import com.jd.pzx.jd_flutter.utils.deviceList
-import tw.com.prolific.pl2303gmultilib.PL2303GMultiLib
+import com.jd.pzx.jd_flutter.utils.PL2303GWeighbridgeUtil
 import android.widget.Toast
 import com.jd.pzx.jd_flutter.utils.jsonToList
 
@@ -54,8 +53,6 @@ const val ACTION_ID5 = "com.action.ai.x1"
 const val BarCode5 = "decoded_json_results"
 const val ACTION_ID6 = "com.action.ai.x1.broadcast"
 const val BarCode6 = "decoded results"
-const val WEIGHT_DEVICE_DETACHED = "tw.PL2303MultiUSBMessage"
-const val WEIGHT_DEVICE_NAME = "com.prolific.pl2300G_multisimpletest.USB_PERMISSION"
 
 enum class WeightState {
     WEIGHT_MSG_DEVICE_NOT_INITIALIZED,
@@ -89,8 +86,6 @@ class ReceiverUtil(
 ) {
     //东集扫码枪密码:4007770876
     private var permissionListener: (Boolean) -> Unit = {}
-    private var serialMulti: PL2303GMultiLib? = null
-    private var readThread: WeighbridgeReadThread? = null
     val mainHandler = Handler(Looper.getMainLooper())
 
     /**
@@ -138,15 +133,11 @@ class ReceiverUtil(
                     usbAttached.invoke()
                 }
 
-                ACTION_USB_DEVICE_DETACHED, ACTION_USB_ACCESSORY_DETACHED, WEIGHT_DEVICE_DETACHED -> {
+                ACTION_USB_DEVICE_DETACHED, ACTION_USB_ACCESSORY_DETACHED -> {
                     Log.e("Pan", "USB设备拔出")
                     Toast.makeText(context, "USB设备拔出", Toast.LENGTH_SHORT).show()
-                    if (intent.action == WEIGHT_DEVICE_DETACHED) {
-                        weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_DETACHED)
-                    } else {
-                        usbIsAttached = false
-                        usbDetached.invoke()
-                    }
+                    usbIsAttached = false
+                    usbDetached.invoke()
                 }
 
                 ACTION_ACL_CONNECTED -> {
@@ -279,7 +270,6 @@ class ReceiverUtil(
                 addAction(ACTION_ID4)
                 addAction(ACTION_ID5)
                 addAction(ACTION_ID6)
-                addAction(WEIGHT_DEVICE_DETACHED)
             }, Context.RECEIVER_EXPORTED)
         } else {
             context.registerReceiver(broadcastReceiver, IntentFilter(ACTION_USB_PERMISSION).apply {
@@ -301,7 +291,6 @@ class ReceiverUtil(
                 addAction(ACTION_ID4)
                 addAction(ACTION_ID5)
                 addAction(ACTION_ID6)
-                addAction(WEIGHT_DEVICE_DETACHED)
             })
         }
     }
@@ -312,129 +301,31 @@ class ReceiverUtil(
 
 
     fun weighbridgeOpen() {
-        if(serialMulti == null){
-            serialMulti = PL2303GMultiLib(
-                context.getSystemService(Activity.USB_SERVICE) as UsbManager,
-                context,
-                WEIGHT_DEVICE_NAME
-            )
-        }
-        serialMulti.let { util ->
-            if (util == null) {
-                weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_NOT_INITIALIZED)
-            } else {
-                synchronized(this) {
-                    util.PL2303G_ReSetStatus()
-                    util.PL2303Enumerate()
-                }
-                if (util.PL2303IsDeviceConnectedByIndex(0)) {
-                    util.PL2303OpenDevByUARTSetting(
-                        0,
-                        PL2303GMultiLib.BaudRate.B9600,
-                        PL2303GMultiLib.DataBits.D8,
-                        PL2303GMultiLib.StopBits.S1,
-                        PL2303GMultiLib.Parity.NONE,
-                        PL2303GMultiLib.FlowControl.OFF
-                    ).let { device ->
-                        if (device) {
-                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_SUCCESS)
-                            try {
-                                if (readThread != null) readThread?.interrupt()
-                                WeighbridgeReadThread(
-                                    util,
-                                    read = { weight ->
-                                        mainHandler.post {
-                                            weighbridgeRead.invoke(weight)
-                                        }
-                                    }, error = {
-                                        mainHandler.post {
-                                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_READ_ERROR)
-                                        }
-                                    }
-                                ).apply {
-                                    readThread = this
-                                    readThread?.start()
-                                }
-                            } catch (e: Exception) {
-                                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
-                            }
-                        } else {
-                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_FAILED)
+        PL2303GWeighbridgeUtil.getInstance().init(context, object : PL2303GWeighbridgeUtil.Listener {
+            override fun onWeightRead(weight: Double) {
+                mainHandler.post { weighbridgeRead.invoke(weight) }
+            }
+
+            override fun onStatusChanged(status: PL2303GWeighbridgeUtil.Status) {
+                mainHandler.post {
+                    weighbridgeState.invoke(
+                        when (status) {
+                            PL2303GWeighbridgeUtil.Status.DEVICE_NOT_INITIALIZED -> WeightState.WEIGHT_MSG_DEVICE_NOT_INITIALIZED
+                            PL2303GWeighbridgeUtil.Status.DEVICE_DETACHED -> WeightState.WEIGHT_MSG_DEVICE_DETACHED
+                            PL2303GWeighbridgeUtil.Status.DEVICE_NOT_CONNECTED -> WeightState.WEIGHT_MSG_DEVICE_NOT_CONNECTED
+                            PL2303GWeighbridgeUtil.Status.OPEN_SUCCESS -> WeightState.WEIGHT_MSG_OPEN_DEVICE_SUCCESS
+                            PL2303GWeighbridgeUtil.Status.OPEN_FAILED -> WeightState.WEIGHT_MSG_OPEN_DEVICE_FAILED
+                            PL2303GWeighbridgeUtil.Status.READ_ERROR -> WeightState.WEIGHT_MSG_READ_ERROR
                         }
-                    }
-                } else {
-                    weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_NOT_CONNECTED)
+                    )
                 }
             }
-        }
+        })
+        PL2303GWeighbridgeUtil.getInstance().open()
     }
 
     fun weighbridgeDestroy() {
-        serialMulti?.let {
-            it.PL2303Release()
-            readThread?.interrupt()
-            readThread = null
-            serialMulti = null
-        }
-    }
-
-
-    class WeighbridgeReadThread(
-        private val device: PL2303GMultiLib,
-        private val read: (Double) -> Unit,
-        private val error: () -> Unit
-    ) : Thread() {
-        private var text = ""
-        private val readByte = ByteArray(64)
-        override fun run() {
-            super.run()
-            try {
-                while (!isInterrupted) {
-                    device.PL2303Read(0, readByte).let { line ->
-                        if (line > 0) {
-                            readByte.forEach { text += it.toInt().toChar() }
-                            read.invoke(getDoubleValue(text))
-                            text = ""
-                        }
-                    }
-                    SystemClock.sleep(100)
-                }
-            } catch (e: Exception) {
-                print(e.toString())
-                error.invoke()
-            }
-        }
-
-        private fun getDoubleValue(str: String): Double {
-            var d = 0.0
-            if (str.isNotEmpty()) {
-                val bf = StringBuffer()
-                val chars = str.toCharArray()
-                for (i in chars.indices) {
-                    val c = chars[i]
-                    if (c in '0'..'9') {
-                        bf.append(c)
-                    } else if (c == '.') {
-                        if (bf.isEmpty()) {
-                            continue
-                        } else if (bf.indexOf(".") != -1) {
-                            break
-                        } else {
-                            bf.append(c)
-                        }
-                    } else {
-                        if (bf.isNotEmpty()) {
-                            break
-                        }
-                    }
-                }
-                try {
-                    d = bf.toString().toDouble()
-                } catch (_: Exception) {
-                }
-            }
-            return d
-        }
+        PL2303GWeighbridgeUtil.getInstance().destroy()
     }
 
 

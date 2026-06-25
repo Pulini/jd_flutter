@@ -18,7 +18,8 @@ class PartReportScanPage extends StatefulWidget {
 class _PartReportScanPageState extends State<PartReportScanPage> {
   final logic = Get.put(PartReportScanLogic());
   final state = Get.find<PartReportScanLogic>().state;
-var tecCode=TextEditingController();
+  var tecCode = TextEditingController();
+
   GestureDetector _item1(ComponentCodeInfo info) {
     return GestureDetector(
         onLongPress: (() {
@@ -26,7 +27,7 @@ var tecCode=TextEditingController();
         }),
         child: Container(
           padding: const EdgeInsets.all(5),
-          margin: const EdgeInsets.only(left: 5,bottom: 2,right: 5,top: 2),
+          margin: const EdgeInsets.only(left: 5, bottom: 2, right: 5, top: 2),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -36,9 +37,8 @@ var tecCode=TextEditingController();
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                info.barCode?? '',
-                style: const TextStyle(
-                    color: Colors.blue),
+                info.barCode ?? '',
+                style: const TextStyle(color: Colors.blue),
               ),
             ],
           ),
@@ -48,14 +48,18 @@ var tecCode=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [TextButton(onPressed: (() {
-        askDialog(
-          content: 'part_report_sure_clear'.tr,
-          confirm: () {
-            logic.clearData();
-          },
-        );
-      }), child: Text('part_report_clear'.tr))],
+        actions: [
+          TextButton(
+              onPressed: () {
+                askDialog(
+                  content: 'part_report_sure_clear'.tr,
+                  confirm: () {
+                    logic.clearData();
+                  },
+                );
+              },
+              child: Text('part_report_clear'.tr))
+        ],
         title: 'part_report_title'.tr,
         body: Column(
           children: [
@@ -65,18 +69,18 @@ var tecCode=TextEditingController();
                   flex: 5,
                   child: EditText(
                     hint: 'process_report_store_manual_input'.tr,
-                controller: tecCode,
+                    controller: tecCode,
                   ),
                 ),
                 Expanded(
                   child: IconButton(
-                    onPressed: (() {
+                    onPressed: () {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
                           logic.addCode(v.toString());
                         }
                       });
-                    }),
+                    },
                     icon: const Icon(
                       Icons.qr_code_scanner_outlined,
                       color: Colors.grey,
@@ -100,7 +104,7 @@ var tecCode=TextEditingController();
                     //手动添加
                     text: 'part_report_manually_add'.tr,
                     click: () {
-                        logic.addCode(tecCode.text);
+                      logic.addCode(tecCode.text);
                     },
                     combination: Combination.left,
                   ),
@@ -123,7 +127,7 @@ var tecCode=TextEditingController();
                     //提交
                     text: 'part_report_submit'.tr,
                     click: () {
-                      if( logic.haveBarCode()){
+                      if (logic.haveBarCode()) {
                         askDialog(
                           content: 'part_report_select_summary_type'.tr,
                           confirmText: 'part_report_select_instruction'.tr,
@@ -148,9 +152,7 @@ var tecCode=TextEditingController();
 
   @override
   void initState() {
-    pdaScanner(
-      scan: (code) {logic.addCode(code);},
-    );
+    pdaScanner(scan: (code) => logic.addCode(code));
     super.initState();
   }
 

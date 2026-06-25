@@ -52,7 +52,7 @@ void checkBarCodeProcessDialog({
               ),
               actions: [
                 TextButton(
-                  onPressed: (() {
+                  onPressed: () {
                     if (worker == null) {
                       showSnackBar(
                           message: 'process_report_store_input_operator_id'.tr,
@@ -75,7 +75,7 @@ void checkBarCodeProcessDialog({
                     spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-                  }),
+                  },
                   child: Text('process_report_store_submit'.tr),
                 ),
                 TextButton(

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -215,7 +216,7 @@ class _HomeSubItemState extends State<HomeSubItem> {
       child: ListTile(
         onTap: () {
           if (widget.item.hasUpdate) {
-            (() => upData());
+            upData();
           } else if (widget.item.route.isEmpty) {
             showSnackBar(
               title: 'home_no_route'.tr,
@@ -225,7 +226,7 @@ class _HomeSubItemState extends State<HomeSubItem> {
           } else {
             widget.item.toFunction(checkUpData: widget.checkUpData);
           }
-        },
+        }.throttled,
         enabled: widget.item.hasUpdate ? true : widget.item.hasPermission,
         leading: cachedNetworkImage(
           widget.item.icon,

@@ -127,7 +127,7 @@ class _PartProcessScanQuickDispatchPageState
       title: 'part_process_scan_quick_dispatch_quick_allocation'.tr,
       actions: [
         TextButton(
-          onPressed: (() => logic.quickPercentage()),
+          onPressed: () => logic.quickPercentage(),
           child: Text('part_process_scan_quick_dispatch_allocation'.tr),
         )
       ],

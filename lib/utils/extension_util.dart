@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/throttle_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -315,4 +316,9 @@ extension ListExt on List? {
     if (this == null) return true;
     return this!.isEmpty;
   }
+}
+
+extension ThrottleExt on void Function() {
+  void Function() get throttled => ThrottleUtil.throttle(this);
+  void Function() throttleWith({int ms = 1000}) => ThrottleUtil.throttle(this, ms: ms);
 }

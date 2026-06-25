@@ -71,8 +71,8 @@ class _CartonLabelScanProgressPageState
                   ),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: (() =>
-                      logic.queryScanHistory(controller.text)),
+                  onPressed: () =>
+                      logic.queryScanHistory(controller.text),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
@@ -86,7 +86,7 @@ class _CartonLabelScanProgressPageState
                   padding: const EdgeInsets.all(8),
                   itemCount: state.progress.length,
                   itemBuilder: (context, index) => InkWell(
-                    onTap: (() => logic.getProgressDetail(state.progress[index])),
+                    onTap: () => logic.getProgressDetail(state.progress[index]),
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8),

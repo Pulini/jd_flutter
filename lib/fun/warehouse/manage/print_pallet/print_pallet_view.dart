@@ -35,7 +35,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       actions: [
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
-                onPressed: (() => logic.printPalletSizeMaterial()),
+                onPressed: () => logic.printPalletSizeMaterial(),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
@@ -44,10 +44,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
             : Container()),
         Obx(() => state.palletList.any((v) => v.any((v2) => v2.isSelect.value))
             ? IconButton(
-                onPressed: (() => askDialog(
+                onPressed: () => askDialog(
                   content: '确定要从托盘移除该标签吗？',
                   confirm: () => logic.deleteLabel(),
-                )),
+                ),
                 icon: const Icon(
                   Icons.link_off_outlined,
                   color: Colors.red,
@@ -176,9 +176,9 @@ class _PalletItemState extends State<_PalletItem> {
                   text: pallet.first.palletNumber ?? '',
                 ),
                 IconButton(
-                  onPressed: (() => askDialog(
+                  onPressed: () => askDialog(
                       content: '确定要删除该托盘码？',
-                      confirm: () => widget.logic.deletePallet(widget.index))),
+                      confirm: () => widget.logic.deletePallet(widget.index)),
                   icon: const Icon(
                     Icons.delete_forever,
                     color: Colors.red,

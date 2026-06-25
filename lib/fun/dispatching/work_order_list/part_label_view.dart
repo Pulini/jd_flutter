@@ -101,12 +101,12 @@ class _PartLabelPageState extends State<PartLabelPage> {
           ),
           actions: [
             TextButton(
-              onPressed: (() => logic.createPartLabel(
+              onPressed: () => logic.createPartLabel(
                 boxCapacity,
                 createQty,
                 data.size ?? '',
                 empID,
-              )),
+              ),
               child: Text(
                 'part_label_create'.tr,
               ),
@@ -251,9 +251,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: (() {
-                    logic.printLabel(list: data);
-                  }),
+                  onPressed: () => logic.printLabel(list: data),
                   child: Text(
                     'part_label_print'.tr,
                   ),

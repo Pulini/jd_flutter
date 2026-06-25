@@ -103,10 +103,10 @@ class _SapSalesShipmentPalletViewState
     return pageBody(
       actions: [
         IconButton(
-          onPressed: (() => askDialog(
+          onPressed: () => askDialog(
             content: 'sap_sales_shipment_pallet_reset_label_status_tips'.tr,
             confirm: () => logic.refreshPallet(index),
-          )),
+          ),
           icon: const Icon(Icons.refresh, color: Colors.blue),
         )
       ],

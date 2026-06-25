@@ -60,7 +60,7 @@ void materialDialog({
           ),
           actions: [
             TextButton(
-              onPressed: (() {
+              onPressed: () {
                 if (select.every((v) => !v)) {
                   errorDialog(content: '请选择要添加的物料');
                 } else {
@@ -73,7 +73,7 @@ void materialDialog({
                   Get.back();
                   addMaterial.call(newList);
                 }
-              }),
+              },
               child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(

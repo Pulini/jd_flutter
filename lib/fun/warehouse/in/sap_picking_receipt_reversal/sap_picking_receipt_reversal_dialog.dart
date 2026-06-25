@@ -80,7 +80,7 @@ void checkPickingReceiptReversalDialog({
             actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
             actions: [
               TextButton(
-                onPressed: (() {
+                onPressed: () {
                   if (leader != null) {
                     spSave(checkPickingReceiptReversalDialogNumber,
                         leader!.empCode ?? '');
@@ -103,7 +103,7 @@ void checkPickingReceiptReversalDialog({
                           },
                         ));
                   }
-                }),
+                },
                 child: Text('dialog_default_confirm'.tr),
               ),
               TextButton(

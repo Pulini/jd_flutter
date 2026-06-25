@@ -167,7 +167,7 @@ class _PackOrderItemState extends State<_PackOrderItem> {
         child: Row(
           children: [
 /*            GestureDetector(
-              onTap: (() => selectPackProfileDialog(
+              onTap: () => selectPackProfileDialog(
                 orderPackProfileID: widget.data.packProfileID ?? 0,
                 capacityQty: widget.data.capacityQty ?? 0,
                 packProfileList: widget.state.packProfileList
@@ -290,8 +290,8 @@ class _PackOrderItemState extends State<_PackOrderItem> {
               ),
             ),
             GestureDetector(
-              onTap: (() =>
-                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery())),
+              onTap: () =>
+                  widget.logic.deletePackOrder(data: widget.data, refresh: () => widget.onQuery()),
               child: Container(
                 width: 40,
                 decoration: const BoxDecoration(

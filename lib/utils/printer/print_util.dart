@@ -14,8 +14,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 class PrintUtil {
   static final PrintUtil _instance = PrintUtil._internal();
-  var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
-  var usbChannel = const MethodChannel(channelUsbTscFlutterToAndroid);
+  var bluetoothChannel = const MethodChannel(channelBluetooth);
+  var usbChannel = const MethodChannel(channelUsb);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
   var _dialogIsShowing = false;

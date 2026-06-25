@@ -21,7 +21,7 @@ void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               if (controller.text.isEmpty) {
                 showSnackBar(
                   message: 'product_quality_inspection_dialog_input_key'.tr,
@@ -33,7 +33,7 @@ void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
                     controller.text);
                 Get.back();
               }
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(

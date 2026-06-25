@@ -43,10 +43,10 @@ void modifyMaterialStockInQtyDialog({
         ),
         actions: [
           TextButton(
-            onPressed: (() {
+            onPressed: () {
               Get.back();
               callback.call(controller.text.toDoubleTry());
-            }),
+            },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
@@ -119,7 +119,7 @@ void checkStockInHandoverDialog({
             actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
             actions: [
               TextButton(
-                onPressed: (() {
+                onPressed: () {
                   if (leader != null) {
                     spSave(checkStockInHandoverDialogNumber,
                         leader!.empCode ?? '');
@@ -142,7 +142,7 @@ void checkStockInHandoverDialog({
                           },
                         )                    );
                   }
-                }),
+                },
                 child: Text('dialog_default_confirm'.tr),
               ),
               TextButton(
