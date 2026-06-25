@@ -13,7 +13,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
 class OrderProductionTableState {
-
   //日期选择器的控制器
   var startDate = DatePickerController(
     PickerType.startDate,
@@ -25,7 +24,7 @@ class OrderProductionTableState {
     PickerType.endDate,
     saveKey: '${RouteConfig.orderProductionTable.name}${PickerType.endDate}',
   );
-  var tecCommand= TextEditingController();
+  var tecCommand = TextEditingController();
 
   var factoryBody = ''.obs; //型体
   var groupName = ''.obs; //组别
@@ -34,8 +33,13 @@ class OrderProductionTableState {
   CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
   var reportBoxList = <ClearTailListInfo>[].obs; //
   var tailNumberList = <OrderProductionExecutionInfo>[].obs; //外箱列表
-  var type = true.obs;  //默认派工日期
-  var list1 = ['全部', '已扫满', '部分扫描','未开始扫描'];
+  var type = true.obs; //默认派工日期
+  var list1 = [
+    'carton_label_scan_order_detail_all'.tr,
+    'carton_label_scan_order_detail_all_scan'.tr,
+    'carton_label_scan_order_detail_all_some_scan'.tr,
+    'carton_label_scan_order_detail_all_no_scan'.tr
+  ];
 
   void getTailNumberReportData({
     required String barCode,
@@ -52,13 +56,16 @@ class OrderProductionTableState {
       if (response.resultCode == resultSuccess) {
         cartonLabelScanClearTailInfo =
             CartonLabelScanClearTailInfo.fromJson(response.data);
-        if(cartonLabelScanClearTailInfo!=null){
+        if (cartonLabelScanClearTailInfo != null) {
           reportBoxList.value = cartonLabelScanClearTailInfo!.sizeList!;
           setDataList();
-          factoryBody.value = cartonLabelScanClearTailInfo!.factoryBody.toString();
+          factoryBody.value =
+              cartonLabelScanClearTailInfo!.factoryBody.toString();
           groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
-          salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
-          customerOrderNumber.value = cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
+          salesOrder.value =
+              cartonLabelScanClearTailInfo!.salesOrder.toString();
+          customerOrderNumber.value =
+              cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
           Get.to(() => const OrderProductionTableDetailPage());
         }
       } else {
@@ -75,17 +82,16 @@ class OrderProductionTableState {
   void setDataList() {
     reportBoxList.add(
       ClearTailListInfo(
-        size: '合计',
+        size: 'carton_label_scan_order_total'.tr,
         arrears:
-        reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
-        fullBoxQty: reportBoxList
-            .map((v) => v.fullBoxQty ?? 0)
-            .reduce((a, b) => a + b),
+            reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
+        fullBoxQty:
+            reportBoxList.map((v) => v.fullBoxQty ?? 0).reduce((a, b) => a + b),
         unFullBoxQty: reportBoxList
             .map((v) => v.unFullBoxQty ?? 0)
             .reduce((a, b) => a + b),
         orderQty:
-        reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
+            reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
         barCode: '',
       ),
     );
@@ -94,14 +100,14 @@ class OrderProductionTableState {
   //查询不满箱
   void getTailNumberListData(String search) {
     var searchType = '0';
-    if(search=='全部'){
-      searchType='0';
-    }else if(search=='已扫满'){
-      searchType='1';
-    }else if(search=='部分扫描'){
-      searchType='2';
-    }else if(search=='未开始扫描'){
-      searchType='3';
+    if (search == 'carton_label_scan_order_detail_all') {
+      searchType = '0';
+    } else if (search == 'carton_label_scan_order_detail_all_scan') {
+      searchType = '1';
+    } else if (search == 'carton_label_scan_order_detail_all_some_scan') {
+      searchType = '2';
+    } else if (search == 'carton_label_scan_order_detail_all_no_scan') {
+      searchType = '3';
     }
     httpGet(
       loading: 'carton_label_scan_order_detail'.tr,
@@ -109,7 +115,7 @@ class OrderProductionTableState {
       params: {
         'StartDate': startDate.getDateFormatYMD(),
         'EndDate': endDate.getDateFormatYMD(),
-        'DateType': type.value ==true? 1 : 2,
+        'DateType': type.value == true ? 1 : 2,
         'SeOrderNo': tecCommand.text,
         'OrganizeID': getUserInfo()!.organizeID,
         'SearchType': searchType,
@@ -121,10 +127,9 @@ class OrderProductionTableState {
             OrderProductionExecutionInfo.fromJson(response.data[i])
         ];
       } else {
-        tailNumberList.value=[];
+        tailNumberList.value = [];
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }
-
 }
