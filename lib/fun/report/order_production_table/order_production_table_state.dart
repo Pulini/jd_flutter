@@ -55,10 +55,10 @@ class OrderProductionTableState {
         if(cartonLabelScanClearTailInfo!=null){
           reportBoxList.value = cartonLabelScanClearTailInfo!.sizeList!;
           setDataList();
-          factoryBody.value =
-              cartonLabelScanClearTailInfo!.factoryBody.toString();
+          factoryBody.value = cartonLabelScanClearTailInfo!.factoryBody.toString();
           groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
           salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
+          customerOrderNumber.value = cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
           Get.to(() => const OrderProductionTableDetailPage());
         }
       } else {

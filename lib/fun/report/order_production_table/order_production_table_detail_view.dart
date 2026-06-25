@@ -135,9 +135,11 @@ class _OrderProductionTableDetailPageState extends State<OrderProductionTableDet
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                    child: Obx(() => textSpan(
-                        hint: 'forming_code_collection_order'.tr,
-                        text: state.salesOrder.value))),
+                    child: Obx(() => InkWell(child: textSpan(
+                        hint: 'forming_code_collection_group'.tr,
+                        text: state.groupName.value),onTap: (){
+                      msgDialog(content: state.groupName.value);
+                    },))),
                 Expanded(
                     child: Obx(() => textSpan(
                         hint: 'forming_code_collection_customer_order'.tr,
