@@ -20,6 +20,7 @@ import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode
 import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
+import 'package:jd_flutter/fun/report/order_production_table/order_production_table_detail_view.dart';
 import 'package:jd_flutter/fun/report/part_replenish_request/part_replenish_request_view.dart';
 import 'package:jd_flutter/fun/report/production_day_report/production_day_report_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
@@ -92,6 +93,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 
+import 'fun/report/order_production_table/order_production_table_view.dart';
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
 
@@ -736,6 +738,13 @@ class RouteConfig {
     const PartLabelManagePage(),
   );
 
+  //部件标签管理
+  static Routes orderProductionTable = Routes(
+    '/order_production_table',
+    200,
+    const OrderProductionTablePage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -828,6 +837,7 @@ class RouteConfig {
     confirmPackingMethod,
     partLabelPrintPage,
     partLabelManagePage,
+    orderProductionTable,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1203,6 +1213,10 @@ class RouteConfig {
     GetPage(
       name: partLabelManagePage.name,
       page: () => partLabelManagePage.page,
+    ),
+    GetPage(
+      name: orderProductionTable.name,
+      page: () => orderProductionTable.page,
     ),
   ];
 }

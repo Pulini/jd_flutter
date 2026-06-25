@@ -25,13 +25,7 @@ class CartonLabelScanState {
   var dispatchNumber = ''.obs;
   var tailDispatchNumber = ''.obs;
   CartonLabelScanInfo? priorityCartonLabelInfo;
-  CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
-  var factoryBody = ''.obs; //型体
-  var groupName = ''.obs; //组别
-  var salesOrder = ''.obs; //销售订单
-  var customerOrderNumber = ''.obs; //客户订单
 
-  var reportBoxList = <ClearTailListInfo>[].obs; //
   var outBoxList = <OutBoxLabelsInfo>[].obs; //外箱数据
   var showIndex = 0;
   var add = true.obs; // 新增
@@ -176,59 +170,6 @@ class CartonLabelScanState {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
-  }
-
-  void getTailNumberReportData({
-    required String barCode,
-    required String dispatchNumber,
-  }) {
-    httpGet(
-      loading: 'carton_label_scan_order_get_last_detail'.tr,
-      method: webApiGetTailNumberReportData,
-      params: {
-        'CartonBarCode': barCode,
-        'DispatchNumber': dispatchNumber,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        cartonLabelScanClearTailInfo =
-            CartonLabelScanClearTailInfo.fromJson(response.data);
-        reportBoxList.value = cartonLabelScanClearTailInfo!.sizeList!;
-        setDataList();
-        factoryBody.value =
-            cartonLabelScanClearTailInfo!.factoryBody.toString();
-        groupName.value = cartonLabelScanClearTailInfo!.groupName.toString();
-        salesOrder.value = cartonLabelScanClearTailInfo!.salesOrder.toString();
-        customerOrderNumber.value =
-            cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
-      } else {
-        factoryBody.value = '';
-        groupName.value = '';
-        salesOrder.value = '';
-        customerOrderNumber.value = '';
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
-  }
-
-  //为每一个工单添加合计行
-  void setDataList() {
-    reportBoxList.add(
-      ClearTailListInfo(
-        size: '合计',
-        arrears:
-        reportBoxList.map((v) => v.arrears ?? 0).reduce((a, b) => a + b),
-        fullBoxQty: reportBoxList
-            .map((v) => v.fullBoxQty ?? 0)
-            .reduce((a, b) => a + b),
-        unFullBoxQty: reportBoxList
-            .map((v) => v.unFullBoxQty ?? 0)
-            .reduce((a, b) => a + b),
-        orderQty:
-        reportBoxList.map((v) => v.orderQty ?? 0).reduce((a, b) => a + b),
-        barCode: '',
-      ),
-    );
   }
 
   //查询不满箱
