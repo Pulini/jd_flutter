@@ -1678,7 +1678,7 @@ const webApiSubMantissaData = 'api/OutBoxScan/SubMantissaData';
 const webApiSubMantissaDataNew = 'api/OutBoxScanNew/SubMantissaDataNew';
 
 //外箱鞋盒贴标 - 查尾数详情
-const webApiGetTailNumberReportDataNew = 'api/OutBoxScan/GetTailNumberReportDataNew';
+const webApiGetTailNumberReportDataNew = 'api/OutBoxScanNew/GetTailNumberReportDataNew';
 
 // 订单生产执行情况表查询
 const webApiGetTailNumberListDataNew = 'api/OutBoxScanNew/GetTailNumberListDataNew';
