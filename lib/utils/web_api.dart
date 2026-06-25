@@ -884,19 +884,23 @@ const webApiSmartDeliveryResumeRobot = 'api/Autoworkshopbatch/ResumeRobot';
 
 //外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
+const webApiGetCartonLabelInfoNew = 'api/OutBoxScanNew/GetLinkDataNew';
 
 //外箱鞋盒贴标数据提交
 const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';
+const webApiSubmitScannedCartonLabelNew = 'api/OutBoxScanNew/SubOutBoxDataNew';
 
 //外箱鞋盒更改优先级
 const webApiChangePOPriority = 'api/OutBoxScan/ChangePOPriority';
+const webApiChangePOPriorityNew = 'api/OutBoxScanNew/ChangePOPriorityNew';
 
 //订单扫码情况表查询
 const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
+const webApiGetCartonLabelScanHistoryNew = 'api/OutBoxScanNew/GetOrderScanNew';
 
 //订单扫码情况明细表
-const webApiGetCartonLabelScanHistoryDetail =
-    'api/OutBoxScan/GetOrderScanDetail';
+const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';
+const webApiGetCartonLabelScanHistoryDetailNew = 'api/OutBoxScanNew/GetOrderScanDetailNew';
 
 //获取品质异常详情
 const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
@@ -1667,15 +1671,18 @@ const webApiForSapGetType = 'sap/zapp/ZMM_GET_YZ';
 
 //外箱鞋盒贴标 - 查尾数
 const webApiGetMantissaData = 'api/OutBoxScan/GetMantissaData';
+const webApiGetMantissaDataNew = 'api/OutBoxScanNew/GetMantissaDataNew';
 
 //外箱鞋盒贴标 - 清尾数提交
 const webApiSubMantissaData = 'api/OutBoxScan/SubMantissaData';
+const webApiSubMantissaDataNew = 'api/OutBoxScanNew/SubMantissaDataNew';
 
 //外箱鞋盒贴标 - 查尾数详情
-const webApiGetTailNumberReportData = 'api/OutBoxScan/GetTailNumberReportData';
+const webApiGetTailNumberReportDataNew = 'api/OutBoxScan/GetTailNumberReportDataNew';
 
 // 订单生产执行情况表查询
-const webApiGetTailNumberListData = 'api/OutBoxScan/GetTailNumberListData';
+const webApiGetTailNumberListDataNew = 'api/OutBoxScanNew/GetTailNumberListDataNew';
+
 
 
 

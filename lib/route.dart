@@ -45,8 +45,8 @@ import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelve
 import 'package:jd_flutter/fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/pack_order_list/pack_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_order_list/part_dispatch_order_list_view.dart';
@@ -268,11 +268,11 @@ class RouteConfig {
     const CartonLabelScanPage(),
   );
 
-  //外箱标扫码进度
-  static Routes cartonLabelScanProgress = Routes(
-    '/carton_label_scan_progress_page',
-    200,
-    const CartonLabelScanProgressPage(),
+  //订单产量采集
+  static Routes newCartonLabelScan = Routes(
+    '/new_carton_label_scan_page',
+    208,
+    const NewCartonLabelScanPage(),
   );
 
   //水电抄度
@@ -770,7 +770,7 @@ class RouteConfig {
     processDispatchRegister,
     smartDelivery,
     cartonLabelScan,
-    cartonLabelScanProgress,
+    newCartonLabelScan,
     hydroelectricExcess,
     warehouseAllocation,
     sapPurchaseStockIn,
@@ -946,8 +946,8 @@ class RouteConfig {
       page: () => cartonLabelScan.page,
     ),
     GetPage(
-      name: cartonLabelScanProgress.name,
-      page: () => cartonLabelScanProgress.page,
+      name: newCartonLabelScan.name,
+      page: () => newCartonLabelScan.page,
     ),
     GetPage(
       name: hydroelectricExcess.name,
