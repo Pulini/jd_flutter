@@ -20,7 +20,6 @@ import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode
 import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
-import 'package:jd_flutter/fun/report/order_production_table/order_production_table_detail_view.dart';
 import 'package:jd_flutter/fun/report/part_replenish_request/part_replenish_request_view.dart';
 import 'package:jd_flutter/fun/report/production_day_report/production_day_report_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';

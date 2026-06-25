@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/carton_label_scan_clear_tail_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/bean/http/response/out_box_labels_info.dart';
