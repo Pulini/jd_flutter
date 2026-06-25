@@ -222,7 +222,7 @@ class RouteConfig {
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    214,
+    215,
     const MaterialDispatchPage(),
   );
 

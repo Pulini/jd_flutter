@@ -15,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 class PrintUtil {
   static final PrintUtil _instance = PrintUtil._internal();
   var bluetoothChannel = const MethodChannel(channelBluetooth);
-  var usbChannel = const MethodChannel(channelUsb);
+  var usbChannel = const MethodChannel(channelUsbTsc);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
   var _dialogIsShowing = false;
@@ -228,46 +228,42 @@ class PrintUtil {
     ].request();
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
     logger.d('''
-  location=${statuses[Permission.location]!.isGranted}
-  bluetoothConnect=${statuses[Permission.bluetoothConnect]!.isGranted}
-  bluetoothScan=${statuses[Permission.bluetoothScan]!.isGranted}
-  bluetooth=${statuses[Permission.bluetooth]!.isGranted}
-  bluetoothAdvertise=${statuses[Permission.bluetoothAdvertise]!.isGranted}
+  location=${statuses[Permission.location]?.isGranted}
+  bluetoothConnect=${statuses[Permission.bluetoothConnect]?.isGranted}
+  bluetoothScan=${statuses[Permission.bluetoothScan]?.isGranted}
+  bluetooth=${statuses[Permission.bluetooth]?.isGranted}
+  bluetoothAdvertise=${statuses[Permission.bluetoothAdvertise]?.isGranted}
   ''');
 
-    if (!statuses[Permission.location]!.isGranted) {
+    if (statuses[Permission.location]?.isGranted == false) {
       errorDialog(content: 'bluetooth_location_permission_denied'.tr);
       return false;
     }
-
-    logger.f('GetPlatform.isAndroid:${GetPlatform.isAndroid}');
-    logger.f('isGranted:${!statuses[Permission.bluetoothConnect]!.isGranted}');
     if (GetPlatform.isAndroid &&
-        !statuses[Permission.bluetoothConnect]!.isGranted) {
+        statuses[Permission.bluetoothConnect]?.isGranted == false) {
       errorDialog(content: 'bluetooth_connect_permission_denied'.tr);
       return false;
     }
     if (GetPlatform.isAndroid &&
-        !statuses[Permission.bluetoothScan]!.isGranted) {
+        statuses[Permission.bluetoothScan]?.isGranted == false) {
       errorDialog(content: 'bluetooth_scan_permission_denied'.tr);
       return false;
     }
-    if (!statuses[Permission.bluetooth]!.isGranted) {
+    if (statuses[Permission.bluetooth]?.isGranted == false) {
       errorDialog(content: 'bluetooth_permission_denied'.tr);
       return false;
     }
     if (GetPlatform.isAndroid &&
-        !statuses[Permission.bluetoothAdvertise]!.isGranted) {
+        statuses[Permission.bluetoothAdvertise]?.isGranted == false) {
       errorDialog(content: 'bluetooth_advertise_permission_denied'.tr);
       return false;
     }
-
-    if (statuses[Permission.location]!.isGranted &&
-        statuses[Permission.bluetooth]!.isGranted) {
+    if (statuses[Permission.location]?.isGranted == true &&
+        statuses[Permission.bluetooth]?.isGranted == true) {
       if (GetPlatform.isAndroid) {
-        return statuses[Permission.bluetoothConnect]!.isGranted &&
-            statuses[Permission.bluetoothScan]!.isGranted &&
-            statuses[Permission.bluetoothAdvertise]!.isGranted;
+        return statuses[Permission.bluetoothConnect]?.isGranted == true &&
+            statuses[Permission.bluetoothScan]?.isGranted == true &&
+            statuses[Permission.bluetoothAdvertise]?.isGranted == true;
       }
       return true;
     }

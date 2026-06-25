@@ -115,7 +115,7 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
         alignment: pw.Alignment.bottomLeft,
         child: pw.Text(
           table[0],
-          style: pw.TextStyle(
+          style: const pw.TextStyle(
             fontSize: 14,
             fontWeight: pw.FontWeight.bold,
           ),
