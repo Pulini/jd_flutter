@@ -43,7 +43,7 @@ class OrderProductionTableState {
   }) {
     httpGet(
       loading: 'carton_label_scan_order_get_last_detail'.tr,
-      method: webApiGetTailNumberReportData,
+      method: webApiGetTailNumberReportDataNew,
       params: {
         'CartonBarCode': barCode,
         'DispatchNumber': dispatchNumber,
@@ -105,7 +105,7 @@ class OrderProductionTableState {
     }
     httpGet(
       loading: 'carton_label_scan_order_detail'.tr,
-      method: webApiGetTailNumberListData,
+      method: webApiGetTailNumberListDataNew,
       params: {
         'StartDate': startDate.getDateFormatYMD(),
         'EndDate': endDate.getDateFormatYMD(),
