@@ -49,13 +49,15 @@ class ViewInstructionDetailsState {
         data: {
           'orderNo': instruction,
           'processFlow':processFlowID,
+          'language':language,
         },
       ).then((response) {
         // loadingDismiss();
-        if (jsonDecode(response.data)['successed']) {
-          success.call(jsonDecode(response.data)['data']);
+        var json=jsonDecode(response.data);
+        if (json['successed']) {
+          success.call(json['data']);
         } else {
-          error.call(response.data['message']?? '');
+          error.call(json['message']?? '');
         }
       });
   }

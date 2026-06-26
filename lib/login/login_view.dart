@@ -155,7 +155,6 @@ class _PhoneLoginWidget extends StatefulWidget {
 }
 
 class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
-
   @override
   Widget build(BuildContext context) {
     return _buildLoginBox(
@@ -188,8 +187,10 @@ class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
                       hintText: 'login_hint_verify_code'.tr,
                       hintStyle: const TextStyle(color: Colors.white),
                       counterStyle: const TextStyle(color: Colors.white),
-                      prefixIcon: const Icon(Icons.email_outlined,
-                          color: Colors.white),
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -200,7 +201,9 @@ class _PhoneLoginWidgetState extends State<_PhoneLoginWidget> {
                             ? Colors.white
                             : Colors.grey.shade400,
                       ),
-                      onPressed: () => widget.logic.getVerifyCode(widget.phoneController.text),
+                      onPressed: () => widget.logic.getVerifyCode(
+                        widget.phoneController.text,
+                      ),
                       child: Text(
                         widget.state.countTimer.value == 0
                             ? 'get_verify_code'.tr
@@ -253,8 +256,10 @@ class _MachineLoginWidget extends StatelessWidget {
           _buildLoginTextField(
             controller: machineController,
             hint: 'login_hint_machine'.tr,
-            leftIcon: const Icon(Icons.precision_manufacturing,
-                color: Colors.white),
+            leftIcon: const Icon(
+              Icons.precision_manufacturing,
+              color: Colors.white,
+            ),
             maxLength: 10,
           ),
           _buildLoginTextField(
@@ -562,8 +567,6 @@ class _LoginPickState extends State<LoginPick>
   void initState() {
     state.isReLogin = widget.isReLogin;
     tabController.addListener(_onTabChanged);
-    _initFeishuWebView();
-    _ensureWebViewLoaded();
     webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
@@ -598,12 +601,11 @@ class _LoginPickState extends State<LoginPick>
           },
         ),
       );
+    _initFeishuWebView();
+    _ensureWebViewLoaded();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
     super.initState();
   }
-
-
-
 
   @override
   void dispose() {
@@ -728,4 +730,3 @@ class _LoginPickState extends State<LoginPick>
     );
   }
 }
-

@@ -124,7 +124,7 @@ class RouteConfig {
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    202,
+    203,
     const ViewInstructionDetailsPage(),
   );
 
