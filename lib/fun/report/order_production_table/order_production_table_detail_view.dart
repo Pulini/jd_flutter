@@ -17,9 +17,11 @@ class OrderProductionTableDetailPage extends StatefulWidget {
       _OrderProductionTableDetailPageState();
 }
 
-class _OrderProductionTableDetailPageState extends State<OrderProductionTableDetailPage> {
+class _OrderProductionTableDetailPageState
+    extends State<OrderProductionTableDetailPage> {
   final OrderProductionTableLogic logic = Get.find<OrderProductionTableLogic>();
-  final OrderProductionTableState state = Get.find<OrderProductionTableLogic>().state;
+  final OrderProductionTableState state =
+      Get.find<OrderProductionTableLogic>().state;
 
   var titleStyle = TextStyle(
     fontWeight: FontWeight.bold,
@@ -47,70 +49,33 @@ class _OrderProductionTableDetailPageState extends State<OrderProductionTableDet
   );
 
   Widget _item(ClearTailListInfo data) {
-    return Container(
-      height: 30,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.blue.shade200, width: 1),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              data.size ?? '',
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          subLine,
-          Expanded(
-            child: Text(
-              data.orderQty.toString(),
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          subLine,
-          Expanded(
-            child: Text(
-              data.fullBoxQty.toString(),
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          subLine,
-          Expanded(
-            child: Text(
-              data.unFullBoxQty.toString(),
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          subLine,
-          Expanded(
-            child: Text(
-              (data.unFullBoxQty! + data.fullBoxQty!).toString(),
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          subLine,
-          Expanded(
-            child: Text(
-              data.arrears.toString(),
-              style: subStyle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        item(data.size ?? '', true),
+        item(data.orderQty.toString(), true),
+        item(data.fullBoxQty.toString(), true),
+        item(data.unFullBoxQty.toString(), true),
+        item((data.unFullBoxQty! + data.fullBoxQty!).toString(), true),
+        item(data.arrears.toString(), true),
+      ],
     );
   }
+
+  Widget item(String text, bool isSub) => ExpandedFrameText(
+        text: text,
+        borderColor: Colors.blue,
+        alignment: Alignment.center,
+        isBold: !isSub,
+        textColor: isSub ? Colors.black : Colors.blue.shade700,
+        backgroundColor:isSub? Colors.white:Colors.grey.shade300,
+      );
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        body: Column(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -135,11 +100,14 @@ class _OrderProductionTableDetailPageState extends State<OrderProductionTableDet
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                    child: Obx(() => InkWell(child: textSpan(
-                        hint: 'forming_code_collection_group'.tr,
-                        text: state.groupName.value),onTap: (){
-                      msgDialog(content: state.groupName.value);
-                    },))),
+                    child: Obx(() => InkWell(
+                          child: textSpan(
+                              hint: 'forming_code_collection_group'.tr,
+                              text: state.groupName.value),
+                          onTap: () {
+                            msgDialog(content: state.groupName.value);
+                          },
+                        ))),
                 Expanded(
                     child: Obx(() => textSpan(
                         hint: 'forming_code_collection_customer_order'.tr,
@@ -147,72 +115,15 @@ class _OrderProductionTableDetailPageState extends State<OrderProductionTableDet
               ],
             ),
             const SizedBox(height: 5),
-            Container(
-              height: 35,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(3),
-                border: Border(
-                  top: BorderSide(color: Colors.blue.shade300, width: 2),
-                  left: BorderSide(color: Colors.blue.shade300, width: 2),
-                  right: BorderSide(color: Colors.blue.shade300, width: 2),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_size'.tr,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  titleLine,
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_quality'.tr,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade700,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  titleLine,
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_full_box'.tr,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  titleLine,
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_not_full_box'.tr,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  titleLine,
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_completed_quantity'.tr,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  titleLine,
-                  Expanded(
-                    child: Text(
-                      'carton_label_scan_order_arrears'.tr,
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                item('carton_label_scan_order_size'.tr, false),
+                item('carton_label_scan_order_quality'.tr, false),
+                item('carton_label_scan_order_full_box'.tr, false),
+                item('carton_label_scan_order_not_full_box'.tr, false),
+                item('carton_label_scan_order_completed_quantity'.tr, false),
+                item('carton_label_scan_order_arrears'.tr, false),
+              ],
             ),
             Expanded(
               child: Obx(
@@ -224,9 +135,10 @@ class _OrderProductionTableDetailPageState extends State<OrderProductionTableDet
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
-
 
   @override
   void initState() {

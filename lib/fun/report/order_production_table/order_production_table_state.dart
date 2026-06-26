@@ -33,7 +33,9 @@ class OrderProductionTableState {
   CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
   var reportBoxList = <ClearTailListInfo>[].obs; //
   var tailNumberList = <OrderProductionExecutionInfo>[].obs; //外箱列表
+  var copyTailNumberList = <OrderProductionExecutionInfo>[].obs; //外箱列表
   var type = true.obs; //默认派工日期
+  var lineList = <String>['carton_label_scan_order_all_lines'.tr]; //所有工厂
   var list1 = [
     'carton_label_scan_order_detail_all'.tr,
     'carton_label_scan_order_detail_all_scan'.tr,
@@ -98,7 +100,10 @@ class OrderProductionTableState {
   }
 
   //查询不满箱
-  void getTailNumberListData(String search) {
+  void getTailNumberListData({
+    required String search,
+    required Function() success,
+  }) {
     var searchType = '0';
     if (search == 'carton_label_scan_order_detail_all') {
       searchType = '0';
@@ -126,10 +131,28 @@ class OrderProductionTableState {
           for (var i = 0; i < response.data.length; ++i)
             OrderProductionExecutionInfo.fromJson(response.data[i])
         ];
+        copyTailNumberList.addAll(tailNumberList);
+        arrangeFactory(success: () => success.call());
       } else {
         tailNumberList.value = [];
+        lineList =['carton_label_scan_order_all_lines'.tr];
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
+  }
+
+  void arrangeFactory({
+    required Function() success,
+  }) {
+    var list = <String>[];
+    list.add('carton_label_scan_order_all_lines'.tr);
+    for (var data in tailNumberList) {
+      if (data.departmentName != '' && !list.contains(data.departmentName)) {
+        list.add(data.departmentName!);
+      }
+    }
+    lineList = list;
+    logger.f('有几个内容：${lineList.length}');
+    success.call();
   }
 }

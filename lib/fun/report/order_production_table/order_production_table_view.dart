@@ -27,7 +27,15 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
   final OrderProductionTableState state =
       Get.find<OrderProductionTableLogic>().state;
 
-  late SpinnerController spinnerController1;
+  late SpinnerController spinnerController1; //查询类型
+  late SpinnerController spinnerController2; //全部线别
+
+  var style = const TextStyle(color: Color(0xFF333333), fontSize: 13);
+  var textStyle = const TextStyle(
+    color: Color(0xFF1967D2),
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
 
   // 单独拎出来的条目组件
   Widget _item(OrderProductionExecutionInfo item) {
@@ -83,18 +91,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "派工单号：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text: 'carton_label_scan_order_title_order_no'.tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.workCardNo ?? "",
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -104,18 +107,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "派工日期：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text: 'carton_label_scan_order_title_order_date'.tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.workCardDate ?? "",
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -132,18 +130,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "指令号：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text: 'carton_label_scan_order_title_command'.tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.seOrderNo ?? "",
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -153,18 +146,14 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "交期：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text:
+                              'carton_label_scan_order_title_delivery_time'.tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.fetchDate ?? "",
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -181,18 +170,14 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "订单数量：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text:
+                              'carton_label_scan_order_title_order_quantity'.tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.seOrderQty.toShowString(),
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -202,18 +187,15 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        const TextSpan(
-                          text: "扫描数量：",
-                          style:
-                              TextStyle(color: Color(0xFF333333), fontSize: 13),
+                        TextSpan(
+                          text:
+                              'carton_label_scan_order_title_order_scan_quantity'
+                                  .tr,
+                          style: style,
                         ),
                         TextSpan(
                           text: item.scanQty.toString(),
-                          style: const TextStyle(
-                            color: Color(0xFF1967D2),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: textStyle,
                         ),
                       ],
                     ),
@@ -228,17 +210,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
             Text.rich(
               TextSpan(
                 children: [
-                  const TextSpan(
-                    text: "组别名称：",
-                    style: TextStyle(color: Color(0xFF333333), fontSize: 13),
+                  TextSpan(
+                    text: 'carton_label_scan_order_title_group_name'.tr,
+                    style: style,
                   ),
                   TextSpan(
                     text: item.departmentName ?? "",
-                    style: const TextStyle(
-                      color: Color(0xFF1967D2),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: textStyle,
                   ),
                 ],
               ),
@@ -248,17 +226,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
             Text.rich(
               TextSpan(
                 children: [
-                  const TextSpan(
-                    text: "工厂型体：",
-                    style: TextStyle(color: Color(0xFF333333), fontSize: 13),
+                  TextSpan(
+                    text: 'carton_label_scan_order_title_factory_body'.tr,
+                    style: style,
                   ),
                   TextSpan(
                     text: item.productName ?? "",
-                    style: const TextStyle(
-                      color: Color(0xFF1967D2),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: textStyle,
                   ),
                 ],
               ),
@@ -275,6 +249,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
         actions: [],
         body: Column(
           children: [
+            SizedBox(child: Spinner(controller: spinnerController2)),
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -308,7 +283,16 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
         ],
         query: () {
           logic.queryOrderList(
-            spinnerController1.select.value,
+            type: spinnerController1.select.value,
+            success: () {
+              setState(() {
+                spinnerController2 = SpinnerController(
+                    dataList: state.lineList,
+                    onChanged: (index) {
+                      logic.selectShow(index);
+                    });
+              });
+            },
           );
         });
   }
@@ -323,5 +307,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
   void initState() {
     super.initState();
     spinnerController1 = SpinnerController(dataList: state.list1);
+    spinnerController2 =
+        SpinnerController(dataList: ['carton_label_scan_order_all_lines'.tr]);
   }
 }

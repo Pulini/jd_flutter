@@ -48,11 +48,6 @@ class _CartonLabelScanClearTailState extends State<CartonLabelScanClearTail> {
                     goActivity: () {
                       Get.to(() => const CartonLabelScanClearTailDetailPage())
                           ?.then((v) {
-                        if (v == true) {
-                          state.queryNotFullBox(
-                            barCode: state.tailController.text
-                          );
-                        }
                         _scan();
                       });
                     });

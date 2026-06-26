@@ -71,9 +71,9 @@ class _CartonLabelScanClearTailDetailPageState
                       children: [
                         textSpan(
                           hint: 'carton_label_scan_outside_code'.tr,
-                          text:
-                              state.outBoxList[state.showIndex].outBoxBarCode ??
-                                  '',
+                          text: (state.outBoxList.isNotEmpty && state.showIndex < state.outBoxList.length)
+                              ? (state.outBoxList[state.showIndex].outBoxBarCode ?? '').toString()
+                              : '',
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -101,7 +101,7 @@ class _CartonLabelScanClearTailDetailPageState
                       ],
                     ),
                   ),
-                  Expanded(
+                  if(state.outBoxList.isNotEmpty) Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.outBoxList[state.showIndex]
@@ -121,6 +121,8 @@ class _CartonLabelScanClearTailDetailPageState
                                   successDialog(
                                       content: s,
                                       back: () {
+                                        state.outBoxList.clear();
+                                        state.tailController.clear();
                                         Get.back(result: true);
                                       })
                                 });

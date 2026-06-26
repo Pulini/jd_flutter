@@ -9,12 +9,29 @@ class OrderProductionTableLogic extends GetxController {
     state.getTailNumberReportData(barCode: code, dispatchNumber: number);
   }
 
-  void queryOrderList(String type) {
-    state.getTailNumberListData(type);
+  void queryOrderList({
+   required String type,
+   required Function success,
+}) {
+    state.getTailNumberListData( search: type, success: () {
+      success.call();
+    });
   }
 
   void getDetail(OrderProductionExecutionInfo data) {
     state.getTailNumberReportData(
         barCode: '', dispatchNumber: data.workCardNo!);
   }
+
+  void selectShow(int index){
+    if (index == 0) {
+      state.tailNumberList.value = state.copyTailNumberList;
+    } else {
+      state.tailNumberList.value = state.copyTailNumberList
+          .where((data) => data.departmentName== state.lineList[index])
+          .toList();
+    }
+    state.tailNumberList.refresh();
+  }
+
 }
