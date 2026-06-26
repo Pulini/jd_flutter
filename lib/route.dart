@@ -124,7 +124,7 @@ class RouteConfig {
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    201,
+    203,
     const ViewInstructionDetailsPage(),
   );
 
@@ -663,14 +663,14 @@ class RouteConfig {
   //SAP标签重打
   static Routes sapLabelReprint = Routes(
     '/sap_label_reprint',
-    203,
+    204,
     const SapLabelReprintPage(),
   );
 
   //打印托盘清单
   static Routes printPallet = Routes(
     '/print_pallet',
-    206,
+    207,
     const PrintPalletPage(),
   );
 

@@ -45,7 +45,7 @@ class AppInitService extends GetxService {
   double androidXDpi = 0.0;
   late BaseDeviceInfo deviceInfo;
   List<CameraDescription>? cameras;
-  final JPushFlutterInterface jpush = JPush.newJPush();
+  late JPushFlutterInterface jpush;
   String? jpushID;
 
   static AppInitService get to => Get.find();
@@ -72,6 +72,10 @@ class AppInitService extends GetxService {
   }
 
   Future<void> _initJPush() async {
+    if(!GetPlatform.isMobile){
+      return;
+    }
+    jpush = JPush.newJPush();
     try {
       jpush.setCallBackHarmony((eventName, data) async {
         debugPrint('''jPush CallBackHarmony

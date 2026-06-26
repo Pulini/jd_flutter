@@ -38,20 +38,47 @@ class _ViewInstructionDetailsPageState
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(Colors.transparent)
         ..setNavigationDelegate(
-          NavigationDelegate(
-            onPageStarted: (String url) {
-              loadingShow('view_instruction_details_reading'.tr);
-            },
-            onPageFinished: (String url) {
-              loadingDismiss();
-            },
-            onWebResourceError: (WebResourceError error) {
-              loadingDismiss();
-            },
-          ),
+            NavigationDelegate(
+              onPageStarted: (String url) {
+                debugPrint('onPageStarted------$url');
+                loadingShow('加载中');
+              },
+              onPageFinished: (String url) {
+                debugPrint('onPageFinished------$url');
+                loadingDismiss();
+              },
+              onHttpError: (HttpResponseError error) {
+                debugPrint('onHttpError------${error.response?.statusCode}');
+                debugPrint('onHttpError URL------${error.response?.uri}');
+                loadingDismiss();
+              },
+              onWebResourceError: (WebResourceError error) {
+                debugPrint('onWebResourceError------${error.description}');
+                debugPrint('onWebResourceError Type------${error.errorType}');
+                debugPrint('onWebResourceError URL------${error.url}');
+                loadingDismiss();
+              },
+            ),
         );
     }
     super.initState();
+  }
+
+  void _query() {
+/*    logic.queryPDF(
+      processFlowId: pickerControllerProcessFlow.selectedId.value,
+      instruction: tecInstruction.text,
+      loadUri: (uri) {
+        webViewController.clearCache();
+        webViewController.loadRequest(uri);
+      },
+    );*/
+
+    logic.queryFile(
+      processFlowID: pickerControllerProcessFlow.selectedId.value,
+      instruction: tecInstruction.text,
+      toWeb: (html) => webViewController.loadHtmlString(html),
+    );
   }
 
   @override
@@ -64,14 +91,7 @@ class _ViewInstructionDetailsPageState
         ),
         OptionsPicker(pickerController: pickerControllerProcessFlow),
       ],
-      query: () => logic.queryPDF(
-        processFlowId: pickerControllerProcessFlow.selectedId.value,
-        instruction: tecInstruction.text,
-        loadUri: (uri) {
-          webViewController.clearCache();
-          webViewController.loadRequest(uri);
-        },
-      ),
+      query: () => _query(),
       body: GetPlatform.isAndroid || GetPlatform.isIOS
           ? WebViewWidget(controller: webViewController)
           : Container(),

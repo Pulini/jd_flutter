@@ -229,8 +229,8 @@ class _WebPrinterState extends State<WebPrinter> {
     ready.value = false;
     dio.post(
       isTestUrl()
-          ? 'https://mestest.goldemperor.com:9099/m'
-          : 'https://wb.goldemperor.com:8096/m',
+          ? 'http://192.168.99.103:9095/m'
+          : 'https://erp.goldemperor.com:9051/m',
       queryParameters: {
         'xwl': 'public/interfaces/app/getPalletListHTML',
         'palletNumber': widget.palletTaskList

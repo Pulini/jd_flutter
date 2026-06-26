@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -25,5 +29,36 @@ class ViewInstructionDetailsState {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
+  }
+  void getFile({
+    required String processFlowID,
+    required String instruction,
+    required Function(String html) success,
+    required Function(String msg) error,
+  }) {
+    // loadingShow( 'view_instruction_details_querying'.tr);
+    Dio()
+      ..interceptors.add(DioManager.simpleInterceptors)
+      ..post(
+        isTestUrl()
+            ? 'http://192.168.99.103:9095/m'
+            : 'https://erp.goldemperor.com:9051/m',
+        queryParameters: {
+          'xwl': 'public/interfaces/app/getOrderSheet',
+        },
+        data: {
+          'orderNo': instruction,
+          'processFlow':processFlowID,
+          'language':language,
+        },
+      ).then((response) {
+        // loadingDismiss();
+        var json=jsonDecode(response.data);
+        if (json['successed']) {
+          success.call(json['data']);
+        } else {
+          error.call(json['message']?? '');
+        }
+      });
   }
 }

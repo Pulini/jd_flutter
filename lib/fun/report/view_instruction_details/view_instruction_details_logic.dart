@@ -28,4 +28,17 @@ class ViewInstructionDetailsLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  void queryFile({
+    required String processFlowID,
+    required String instruction,
+    required Function(String) toWeb,
+  }) {
+    state.getFile(
+      processFlowID: processFlowID,
+      instruction: instruction,
+      success: toWeb,
+      error: (msg)=>errorDialog(content: msg),
+    );
+  }
 }

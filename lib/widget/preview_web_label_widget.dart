@@ -39,8 +39,8 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
     loadingShow('正在获取标签信息...');
     dio.post(
       isTestUrl()
-          ? 'https://mestest.goldemperor.com:9099/m'
-          : 'https://wb.goldemperor.com:8096/m',
+          ? 'http://192.168.99.103:9095/m'
+          : 'https://erp.goldemperor.com:9051/m',
       queryParameters: {'xwl': 'public/interfaces/app/getBqModel'},
       data: {'bqList': widget.labelCodes},
     ).then((response) async {
