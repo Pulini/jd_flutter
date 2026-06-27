@@ -43,7 +43,7 @@ void feishuViewWikiFiles({required String query}) {
   if (query.isEmpty) {
     showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
-    querySuccess(List<FeishuWikiSearchItemInfo> files) {
+    querySuccess(List<LarkWikiSearchItemInfo> files) {
       pickFilePopup(
         fileList: [
           for (var f in files) {'title': f.title, 'url': f.url}
@@ -84,7 +84,7 @@ void feishuViewCloudDocFiles({required String query}) {
     showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
     var authorizeToken = '';
-    querySuccess(List<FeishuCloudDocSearchItemInfo> files) {
+    querySuccess(List<LarkCloudDocSearchItemInfo> files) {
       pickFilePopup(
         fileList: [
           for (var f in files) {'title': f.title, 'url': f.docsToken}
@@ -229,7 +229,7 @@ void feishuWikiAuthorizeCheck({
     notAuthorize.call();
   } else {
     var tokenInfo =
-        FeishuUserTokenInfo.fromSaveJson(jsonDecode(feishuLoginCache));
+        LarkUserTokenInfo.fromSaveJson(jsonDecode(feishuLoginCache));
     if (tokenInfo.isTimeout()) {
       notAuthorize.call();
     } else {
@@ -248,7 +248,7 @@ void feishuCloudDocAuthorizeCheck({
     notAuthorize.call();
   } else {
     var tokenInfo =
-        FeishuUserTokenInfo.fromSaveJson(jsonDecode(feishuLoginCache));
+        LarkUserTokenInfo.fromSaveJson(jsonDecode(feishuLoginCache));
     if (tokenInfo.isTimeout()) {
       notAuthorize.call();
     } else {
@@ -261,7 +261,7 @@ void feishuCloudDocAuthorizeCheck({
 void feishuWikiSearch({
   required String token,
   required String query,
-  required Function(List<FeishuWikiSearchItemInfo> list) success,
+  required Function(List<LarkWikiSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
   loadingShow('feishu_authorize_wiki_searching'.tr);
@@ -286,9 +286,9 @@ void feishuWikiSearch({
     ).then(
       (response) {
         loadingDismiss();
-        var searchInfo = FeishuSearchResultInfo.fromJson(response.data);
+        var searchInfo = LarkSearchResultInfo.fromJson(response.data);
         if (searchInfo.code == 0) {
-          var wikiInfo = FeishuWikiSearchDataInfo.fromJson(searchInfo.data);
+          var wikiInfo = LarkWikiSearchDataInfo.fromJson(searchInfo.data);
           if (wikiInfo.items?.isEmpty == true) {
             failed.call('feishu_authorize_not_find_file'.tr);
           } else {
@@ -317,7 +317,7 @@ void feishuWikiSearch({
 void feishuCloudDocSearch({
   required String token,
   required String query,
-  required Function(List<FeishuCloudDocSearchItemInfo> list) success,
+  required Function(List<LarkCloudDocSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
 
@@ -338,9 +338,9 @@ void feishuCloudDocSearch({
     ).then(
       (response) {
         loadingDismiss();
-        var searchInfo = FeishuSearchResultInfo.fromJson(response.data);
+        var searchInfo = LarkSearchResultInfo.fromJson(response.data);
         if (searchInfo.code == 0) {
-          var cloudDocInfo = FeishuCloudDocSearchInfo.fromJson(searchInfo.data);
+          var cloudDocInfo = LarkCloudDocSearchInfo.fromJson(searchInfo.data);
           if (cloudDocInfo.docs?.isEmpty == true) {
             failed.call('feishu_authorize_not_find_file'.tr);
           } else {
@@ -368,8 +368,8 @@ void feishuCloudDocSearch({
 /// 飞书云文档获取文件明细
 void feishuGetCloudDocInfo({
   required String token,
-  required FeishuCloudDocSearchItemInfo cloudDocInfo,
-  required Function(List<FeishuCloudDocFileMetasInfo> list) success,
+  required LarkCloudDocSearchItemInfo cloudDocInfo,
+  required Function(List<LarkCloudDocFileMetasInfo> list) success,
   required Function(String error) failed,
 }) {
   loadingShow('feishu_authorize_getting_file_detail'.tr);
@@ -395,9 +395,9 @@ void feishuGetCloudDocInfo({
     ).then(
       (response) {
         loadingDismiss();
-        var searchInfo = FeishuSearchResultInfo.fromJson(response.data);
+        var searchInfo = LarkSearchResultInfo.fromJson(response.data);
         if (searchInfo.code == 0) {
-          var cloudDocInfo = FeishuCloudDocFileInfo.fromJson(searchInfo.data);
+          var cloudDocInfo = LarkCloudDocFileInfo.fromJson(searchInfo.data);
           if (cloudDocInfo.metas?.isEmpty == true) {
             failed.call('feishu_authorize_not_find_file'.tr);
           } else {
@@ -452,7 +452,7 @@ class FeishuAuthorize extends StatelessWidget {
       ).then(
         (response) {
           loadingDismiss();
-          var feishu = FeishuUserTokenInfo.fromJson(response.data);
+          var feishu = LarkUserTokenInfo.fromJson(response.data);
           spSave(
               isWikiPermission
                   ? spSaveFeishuUserWikiTokenData

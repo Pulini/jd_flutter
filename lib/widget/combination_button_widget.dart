@@ -13,19 +13,22 @@ class CombinationButton extends StatefulWidget {
   final String text;
   final Widget? icon;
   final Function() click;
+  final Function()? longClick;
   final int debounceDuration;
 
-  const CombinationButton(
-      {super.key,
-      required this.text,
-      required this.click,
-      this.icon,
-      this.combination = Combination.intact,
-      this.backgroundColor = Colors.blue,
-      this.foregroundColor = Colors.white,
-      this.isEnabled = true,
-      this.hasPadding = true,
-      this.debounceDuration = 500});
+  const CombinationButton({
+    super.key,
+    required this.text,
+    required this.click,
+    this.longClick,
+    this.icon,
+    this.combination = Combination.intact,
+    this.backgroundColor = Colors.blue,
+    this.foregroundColor = Colors.white,
+    this.isEnabled = true,
+    this.hasPadding = true,
+    this.debounceDuration =1000,
+  });
 
   @override
   State<CombinationButton> createState() => _CombinationButtonState();
@@ -81,16 +84,15 @@ class _CombinationButtonState extends State<CombinationButton> {
   @override
   Widget build(BuildContext context) {
     var textStyle = TextStyle(
-      color: widget.isEnabled == true
-          ? widget.foregroundColor
-          : Colors.grey[800],
+      color:
+          widget.isEnabled == true ? widget.foregroundColor : Colors.grey.shade800,
     );
     return Container(
       height: 40,
       padding: widget.hasPadding ? getPadding() : const EdgeInsets.all(0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          overlayColor: Colors.white,
+          overlayColor: Colors.black87,
           padding: const EdgeInsets.only(left: 8, right: 8),
           backgroundColor:
               widget.isEnabled == true ? widget.backgroundColor : Colors.grey,
@@ -109,6 +111,7 @@ class _CombinationButtonState extends State<CombinationButton> {
             widget.click.call();
           }
         },
+        onLongPress: ()=>widget.longClick?.call(),
         child: widget.icon != null
             ? Text.rich(
                 TextSpan(

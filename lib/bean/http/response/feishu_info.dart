@@ -1,4 +1,4 @@
-class FeishuUserTokenInfo {
+class LarkUserTokenInfo {
   int? code;
   String? tokenType;
   String? accessToken;
@@ -7,7 +7,7 @@ class FeishuUserTokenInfo {
 
   int time = 0;
 
-  FeishuUserTokenInfo.fromJson(Map<String, dynamic> json) {
+  LarkUserTokenInfo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     tokenType = json['token_type'];
     accessToken = json['access_token'];
@@ -16,7 +16,7 @@ class FeishuUserTokenInfo {
     time = DateTime.now().millisecondsSinceEpoch;
   }
 
-  FeishuUserTokenInfo.fromSaveJson(Map<String, dynamic> json) {
+  LarkUserTokenInfo.fromSaveJson(Map<String, dynamic> json) {
     code = json['code'];
     tokenType = json['token_type'];
     accessToken = json['access_token'];
@@ -48,12 +48,12 @@ class FeishuUserTokenInfo {
 //     "data": data,
 //     "msg": "success"
 // }
-class FeishuSearchResultInfo {
+class LarkSearchResultInfo {
   int? code;
   dynamic data;
   String? msg;
 
-  FeishuSearchResultInfo.fromJson(dynamic json) {
+  LarkSearchResultInfo.fromJson(dynamic json) {
     code = json['code'];
     data = json['data'];
     msg = json['msg'];
@@ -64,16 +64,16 @@ class FeishuSearchResultInfo {
 //  "has_more": false,
 //  "items": []
 //}
-class FeishuWikiSearchDataInfo {
+class LarkWikiSearchDataInfo {
   bool? hasMore;
-  List<FeishuWikiSearchItemInfo>? items;
+  List<LarkWikiSearchItemInfo>? items;
 
-  FeishuWikiSearchDataInfo.fromJson(dynamic json) {
+  LarkWikiSearchDataInfo.fromJson(dynamic json) {
     hasMore = json['has_more'];
     if (json['items'] != null) {
       items = [];
       json['items'].forEach((v) {
-        items?.add(FeishuWikiSearchItemInfo.fromJson(v));
+        items?.add(LarkWikiSearchItemInfo.fromJson(v));
       });
     }
   }
@@ -89,7 +89,7 @@ class FeishuWikiSearchDataInfo {
 //  "title": "(2008.10.29-)欧盟REACH法规高关注物质清单.pdf",
 //  "url": "https://goldemperor.feishu.cn/wiki/LK5YwQFdwiorgIkeac6cGszGnwb"
 //}
-class FeishuWikiSearchItemInfo {
+class LarkWikiSearchItemInfo {
   String? nodeId;
   String? objToken;
   int? objType;
@@ -99,7 +99,7 @@ class FeishuWikiSearchItemInfo {
   String? title;
   String? url;
 
-  FeishuWikiSearchItemInfo.fromJson(dynamic json) {
+  LarkWikiSearchItemInfo.fromJson(dynamic json) {
     nodeId = json['node_id'];
     objToken = json['obj_token'];
     objType = json['obj_type'];
@@ -114,16 +114,16 @@ class FeishuWikiSearchItemInfo {
 //  "docs_entities": [],
 //  "has_more": true,
 //  "total": 59
-class FeishuCloudDocSearchInfo {
-  List<FeishuCloudDocSearchItemInfo>? docs;
+class LarkCloudDocSearchInfo {
+  List<LarkCloudDocSearchItemInfo>? docs;
   bool? hasMore;
   int? total;
 
-  FeishuCloudDocSearchInfo.fromJson(dynamic json) {
+  LarkCloudDocSearchInfo.fromJson(dynamic json) {
     if (json['docs_entities'] != null) {
       docs = [];
       json['docs_entities'].forEach((v) {
-        docs?.add(FeishuCloudDocSearchItemInfo.fromJson(v));
+        docs?.add(LarkCloudDocSearchItemInfo.fromJson(v));
       });
     }
     hasMore = json['has_more'];
@@ -137,13 +137,13 @@ class FeishuCloudDocSearchInfo {
 //  "owner_id": "ou_b97fbe610114d9489ff3b501a71abcef",
 //  "title": "项目进展周报"
 //},
-class FeishuCloudDocSearchItemInfo {
+class LarkCloudDocSearchItemInfo {
   String? docsToken;
   String? docsType;
   String? ownerId;
   String? title;
 
-  FeishuCloudDocSearchItemInfo.fromJson(dynamic json) {
+  LarkCloudDocSearchItemInfo.fromJson(dynamic json) {
     docsToken = json['docs_token'];
     docsType = json['docs_type'];
     ownerId = json['owner_id'];
@@ -155,21 +155,21 @@ class FeishuCloudDocSearchItemInfo {
 //  "metas": [],
 //  "failed_list": []
 // }
-class FeishuCloudDocFileInfo {
-  List<FeishuCloudDocFileMetasInfo>? metas;
-  List<FeishuCloudDocFileFailedInfo>? failedList;
+class LarkCloudDocFileInfo {
+  List<LarkCloudDocFileMetasInfo>? metas;
+  List<LarkCloudDocFileFailedInfo>? failedList;
 
-  FeishuCloudDocFileInfo.fromJson(dynamic json) {
+  LarkCloudDocFileInfo.fromJson(dynamic json) {
     if (json['metas'] != null) {
       metas = [];
       json['metas'].forEach((v) {
-        metas?.add(FeishuCloudDocFileMetasInfo.fromJson(v));
+        metas?.add(LarkCloudDocFileMetasInfo.fromJson(v));
       });
     }
     if (json['failed_list'] != null) {
       failedList = [];
       json['failed_list'].forEach((v) {
-        failedList?.add(FeishuCloudDocFileFailedInfo.fromJson(v));
+        failedList?.add(LarkCloudDocFileFailedInfo.fromJson(v));
       });
     }
   }
@@ -186,7 +186,7 @@ class FeishuCloudDocFileInfo {
 //  "url": "https://sample.feishu.cn/docs/doccnfYZzTlvXqZIGTdAHKabcef",
 //  "sec_label_name": "L2-内部"
 // }
-class FeishuCloudDocFileMetasInfo {
+class LarkCloudDocFileMetasInfo {
   String? docToken;
   String? docType;
   String? title;
@@ -197,7 +197,7 @@ class FeishuCloudDocFileMetasInfo {
   String? url;
   String? secLabelName;
 
-  FeishuCloudDocFileMetasInfo.fromJson(dynamic json) {
+  LarkCloudDocFileMetasInfo.fromJson(dynamic json) {
     docToken = json['doc_token'];
     docType = json['doc_type'];
     title = json['title'];
@@ -214,11 +214,11 @@ class FeishuCloudDocFileMetasInfo {
 //  "token": "boxcnrHpsg1QDqXAAAyachabcef",
 //  "code": 970005
 // }
-class FeishuCloudDocFileFailedInfo {
+class LarkCloudDocFileFailedInfo {
   String? token;
   int? code;
 
-  FeishuCloudDocFileFailedInfo.fromJson(dynamic json) {
+  LarkCloudDocFileFailedInfo.fromJson(dynamic json) {
     token = json['token'];
     code = json['code'];
   }
@@ -238,7 +238,7 @@ class FeishuCloudDocFileFailedInfo {
 //         "mobile": "+86130002883xx",
 //         "tenant_key": "736588c92lxf175d",
 // 		"employee_no": "111222333"
-class FeishuUserInfo {
+class LarkUserInfo {
   String? name;
   String? enName;
   String? avatarUrl;
@@ -254,7 +254,7 @@ class FeishuUserInfo {
   String? tenantKey;
   String? employeeNo;
 
-  FeishuUserInfo.fromJson(dynamic json) {
+  LarkUserInfo.fromJson(dynamic json) {
     name = json['name'];
     enName = json['en_name'];
     avatarUrl = json['avatar_url'];

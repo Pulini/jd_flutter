@@ -3,7 +3,6 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -47,11 +46,6 @@ class LoginLogic extends GetxController {
 
   //根据手机号码获取用户头像并登录
   void faceLogin(String phone) {
-    hideKeyBoard();
-    if (phone.isEmpty) {
-      errorDialog(content: 'login_tips_phone'.tr);
-      return;
-    }
     state.faceLogin(
         phone: phone,
         success: (s) {
@@ -82,15 +76,7 @@ class LoginLogic extends GetxController {
     String machine,
     String password,
   ) {
-    hideKeyBoard();
-    if (machine.isEmpty) {
-      errorDialog(content: 'login_tips_machine'.tr);
-      return;
-    }
-    if (password.isEmpty) {
-      errorDialog(content: 'login_tips_password'.tr);
-      return;
-    }
+
     state.login(
       jiGuangID: getJPushID(),
       phone: machine,
@@ -128,18 +114,7 @@ class LoginLogic extends GetxController {
     );
   }
 
-  //获取验证码
-  String getDebugVCode() {
-    var date = DateTime.now();
-    var now = '${date.year.toString().substring(2, 4)}'
-        '${date.month.toString().padLeft(2, '0')}'
-        '${date.day.toString().padLeft(2, '0')}';
-    var vCode = '';
-    for (var i = now.length; i > 0; i--) {
-      vCode += now.substring(i - 1, i);
-    }
-    return vCode;
-  }
+
 
   // 手机号码登录
   void phoneLogin(
@@ -147,28 +122,6 @@ class LoginLogic extends GetxController {
     String password,
     String vCode,
   ) {
-    hideKeyBoard();
-    if (phone.isEmpty) {
-      errorDialog(content: 'login_tips_phone'.tr);
-      return;
-    }
-    if (isTestUrl()) {
-      //测试库无需验证码
-      vCode = getDebugVCode();
-      String dadPwd = dadPhone[phone] ?? '';
-      if (dadPwd.isNotEmpty && password.isEmpty) {
-        //程序员专用通道
-        password = dadPwd;
-      }
-    }
-    if (password.isEmpty) {
-      errorDialog(content: 'login_tips_password'.tr);
-      return;
-    }
-    if (vCode.isEmpty) {
-      errorDialog(content: 'login_tips_verify_code'.tr);
-      return;
-    }
     state.login(
       jiGuangID: getJPushID(),
       phone: phone,
@@ -189,15 +142,6 @@ class LoginLogic extends GetxController {
     String workNumber,
     String password,
   ) {
-    hideKeyBoard();
-    if (workNumber.isEmpty) {
-      errorDialog(content: 'login_tips_work_number'.tr);
-      return;
-    }
-    if (password.isEmpty) {
-      errorDialog(content: 'login_tips_password'.tr);
-      return;
-    }
     state.login(
       jiGuangID: getJPushID(),
       phone: workNumber,
@@ -213,34 +157,18 @@ class LoginLogic extends GetxController {
     );
   }
 
-  void getFeishuToken({
-    required String code,
-    required Function() reload,
-  }) {
-    error(String msg) {
-      errorDialog(content: msg);
-      reload.call();
-    }
-
-    state.getFeishuUserAccessToken(
-      code: code,
-      success: (token) => state.getFeishuUserInfo(
-        token: token,
-        success: (userInfo) => state.login(
-          jiGuangID: getJPushID(),
-          phone: userInfo.userId ?? '',
-          password: '',
-          vCode: '',
-          type: 4,
-          success: (userInfo) {
-            spSave(spSaveLoginType, spSaveLoginTypeFeiShu);
-            state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
-          },
-          error: error,
-        ),
-        error: error,
-      ),
-      error: error,
+  void larkLogin(String userId){
+    state.login(
+      jiGuangID: getJPushID(),
+      phone: userId,
+      password: '',
+      vCode: '',
+      type: 4,
+      success: (userInfo) {
+        spSave(spSaveLoginType, spSaveLoginTypeFeiShu);
+        state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+      },
+      error: (msg)=>errorDialog(content: msg),
     );
   }
 }

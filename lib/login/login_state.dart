@@ -1,16 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-
-import '../bean/http/response/feishu_info.dart';
-import '../widget/feishu_authorize.dart';
 
 class LoginState {
   var countTimer = 0.obs;
@@ -97,88 +92,4 @@ class LoginState {
     });
   }
 
-  void getFeishuUserAccessToken({
-    required String code,
-    required Function(String accessToken) success,
-    required Function(String msg) error,
-  }) {
-    loadingShow('getting_lark_token'.tr);
-    Dio()
-      ..interceptors.add(DioManager.simpleInterceptors)
-      ..post(
-        getUserTokenUrl,
-        data: {
-          'grant_type': 'authorization_code',
-          'client_id': appID,
-          'client_secret': appSecret,
-          'code': code,
-          'redirect_uri': redirectUri,
-        },
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        ),
-      ).then(
-        (response) {
-          loadingDismiss();
-          var feishu = FeishuUserTokenInfo.fromJson(response.data);
-          if (feishu.code == 0) {
-            success.call(feishu.accessToken ?? '');
-          } else {
-            error.call(
-                'getting_lark_token_failed'.trArgs([feishu.code.toString()]));
-          }
-        },
-        onError: (e) {
-          loadingDismiss();
-          error.call(
-            'getting_lark_token_failed'.trArgs(
-              [
-                '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
-              ],
-            ),
-          );
-        },
-      );
-  }
-
-  void getFeishuUserInfo({
-    required String token,
-    required Function(FeishuUserInfo userInfo) success,
-    required Function(String msg) error,
-  }) {
-    loadingShow('getting_lark_user_info'.tr);
-    Dio()
-      ..interceptors.add(DioManager.simpleInterceptors)
-      ..get(
-        getUserInfoUrl,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        ),
-      ).then(
-        (response) {
-          loadingDismiss();
-          var code = response.data['code'];
-          if (code == 0) {
-            success.call(FeishuUserInfo.fromJson(response.data['data']));
-          } else {
-            error.call('getting_lark_user_info_failed'.trArgs([code]));
-          }
-        },
-        onError: (e) {
-          loadingDismiss();
-          error.call(
-            'getting_lark_user_info_failed'.trArgs(
-              [
-                '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
-              ],
-            ),
-          );
-        },
-      );
-  }
 }

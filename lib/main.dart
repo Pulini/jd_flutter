@@ -18,6 +18,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       translations: Translation(),
       navigatorObservers: [GetObserver()],
+      initialRoute: '/',
       locale: localeChinese,
       localeListResolutionCallback: (locales, supportedLocales) {
         language = locales!.first.languageCode;

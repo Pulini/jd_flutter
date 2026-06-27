@@ -72,9 +72,7 @@ class AppInitService extends GetxService {
   }
 
   Future<void> _initJPush() async {
-    if(!GetPlatform.isMobile){
-      return;
-    }
+    if (!GetPlatform.isMobile) return; // JPush 不支持 Web 平台
     jpush = JPush.newJPush();
     try {
       jpush.setCallBackHarmony((eventName, data) async {
