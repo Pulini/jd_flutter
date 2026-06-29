@@ -255,8 +255,8 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                   const SizedBox(width: 10),
                                   Expanded(
                                       child: PercentIndicator(
-                                    max: state.detailShouldPackQty.value,
-                                    value: state.detailPackagedQty.value,
+                                    max: state.detailShouldPackQty.value.toDouble(),
+                                    value: state.detailPackagedQty.value.toDouble(),
                                   ))
                                 ],
                               ),
@@ -270,19 +270,17 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                         'production_tasks_detail_should_packing'
                                             .tr,
                                     text: state.detailShouldPackQty.value
-                                        .toShowString(),
+                                        .toString(),
                                   ),
                                   textSpan(
                                     hint: 'production_tasks_detail_packaged'.tr,
                                     text: state.detailPackagedQty.value
-                                        .toShowString(),
+                                        .toString(),
                                   ),
                                   textSpan(
                                     hint:
                                         'production_tasks_detail_unpackaged'.tr,
-                                    text: state.detailShouldPackQty.value
-                                        .sub(state.detailPackagedQty.value)
-                                        .toShowString(),
+                                    text: (state.detailShouldPackQty.value - state.detailPackagedQty.value).toString(),
                                   )
                                 ],
                               ),

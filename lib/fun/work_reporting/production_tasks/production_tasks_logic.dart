@@ -35,11 +35,11 @@ class ProductionTasksLogic extends GetxController {
         manualScannedQty: (state.orderList[0].workCardSizeInfo ?? [])
             .map((v) => v.manualScannedQty ?? 0)
             .reduce((a, b) => a.add(b)),
-        scannedQty: (state.orderList[0].workCardSizeInfo ?? [])
-            .map((v) => v.scannedQty ?? 0)
+        totalQty: (state.orderList[0].workCardSizeInfo ?? [])
+            .map((v) => v.totalQty ?? 0)
             .reduce((a, b) => a.add(b)),
-        installedQty: (state.orderList[0].workCardSizeInfo ?? [])
-            .map((v) => v.installedQty ?? 0)
+        scanTotalQty: (state.orderList[0].workCardSizeInfo ?? [])
+            .map((v) => v.scanTotalQty ?? 0)
             .reduce((a, b) => a.add(b)),
       );
 

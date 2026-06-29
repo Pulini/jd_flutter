@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -179,7 +178,7 @@ class CameraCropController extends GetxController {
       ResolutionPreset.high,
       enableAudio: false,
       imageFormatGroup:
-          Platform.isIOS ? ImageFormatGroup.bgra8888 : ImageFormatGroup.yuv420,
+          GetPlatform.isIOS ? ImageFormatGroup.bgra8888 : ImageFormatGroup.yuv420,
     );
 
     await controller!.initialize();

@@ -4,8 +4,10 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class ProductionTasksState {
-  var mqttServer = '192.168.99.229';
-  var mqttPort = 1883;
+  var mqttTcpServer = '192.168.99.229';
+  var mqttTcpPort = 1883;
+  var mqttWebSocketServer = 'ws://192.168.99.229/mqtt';
+  var mqttWebSocketPort = 8083;
   var mqttTopic = [
     'JJb_WorkLine/${userInfo?.departmentID}/sync/resp',
     'JJb_WorkLine/${userInfo?.departmentID}/rfid_record',
@@ -25,16 +27,16 @@ class ProductionTasksState {
   var typeBody = ''.obs;
   var instructionNo = ''.obs;
   var customerPO = ''.obs;
-  var shouldPackQty = (0.0).obs;
-  var packagedQty = (0.0).obs;
+  var shouldPackQty = 0.obs;
+  var packagedQty = 0.obs;
   var packetWay = <String>[].obs;
   var specificRequirements = <String>[].obs;
 
   var detailTableInfo = <ProductionTasksDetailItemInfo>[].obs;
   var detailInstructionNo = ''.obs;
   var detailCustomerPO = ''.obs;
-  var detailShouldPackQty = (0.0).obs;
-  var detailPackagedQty = (0.0).obs;
+  var detailShouldPackQty = 0.obs;
+  var detailPackagedQty =0.obs;
   var detailPacketWay = <String>[].obs;
   var detailSpecificRequirements = <String>[].obs;
 
@@ -80,14 +82,14 @@ class ProductionTasksState {
       packetWay.value = orderList[0].packetWay ?? [];
       specificRequirements.value = orderList[0].specificRequirements ?? [];
     } else {
-      todayTargetQty.value = 0.0;
-      todayCompleteQty.value = 0.0;
-      monthCompleteQty.value = 0.0;
+      todayTargetQty.value = 0;
+      todayCompleteQty.value = 0;
+      monthCompleteQty.value = 0;
       typeBody.value = '';
       instructionNo.value = '';
       customerPO.value = '';
-      shouldPackQty.value = 0.0;
-      packagedQty.value = 0.0;
+      shouldPackQty.value = 0;
+      packagedQty.value = 0;
       tableInfo.value = [];
       packetWay.value = [];
       specificRequirements.value = [];

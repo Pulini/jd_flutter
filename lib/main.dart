@@ -18,7 +18,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       translations: Translation(),
       navigatorObservers: [GetObserver()],
-      initialRoute: '/',
+      initialRoute: RouteConfig.login,
       locale: localeChinese,
       localeListResolutionCallback: (locales, supportedLocales) {
         language = locales!.first.languageCode;
@@ -29,6 +29,7 @@ void main() {
         localeChinese, //中文
         localeEnglish, //英文
         localeIndonesian, //印度尼西亚
+        localeBurmese, //缅甸语
       ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

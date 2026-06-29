@@ -90,8 +90,8 @@ class ProductionTasksSubInfo {
   bool? isClose;
   String? itemImage; //型体图片
   double? finishQtyTotal; //累计完成数
-  double? shouldPackQty; //应装箱数
-  double? packagedQty; //应装箱数
+  int? shouldPackQty; //应装箱数
+  int? packagedQty; //装箱数
   bool? existOutBoxBarCode; //外箱标扫码状态
   List<String>? packetWay; //装箱方式
   List<String>? specificRequirements; //客人需求
@@ -197,8 +197,9 @@ class WorkCardSizeInfos {
     this.qty,
     this.productScannedQty,
     this.manualScannedQty,
-    this.scannedQty,
-    this.installedQty,
+    this.totalQty,
+    this.scanTotalQty,
+    this.noFullInstalledQty,
   });
 
   WorkCardSizeInfos.fromJson(dynamic json) {
@@ -206,16 +207,18 @@ class WorkCardSizeInfos {
     qty = json['Qty'];
     productScannedQty = json['ProductScannedQty'];
     manualScannedQty = json['ManualScannedQty'];
-    scannedQty = json['ScannedQty'];
-    installedQty = json['InstalledQty'];
+    totalQty = json['ScannedQty'];
+    scanTotalQty = json['InstalledQty'];
+    noFullInstalledQty = json['NoFullInstalledQty'];
   }
 
   String? size; //尺码
   double? qty; //派工数量
   double? productScannedQty; //产线扫描数量
   double? manualScannedQty; //手动扫描数
-  double? scannedQty; //已扫数量
-  double? installedQty; //已装数量
+  double? totalQty; //累计双数
+  double? scanTotalQty; //扫箱累计双输
+  double? noFullInstalledQty; //不满箱双数
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -223,30 +226,31 @@ class WorkCardSizeInfos {
     map['Qty'] = qty;
     map['ProductScannedQty'] = productScannedQty;
     map['ManualScannedQty'] = manualScannedQty;
-    map['ScannedQty'] = scannedQty;
-    map['InstalledQty'] = installedQty;
+    map['ScannedQty'] = totalQty;
+    map['InstalledQty'] = scanTotalQty;
+    map['NoFullInstalledQty'] = noFullInstalledQty;
     return map;
   }
 
-  double getOwe() => qty! - scannedQty!;
+  double getOwe() => qty! - totalQty!;
 
   String getCompletionRate() =>
       '${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
 
-  double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
+  double scannedNotInstalled() => totalQty.sub(scanTotalQty ?? 0);
 
   void addProductScannedQty(double qty) {
     productScannedQty = productScannedQty.add(qty);
-    scannedQty = scannedQty.add(qty);
+    totalQty = totalQty.add(qty);
   }
 
   void addManualScannedQty(double qty) {
     manualScannedQty = manualScannedQty.add(qty);
-    scannedQty = scannedQty.add(qty);
+    totalQty = totalQty.add(qty);
   }
 
   void addInstalledQty(double qty) {
-    installedQty = installedQty.add(qty);
+    scanTotalQty = scanTotalQty.add(qty);
   }
 }
 
@@ -268,8 +272,8 @@ class WorkCardSizeInfos {
 class ProductionTasksDetailInfo {
   String? billNo;
   String? clientOrderNumber;
-  double? total;
-  double? hasInstall;
+  int? total;
+  int? hasInstall;
   List<String>? packetWay; //装箱方式
   List<String>? specificRequirements; //客人需求
   List<ProductionTasksDetailItemInfo>? scheduleInfos;

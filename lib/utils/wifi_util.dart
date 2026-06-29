@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
@@ -30,7 +29,7 @@ class WiFiManager {
       await WiFiForIoTPlugin.connect(currentSSID);
 
       // 在Android平台上添加特殊处理
-      if (Platform.isAndroid) {
+      if (GetPlatform.isAndroid) {
         // 设置网络优先级，防止自动切换
         await WiFiForIoTPlugin.forceWifiUsage(true);
 

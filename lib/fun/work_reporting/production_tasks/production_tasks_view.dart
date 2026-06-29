@@ -28,8 +28,10 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
   var controller = TextEditingController();
   final orderListKey = GlobalKey<AnimatedListState>();
   late MqttUtil mqtt = MqttUtil(
-    server: state.mqttServer,
-    port: state.mqttPort,
+    webSocketServer: state.mqttWebSocketServer,
+    webSocketPort: state.mqttWebSocketPort,
+    tcpServer: state.mqttTcpServer,
+    tcpPort: state.mqttTcpPort,
     topic: state.mqttTopic,
     // connectListener: (m) => mqtt.send(
     //   topic: state.mqttSend,
@@ -118,17 +120,18 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   Widget productionTasksTableItem({
     WorkCardSizeInfos? data,
+    int? shouldPackQty,
     int? type,
   }) {
     var size = '';
     var qty = '';
     var productScannedQty = '';
     var manualScannedQty = '';
-    var scannedQty = '';
+    var totalQty = '';
     var owe = '';
     var completionRate = '';
-    var installedQty = '';
-    var scannedNotInstalled = '';
+    var scanTotalQty = '';
+    var noFullInstalledQty = '';
     var bkgColor = type != null && type == 1
         ? Colors.blueAccent
         : type == 2
@@ -138,26 +141,26 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     if (type != null && type == 1) {
       size = 'production_tasks_size'.tr;
       qty = 'production_tasks_production_qty'.tr;
-      productScannedQty = 'production_tasks_auto_scan'.tr;
-      manualScannedQty = 'production_tasks_manual_scan'.tr;
-      scannedQty = 'production_tasks_total_scan'.tr;
+      scanTotalQty = 'production_tasks_scan_total_qty'.tr;
+      noFullInstalledQty = 'production_tasks_no_full_installed_qty'.tr;
+      totalQty = 'production_tasks_total_qty'.tr;
       owe = 'production_tasks_owing_qty'.tr;
       completionRate = 'production_tasks_completion_rate'.tr;
-      installedQty = 'production_tasks_packaged_qty'.tr;
-      scannedNotInstalled = 'production_tasks_scanned_unpackaged'.tr;
+      productScannedQty = 'production_tasks_auto_scan'.tr;
+      manualScannedQty = 'production_tasks_manual_scan'.tr;
     } else {
       if (type != null && type == 2) {
         data = logic.getTotalItem();
       }
       size = data!.size ?? '';
       qty = data.qty.toShowString();
-      productScannedQty = data.productScannedQty.toShowString();
-      manualScannedQty = data.manualScannedQty.toShowString();
-      scannedQty = data.scannedQty.toShowString();
+      scanTotalQty = data.scanTotalQty.toShowString();
+      noFullInstalledQty = data.noFullInstalledQty.toShowString();
+      totalQty = data.totalQty.toShowString();
       owe = data.getOwe().toShowString();
       completionRate = data.getCompletionRate();
-      installedQty = data.installedQty.toShowString();
-      scannedNotInstalled = data.scannedNotInstalled().toShowString();
+      productScannedQty = data.productScannedQty.toShowString();
+      manualScannedQty = data.manualScannedQty.toShowString();
     }
     return Row(
       children: [
@@ -176,21 +179,21 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
           alignment: Alignment.center,
         ),
         ExpandedFrameText(
-          text: productScannedQty,
+          text: scanTotalQty,
           backgroundColor: bkgColor,
           textColor: textColor,
           isBold: true,
           alignment: Alignment.center,
         ),
         ExpandedFrameText(
-          text: manualScannedQty,
+          text: noFullInstalledQty,
           backgroundColor: bkgColor,
           textColor: textColor,
           isBold: true,
           alignment: Alignment.center,
         ),
         ExpandedFrameText(
-          text: scannedQty,
+          text: totalQty,
           backgroundColor: bkgColor,
           textColor: textColor,
           isBold: true,
@@ -211,14 +214,14 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
           alignment: Alignment.center,
         ),
         ExpandedFrameText(
-          text: installedQty,
+          text: productScannedQty,
           backgroundColor: bkgColor,
           textColor: textColor,
           isBold: true,
           alignment: Alignment.center,
         ),
         ExpandedFrameText(
-          text: scannedNotInstalled,
+          text: manualScannedQty,
           backgroundColor: bkgColor,
           textColor: textColor,
           isBold: true,
@@ -388,17 +391,17 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               children: [
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_should_packing_box_qty'.tr,
-                      text: state.shouldPackQty.value.toShowString(),
+                      text: state.shouldPackQty.value.toString(),
                     )),
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_packaged_box_qty'.tr,
-                      text: state.packagedQty.value.toShowString(),
+                      text: state.packagedQty.value.toString(),
                     )),
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_unpackaged_box_qty'.tr,
-                      text: state.shouldPackQty.value
-                          .sub(state.packagedQty.value)
-                          .toShowString(),
+                      text:
+                          (state.shouldPackQty.value - state.packagedQty.value)
+                              .toString(),
                     )),
               ],
             ),
@@ -408,7 +411,10 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               child: Obx(() {
                 final items = <Widget>[
                   for (var item in state.tableInfo)
-                    productionTasksTableItem(data: item),
+                    productionTasksTableItem(
+                      data: item,
+                      shouldPackQty: state.orderList.first.shouldPackQty,
+                    ),
                   if (state.tableInfo.isNotEmpty)
                     productionTasksTableItem(type: 2),
                   if (state.packetWay.isNotEmpty) _packetWay(),
@@ -464,9 +470,7 @@ class _ProductionTasksOrderItem extends StatefulWidget {
       _ProductionTasksOrderItemState();
 }
 
-class _ProductionTasksOrderItemState
-    extends State<_ProductionTasksOrderItem> {
-
+class _ProductionTasksOrderItemState extends State<_ProductionTasksOrderItem> {
   bool _isSelected() => widget.state.selected == widget.index;
 
   @override
@@ -569,7 +573,8 @@ class _ProductionTasksOrderItemState
         height: _isSelected() ? 39 : 0,
         child: CombinationButton(
           text: 'production_tasks_top_up'.tr,
-          click: () => logic.changeSort(oldIndex: index, newIndex: 0, refresh: ()=>onMoveTop(index)),
+          click: () => logic.changeSort(
+              oldIndex: index, newIndex: 0, refresh: () => onMoveTop(index)),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -155,7 +156,7 @@ class DioManager {
       _dio!.interceptors.add(geInterceptors);
 
       // 为 Android 平台配置 HttpClient，解决 SSL 证书和 DNS 问题
-      if (Platform.isAndroid) {
+      if (GetPlatform.isAndroid) {
         (_dio!.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
           final client = HttpClient();
 

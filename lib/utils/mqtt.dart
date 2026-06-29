@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttUtil {
@@ -10,13 +11,19 @@ class MqttUtil {
   var isAutoReconnect = false;
 
   // MQTT客户端
-  late MqttServerClient client;
+  late MqttClient client;
 
-  // MQTT服务器地址
-  String server;
+  // MQTT tcp服务器地址
+  String tcpServer;
 
-  // MQTT服务器端口
-  int port;
+  // MQTT tcp服务器端口
+  int tcpPort;
+
+  // MQTT webSocket服务器地址
+  String webSocketServer;
+
+  // MQTT webSocket服务器端口
+  int webSocketPort;
 
   // MQTT订阅主题
   List<String> topic;
@@ -31,12 +38,14 @@ class MqttUtil {
   Function(String)? subscribedListener = (topic) {};
 
   MqttUtil({
-    required this.server,
-    required this.port,
+    required this.tcpServer,
+    required this.tcpPort,
+    required this.webSocketServer,
+    required this.webSocketPort,
     required this.topic,
+    required this.msgListener,
     this.connectListener,
     this.subscribedListener,
-    required this.msgListener,
   }) {
     initClient();
   }
@@ -55,11 +64,19 @@ class MqttUtil {
   }
 
   void initClient() {
-    client = MqttServerClient.withPort(
-      server,
-      '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
-      port,
-    );
+    if (kIsWeb) {
+      client = MqttBrowserClient.withPort(
+        webSocketServer,
+        '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
+        webSocketPort,
+      );
+    } else {
+      client = MqttServerClient.withPort(
+        tcpServer,
+        '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
+        tcpPort,
+      );
+    }
 
     // 设置日志
     client.logging(on: false);

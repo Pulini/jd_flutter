@@ -38,6 +38,8 @@ double getDpi() => AppInitService.to.androidXDpi;
 
 String getJPushID() => AppInitService.to.jpushID ?? 'Flutter_JPushID_isEmpty';
 
+RxString getVersion() => AppInitService.to.version;
+
 class AppInitService extends GetxService {
 
   late SharedPreferences sharedPreferences;
@@ -47,6 +49,7 @@ class AppInitService extends GetxService {
   List<CameraDescription>? cameras;
   late JPushFlutterInterface jpush;
   String? jpushID;
+  var version=''.obs;
 
   static AppInitService get to => Get.find();
 
@@ -200,6 +203,7 @@ class AppInitService extends GetxService {
       sharedPreferences = await SharedPreferences.getInstance();
       Get.put(LanguageController());
       packageInfo = await PackageInfo.fromPlatform();
+      version.value=packageInfo.version;
       deviceInfo = await DeviceInfoPlugin().deviceInfo;
       androidXDpi = await getAndroidXDpi();
       debugPrint('androidXDpi: $androidXDpi');
