@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_browser_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
+
+import 'mqtt_client_factory.dart';
 
 class MqttUtil {
   //是否自动重连
@@ -64,19 +64,13 @@ class MqttUtil {
   }
 
   void initClient() {
-    if (kIsWeb) {
-      client = MqttBrowserClient.withPort(
-        webSocketServer,
-        '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
-        webSocketPort,
-      );
-    } else {
-      client = MqttServerClient.withPort(
-        tcpServer,
-        '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
-        tcpPort,
-      );
-    }
+    client = createMqttClient(
+      tcpServer,
+      webSocketServer,
+      tcpPort,
+      webSocketPort,
+      '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
+    );
 
     // 设置日志
     client.logging(on: false);
