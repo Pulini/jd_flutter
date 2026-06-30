@@ -127,7 +127,8 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     var productScannedQty = '';
     var manualScannedQty = '';
     var totalQty = '';
-    var owe = '';
+    var packOwe = '';
+    var productionOwe = '';
     var completionRate = '';
     var scanTotalQty = '';
     var noFullInstalledQty = '';
@@ -143,10 +144,11 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       scanTotalQty = 'production_tasks_scan_total_qty'.tr;
       noFullInstalledQty = 'production_tasks_no_full_installed_qty'.tr;
       totalQty = 'production_tasks_total_qty'.tr;
-      owe = 'production_tasks_owing_qty'.tr;
+      packOwe = 'production_tasks_owing_qty'.tr;
       completionRate = 'production_tasks_completion_rate'.tr;
       productScannedQty = 'production_tasks_auto_scan'.tr;
       manualScannedQty = 'production_tasks_manual_scan'.tr;
+      productionOwe = 'production_tasks_production_owing_qty'.tr;
     } else {
       if (type != null && type == 2) {
         data = logic.getTotalItem();
@@ -156,16 +158,17 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       scanTotalQty = data.scanTotalQty.toShowString();
       noFullInstalledQty = data.noFullInstalledQty.toShowString();
       totalQty = data.totalQty.toShowString();
-      owe = data.getOwe().toShowString();
+      packOwe = data.getPackOwe().toShowString();
       completionRate = data.getCompletionRate();
       productScannedQty = data.productScannedQty.toShowString();
       manualScannedQty = data.manualScannedQty.toShowString();
+      productionOwe = data.getProductionOwe().toShowString();
     }
     return IntrinsicHeight(
       child: Row(
         children: [
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: size,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -173,7 +176,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: qty,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -181,7 +184,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: scanTotalQty,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -189,7 +192,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: noFullInstalledQty,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -197,7 +200,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: totalQty,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -205,15 +208,15 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
-            text: owe,
+            maxLines: type == 1 ? 2 : 1,
+            text: packOwe,
             backgroundColor: bkgColor,
             textColor: textColor,
             isBold: true,
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: completionRate,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -221,7 +224,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: productScannedQty,
             backgroundColor: bkgColor,
             textColor: textColor,
@@ -229,8 +232,16 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-            maxLines: type==1?2:1,
+            maxLines: type == 1 ? 2 : 1,
             text: manualScannedQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type == 1 ? 2 : 1,
+            text: productionOwe,
             backgroundColor: bkgColor,
             textColor: textColor,
             isBold: true,

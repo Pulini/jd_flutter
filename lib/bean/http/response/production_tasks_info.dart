@@ -232,10 +232,11 @@ class WorkCardSizeInfos {
     return map;
   }
 
-  double getOwe() => qty! - totalQty!;
+  double getPackOwe() => qty!.sub(productScannedQty ?? 0).sub(manualScannedQty ?? 0);
+  double getProductionOwe() => qty!.sub(totalQty?? 0);
 
   String getCompletionRate() =>
-      '${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
+      '${Decimal.parse(((1 - getProductionOwe() / qty!) * 100).toStringAsFixed(2))}%';
 
   double scannedNotInstalled() => totalQty.sub(scanTotalQty ?? 0);
 
