@@ -201,7 +201,7 @@ class AppInitService extends GetxService {
   Future<void> _initializeApp() async {
     try {
       sharedPreferences = await SharedPreferences.getInstance();
-      Get.put(LanguageController());
+      Get.put(LanguageController(),permanent: true);
       packageInfo = await PackageInfo.fromPlatform();
       version.value=packageInfo.version;
       deviceInfo = await DeviceInfoPlugin().deviceInfo;

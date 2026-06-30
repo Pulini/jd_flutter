@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/utils/dio_manager.dart';
@@ -36,14 +37,24 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
           loadingDismiss();
         },
         onWebResourceError: (WebResourceError error) {
-          debugPrint('onWebResourceError------${error.description}');
+          debugPrint(
+            'onWebResourceError------${error.description}'
+            '|code:${error.errorCode}|type:${error.errorType}',
+          );
           loadingDismiss();
         },
       ),
     );
 
-  void _loadAssetUrl() =>
-      webViewController.loadFlutterAsset('assets/web/feishu.html');
+  void _loadAssetUrl() async {
+    // Android 7 兼容方案：
+    // loadFlutterAsset 在低版本 WebView 有 scheme 兼容问题，
+    // 改用 loadHtmlString 替代。不指定 baseUrl 避免 SDK
+    // 向错误域名发起 API 请求导致 404。
+    final htmlContent =
+        await rootBundle.loadString('assets/web/feishu.html');
+    webViewController.loadHtmlString(htmlContent);
+  }
 
   var dio = Dio()..interceptors.add(DioManager.simpleInterceptors);
 
