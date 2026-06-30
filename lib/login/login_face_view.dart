@@ -32,6 +32,7 @@ class _FaceLoginWidgetState extends State<FaceLoginWidget> {
       errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
+    widget.login.call(phone);
   }
 
   @override

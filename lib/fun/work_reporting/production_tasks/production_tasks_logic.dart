@@ -154,6 +154,7 @@ class ProductionTasksLogic extends GetxController {
             ]));
           }
         } else {
+          if(info.workCardID?.isEmpty==true)return;
           WorkCardSizeInfos? findSize = state.orderList
               .firstWhere((v) =>
                   v.workCardInterID == info.workCardID &&

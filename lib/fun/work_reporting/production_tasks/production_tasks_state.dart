@@ -27,16 +27,16 @@ class ProductionTasksState {
   var typeBody = ''.obs;
   var instructionNo = ''.obs;
   var customerPO = ''.obs;
-  var shouldPackQty = 0.obs;
-  var packagedQty = 0.obs;
+  var shouldPackQty = (0.0).obs;
+  var packagedQty = (0.0).obs;
   var packetWay = <String>[].obs;
   var specificRequirements = <String>[].obs;
 
   var detailTableInfo = <ProductionTasksDetailItemInfo>[].obs;
   var detailInstructionNo = ''.obs;
   var detailCustomerPO = ''.obs;
-  var detailShouldPackQty = 0.obs;
-  var detailPackagedQty =0.obs;
+  var detailShouldPackQty = (0.0).obs;
+  var detailPackagedQty =(0.0).obs;
   var detailPacketWay = <String>[].obs;
   var detailSpecificRequirements = <String>[].obs;
 

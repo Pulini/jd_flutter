@@ -98,14 +98,14 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Obx(()=>Text(
-                'v:${getVersion()}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  decoration: TextDecoration.none,
-                ),
-              )),
+              child: Obx(() => Text(
+                    'v:${getVersion()}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      decoration: TextDecoration.none,
+                    ),
+                  )),
             ),
           ),
         ],
@@ -139,7 +139,7 @@ class _LoginPickState extends State<LoginPick>
 
   void tabChange() => pageIndex.value = tabController.index;
 
-  void initTab(){
+  void initTab() {
     tabList = [
       if (GetPlatform.isMobile)
         Tab(icon: Image.asset('assets/images/ic_feishu.png')),
@@ -161,6 +161,7 @@ class _LoginPickState extends State<LoginPick>
           vCode,
         ),
         longClick: longClick,
+        getVCode: (phone) => logic.getVerifyCode(phone),
       ),
       if (hasFrontCamera() && GetPlatform.isMobile)
         FaceLoginWidget(
@@ -187,6 +188,7 @@ class _LoginPickState extends State<LoginPick>
       vsync: this,
     )..addListener(tabChange);
   }
+
   @override
   void initState() {
     state.isReLogin = widget.isReLogin;

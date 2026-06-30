@@ -120,7 +120,6 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   Widget productionTasksTableItem({
     WorkCardSizeInfos? data,
-    int? shouldPackQty,
     int? type,
   }) {
     var size = '';
@@ -162,72 +161,83 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       productScannedQty = data.productScannedQty.toShowString();
       manualScannedQty = data.manualScannedQty.toShowString();
     }
-    return Row(
-      children: [
-        ExpandedFrameText(
-          text: size,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: qty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: scanTotalQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: noFullInstalledQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: totalQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: owe,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: completionRate,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: productScannedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-        ExpandedFrameText(
-          text: manualScannedQty,
-          backgroundColor: bkgColor,
-          textColor: textColor,
-          isBold: true,
-          alignment: Alignment.center,
-        ),
-      ],
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: size,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: qty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: scanTotalQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: noFullInstalledQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: totalQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: owe,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: completionRate,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: productScannedQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+          ExpandedFrameText(
+            maxLines: type==1?2:1,
+            text: manualScannedQty,
+            backgroundColor: bkgColor,
+            textColor: textColor,
+            isBold: true,
+            alignment: Alignment.center,
+          ),
+        ],
+      ),
     );
   }
 
@@ -391,17 +401,17 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               children: [
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_should_packing_box_qty'.tr,
-                      text: state.shouldPackQty.value.toString(),
+                      text: state.shouldPackQty.value.toShowString(),
                     )),
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_packaged_box_qty'.tr,
-                      text: state.packagedQty.value.toString(),
+                      text: state.packagedQty.value.toShowString(),
                     )),
                 Obx(() => expandedTextSpan(
                       hint: 'production_tasks_unpackaged_box_qty'.tr,
-                      text:
-                          (state.shouldPackQty.value - state.packagedQty.value)
-                              .toString(),
+                      text: state.shouldPackQty.value
+                          .sub(state.packagedQty.value)
+                          .toShowString(),
                     )),
               ],
             ),
@@ -411,10 +421,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               child: Obx(() {
                 final items = <Widget>[
                   for (var item in state.tableInfo)
-                    productionTasksTableItem(
-                      data: item,
-                      shouldPackQty: state.orderList.first.shouldPackQty,
-                    ),
+                    productionTasksTableItem(data: item),
                   if (state.tableInfo.isNotEmpty)
                     productionTasksTableItem(type: 2),
                   if (state.packetWay.isNotEmpty) _packetWay(),

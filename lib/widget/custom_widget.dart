@@ -755,8 +755,9 @@ class ExpandedFrameText extends StatelessWidget {
   Widget build(BuildContext context) {
     var maxLinesValue = maxLines!;
     var widget = Container(
-      height: (maxLinesValue * (lineHeight ?? 35)).toDouble(),
+      // height: (maxLinesValue * (lineHeight ?? 35)).toDouble(),
       padding: padding ?? const EdgeInsets.all(5),
+      constraints: BoxConstraints(minHeight: (lineHeight ?? 35).toDouble()),
       decoration: BoxDecoration(
         border: Border.all(color: borderColor ?? Colors.grey),
         color: backgroundColor ?? Colors.transparent,

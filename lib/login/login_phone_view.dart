@@ -9,12 +9,14 @@ import 'package:jd_flutter/widget/field.dart';
 
 class PhoneLoginWidget extends StatefulWidget {
   final Function(String phone, String password, String vCode) login;
+  final Function(String phone) getVCode;
   final Function() longClick;
 
   const PhoneLoginWidget({
     super.key,
     required this.login,
     required this.longClick,
+    required this.getVCode,
   });
 
   @override
@@ -32,6 +34,7 @@ class _PhoneLoginWidgetState extends State<PhoneLoginWidget> {
   void startCountdown() {
     if (vCodeCountdown.value > 0) return;
     vCodeCountdown.value = 60;
+    widget.getVCode.call(phoneController.text);
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return false;

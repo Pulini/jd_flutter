@@ -90,8 +90,8 @@ class ProductionTasksSubInfo {
   bool? isClose;
   String? itemImage; //型体图片
   double? finishQtyTotal; //累计完成数
-  int? shouldPackQty; //应装箱数
-  int? packagedQty; //装箱数
+  double? shouldPackQty; //应装箱数
+  double? packagedQty; //装箱数
   bool? existOutBoxBarCode; //外箱标扫码状态
   List<String>? packetWay; //装箱方式
   List<String>? specificRequirements; //客人需求
@@ -272,8 +272,8 @@ class WorkCardSizeInfos {
 class ProductionTasksDetailInfo {
   String? billNo;
   String? clientOrderNumber;
-  int? total;
-  int? hasInstall;
+  double? total;
+  double? hasInstall;
   List<String>? packetWay; //装箱方式
   List<String>? specificRequirements; //客人需求
   List<ProductionTasksDetailItemInfo>? scheduleInfos;
