@@ -141,7 +141,7 @@ class _LoginPickState extends State<LoginPick>
 
   void initTab() {
     tabList = [
-      if (GetPlatform.isMobile)
+      // if (GetPlatform.isMobile)
         Tab(icon: Image.asset('assets/images/ic_feishu.png')),
       const Tab(icon: Icon(Icons.phone)),
       if (hasFrontCamera() && GetPlatform.isMobile)
@@ -150,7 +150,7 @@ class _LoginPickState extends State<LoginPick>
       const Tab(icon: Icon(Icons.assignment_ind_outlined))
     ];
     tabPageList = [
-      if (GetPlatform.isMobile)
+      // if (GetPlatform.isMobile)
         LarkLoginWidget(
           login: (userId) => logic.larkLogin(userId),
         ),

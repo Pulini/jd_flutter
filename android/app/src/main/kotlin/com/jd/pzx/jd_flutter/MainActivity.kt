@@ -44,6 +44,10 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
 import android.view.KeyEvent
+import android.view.View
+import android.view.ViewGroup
+import com.jd.pzx.jd_flutter.utils.disableHardwareAcceleration
+import com.jd.pzx.jd_flutter.utils.findWebView
 
 
 @SuppressLint("MissingPermission")
@@ -241,6 +245,7 @@ class MainActivity : FlutterActivity() {
                 "GetInstalledApps" -> result.success(getInstalledApps(this))
                 "OpenFile" -> openFile(this, File(call.arguments.toString()))
                 "isStartKeyListener" -> isStartKeyListener = call.arguments as Boolean
+                "disableHardwareAcceleration" -> result.success(disableHardwareAcceleration(this))
                 else -> result.notImplemented()
             }
         }

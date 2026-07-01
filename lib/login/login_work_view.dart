@@ -57,7 +57,6 @@ class _WorkLoginWidgetState extends State<WorkLoginWidget> {
                   controller: workNumberController,
                   hint: 'login_hint_work_number'.tr,
                   prefixIcon: Icons.badge_outlined,
-                  keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: 16),
                 Obx(() => LoginField(

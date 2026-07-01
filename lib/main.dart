@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
@@ -21,9 +22,13 @@ void main() {
       initialRoute: RouteConfig.login,
       locale: localeChinese,
       localeListResolutionCallback: (locales, supportedLocales) {
-        language = locales!.first.languageCode;
+        var locale = locales!.first;
+        language = locale.languageCode;
         debugPrint('当前语言: $language');
-        return null;
+        return supportedLocales.firstWhere(
+          (l) => l.languageCode == locale.languageCode,
+          orElse: () => localeChinese,
+        );
       },
       supportedLocales: [
         localeChinese, //中文
@@ -42,26 +47,10 @@ void main() {
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0.0),
       ),
       getPages: RouteConfig.appRoutes,
-      home:  const App(),
+      unknownRoute: GetPage(
+        name: '/404',
+        page: () => const LoginPage(),
+      ),
     ),
   );
-}
-
-class App extends StatelessWidget {
-  const App({super.key});
-  @override
-  Widget build(BuildContext context) {
-    Get.find<AppInitService>();
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isTestUrl()
-              ? [Colors.lightBlueAccent, Colors.greenAccent]
-              : [Colors.lightBlueAccent, Colors.blueAccent],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-        ),
-      ),
-    );
-  }
 }

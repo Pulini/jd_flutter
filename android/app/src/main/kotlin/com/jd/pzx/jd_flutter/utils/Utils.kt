@@ -17,6 +17,8 @@ import android.util.Log
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -803,10 +805,7 @@ fun jsonToList(json: String): List<String> {
 }
 
 
-
-data class AkxJsonData(
-    var labels: MutableList<LabelInfo>,
-) {
+data class AkxJsonData(var labels: MutableList<LabelInfo>) {
     data class LabelInfo(
         var template_name: String,
         var results: ResultInfo
@@ -815,4 +814,30 @@ data class AkxJsonData(
     data class ResultInfo(
         var result_0: String,
     )
+}
+fun disableHardwareAcceleration(activity: Activity):Boolean{
+    val root = activity.window.decorView.rootView
+    if (root is ViewGroup) {
+        findWebView(root).also { web->
+            if(web==null){
+                return false
+            }else{
+                web.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                println("关闭gpu加速")
+                return true
+            }
+        }
+    }else{
+        return false
+    }
+}
+ fun findWebView(parent: ViewGroup): WebView? {
+    for (i in 0 until parent.childCount) {
+        val child = parent.getChildAt(i)
+        if (child is WebView) return child
+        if (child is ViewGroup) {
+            findWebView(child)?.let { return it }
+        }
+    }
+    return null
 }

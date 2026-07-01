@@ -1,13 +1,23 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'dart:js_interop';
+import 'dart:ui_web' as ui_web;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
-import 'package:jd_flutter/utils/dio_manager.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:web/web.dart' as web;
 import 'package:webview_flutter/webview_flutter.dart';
 
+/// 飞书登录 Widget
+/// - 移动端（Android/iOS）：使用 webview_flutter 加载 feishu.html
+/// - Web 端：使用 HtmlElementView 嵌入 iframe 加载 feishu.html
+///   扫码后 feishu.html 在 iframe 内跳转到飞书授权页，
+///   回调页 FeiShuCallBack.aspx 通过 postMessage 将 code 发回 Flutter
 class LarkLoginWidget extends StatefulWidget {
   final Function(String userId) login;
 
@@ -18,51 +28,121 @@ class LarkLoginWidget extends StatefulWidget {
 }
 
 class _LarkLoginWidgetState extends State<LarkLoginWidget> {
-  late var webViewController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(Colors.white)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onPageStarted: (String url) {
-          debugPrint('onPageStarted------$url');
-          loadingShow('加载中...');
-        },
-        onPageFinished: (String url) {
-          debugPrint('onPageFinished------$url');
-          loadingDismiss();
-          larkAuthorize(url);
-        },
-        onHttpError: (HttpResponseError error) {
-          debugPrint('onHttpError------${error.response?.statusCode}');
-          loadingDismiss();
-        },
-        onWebResourceError: (WebResourceError error) {
-          debugPrint(
-            'onWebResourceError------${error.description}'
-            '|code:${error.errorCode}|type:${error.errorType}',
-          );
-          loadingDismiss();
-        },
-      ),
-    );
+  // ========== 移动端 WebView Controller ==========
+  late final WebViewController webViewController;
 
-  void _loadAssetUrl() async {
-    // Android 7 兼容方案：
-    // loadFlutterAsset 在低版本 WebView 有 scheme 兼容问题，
-    // 改用 loadHtmlString 替代。不指定 baseUrl 避免 SDK
-    // 向错误域名发起 API 请求导致 404。
-    final htmlContent =
-        await rootBundle.loadString('assets/web/feishu.html');
-    webViewController.loadHtmlString(htmlContent);
+  // ========== Web 端消息监听（静态，全局只注册一次）==========
+  static bool _webListenerRegistered = false;
+  static bool _viewFactoryRegistered = false;
+
+  // ========== 网络 ==========
+  // var dio = Dio()..interceptors.add(DioManager.simpleInterceptors);
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      _ensureWebListener();
+      _ensureViewFactoryRegistered();
+    } else {
+      _initWebView();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
   }
 
-  var dio = Dio()..interceptors.add(DioManager.simpleInterceptors);
+  void _initWebView() {
+    webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.white)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            debugPrint('onPageStarted------$url');
+            loadingShow('加载中...');
+          },
+          onPageFinished: (String url) {
+            debugPrint('onPageFinished------$url');
+            loadingDismiss();
+            // 移动端：关闭 GPU 加速，避免 Android 7 canvas 空白
+            if (!kIsWeb) disableWebViewGpu();
+            larkAuthorize(url);
+          },
+          onHttpError: (HttpResponseError error) {
+            debugPrint('onHttpError------${error.response?.statusCode}');
+            loadingDismiss();
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint(
+              'onWebResourceError------${error.description}'
+              '|code:${error.errorCode}|type:${error.errorType}',
+            );
+            loadingDismiss();
+          },
+        ),
+      );
+  }
 
+  /// 注册 Web 端 window message 监听（全局只注册一次）
+  void _ensureWebListener() {
+    if (_webListenerRegistered) return;
+    _webListenerRegistered = true;
+    web.window.addEventListener(
+      'message',
+      ((web.Event e) {
+        final msg = (e as web.MessageEvent).data.toString();
+        handleWebMessage(msg);
+      }).toJS,
+    );
+  }
+
+  /// 注册 HtmlElementView 的 iframe 工厂（全局只注册一次）
+  void _ensureViewFactoryRegistered() {
+    if (_viewFactoryRegistered) return;
+    _viewFactoryRegistered = true;
+    ui_web.platformViewRegistry.registerViewFactory(
+      'feishu-login-iframe',
+      (int viewId) {
+        final iframe =
+            web.document.createElement('iframe') as web.HTMLIFrameElement;
+        iframe.src = 'feishu.html';
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        return iframe;
+      },
+    );
+  }
+
+  /// 处理 Web 端 iframe 发来的 postMessage
+  void handleWebMessage(String msg) {
+    if (!msg.contains('code=')) return;
+    final url = msg.startsWith('?') ? '$redirectUri$msg' : msg;
+    if (url.startsWith(redirectUri)) {
+      larkAuthorize(url);
+    }
+  }
+
+  /// 加载 feishu.html
+  void _loadAssetUrl() {
+    if (!mounted) return;
+    if (kIsWeb) {
+      // Web 端通过 HtmlElementView 加载，setState 触发重建
+      setState(() {});
+    } else {
+      webViewController.loadFlutterAsset('assets/web/feishu.html');
+    }
+  }
+
+  // ========== 飞书 OAuth 回调处理 ==========
   void larkAuthorize(String url) {
     if (url.startsWith(redirectUri)) {
       final code = Uri.parse(url).queryParameters['code'];
-      if (code != null) {
-        getLarkUserAccessToken(
+      debugPrint('code: $code');
+      if (code != null && code.isNotEmpty) {
+        _loginViaServerProxy(code);
+        // 移动端：原生 HTTP 无 CORS 限制，直接调飞书 API
+/*
+         getLarkUserAccessToken(
           code: code,
           success: (token) => getLarkUserInfo(
             token: token,
@@ -77,6 +157,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
             _loadAssetUrl();
           },
         );
+        */
       } else {
         errorDialog(
           content: 'getting_lark_authorization_code_failed'.tr,
@@ -86,6 +167,33 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
     }
   }
 
+  // ========== Web 端：通过 MES 服务器代理获取飞书用户信息 ==========
+  // 服务器 api/FeiShu/LoginUserInfo 内部完成两步：
+  //   1. 用 code 换取 user_access_token
+  //   2. 用 token 获取用户信息
+  void _loginViaServerProxy(String code) {
+    httpPost(
+      method: 'api/FeiShu/LoginUserInfo',
+      loading: 'getting_lark_user_info'.tr,
+      body: {
+        'AppNumber': '6',
+        'Code': code,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        final userInfo =
+            LarkUserInfo.fromJson(jsonDecode(response.data['Datas'] as String));
+        widget.login(userInfo.userId ?? '');
+      } else {
+        errorDialog(content: response.message);
+        _loadAssetUrl();
+      }
+    });
+  }
+
+/*
+
+  // ========== 获取飞书 token ==========
   void getLarkUserAccessToken({
     required String code,
     required Function(String accessToken) success,
@@ -103,15 +211,15 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
         'redirect_uri': redirectUri,
       },
       options: Options(
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
       ),
     )
         .then(
       (response) {
+        logger.f(response.data);
+
         loadingDismiss();
-        var token = LarkUserTokenInfo.fromJson(response.data);
+        final token = LarkUserTokenInfo.fromJson(response.data);
         if (token.code == 0) {
           success.call(token.accessToken ?? '');
         } else {
@@ -123,16 +231,15 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
       onError: (e) {
         loadingDismiss();
         error.call(
-          'getting_lark_token_failed'.trArgs(
-            [
-              '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
-            ],
-          ),
+          'getting_lark_token_failed'.trArgs([
+            '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
+          ]),
         );
       },
     );
   }
 
+  // ========== 获取飞书用户信息 ==========
   void getLarkUserInfo({
     required String token,
     required Function(LarkUserInfo userInfo) success,
@@ -152,39 +259,33 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
         .then(
       (response) {
         loadingDismiss();
-        var code = response.data['code'];
+        final code = response.data['code'];
         if (code == 0) {
           success.call(LarkUserInfo.fromJson(response.data['data']));
         } else {
-          error.call('getting_lark_user_info_failed'.trArgs([code]));
+          error.call('getting_lark_user_info_failed'.trArgs([code.toString()]));
         }
       },
       onError: (e) {
         loadingDismiss();
         error.call(
-          'getting_lark_user_info_failed'.trArgs(
-            [
-              '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
-            ],
-          ),
+          'getting_lark_user_info_failed'.trArgs([
+            '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
+          ]),
         );
       },
     );
   }
+*/
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
-    super.initState();
-  }
-
+  // ========== UI ==========
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         color: Colors.white,
-        border: Border.all(color: Colors.blueAccent, width: 4),
+        border: Border.all(color: Colors.blue, width: 4),
       ),
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(2),
@@ -192,7 +293,10 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [
-            WebViewWidget(controller: webViewController),
+            if (kIsWeb)
+              const HtmlElementView(viewType: 'feishu-login-iframe')
+            else
+              WebViewWidget(controller: webViewController),
             Positioned(
               top: 10,
               left: 5,

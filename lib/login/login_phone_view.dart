@@ -113,7 +113,6 @@ class _PhoneLoginWidgetState extends State<PhoneLoginWidget> {
                   controller: codeController,
                   hint: 'login_hint_verify_code'.tr,
                   prefixIcon: Icons.sms_outlined,
-                  keyboardType: TextInputType.number,
                   suffix: SizedBox(
                     height: 32,
                     child: TextButton(

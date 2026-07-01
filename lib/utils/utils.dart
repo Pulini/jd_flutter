@@ -932,6 +932,10 @@ Future<void> getDeviceInstalledAppsInfo({
   }
 }
 
+Future<void> disableWebViewGpu() async {
+  await const MethodChannel(channelOther).invokeMethod('disableHardwareAcceleration');
+}
+
 void upsertDeviceInfo(Map deviceInfo, List<Map> apps) {
   springBootPost(method: webApiUpsertDeviceInfo, body: {
     'empNumber': userInfo?.number,

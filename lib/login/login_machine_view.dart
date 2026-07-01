@@ -57,7 +57,6 @@ class _MachineLoginWidgetState extends State<MachineLoginWidget> {
                   controller: machineController,
                   hint: 'login_hint_machine'.tr,
                   prefixIcon: Icons.precision_manufacturing,
-                  keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: 16),
                 Obx(() => LoginField(
