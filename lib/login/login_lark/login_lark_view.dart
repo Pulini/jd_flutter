@@ -1,16 +1,14 @@
 import 'dart:convert';
-import 'dart:js_interop';
-import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
+import 'package:jd_flutter/login/login_lark/login_lark_web_helper.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
-import 'package:web/web.dart' as web;
 import 'package:webview_flutter/webview_flutter.dart';
 
 /// 飞书登录 Widget
@@ -28,27 +26,7 @@ class LarkLoginWidget extends StatefulWidget {
 }
 
 class _LarkLoginWidgetState extends State<LarkLoginWidget> {
-  // ========== 移动端 WebView Controller ==========
   late final WebViewController webViewController;
-
-  // ========== Web 端消息监听（静态，全局只注册一次）==========
-  static bool _webListenerRegistered = false;
-  static bool _viewFactoryRegistered = false;
-
-  // ========== 网络 ==========
-  // var dio = Dio()..interceptors.add(DioManager.simpleInterceptors);
-
-  @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) {
-      _ensureWebListener();
-      _ensureViewFactoryRegistered();
-    } else {
-      _initWebView();
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
-  }
 
   void _initWebView() {
     webViewController = WebViewController()
@@ -82,45 +60,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
       );
   }
 
-  /// 注册 Web 端 window message 监听（全局只注册一次）
-  void _ensureWebListener() {
-    if (_webListenerRegistered) return;
-    _webListenerRegistered = true;
-    web.window.addEventListener(
-      'message',
-      ((web.Event e) {
-        final msg = (e as web.MessageEvent).data.toString();
-        handleWebMessage(msg);
-      }).toJS,
-    );
-  }
 
-  /// 注册 HtmlElementView 的 iframe 工厂（全局只注册一次）
-  void _ensureViewFactoryRegistered() {
-    if (_viewFactoryRegistered) return;
-    _viewFactoryRegistered = true;
-    ui_web.platformViewRegistry.registerViewFactory(
-      'feishu-login-iframe',
-      (int viewId) {
-        final iframe =
-            web.document.createElement('iframe') as web.HTMLIFrameElement;
-        iframe.src = 'feishu.html';
-        iframe.style.border = 'none';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        return iframe;
-      },
-    );
-  }
-
-  /// 处理 Web 端 iframe 发来的 postMessage
-  void handleWebMessage(String msg) {
-    if (!msg.contains('code=')) return;
-    final url = msg.startsWith('?') ? '$redirectUri$msg' : msg;
-    if (url.startsWith(redirectUri)) {
-      larkAuthorize(url);
-    }
-  }
 
   /// 加载 feishu.html
   void _loadAssetUrl() {
@@ -139,9 +79,9 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
       final code = Uri.parse(url).queryParameters['code'];
       debugPrint('code: $code');
       if (code != null && code.isNotEmpty) {
+        //统一改为由MES服务器代理获取飞书用户信息
         _loginViaServerProxy(code);
-        // 移动端：原生 HTTP 无 CORS 限制，直接调飞书 API
-/*
+/*  Web端调用飞书官方接口会被CORS限制跨域，移动端：原生 HTTP 无 CORS 限制
          getLarkUserAccessToken(
           code: code,
           success: (token) => getLarkUserInfo(
@@ -192,6 +132,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
   }
 
 /*
+  var dio = Dio()..interceptors.add(DioManager.simpleInterceptors);
 
   // ========== 获取飞书 token ==========
   void getLarkUserAccessToken({
@@ -278,7 +219,23 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
   }
 */
 
-  // ========== UI ==========
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      LarkWebHelper.initIframeWebListener((msg){
+        if (!msg.contains('code=')) return;
+        final url = msg.startsWith('?') ? '$redirectUri$msg' : msg;
+        if (url.startsWith(redirectUri)) {
+          larkAuthorize(url);
+        }
+      });
+    } else {
+      _initWebView();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

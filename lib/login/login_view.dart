@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/login/login_dialog.dart';
-import 'package:jd_flutter/login/login_lark_view.dart';
+import 'package:jd_flutter/login/login_lark/login_lark_view.dart';
 import 'package:jd_flutter/login/login_work_view.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/app_init.dart';
