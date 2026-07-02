@@ -36,25 +36,21 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
         NavigationDelegate(
           onPageStarted: (String url) {
             debugPrint('onPageStarted------$url');
-            loadingShow('加载中...');
           },
           onPageFinished: (String url) {
             debugPrint('onPageFinished------$url');
-            loadingDismiss();
             // 移动端：关闭 GPU 加速，避免 Android 7 canvas 空白
             if (!kIsWeb) disableWebViewGpu();
             larkAuthorize(url);
           },
           onHttpError: (HttpResponseError error) {
             debugPrint('onHttpError------${error.response?.statusCode}');
-            loadingDismiss();
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint(
               'onWebResourceError------${error.description}'
               '|code:${error.errorCode}|type:${error.errorType}',
             );
-            loadingDismiss();
           },
         ),
       );

@@ -118,6 +118,29 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     });
   }
 
+  Widget productionTasksTableTitle() => IntrinsicHeight(
+        child: Row(
+          children: [
+            ExpandedFrameText(
+              flex: 13,
+              text: '打包区',
+              backgroundColor: Colors.blue.shade300,
+              textColor: Colors.white,
+              isBold: true,
+              alignment: Alignment.center,
+            ),
+            ExpandedFrameText(
+              flex: 6,
+              text: '产线',
+              backgroundColor: Colors.green.shade300,
+              textColor: Colors.white,
+              isBold: true,
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+
   Widget productionTasksTableItem({
     WorkCardSizeInfos? data,
     int? type,
@@ -135,6 +158,11 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     var bkgColor = type != null && type == 1
         ? Colors.blueAccent
         : type == 2
+            ? Colors.blue.shade100
+            : Colors.white;
+    var bkgColor2 = type != null && type == 1
+        ? Colors.green
+        : type == 2
             ? Colors.green.shade100
             : Colors.white;
     var textColor = type != null && type == 1 ? Colors.white : Colors.black87;
@@ -148,7 +176,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       completionRate = 'production_tasks_completion_rate'.tr;
       productScannedQty = 'production_tasks_auto_scan'.tr;
       manualScannedQty = 'production_tasks_manual_scan'.tr;
-      productionOwe = 'production_tasks_production_owing_qty'.tr;
+      productionOwe = 'production_tasks_owing_qty'.tr;
     } else {
       if (type != null && type == 2) {
         data = logic.getTotalItem();
@@ -176,6 +204,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: qty,
             backgroundColor: bkgColor,
@@ -184,6 +213,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: scanTotalQty,
             backgroundColor: bkgColor,
@@ -192,6 +222,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: noFullInstalledQty,
             backgroundColor: bkgColor,
@@ -200,6 +231,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: totalQty,
             backgroundColor: bkgColor,
@@ -208,6 +240,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: packOwe,
             backgroundColor: bkgColor,
@@ -216,6 +249,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: completionRate,
             backgroundColor: bkgColor,
@@ -224,25 +258,28 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: productScannedQty,
-            backgroundColor: bkgColor,
+            backgroundColor: bkgColor2,
             textColor: textColor,
             isBold: true,
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: manualScannedQty,
-            backgroundColor: bkgColor,
+            backgroundColor: bkgColor2,
             textColor: textColor,
             isBold: true,
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
+             flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: productionOwe,
-            backgroundColor: bkgColor,
+            backgroundColor: bkgColor2,
             textColor: textColor,
             isBold: true,
             alignment: Alignment.center,
@@ -330,56 +367,10 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade50, Colors.white],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                // color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.blue, width: 2),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Obx(() => textSpan(
-                              hint: 'production_tasks_today_target'.tr,
-                              text: state.todayTargetQty.value.toShowString(),
-                            )),
-                        Obx(() => textSpan(
-                              hint: 'production_tasks_today_completion'.tr,
-                              text: state.todayCompleteQty.value.toShowString(),
-                            )),
-                        Obx(() => textSpan(
-                              hint: 'production_tasks_monthly_completion'.tr,
-                              text: state.monthCompleteQty.value.toShowString(),
-                            )),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(13),
-                      border: Border.all(color: Colors.green, width: 2),
-                    ),
-                    child: IconButton(
-                      padding: const EdgeInsets.all(0),
-                      onPressed: () =>
-                          logic.refreshTable(refresh: () => _refreshTable()),
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            _DailyTargetHeader(
+              monthCompleteQty: state.monthCompleteQty.value,
+              todayCompleteQty: state.todayCompleteQty.value,
+              todayTargetQty: state.todayTargetQty.value,
             ),
             SizedBox(
               height: 260,
@@ -427,6 +418,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               ],
             ),
             const SizedBox(height: 10),
+            productionTasksTableTitle(),
             productionTasksTableItem(type: 1),
             Expanded(
               child: Obx(() {
@@ -459,6 +451,268 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     super.dispose();
   }
 }
+
+class _DailyTargetHeader extends StatelessWidget {
+  final double monthCompleteQty;
+  final double todayCompleteQty;
+  final double todayTargetQty;
+
+  const _DailyTargetHeader({
+    required this.monthCompleteQty,
+    required this.todayCompleteQty,
+    required this.todayTargetQty,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(left: 5,right: 5),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.green.shade300, Colors.blue.shade300],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.28),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          Expanded(
+            child: _MetricItem(
+              label: '日目标',
+              value: todayTargetQty.toShowString(),
+              icon: Icons.flag_rounded,
+              color: Colors.white,
+            ),
+          ),
+          _Divider(),
+          Expanded(
+            child: _MetricItem(
+              label: '日完成',
+              value: todayCompleteQty.toShowString(),
+              icon: Icons.check_circle_rounded,
+              color: todayTargetQty == todayCompleteQty
+                  ? Colors.greenAccent
+                  : Colors.white,
+              highlight: todayTargetQty == todayCompleteQty,
+            ),
+          ),
+          _Divider(),
+          Expanded(
+              child: _RateItem(
+            label: '日达成率',
+            rate: todayCompleteQty.div(todayTargetQty),
+            rateStr:
+                '${todayCompleteQty.div(todayTargetQty).mul(100).toShowString()}%',
+            isOver: todayTargetQty == todayCompleteQty,
+            accentColor: Colors.greenAccent,
+          )),
+          _Divider(),
+          Expanded(
+              child: _MetricItem(
+            label: '月完成',
+            value: monthCompleteQty.toShowString(),
+            icon: Icons.calendar_month_rounded,
+            color: Colors.white,
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: 52,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      color: Colors.white.withValues(alpha: 0.3),
+    );
+  }
+}
+
+class _MetricItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final bool highlight;
+
+  const _MetricItem({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(children: [
+          Icon(icon, size: 12, color: color.withValues(alpha: 0.7)),
+          const SizedBox(width: 4),
+          Text(label,
+              style: TextStyle(
+                fontSize: 14,
+                color: color,
+                fontWeight: FontWeight.w500,
+              )),
+        ]),
+        const SizedBox(height: 6),
+        Text(value,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: color,
+              height: 1.1,
+              letterSpacing: -0.4,
+            )),
+      ],
+    );
+  }
+}
+
+class _RateItem extends StatelessWidget {
+  final String label;
+  final double rate;
+  final String rateStr;
+  final bool isOver;
+  final Color accentColor;
+
+  const _RateItem({
+    required this.label,
+    required this.rate,
+    required this.rateStr,
+    required this.isOver,
+    required this.accentColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final progressRate = rate.clamp(0.0, 1.0);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(children: [
+          Icon(Icons.speed_rounded,
+              size: 12, color: isOver ? accentColor : Colors.white),
+          const SizedBox(width: 4),
+          Text(label,
+              style: TextStyle(
+                fontSize: 13,
+                color: isOver ? accentColor : Colors.white,
+                fontWeight: FontWeight.w500,
+              )),
+          const Spacer(),
+          if (isOver)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text('已达标',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: accentColor,
+                  )),
+            ),
+        ]),
+        const SizedBox(height: 3),
+        Text(rateStr,
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w800,
+              color: isOver ? accentColor : Colors.white,
+              height: 1.1,
+              letterSpacing: -0.4,
+            )),
+        const SizedBox(height: 3),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: SizedBox(
+            height: 5,
+            child: LinearProgressIndicator(
+              value: progressRate,
+              backgroundColor: Colors.white.withValues(alpha: 0.12),
+              valueColor: AlwaysStoppedAnimation(
+                isOver ? accentColor : Colors.white.withValues(alpha: 0.7),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+/*
+Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        // color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.blue, width: 2),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Obx(() => textSpan(
+                  hint: 'production_tasks_today_target'.tr,
+                  text: state.todayTargetQty.value.toShowString(),
+                )),
+                Obx(() => textSpan(
+                  hint: 'production_tasks_today_completion'.tr,
+                  text: state.todayCompleteQty.value.toShowString(),
+                )),
+                Obx(() => textSpan(
+                  hint: 'production_tasks_monthly_completion'.tr,
+                  text: state.monthCompleteQty.value.toShowString(),
+                )),
+              ],
+            ),
+          ),
+          Container(
+            height: 35,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(color: Colors.green, width: 2),
+            ),
+            child: IconButton(
+              padding: const EdgeInsets.all(0),
+              onPressed: () =>
+                  logic.refreshTable(refresh: () => _refreshTable()),
+              icon: const Icon(
+                Icons.refresh,
+                color: Colors.green,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    */
 
 class _ProductionTasksOrderItem extends StatefulWidget {
   final ProductionTasksSubInfo data;

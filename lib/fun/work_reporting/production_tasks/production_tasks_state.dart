@@ -22,6 +22,7 @@ class ProductionTasksState {
 
   var todayTargetQty = (0.0).obs;
   var todayCompleteQty = (0.0).obs;
+  var monthTargetQty = (0.0).obs;
   var monthCompleteQty = (0.0).obs;
 
   var typeBody = ''.obs;
@@ -60,6 +61,7 @@ class ProductionTasksState {
         orderList = info.subInfo ?? [];
         todayTargetQty.value = info.toDayPlanQty ?? 0;
         todayCompleteQty.value = info.toDayFinishQty ?? 0;
+        monthTargetQty.value = info.toMonthPlanQty ?? 0;
         monthCompleteQty.value = info.toMonthFinishQty ?? 0;
         refreshUiData();
         success.call();
@@ -84,6 +86,7 @@ class ProductionTasksState {
     } else {
       todayTargetQty.value = 0;
       todayCompleteQty.value = 0;
+      monthTargetQty.value = 0;
       monthCompleteQty.value = 0;
       typeBody.value = '';
       instructionNo.value = '';

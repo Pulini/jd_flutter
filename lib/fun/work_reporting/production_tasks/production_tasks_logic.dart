@@ -219,4 +219,5 @@ class ProductionTasksLogic extends GetxController {
           .toList();
     }
   }
+
 }

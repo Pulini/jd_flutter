@@ -54,8 +54,8 @@ extension DoubleExt on double? {
   double mul(double value) =>
       (Decimal.parse(toString()) * Decimal.parse(value.toString())).toDouble();
 
-  double div(double value) {
-    if (value == 0) return 0;
+  double div(double? value) {
+    if (value==null||value == 0) return 0;
     return (Decimal.parse(toString()) / Decimal.parse(value.toString()))
         .toDouble();
   }

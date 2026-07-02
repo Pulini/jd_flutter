@@ -39,6 +39,7 @@ class ProductionTasksInfo {
   String? deptID; //部门ID
   double? toDayPlanQty; //今日任务数
   double? toDayFinishQty; //今日完成数
+  double? toMonthPlanQty; //月任务数
   double? toMonthFinishQty; //月完成数
   List<ProductionTasksSubInfo>? subInfo;
 
@@ -46,6 +47,7 @@ class ProductionTasksInfo {
     this.deptID,
     this.toDayPlanQty,
     this.toDayFinishQty,
+    this.toMonthPlanQty,
     this.toMonthFinishQty,
     this.subInfo,
   });
@@ -54,6 +56,7 @@ class ProductionTasksInfo {
     deptID = json['DeptID'];
     toDayPlanQty = json['ToDayPlanQty'];
     toDayFinishQty = json['ToDayFinishQty'];
+    toMonthPlanQty = json['ToMonthPlanQty'];
     toMonthFinishQty = json['ToMonthFinishQty'];
     if (json['ScWorkCardInfos'] != null) {
       subInfo = [];
@@ -68,12 +71,14 @@ class ProductionTasksInfo {
     map['DeptID'] = deptID;
     map['ToDayPlanQty'] = toDayPlanQty;
     map['ToDayFinishQty'] = toDayFinishQty;
+    map['ToMonthPlanQty'] = toMonthPlanQty;
     map['ToMonthFinishQty'] = toMonthFinishQty;
     if (subInfo != null) {
       map['ScWorkCardInfos'] = subInfo!.map((v) => v.toJson()).toList();
     }
     return map;
   }
+
 }
 
 class ProductionTasksSubInfo {
@@ -232,11 +237,11 @@ class WorkCardSizeInfos {
     return map;
   }
 
-  double getPackOwe() => qty!.sub(productScannedQty ?? 0).sub(manualScannedQty ?? 0);
-  double getProductionOwe() => qty!.sub(totalQty?? 0);
+  double getProductionOwe() => qty!.sub(productScannedQty ?? 0).sub(manualScannedQty ?? 0);
+  double getPackOwe() => qty!.sub(totalQty?? 0);
 
   String getCompletionRate() =>
-      '${Decimal.parse(((1 - getProductionOwe() / qty!) * 100).toStringAsFixed(2))}%';
+      '${Decimal.parse(((1 - getPackOwe() / qty!) * 100).toStringAsFixed(2))}%';
 
   double scannedNotInstalled() => totalQty.sub(scanTotalQty ?? 0);
 
