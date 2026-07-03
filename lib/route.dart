@@ -418,7 +418,7 @@ class RouteConfig {
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    205,
+    206,
     const ProductionTasksPage(),
   );
 
@@ -698,7 +698,7 @@ class RouteConfig {
   //包装清单列表
   static Routes packOrderList = Routes(
     '/pack_order_list',
-    200,
+    201,
     const PackOrderListPage(),
   );
 
@@ -726,14 +726,14 @@ class RouteConfig {
   //部件标签打印
   static Routes partLabelPrintPage = Routes(
     '/part_label_print',
-    200,
+    201,
     const PartLabelPrintPage(),
   );
 
   //部件标签管理
   static Routes partLabelManagePage = Routes(
     '/part_label_manage',
-    200,
+    201,
     const PartLabelManagePage(),
   );
 

@@ -1410,8 +1410,8 @@ class MaintainLabelLogic extends GetxController {
         tableFirstLineTitle: titleText,
         tableLastLineTitle: totalText,
         tableData: map,
-        bottomLeftText: languageInfo.pageNumber ?? '',
-        bottomRightText: languageInfo.deliveryDate ?? '',
+        bottomLeftText2: languageInfo.pageNumber ?? '',
+        bottomRightText2: languageInfo.deliveryDate ?? '',
         speed: spGet(spSavePrintSpeed) ?? 5.0,
         density: spGet(spSavePrintDensity) ?? 10.0,
       ));

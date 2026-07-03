@@ -99,11 +99,11 @@ class PartLabelPrintLogic extends GetxController {
                 [v2.size ?? '', v2.auxQty.toString()]
             ]
         },
-        // bottomLeftText: 'part_dispatch_label_print_piece_no'.trArgs(
-        //   [label.pieceNo.toString()],
-        // ),
-        bottomLeftText:label.batchNo??'',
-        bottomRightText: 'part_dispatch_label_print_fetch_date'.trArgs(
+        bottomLeftText1:label.batchNo??'',
+        bottomLeftText2: 'part_dispatch_label_print_piece_no'.trArgs(
+          [label.pieceNo.toString()],
+        ),
+        bottomRightText2: 'part_dispatch_label_print_fetch_date'.trArgs(
           [label.fetchDate ?? ''],
         ),
       );
@@ -171,10 +171,10 @@ class PartLabelPrintLogic extends GetxController {
                     [v2.size ?? '', v2.auxQty.toString()]
                 ]
             },
-            // pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
-            //   [label.pieceNo.toString()],
-            // ),
-            pageNumber:label.batchNo??'',
+            batchNo:label.batchNo??'',
+            pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
+              [label.pieceNo.toString()],
+            ),
             deliveryDate: 'part_dispatch_label_print_fetch_date'.trArgs(
               [label.fetchDate ?? ''],
             ),

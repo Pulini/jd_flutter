@@ -776,6 +776,7 @@ Widget partDynamicLabel({
   required String tableFirstLineTitle,
   required String tableLastLineTitle,
   required Map<String, List<List<String>>> map,
+  required String batchNo,
   required String pageNumber,
   required String deliveryDate,
 }) {
@@ -819,19 +820,29 @@ Widget partDynamicLabel({
     ),
     footer: Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              pageNumber,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
+          Text(
+            batchNo,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Expanded(
-            child: Text(
-              deliveryDate,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
+           Row(
+            children: [
+              Expanded(
+                child: Text(
+                  pageNumber,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  deliveryDate,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -100,10 +100,10 @@ Widget createPartLabel(PartLabelInfo label) => partDynamicLabel(
               [v2.size ?? '', v2.auxQty.toString()]
           ]
       },
-      // pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
-      //   [label.pieceNo.toString()],
-      // ),
-      pageNumber: label.batchNo ?? '',
+      batchNo: label.batchNo ?? '',
+      pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
+        [label.pieceNo.toString()],
+      ),
       deliveryDate: 'part_dispatch_label_print_fetch_date'.trArgs(
         [label.fetchDate ?? ''],
       ),

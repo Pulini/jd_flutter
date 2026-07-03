@@ -122,7 +122,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         child: Row(
           children: [
             ExpandedFrameText(
-              flex: 13,
+              flex: isPad()?13:14,
               text: '打包区',
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
@@ -196,6 +196,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       child: Row(
         children: [
           ExpandedFrameText(
+            flex: isPad() ? 1 : 2,
             maxLines: type == 1 ? 2 : 1,
             text: size,
             backgroundColor: bkgColor,
@@ -204,7 +205,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: qty,
             backgroundColor: bkgColor,
@@ -213,7 +214,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: scanTotalQty,
             backgroundColor: bkgColor,
@@ -222,7 +223,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: noFullInstalledQty,
             backgroundColor: bkgColor,
@@ -231,7 +232,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: totalQty,
             backgroundColor: bkgColor,
@@ -240,7 +241,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: packOwe,
             backgroundColor: bkgColor,
@@ -249,7 +250,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: completionRate,
             backgroundColor: bkgColor,
@@ -258,7 +259,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: productScannedQty,
             backgroundColor: bkgColor2,
@@ -267,7 +268,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: manualScannedQty,
             backgroundColor: bkgColor2,
@@ -276,7 +277,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             alignment: Alignment.center,
           ),
           ExpandedFrameText(
-             flex: 2,
+            flex: 2,
             maxLines: type == 1 ? 2 : 1,
             text: productionOwe,
             backgroundColor: bkgColor2,
@@ -316,6 +317,49 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   @override
   Widget build(BuildContext context) {
+    var typeBody = Obx(() => expandedTextSpan(
+          flex: isPad() ? 1 : 2,
+          hint: 'production_tasks_type_body'.tr,
+          text: state.typeBody.value,
+        ));
+    var instructionNo = Obx(() => expandedTextSpan(
+          flex: isPad() ? 1 : 2,
+          hint: 'production_tasks_instruction_no'.tr,
+          text: state.instructionNo.value,
+        ));
+    var customerPo = Obx(() => expandedTextSpan(
+          flex: isPad() ? 1 : 2,
+          hint: 'production_tasks_customer_po'.tr,
+          text: state.customerPO.value,
+        ));
+    var shouldPackingBoxQty = Obx(() => expandedTextSpan(
+          hint: 'production_tasks_should_packing_box_qty'.tr,
+          text: state.shouldPackQty.value.toShowString(),
+        ));
+    var packagedBoxQ = Obx(() => expandedTextSpan(
+          hint: 'production_tasks_packaged_box_qty'.tr,
+          text: state.packagedQty.value.toShowString(),
+        ));
+    var unpackagedBoxQty = Obx(() => expandedTextSpan(
+          hint: 'production_tasks_unpackaged_box_qty'.tr,
+          text: state.shouldPackQty.value
+              .sub(state.packagedQty.value)
+              .toShowString(),
+        ));
+    var subTitle = isPad()
+        ? [
+            Row(children: [typeBody, instructionNo, customerPo]),
+            Row(children: [
+              shouldPackingBoxQty,
+              packagedBoxQ,
+              unpackagedBoxQty
+            ]),
+          ]
+        : [
+            Row(children: [typeBody, shouldPackingBoxQty]),
+            Row(children: [instructionNo, packagedBoxQ]),
+            Row(children: [customerPo, unpackagedBoxQty]),
+          ];
     return pageBody(
       title: '$functionTitle  <${userInfo?.departmentName}>',
       actions: [
@@ -364,14 +408,16 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         ),
       ],
       body: Padding(
-        padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
+        padding: const EdgeInsets.only(left: 7, bottom: 7),
         child: Column(
           children: [
-            _DailyTargetHeader(
-              monthCompleteQty: state.monthCompleteQty.value,
-              todayCompleteQty: state.todayCompleteQty.value,
-              todayTargetQty: state.todayTargetQty.value,
-            ),
+            Obx(() => _DailyTargetHeader(
+                  monthCompleteQty: state.monthCompleteQty.value,
+                  todayCompleteQty: state.todayCompleteQty.value,
+                  todayTargetQty: state.todayTargetQty.value,
+                  refresh: () =>
+                      logic.refreshTable(refresh: () => _refreshTable()),
+                )),
             SizedBox(
               height: 260,
               child: AnimatedList(
@@ -383,40 +429,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                 },
               ),
             ),
-            Row(
-              children: [
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_type_body'.tr,
-                      text: state.typeBody.value,
-                    )),
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_instruction_no'.tr,
-                      text: state.instructionNo.value,
-                    )),
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_customer_po'.tr,
-                      text: state.customerPO.value,
-                    )),
-              ],
-            ),
-            Row(
-              children: [
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_should_packing_box_qty'.tr,
-                      text: state.shouldPackQty.value.toShowString(),
-                    )),
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_packaged_box_qty'.tr,
-                      text: state.packagedQty.value.toShowString(),
-                    )),
-                Obx(() => expandedTextSpan(
-                      hint: 'production_tasks_unpackaged_box_qty'.tr,
-                      text: state.shouldPackQty.value
-                          .sub(state.packagedQty.value)
-                          .toShowString(),
-                    )),
-              ],
-            ),
+            ...subTitle,
             const SizedBox(height: 10),
             productionTasksTableTitle(),
             productionTasksTableItem(type: 1),
@@ -456,18 +469,20 @@ class _DailyTargetHeader extends StatelessWidget {
   final double monthCompleteQty;
   final double todayCompleteQty;
   final double todayTargetQty;
+  final Function() refresh;
 
   const _DailyTargetHeader({
     required this.monthCompleteQty,
     required this.todayCompleteQty,
     required this.todayTargetQty,
+    required this.refresh,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(left: 5,right: 5),
+      margin: const EdgeInsets.only(left: 5, right: 5),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.green.shade300, Colors.blue.shade300],
@@ -483,10 +498,13 @@ class _DailyTargetHeader extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: isPad()
+          ? const EdgeInsets.only(left: 20, top: 20, right: 10, bottom: 20)
+          : const EdgeInsets.only(left: 10, top: 10, right: 5, bottom: 10),
       child: Row(
         children: [
           Expanded(
+            flex: 3,
             child: _MetricItem(
               label: '日目标',
               value: todayTargetQty.toShowString(),
@@ -496,6 +514,7 @@ class _DailyTargetHeader extends StatelessWidget {
           ),
           _Divider(),
           Expanded(
+            flex: 3,
             child: _MetricItem(
               label: '日完成',
               value: todayCompleteQty.toShowString(),
@@ -508,22 +527,35 @@ class _DailyTargetHeader extends StatelessWidget {
           ),
           _Divider(),
           Expanded(
-              child: _RateItem(
-            label: '日达成率',
-            rate: todayCompleteQty.div(todayTargetQty),
-            rateStr:
-                '${todayCompleteQty.div(todayTargetQty).mul(100).toShowString()}%',
-            isOver: todayTargetQty == todayCompleteQty,
-            accentColor: Colors.greenAccent,
-          )),
+            flex: 3,
+            child: _RateItem(
+              label: '日达成率',
+              rate: todayCompleteQty.div(todayTargetQty).toFixed(2),
+              rateStr:
+                  '${todayCompleteQty.div(todayTargetQty).mul(100).toFixed(2).toShowString()}%',
+              isOver: todayTargetQty == todayCompleteQty,
+              accentColor: Colors.greenAccent,
+            ),
+          ),
           _Divider(),
           Expanded(
-              child: _MetricItem(
-            label: '月完成',
-            value: monthCompleteQty.toShowString(),
-            icon: Icons.calendar_month_rounded,
-            color: Colors.white,
-          )),
+            flex: 2,
+            child: _MetricItem(
+              label: '月完成',
+              value: monthCompleteQty.toShowString(),
+              icon: Icons.calendar_month_rounded,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: refresh,
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.white,
+              size: isPad() ? 40 : 30,
+            ),
+          ),
         ],
       ),
     );
@@ -562,25 +594,31 @@ class _MetricItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: [
-          Icon(icon, size: 12, color: color.withValues(alpha: 0.7)),
-          const SizedBox(width: 4),
-          Text(label,
+        Row(
+          children: [
+            Icon(icon, size: 12, color: color.withValues(alpha: 0.7)),
+            const SizedBox(width: 4),
+            Text(
+              label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: isPad() ? 14 : 10,
                 color: color,
                 fontWeight: FontWeight.w500,
-              )),
-        ]),
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 6),
-        Text(value,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: color,
-              height: 1.1,
-              letterSpacing: -0.4,
-            )),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: isPad() ? 24 : 18,
+            fontWeight: FontWeight.w800,
+            color: color,
+            height: 1.1,
+            letterSpacing: -0.4,
+          ),
+        ),
       ],
     );
   }
@@ -607,41 +645,50 @@ class _RateItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: [
-          Icon(Icons.speed_rounded,
-              size: 12, color: isOver ? accentColor : Colors.white),
-          const SizedBox(width: 4),
-          Text(label,
-              style: TextStyle(
-                fontSize: 13,
-                color: isOver ? accentColor : Colors.white,
-                fontWeight: FontWeight.w500,
-              )),
-          const Spacer(),
-          if (isOver)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-              decoration: BoxDecoration(
-                color: accentColor.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text('已达标',
+        Row(
+          children: [
+            Icon(
+              Icons.speed_rounded,
+              size: 12,
+              color: isOver ? accentColor : Colors.white,
+            ),
+            const SizedBox(width: 4),
+            Text(label,
+                style: TextStyle(
+                  fontSize: isPad() ? 13 : 10,
+                  color: isOver ? accentColor : Colors.white,
+                  fontWeight: FontWeight.w500,
+                )),
+            const Spacer(),
+            if (isOver && isPad())
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                decoration: BoxDecoration(
+                  color: accentColor.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  '已达标',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: isPad() ? 12 : 10,
                     fontWeight: FontWeight.w700,
                     color: accentColor,
-                  )),
-            ),
-        ]),
+                  ),
+                ),
+              ),
+          ],
+        ),
         const SizedBox(height: 3),
-        Text(rateStr,
-            style: TextStyle(
-              fontSize: 23,
-              fontWeight: FontWeight.w800,
-              color: isOver ? accentColor : Colors.white,
-              height: 1.1,
-              letterSpacing: -0.4,
-            )),
+        Text(
+          rateStr,
+          style: TextStyle(
+            fontSize: isPad() ? 23 : 18,
+            fontWeight: FontWeight.w800,
+            color: isOver ? accentColor : Colors.white,
+            height: 1.1,
+            letterSpacing: -0.4,
+          ),
+        ),
         const SizedBox(height: 3),
         ClipRRect(
           borderRadius: BorderRadius.circular(4),

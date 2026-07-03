@@ -1208,8 +1208,10 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   String tableFirstLineTitle = '',
   String tableLastLineTitle = '',
   Map<String, List<List<String>>> tableData = const {},
-  String bottomLeftText = '',
-  String bottomRightText = '',
+  String bottomLeftText1 = '',
+  String bottomLeftText2 = '',
+  String bottomRightText1= '',
+  String bottomRightText2 = '',
   double speed = 3.0,
   double density = 10.0,
 }) async {
@@ -1281,22 +1283,39 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   var qrCodeShowX = (1 + padding) * _dpi;
   var qrCodeShowY = margin * _dpi;
 
-  var bLeftTextX = (1 + padding) * _dpi;
-  var bLeftTextY = (margin +
-          padding +
-          qrCodeWidth +
-          qrCodeBottomLineHeight +
-          titleViewToTableHeight +
-          tableHeight) *
+  var bLeftText1X = (1 + padding) * _dpi;
+  var bLeftText1Y = (margin +
+      padding +
+      qrCodeWidth +
+      qrCodeBottomLineHeight +
+      titleViewToTableHeight +
+      tableHeight) *
       _dpi;
-
-  var bRightTextX = (1 + padding + 35) * _dpi;
-  var bRightTextY = (margin +
-          padding +
-          qrCodeWidth +
-          qrCodeBottomLineHeight +
-          titleViewToTableHeight +
-          tableHeight) *
+  var bLeftText2X = (1 + padding) * _dpi;
+  var bLeftText2Y = (margin +
+      padding +
+      qrCodeWidth +
+      qrCodeBottomLineHeight +
+      titleViewToTableHeight +
+      tableHeight +
+      4) *
+      _dpi;
+  var bRightText1X = (1 + padding + 35) * _dpi;
+  var bRightText1Y = (margin +
+      padding +
+      qrCodeWidth +
+      qrCodeBottomLineHeight +
+      titleViewToTableHeight +
+      tableHeight) *
+      _dpi;
+  var bRightText2X = (1 + padding + 35) * _dpi;
+  var bRightText2Y = (margin +
+      padding +
+      qrCodeWidth +
+      qrCodeBottomLineHeight +
+      titleViewToTableHeight +
+      tableHeight +
+      4) *
       _dpi;
 
   list.add(_tscCutter());
@@ -1396,16 +1415,22 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
       }
     }
   }
-  if (bottomLeftText.isNotEmpty) {
-    list.add(
-      await _tscBitmapText(bLeftTextX, bLeftTextY, 30, bottomLeftText),
-    );
-  }
 
-  if (bottomRightText.isNotEmpty) {
+  if (bottomLeftText1.isNotEmpty) {
     list.add(
-      await _tscBitmapText(bRightTextX, bRightTextY, 30, bottomRightText),
-    );
+        await _tscBitmapText(bLeftText1X, bLeftText1Y, 30, bottomLeftText1));
+  }
+  if (bottomLeftText2.isNotEmpty) {
+    list.add(
+        await _tscBitmapText(bLeftText2X, bLeftText2Y, 30, bottomLeftText2));
+  }
+  if (bottomRightText1.isNotEmpty) {
+    list.add(
+        await _tscBitmapText(bRightText1X, bRightText1Y, 30, bottomRightText1));
+  }
+  if (bottomRightText2.isNotEmpty) {
+    list.add(
+        await _tscBitmapText(bRightText2X, bRightText2Y, 30, bottomRightText2));
   }
 
   list.add(_tscLine(

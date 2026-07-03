@@ -887,7 +887,10 @@ BaseUrl getSpringBootBaseUrl() {
   }
 }
 
-bool isPad() => MediaQuery.of(Get.overlayContext!).size.width >= 600;
+bool isPad([BuildContext? context]) =>
+    context != null
+        ? MediaQuery.of(context).size.width >= 600
+        : Get.width >= 600;
 
 Future<void> makePhoneCall(String phoneNumber) async {
   final Uri launchUri = Uri(
