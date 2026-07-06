@@ -100,6 +100,7 @@ void getProcessFlowInfoByBarCode({
 }) {
   httpPost(
     method: webApiGetProcessFlowInfoByBarCode,
+    loading: 'process_report_store_get_code_process'.tr,
     body: {
       'BarCodeList': [
         for (var item in list) {'BarCode': item.code}
