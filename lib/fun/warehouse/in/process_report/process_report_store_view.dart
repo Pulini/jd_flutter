@@ -214,12 +214,16 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   child: CombinationButton(
                     text: 'process_report_store_submit_barcode'.tr,
                     click: () {
-                      checkBarCodeProcessDialog(
-                        list: state.barCodeList,
-                        submit: (w, p) {
-                          logic.submit(worker: w, process: p);
-                        },
-                      );
+                      if(state.barCodeList.isNotEmpty){
+                        checkBarCodeProcessDialog(
+                          list: state.barCodeList,
+                          submit: (w, p) {
+                            logic.submit(worker: w, process: p);
+                          },
+                        );
+                      }else{
+                        errorDialog(content: 'process_report_store_no_barcode'.tr);
+                      }
                     },
                     combination: Combination.right,
                   ),
