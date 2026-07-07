@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -24,7 +25,8 @@ class NewCartonLabelScanPage extends StatefulWidget {
 
 class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   final NewCartonLabelScanLogic logic = Get.put(NewCartonLabelScanLogic());
-  final NewCartonLabelScanState state = Get.find<NewCartonLabelScanLogic>().state;
+  final NewCartonLabelScanState state =
+      Get.find<NewCartonLabelScanLogic>().state;
 
   var controller = TextEditingController();
 
@@ -36,7 +38,8 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   var ae2 = 'audios/audio_error2.mp3';
 
   void playAudio(String as) {
-    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
+        8) {
       if (player.state != PlayerState.completed) {
         player.stop();
         player.setSource(AssetSource(as));
@@ -69,7 +72,8 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
 
   @override
   void initState() {
-    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
+        8) {
       player = AudioPlayer();
     }
     _scan();
@@ -79,12 +83,10 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'carton_label_scan_order_production_collection'.tr,
       actions: [
         IconButton(
-          onPressed: (){
-            Get.to(() => const NewCartonLabelScanClearTail())
-                ?.then((v) {
+          onPressed: () {
+            Get.to(() => const NewCartonLabelScanClearTail())?.then((v) {
               _scan();
             });
           },
@@ -188,6 +190,34 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                         value: state.scannedLabelTotal.value.toDouble(),
                       ),
                     ),
+                    state.isAutoSubmit.value
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_this_time_scan'
+                                    .tr,
+                                text:
+                                    '${state.cartonLabelInfo?.scanned.value ?? 0}',
+                              ),
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_scanned'.tr,
+                                text:
+                                    '${state.cartonLabelInfo?.scannedCount ?? 0}',
+                              ),
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_total'.tr,
+                                text: '${state.cartonLabelInfo?.piece ?? 0}',
+                              ),
+                            ],
+                          ),
                     Row(
                       children: [
                         Expanded(
@@ -206,7 +236,7 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -214,17 +244,54 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.cartonInsideLabelList.length,
-                  itemBuilder: (c, i) =>
-                      _CartonInsideLabelItem(data: state.cartonInsideLabelList[i]),
+                  itemBuilder: (c, i) => _CartonInsideLabelItem(
+                      data: state.cartonInsideLabelList[i]),
                 ),
               ),
-              textSpan(hint: 'carton_label_scan_dispatch_no'.tr, text: state.dispatchNumber.value),
-              if (state.labelTotal.value != 0 &&
-                  state.labelTotal.value == state.scannedLabelTotal.value)
-                CombinationButton(
-                  text: 'carton_label_scan_submit'.tr,
-                  click: () => logic.submit(() => controller.text = ''),
-                )
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: textSpan(
+                  hint: 'carton_label_scan_dispatch_no'.tr,
+                  text: state.dispatchNumber.value,
+                ),
+              ),
+              state.isAutoSubmit.value
+                  ? state.labelTotal.value != 0 &&
+                          state.labelTotal.value ==
+                              state.scannedLabelTotal.value
+                      ? CombinationButton(
+                          text: 'carton_label_scan_submit'.tr,
+                          click: () => logic.submit(() => controller.text = ''),
+                        )
+                      : Container()
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: CombinationButton(
+                            isEnabled: state.labelTotal.value > 0,
+                            combination: Combination.left,
+                            text: 'carton_label_scan_submit'.tr,
+                            click: () =>
+                                logic.submit(() => controller.text = ''),
+                          ),
+                        ),
+                        Expanded(
+                          child: CombinationButton(
+                            combination: Combination.right,
+                            text: 'carton_label_scan_modify_out_box_scanned'.tr,
+                            click: () => modifyOutBoxScannedDialog(
+                              scannedQty:
+                                  state.cartonLabelInfo?.scanned.value ?? 0,
+                              max: state.cartonLabelInfo?.maxScanned() ?? 0,
+                              modify: (int scannedQty) {
+                                state.cartonLabelInfo?.scanned.value =
+                                    scannedQty;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
             ],
           )),
     );
@@ -239,7 +306,8 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
 }
 
 class _CartonInsideLabelItem extends StatelessWidget {
-  final LinkDataSizeList data;
+  final LinkDataSizeNewList data;
+
   const _CartonInsideLabelItem({required this.data});
 
   @override

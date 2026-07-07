@@ -9,21 +9,23 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class NewCartonLabelScanState {
+  var isAutoSubmit=true.obs;
+
   var isCheckingCartonBarCode = false;
-  var cartonInsideLabelList = <LinkDataSizeList>[].obs;
+  var cartonInsideLabelList = <LinkDataSizeNewList>[].obs;
   var cartonLabel = ''.obs;
-  CartonLabelScanInfo? cartonLabelInfo;
+  CartonLabelScanNewInfo? cartonLabelInfo;
   var labelTotal = 0.obs;
   var scannedLabelTotal = 0.obs;
   var progress = <CartonLabelScanProgressInfo>[].obs;
   var progressDetail = <List<CartonLabelScanProgressDetailInfo>>[].obs;
 
-  var priorityCartonInsideLabelList = <LinkDataSizeList>[].obs;
+  var priorityCartonInsideLabelList = <LinkDataSizeNewList>[].obs;
   var priorityCartonLabel = ''.obs;
   var priorityPo = ''.obs;
   var dispatchNumber = ''.obs;
   var tailDispatchNumber = ''.obs;
-  CartonLabelScanInfo? priorityCartonLabelInfo;
+  CartonLabelScanNewInfo? priorityCartonLabelInfo;
 
   var outBoxList = <OutBoxLabelsInfo>[].obs; //外箱数据
   var showIndex = 0;
@@ -34,7 +36,7 @@ class NewCartonLabelScanState {
 
   void queryCartonLabelInfo({
     required String code,
-    required Function(CartonLabelScanInfo) success,
+    required Function(CartonLabelScanNewInfo) success,
     required Function(String) error,
   }) {
     if (isCheckingCartonBarCode) {
@@ -51,7 +53,7 @@ class NewCartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(CartonLabelScanInfo.fromJson(response.data));
+        success.call(CartonLabelScanNewInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -61,7 +63,7 @@ class NewCartonLabelScanState {
 
   //清理优先级界面数据
   void clearPriority() {
-    priorityCartonLabelInfo = CartonLabelScanInfo();
+    priorityCartonLabelInfo = CartonLabelScanNewInfo();
     priorityCartonLabel.value = '';
     priorityPo.value = '';
     priorityCartonInsideLabelList.value = [];
@@ -102,12 +104,13 @@ class NewCartonLabelScanState {
         'Mix': cartonLabelInfo?.mix,
         'UserID': userInfo?.userID,
         'DispatchNumber': dispatchNumber.value,
+        'Piece':cartonLabelInfo?.scanned.value,
         'OutBoxSizeList': [
           for (var data in cartonInsideLabelList)
             {
               'PriceBarCode': data.priceBarCode,
               'Size': data.size,
-              'LabelCount': data.scanned,
+              'LabelCount':isAutoSubmit.value?data.scanned: data.labelCount,
             }
         ]
       },
@@ -115,6 +118,8 @@ class NewCartonLabelScanState {
       if (response.resultCode == resultSuccess) {
         labelTotal.value = 0;
         scannedLabelTotal.value = 0;
+        isAutoSubmit.value=true;
+        cartonLabelInfo=null;
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

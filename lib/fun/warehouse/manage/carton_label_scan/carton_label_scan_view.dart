@@ -80,7 +80,6 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'carton_label_scan_order_production_collection'.tr,
       actions: [
         IconButton(
           onPressed: (){

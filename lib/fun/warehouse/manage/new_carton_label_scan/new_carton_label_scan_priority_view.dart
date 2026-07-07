@@ -125,7 +125,7 @@ class _NewCartonLabelScanPriorityPageState extends State<NewCartonLabelScanPrior
 }
 
 class _PriorityInsideLabelItem extends StatelessWidget {
-  final LinkDataSizeList data;
+  final LinkDataSizeNewList data;
   const _PriorityInsideLabelItem({required this.data});
 
   @override

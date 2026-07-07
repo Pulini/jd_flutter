@@ -264,14 +264,14 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    208,
+    209,
     const CartonLabelScanPage(),
   );
 
   //订单产量采集
   static Routes newCartonLabelScan = Routes(
     '/new_carton_label_scan_page',
-    208,
+    209,
     const NewCartonLabelScanPage(),
   );
 

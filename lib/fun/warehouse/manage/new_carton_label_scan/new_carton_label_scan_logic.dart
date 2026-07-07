@@ -18,6 +18,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
+        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
         state.priorityCartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.priorityCartonLabel.value =
@@ -40,6 +41,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
+        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
         state.cartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
@@ -93,7 +95,7 @@ class NewCartonLabelScanLogic extends GetxController {
     } else {
       try {
         var exist = state.cartonInsideLabelList.singleWhere(
-              (v) => v.priceBarCode == code,
+          (v) => v.priceBarCode == code,
         );
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
@@ -118,7 +120,8 @@ class NewCartonLabelScanLogic extends GetxController {
         );
       }
     }
-    if (state.labelTotal.value > 0 &&
+    if (state.isAutoSubmit.value &&
+        state.labelTotal.value > 0 &&
         state.labelTotal.value == state.scannedLabelTotal.value) {
       isSubmitting = true;
       state.submitScannedCartonLabel(
@@ -186,7 +189,6 @@ class NewCartonLabelScanLogic extends GetxController {
     );
   }
 
-
   void setTailDetail({
     required int index,
     required Function goActivity,
@@ -227,22 +229,22 @@ class NewCartonLabelScanLogic extends GetxController {
               final currentShortQty = a.thisShortQty ?? 0;
               final currentLabelCount = a.labelCount ?? 0;
 
-              if (currentShortQty < currentLabelCount){
-                if(state.tailScannedLabelTotal.value +1<state.tailLabelTotal.value){
+              if (currentShortQty < currentLabelCount) {
+                if (state.tailScannedLabelTotal.value + 1 <
+                    state.tailLabelTotal.value) {
                   a.thisShortQty = currentShortQty + 1;
 
                   showScanTips();
                   state.tailScannedLabelTotal.value += 1;
                   add.call();
-
-                }else{
+                } else {
                   full.call();
                   if (Get.isDialogOpen == true) Get.back();
                   errorDialog(
                     content: 'carton_label_scan_order_not_full'.tr,
                   );
                 }
-              }else{
+              } else {
                 full.call();
               }
             } else {
