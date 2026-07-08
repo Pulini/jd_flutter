@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_progress_detail_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'new_carton_label_scan_state.dart';
@@ -60,6 +61,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.cartonLabelInfo = null;
     state.labelTotal.value = 0;
     state.scannedLabelTotal.value = 0;
+    state.dispatchNumber.value = '';
     refresh.call();
   }
 
@@ -75,6 +77,7 @@ class NewCartonLabelScanLogic extends GetxController {
     required String code,
     required Function(String) outsideCode,
     required Function(String) insideCode,
+    required Function() successOutsideCode,
     required Function() insideExpired,
     required Function() notOutsideCode,
     required Function() submitSuccess,
@@ -84,45 +87,54 @@ class NewCartonLabelScanLogic extends GetxController {
       state.dispatchNumber.value = code;
       return;
     }
-    // if(state.dispatchNumber.value.isEmpty){
-    //   errorDialog(content: 'carton_label_scan_label_scan_dispatch_no_empty_tips'.tr);
-    //   return;
-    // }
     if (isSubmitting) return;
     if (state.cartonLabel.value.isEmpty) {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
     } else {
-      try {
-        var exist = state.cartonInsideLabelList.singleWhere(
-          (v) => v.priceBarCode == code,
-        );
-        if (exist.scanned < exist.labelCount!) {
-          insideCode.call(code);
-          exist.scanned += 1;
-          state.scannedLabelTotal.value += 1;
-        } else {
+      if (code == state.cartonLabel.value && state.cartonLabelInfo?.isUniqueBarCode ==false) {
+        final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
+        final piece = state.cartonLabelInfo?.piece ?? 0;
+        final scan = state.cartonLabelInfo?.scannedCount ?? 0;
+        if ((scanned + 1 + scan) > piece) {
+          if (Get.isDialogOpen == true) Get.back();
+          errorDialog(content: 'carton_label_scan_outer_box_tips'.tr);
           insideExpired.call();
+        } else {
+          state.cartonLabelInfo?.scanned += 1;
+          successOutsideCode.call();
+          showScanTips();
+        }
+      } else {
+        try {
+          var exist = state.cartonInsideLabelList.singleWhere(
+            (v) => v.priceBarCode == code,
+          );
+          if (exist.scanned < exist.labelCount!) {
+            insideCode.call(code);
+            exist.scanned += 1;
+            state.scannedLabelTotal.value += 1;
+          } else {
+            insideExpired.call();
+            if (Get.isDialogOpen == true) Get.back();
+            errorDialog(
+              content: 'carton_label_scan_label_scan_completed_tips'.trArgs(
+                [code],
+              ),
+            );
+          }
+        } catch (e) {
+          notOutsideCode.call();
           if (Get.isDialogOpen == true) Get.back();
           errorDialog(
-            content: 'carton_label_scan_label_scan_completed_tips'.trArgs(
+            content: 'carton_label_scan_label_placement_error_tips'.trArgs(
               [code],
             ),
           );
         }
-      } catch (e) {
-        notOutsideCode.call();
-        if (Get.isDialogOpen == true) Get.back();
-        errorDialog(
-          content: 'carton_label_scan_label_placement_error_tips'.trArgs(
-            [code],
-          ),
-        );
       }
     }
-    if (state.isAutoSubmit.value &&
-        state.labelTotal.value > 0 &&
-        state.labelTotal.value == state.scannedLabelTotal.value) {
+    if (state.isAutoSubmit.value && state.labelTotal.value > 0 && state.labelTotal.value == state.scannedLabelTotal.value) {
       isSubmitting = true;
       state.submitScannedCartonLabel(
         success: (msg) {
@@ -144,8 +156,9 @@ class NewCartonLabelScanLogic extends GetxController {
     isSubmitting = true;
     state.submitScannedCartonLabel(
       success: (msg) {
-        cleanAll(refresh);
-        successDialog(content: msg);
+        successDialog(content: msg,back: (){
+          cleanAll(refresh);
+        });
         isSubmitting = false;
       },
       error: (msg) {

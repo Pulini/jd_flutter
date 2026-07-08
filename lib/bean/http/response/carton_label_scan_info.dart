@@ -165,10 +165,10 @@ class LinkDataSizeNewList {
     labelCount = json['LabelCount'];
   }
 
-  String? priceBarCode;
-  String? size;
-  int? labelCount;
-  int scanned = 0;
+  String? priceBarCode;  //标签
+  String? size;  //尺码
+  int? labelCount;  //内盒数量
+  int scanned = 0;  //已次扫码
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

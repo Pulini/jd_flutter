@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -26,7 +26,9 @@ class NewCartonLabelScanPage extends StatefulWidget {
 class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   final NewCartonLabelScanLogic logic = Get.put(NewCartonLabelScanLogic());
   final NewCartonLabelScanState state =
-      Get.find<NewCartonLabelScanLogic>().state;
+      Get
+          .find<NewCartonLabelScanLogic>()
+          .state;
 
   var controller = TextEditingController();
 
@@ -66,6 +68,9 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
           playAudio(as2);
         },
         submitError: () => playAudio(ae2),
+        successOutsideCode: () {
+          playAudio(as3);
+        },
       );
     });
   }
@@ -96,28 +101,31 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
           ),
         ),
         IconButton(
-          onPressed: () => Get.to(
-            () => const NewCartonLabelScanProgressPage(),
-            arguments: {
-              'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
-            },
-          ),
+          onPressed: () =>
+              Get.to(
+                    () => const NewCartonLabelScanProgressPage(),
+                arguments: {
+                  'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
+                },
+              ),
           icon: const Icon(
             Icons.menu_book,
             color: Colors.blue,
           ),
         ),
         IconButton(
-          onPressed: () => Get.to(
-            () => const NewCartonLabelScanPriorityPage(),
-          )?.then((v) => _scan()),
+          onPressed: () =>
+              Get.to(
+                    () => const NewCartonLabelScanPriorityPage(),
+              )?.then((v) => _scan()),
           icon: const Icon(
             Icons.low_priority,
             color: Colors.blue,
           ),
         )
       ],
-      body: Obx(() => Column(
+      body: Obx(() =>
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
@@ -137,7 +145,7 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     hintText:
-                        'carton_label_scan_scan_code_or_input_outside_code'.tr,
+                    'carton_label_scan_scan_code_or_input_outside_code'.tr,
                     hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () => controller.clear(),
@@ -193,31 +201,31 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                     state.isAutoSubmit.value
                         ? Container()
                         : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              textSpan(
-                                isBold: false,
-                                textColor: Colors.green.shade800,
-                                hint: 'carton_label_scan_out_box_this_time_scan'
-                                    .tr,
-                                text:
-                                    '${state.cartonLabelInfo?.scanned.value ?? 0}',
-                              ),
-                              textSpan(
-                                isBold: false,
-                                textColor: Colors.green.shade800,
-                                hint: 'carton_label_scan_out_box_scanned'.tr,
-                                text:
-                                    '${state.cartonLabelInfo?.scannedCount ?? 0}',
-                              ),
-                              textSpan(
-                                isBold: false,
-                                textColor: Colors.green.shade800,
-                                hint: 'carton_label_scan_out_box_total'.tr,
-                                text: '${state.cartonLabelInfo?.piece ?? 0}',
-                              ),
-                            ],
-                          ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        textSpan(
+                          isBold: false,
+                          textColor: Colors.green.shade800,
+                          hint: 'carton_label_scan_out_box_this_time_scan'
+                              .tr,
+                          text:
+                          '${state.cartonLabelInfo?.scanned.value ?? 0}',
+                        ),
+                        textSpan(
+                          isBold: false,
+                          textColor: Colors.green.shade800,
+                          hint: 'carton_label_scan_out_box_scanned'.tr,
+                          text:
+                          '${state.cartonLabelInfo?.scannedCount ?? 0}',
+                        ),
+                        textSpan(
+                          isBold: false,
+                          textColor: Colors.green.shade800,
+                          hint: 'carton_label_scan_out_box_total'.tr,
+                          text: '${state.cartonLabelInfo?.piece ?? 0}',
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         Expanded(
@@ -244,8 +252,9 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.cartonInsideLabelList.length,
-                  itemBuilder: (c, i) => _CartonInsideLabelItem(
-                      data: state.cartonInsideLabelList[i]),
+                  itemBuilder: (c, i) =>
+                      _CartonInsideLabelItem(
+                          data: state.cartonInsideLabelList[i]),
                 ),
               ),
               Padding(
@@ -257,41 +266,43 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
               ),
               state.isAutoSubmit.value
                   ? state.labelTotal.value != 0 &&
-                          state.labelTotal.value ==
-                              state.scannedLabelTotal.value
-                      ? CombinationButton(
-                          text: 'carton_label_scan_submit'.tr,
-                          click: () => logic.submit(() => controller.text = ''),
-                        )
-                      : Container()
+                  state.labelTotal.value ==
+                      state.scannedLabelTotal.value
+                  ? CombinationButton(
+                text: 'carton_label_scan_submit'.tr,
+                click: () => logic.submit(() => controller.text = ''),
+              )
+                  : Container()
                   : Row(
-                      children: [
-                        Expanded(
-                          child: CombinationButton(
-                            isEnabled: state.labelTotal.value > 0,
-                            combination: Combination.left,
-                            text: 'carton_label_scan_submit'.tr,
-                            click: () =>
-                                logic.submit(() => controller.text = ''),
-                          ),
-                        ),
-                        Expanded(
-                          child: CombinationButton(
-                            combination: Combination.right,
-                            text: 'carton_label_scan_modify_out_box_scanned'.tr,
-                            click: () => modifyOutBoxScannedDialog(
-                              scannedQty:
-                                  state.cartonLabelInfo?.scanned.value ?? 0,
-                              max: state.cartonLabelInfo?.maxScanned() ?? 0,
-                              modify: (int scannedQty) {
-                                state.cartonLabelInfo?.scanned.value =
-                                    scannedQty;
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                children: [
+                  Expanded(
+                    child: CombinationButton(
+                        isEnabled: state.labelTotal.value > 0,
+                        combination: Combination.intact,
+                        text: 'carton_label_scan_submit'.tr,
+                        click: () =>
+                            askDialog(content:'carton_label_scan_submit_data'.tr, confirm: () {
+                              logic.submit(() => controller.text = '');
+                            })
                     ),
+                  ),
+                  // Expanded(  //7.7 林总说还是采用扫码
+                  //   child: CombinationButton(
+                  //     combination: Combination.right,
+                  //     text: 'carton_label_scan_modify_out_box_scanned'.tr,
+                  //     click: () => modifyOutBoxScannedDialog(
+                  //       scannedQty:
+                  //           state.cartonLabelInfo?.scanned.value ?? 0,
+                  //       max: state.cartonLabelInfo?.maxScanned() ?? 0,
+                  //       modify: (int scannedQty) {
+                  //         state.cartonLabelInfo?.scanned.value =
+                  //             scannedQty;
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ],
           )),
     );
