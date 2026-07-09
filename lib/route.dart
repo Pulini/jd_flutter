@@ -271,7 +271,7 @@ class RouteConfig {
   //订单产量采集
   static Routes newCartonLabelScan = Routes(
     '/new_carton_label_scan_page',
-    210,
+    211,
     const NewCartonLabelScanPage(),
   );
 
