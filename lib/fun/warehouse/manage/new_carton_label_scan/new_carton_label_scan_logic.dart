@@ -91,7 +91,8 @@ class NewCartonLabelScanLogic extends GetxController {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
     } else {
-      if (code == state.cartonLabel.value && state.cartonLabelInfo?.isUniqueBarCode ==false) {
+      if (code == state.cartonLabel.value &&
+          state.cartonLabelInfo?.isUniqueBarCode == false) {
         final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
         final piece = state.cartonLabelInfo?.piece ?? 0;
         final scan = state.cartonLabelInfo?.scannedCount ?? 0;
@@ -133,7 +134,9 @@ class NewCartonLabelScanLogic extends GetxController {
         }
       }
     }
-    if (state.isAutoSubmit.value && state.labelTotal.value > 0 && state.labelTotal.value == state.scannedLabelTotal.value) {
+    if (state.isAutoSubmit.value &&
+        state.labelTotal.value > 0 &&
+        state.labelTotal.value == state.scannedLabelTotal.value) {
       isSubmitting = true;
       state.submitScannedCartonLabel(
         success: (msg) {
@@ -155,9 +158,11 @@ class NewCartonLabelScanLogic extends GetxController {
     isSubmitting = true;
     state.submitScannedCartonLabel(
       success: (msg) {
-        successDialog(content: msg,back: (){
-          cleanAll(refresh);
-        });
+        successDialog(
+            content: msg,
+            back: () {
+              cleanAll(refresh);
+            });
         isSubmitting = false;
       },
       error: (msg) {
@@ -309,5 +314,9 @@ class NewCartonLabelScanLogic extends GetxController {
     }
     setTotalQty();
     state.outBoxList.refresh();
+  }
+
+  void getAnalyze() {
+    state.getAnalyze();
   }
 }

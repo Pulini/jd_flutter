@@ -91,6 +91,15 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
       actions: [
         IconButton(
           onPressed: () {
+              logic.getAnalyze();
+          },
+          icon: const Icon(
+            Icons.calendar_month,
+            color: Colors.blue,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
             Get.to(() => const NewCartonLabelScanClearTail())?.then((v) {
               _scan();
             });
