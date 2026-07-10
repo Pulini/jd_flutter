@@ -256,4 +256,24 @@ class NewCartonLabelScanState {
       }
     });
   }
+
+  //确认条码
+  void confirmTag({
+    required Function(String) success,
+    required String command,
+  }) {
+    httpGet(
+      loading: 'carton_label_scan_verifying_label_barcode'.tr,
+      method: webApiConfirmTag,
+      params: {
+        'MtoNo': command,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
 }

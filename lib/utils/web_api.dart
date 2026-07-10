@@ -1683,6 +1683,9 @@ const webApiGetTailNumberReportDataNew = 'api/OutBoxScanNew/GetTailNumberReportD
 // 订单生产执行情况表查询
 const webApiGetTailNumberListDataNew = 'api/OutBoxScanNew/GetTailNumberListDataNew';
 
+// 确认标签
+const webApiConfirmTag = 'api/OutBoxScanNew/ConfirmTag';
+
 
 
 

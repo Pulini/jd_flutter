@@ -26,9 +26,7 @@ class NewCartonLabelScanPage extends StatefulWidget {
 class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   final NewCartonLabelScanLogic logic = Get.put(NewCartonLabelScanLogic());
   final NewCartonLabelScanState state =
-      Get
-          .find<NewCartonLabelScanLogic>()
-          .state;
+      Get.find<NewCartonLabelScanLogic>().state;
 
   var controller = TextEditingController();
 
@@ -91,50 +89,15 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
       actions: [
         IconButton(
           onPressed: () {
-              logic.getAnalyze();
+            showBottomIconDialog();
           },
           icon: const Icon(
-            Icons.calendar_month,
+            Icons.menu,
             color: Colors.blue,
           ),
         ),
-        IconButton(
-          onPressed: () {
-            Get.to(() => const NewCartonLabelScanClearTail())?.then((v) {
-              _scan();
-            });
-          },
-          icon: const Icon(
-            Icons.published_with_changes_sharp,
-            color: Colors.blue,
-          ),
-        ),
-        IconButton(
-          onPressed: () =>
-              Get.to(
-                    () => const NewCartonLabelScanProgressPage(),
-                arguments: {
-                  'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
-                },
-              ),
-          icon: const Icon(
-            Icons.menu_book,
-            color: Colors.blue,
-          ),
-        ),
-        IconButton(
-          onPressed: () =>
-              Get.to(
-                    () => const NewCartonLabelScanPriorityPage(),
-              )?.then((v) => _scan()),
-          icon: const Icon(
-            Icons.low_priority,
-            color: Colors.blue,
-          ),
-        )
       ],
-      body: Obx(() =>
-          Column(
+      body: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
@@ -154,7 +117,7 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     hintText:
-                    'carton_label_scan_scan_code_or_input_outside_code'.tr,
+                        'carton_label_scan_scan_code_or_input_outside_code'.tr,
                     hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () => controller.clear(),
@@ -210,31 +173,31 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                     state.isAutoSubmit.value
                         ? Container()
                         : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        textSpan(
-                          isBold: false,
-                          textColor: Colors.green.shade800,
-                          hint: 'carton_label_scan_out_box_this_time_scan'
-                              .tr,
-                          text:
-                          '${state.cartonLabelInfo?.scanned.value ?? 0}',
-                        ),
-                        textSpan(
-                          isBold: false,
-                          textColor: Colors.green.shade800,
-                          hint: 'carton_label_scan_out_box_scanned'.tr,
-                          text:
-                          '${state.cartonLabelInfo?.scannedCount ?? 0}',
-                        ),
-                        textSpan(
-                          isBold: false,
-                          textColor: Colors.green.shade800,
-                          hint: 'carton_label_scan_out_box_total'.tr,
-                          text: '${state.cartonLabelInfo?.piece ?? 0}',
-                        ),
-                      ],
-                    ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_this_time_scan'
+                                    .tr,
+                                text:
+                                    '${state.cartonLabelInfo?.scanned.value ?? 0}',
+                              ),
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_scanned'.tr,
+                                text:
+                                    '${state.cartonLabelInfo?.scannedCount ?? 0}',
+                              ),
+                              textSpan(
+                                isBold: false,
+                                textColor: Colors.green.shade800,
+                                hint: 'carton_label_scan_out_box_total'.tr,
+                                text: '${state.cartonLabelInfo?.piece ?? 0}',
+                              ),
+                            ],
+                          ),
                     Row(
                       children: [
                         Expanded(
@@ -261,9 +224,8 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.cartonInsideLabelList.length,
-                  itemBuilder: (c, i) =>
-                      _CartonInsideLabelItem(
-                          data: state.cartonInsideLabelList[i]),
+                  itemBuilder: (c, i) => _CartonInsideLabelItem(
+                      data: state.cartonInsideLabelList[i]),
                 ),
               ),
               Padding(
@@ -275,45 +237,245 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
               ),
               state.isAutoSubmit.value
                   ? state.labelTotal.value != 0 &&
-                  state.labelTotal.value ==
-                      state.scannedLabelTotal.value
-                  ? CombinationButton(
-                text: 'carton_label_scan_submit'.tr,
-                click: () => logic.submit(() => controller.text = ''),
-              )
-                  : Container()
+                          state.labelTotal.value ==
+                              state.scannedLabelTotal.value
+                      ? CombinationButton(
+                          text: 'carton_label_scan_submit'.tr,
+                          click: () => logic.submit(() => controller.text = ''),
+                        )
+                      : Container()
                   : Row(
-                children: [
-                  Expanded(
-                    child: CombinationButton(
-                        isEnabled: state.labelTotal.value > 0,
-                        combination: Combination.intact,
-                        text: 'carton_label_scan_submit'.tr,
-                        click: () =>
-                            askDialog(content:'carton_label_scan_submit_data'.tr, confirm: () {
-                              logic.submit(() => controller.text = '');
-                            })
+                      children: [
+                        Expanded(
+                          child: CombinationButton(
+                              isEnabled: state.labelTotal.value > 0,
+                              combination: Combination.intact,
+                              text: 'carton_label_scan_submit'.tr,
+                              click: () => askDialog(
+                                  content: 'carton_label_scan_submit_data'.tr,
+                                  confirm: () {
+                                    logic.submit(() => controller.text = '');
+                                  })),
+                        ),
+                        // Expanded(  //7.7 林总说还是采用扫码
+                        //   child: CombinationButton(
+                        //     combination: Combination.right,
+                        //     text: 'carton_label_scan_modify_out_box_scanned'.tr,
+                        //     click: () => modifyOutBoxScannedDialog(
+                        //       scannedQty:
+                        //           state.cartonLabelInfo?.scanned.value ?? 0,
+                        //       max: state.cartonLabelInfo?.maxScanned() ?? 0,
+                        //       modify: (int scannedQty) {
+                        //         state.cartonLabelInfo?.scanned.value =
+                        //             scannedQty;
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
                     ),
-                  ),
-                  // Expanded(  //7.7 林总说还是采用扫码
-                  //   child: CombinationButton(
-                  //     combination: Combination.right,
-                  //     text: 'carton_label_scan_modify_out_box_scanned'.tr,
-                  //     click: () => modifyOutBoxScannedDialog(
-                  //       scannedQty:
-                  //           state.cartonLabelInfo?.scanned.value ?? 0,
-                  //       max: state.cartonLabelInfo?.maxScanned() ?? 0,
-                  //       modify: (int scannedQty) {
-                  //         state.cartonLabelInfo?.scanned.value =
-                  //             scannedQty;
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
             ],
           )),
+    );
+  }
+
+  void showBottomIconDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // 必须开启，键盘才能顶起弹窗
+      enableDrag: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext ctx) {
+        // 替换原来的Padding为AnimatedPadding，动态避让键盘
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 120),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            // 滚动层兜底，防止任何内容溢出
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 顶部拖拽小横条
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  // 按钮区域，你的Row逻辑完全不动
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.calendar_month),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:4), // 压缩按钮高度
+                              ),
+                              label: Text('carton_label_scan_analysis_report'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                logic.getAnalyze();
+                              },
+                            ),
+                          ),
+                          const SizedBox(width:8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.published_with_changes_sharp),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:4),
+                              ),
+                              label: Text('carton_label_scan_order_clean'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(() => const NewCartonLabelScanClearTail())
+                                    ?.then((v) {
+                                  _scan();
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height:6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.menu_book),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:4),
+                              ),
+                              label: Text('carton_label_scan_scanning_progress'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(
+                                      () => const NewCartonLabelScanProgressPage(),
+                                  arguments: {
+                                    'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width:8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.low_priority),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:4),
+                              ),
+                              label: Text('carton_label_scan_dialog_change_priority'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(() => const NewCartonLabelScanPriorityPage())?.then((v) => _scan());
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height:6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.note_alt),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:4),
+                              ),
+                              label: Text('carton_label_scan_label_confirmation'.tr),
+                              onPressed: () {
+                                // 点击先关闭底部sheet，再打开输入弹窗（关键！）
+                                Navigator.pop(ctx);
+                                reasonInputPopup(
+                                  title: [
+                                    Center(
+                                      child: Text(
+                                        'carton_label_scan_label_confirmation'.tr,
+                                        style: const TextStyle(fontSize: 20, color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                  hintText: 'carton_label_scan_input_instructions'.tr,
+                                  isCanCancel: true,
+                                  confirm: (mes) {
+                                    logic.checkCode(
+                                        success: (String msg) {
+                                          successDialog(
+                                              content: msg,
+                                              back: (){
+                                                Get.back();
+                                              });
+                                        },
+                                        msg: mes);
+                                  },
+                                  cancel: () => Get.back(),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(width:8),
+                          const Expanded(child: SizedBox()),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  // 取消按钮
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        backgroundColor: Colors.grey.shade100,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text(
+                        "取消",
+                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  // 底部安全距离
+                  SizedBox(height: MediaQuery.of(ctx).padding.bottom),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

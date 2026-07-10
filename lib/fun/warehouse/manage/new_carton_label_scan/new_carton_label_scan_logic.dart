@@ -319,4 +319,12 @@ class NewCartonLabelScanLogic extends GetxController {
   void getAnalyze() {
     state.getAnalyze();
   }
+
+  void checkCode({required Function(String) success, required String msg}) {
+    state.confirmTag(
+        success: (String msg) {
+          success.call(msg);
+        },
+        command: msg);
+  }
 }
