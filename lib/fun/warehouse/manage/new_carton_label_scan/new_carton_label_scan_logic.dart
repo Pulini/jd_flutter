@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_progress_detail_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'new_carton_label_scan_state.dart';
@@ -18,7 +19,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
+        state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
         state.priorityCartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.priorityCartonLabel.value =
@@ -41,7 +42,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
+        state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
         state.cartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
@@ -92,7 +93,7 @@ class NewCartonLabelScanLogic extends GetxController {
       queryCartonLabelInfo(code);
     } else {
       if (code == state.cartonLabel.value &&
-          state.cartonLabelInfo?.isUniqueBarCode == false) {
+          state.cartonLabelInfo?.isNeedInnerBoxLabel == false) {
         final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
         final piece = state.cartonLabelInfo?.piece ?? 0;
         final scan = state.cartonLabelInfo?.scannedCount ?? 0;

@@ -64,7 +64,7 @@ class CartonLabelScanNewInfo {
     this.isSoleBarCode,
     this.piece,
     this.scannedCount,
-    this.isUniqueBarCode,
+    this.isNeedInnerBoxLabel,
     this.linkDataSizeList,
   });
 
@@ -77,7 +77,7 @@ class CartonLabelScanNewInfo {
     isSoleBarCode = json['IsSoleBarCode'];
     piece = json['Piece'];
     scannedCount = json['ScannedCount'];
-    isUniqueBarCode = json['IsUniqueBarCode'];
+    isNeedInnerBoxLabel = json['IsNeedInnerBoxLabel'];
     if (json['LinkDataSizeList'] != null) {
       linkDataSizeList = [];
       json['LinkDataSizeList'].forEach((v) {
@@ -94,7 +94,7 @@ class CartonLabelScanNewInfo {
   int? isSoleBarCode;
   int? piece;
   int? scannedCount;
-  bool? isUniqueBarCode;
+  bool? isNeedInnerBoxLabel;
   RxInt scanned=1.obs;
 
   List<LinkDataSizeNewList>? linkDataSizeList;
@@ -109,7 +109,7 @@ class CartonLabelScanNewInfo {
     map['IsSoleBarCode'] = isSoleBarCode;
     map['Piece'] = piece;
     map['ScannedCount'] = scannedCount;
-    map['IsUniqueBarCode'] = isUniqueBarCode;
+    map['IsNeedInnerBoxLabel'] = isNeedInnerBoxLabel;
     if (linkDataSizeList != null) {
       map['LinkDataSizeList'] =
           linkDataSizeList?.map((v) => v.toJson()).toList();
