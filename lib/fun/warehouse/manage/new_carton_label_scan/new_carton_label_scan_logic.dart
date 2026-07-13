@@ -91,8 +91,7 @@ class NewCartonLabelScanLogic extends GetxController {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
     } else {
-      if (code == state.cartonLabel.value &&
-          state.cartonLabelInfo?.isNeedInnerBoxLabel == false) {
+      if (code == state.cartonLabel.value && state.cartonLabelInfo?.isNeedInnerBoxLabel == false) { //是否需要扫内盒
         final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
         final piece = state.cartonLabelInfo?.piece ?? 0;
         final scan = state.cartonLabelInfo?.scannedCount ?? 0;

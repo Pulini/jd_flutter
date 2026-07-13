@@ -94,7 +94,7 @@ class CartonLabelScanNewInfo {
   int? isSoleBarCode;
   int? piece;
   int? scannedCount;
-  bool? isNeedInnerBoxLabel;
+  bool? isNeedInnerBoxLabel;   //是否需要扫内盒
   RxInt scanned=1.obs;
 
   List<LinkDataSizeNewList>? linkDataSizeList;
