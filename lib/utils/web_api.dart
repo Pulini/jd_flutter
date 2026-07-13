@@ -1174,6 +1174,9 @@ const webApiGetBarCodeStatus = 'api/BarCode/GetBarCodeStatus';
 //根据条形码数据,获得对应的制程
 const webApiGetProcessFlowInfoByBarCode =
     'api/ProcessFlow/GetProcessFlowInfoByBarCode';
+//根据条形码数据,获得对应的制程和选择制成的数量
+const webApiGetReportableProcessByBarcode =
+    'api/ProcessFlow/GetReportableProcessByBarcode';
 
 //金灿领料出库
 const webApiJinCanMaterialOutStockSubmit =

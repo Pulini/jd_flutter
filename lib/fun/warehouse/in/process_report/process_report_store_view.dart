@@ -217,8 +217,8 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                       if(state.barCodeList.isNotEmpty){
                         checkBarCodeProcessDialog(
                           list: state.barCodeList,
-                          submit: (w, p) {
-                            logic.submit(worker: w, process: p);
+                          submit: (w,i, p) {
+                            logic.submit(worker: w,isSingle:i, processList: p);
                           },
                         );
                       }else{

@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:sqflite/sqflite.dart';
@@ -67,11 +68,13 @@ class BarCodeInfo {
 
   void save({required Function(BarCodeInfo) callback}) {
     _getDb().then((db) {
-      db.insert(
+      db
+          .insert(
         tableName,
         toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
-      ).then(
+      )
+          .then(
         (value) {
           id = value;
           callback.call(this);
@@ -162,6 +165,7 @@ class BarCodeProcessInfo {
   int? processFlowID; //制程id
   String? processFlowName; //名称
   String? processNodeName; //节点名称
+  RxBool isSelected=false.obs;
 
   BarCodeProcessInfo({
     this.processFlowID,
@@ -178,5 +182,23 @@ class BarCodeProcessInfo {
   @override
   String toString() {
     return '$processFlowName/$processNodeName';
+  }
+}
+
+class BarCodeReportableProcessInfo {
+  String? dataType; //选择类型
+  List<BarCodeProcessInfo>? process; //制程列表
+
+  BarCodeReportableProcessInfo({
+    this.dataType,
+    this.process,
+  });
+
+  BarCodeReportableProcessInfo.fromJson(dynamic json) {
+    dataType = json['DataType'];
+    process = [
+      if (json['ProcessTable'] != null)
+        for (var v in json['ProcessTable']) BarCodeProcessInfo.fromJson(v)
+    ];
   }
 }

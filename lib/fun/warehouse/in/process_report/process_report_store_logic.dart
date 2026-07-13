@@ -172,11 +172,12 @@ class ProcessReportStoreLogic extends GetxController {
   //提交工序汇报入库
   void submit({
     required WorkerInfo worker,
-    required BarCodeProcessInfo process,
+    required bool isSingle,
+    required List<BarCodeProcessInfo> processList,
   }) {
     state.getBarCodeStatus(
-      processFlowID: process.processFlowID ?? 0,
-      processName: process.processNodeName ?? '',
+      processFlowID: processList.first.processFlowID ?? 0,
+      processName: processList.first.processNodeName ?? '',
       success: (data) {
         for (var v in state.barCodeList) {
           if ((data.list2 ?? []).any((v2) => v2.barCode == v.code)) {
@@ -193,7 +194,7 @@ class ProcessReportStoreLogic extends GetxController {
           errorDialog(content: 'process_report_store_no_barcode'.tr);
         } else {
           state.getBarCodeReport(
-            processFlowID: process.processFlowID ?? 0,
+            processFlowID: processList.first.processFlowID ?? 0,
             success: (report) {
               Get.to(
                 () => const CodeListReportPage(),
@@ -202,7 +203,8 @@ class ProcessReportStoreLogic extends GetxController {
                 if (v != null) {
                   state.submitBarCode(
                     worker: worker,
-                    process: process,
+                    isSingle:isSingle,
+                    processList: processList,
                     success: (msg) {
                       clearBarCodeList();
                       successDialog(content: msg);
