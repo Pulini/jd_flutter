@@ -9,7 +9,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class NewCartonLabelScanState {
-  var isAutoSubmit=true.obs;
+  var isAutoSubmit = true.obs;
 
   var isCheckingCartonBarCode = false;
   var cartonInsideLabelList = <LinkDataSizeNewList>[].obs;
@@ -104,13 +104,13 @@ class NewCartonLabelScanState {
         'Mix': cartonLabelInfo?.mix,
         'UserID': userInfo?.userID,
         'DispatchNumber': dispatchNumber.value,
-        'Piece':cartonLabelInfo?.scanned.value,
+        'Piece': cartonLabelInfo?.scanned.value,
         'OutBoxSizeList': [
           for (var data in cartonInsideLabelList)
             {
               'PriceBarCode': data.priceBarCode,
               'Size': data.size,
-              'LabelCount':isAutoSubmit.value?data.scanned: data.labelCount,
+              'LabelCount': isAutoSubmit.value ? data.scanned : data.labelCount,
             }
         ]
       },
@@ -118,8 +118,8 @@ class NewCartonLabelScanState {
       if (response.resultCode == resultSuccess) {
         labelTotal.value = 0;
         scannedLabelTotal.value = 0;
-        isAutoSubmit.value=true;
-        cartonLabelInfo=null;
+        isAutoSubmit.value = true;
+        cartonLabelInfo = null;
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -235,6 +235,44 @@ class NewCartonLabelScanState {
         success.call(response.message ?? 'process_report_success_submit'.tr);
       } else {
         error.call(response.message ?? 'process_report_error_submit'.tr);
+      }
+    });
+  }
+
+  //线别分析报告
+  void getAnalyze() {
+    httpGet(
+      loading: 'forming_code_collection_getting'.tr,
+      method: webApiGetDeptDistributeInfoNew,
+      params: {
+        'DeptmentID': getUserInfo()!.departmentID,
+        'Date': '',
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        msgDialog(content: response.data);
+      } else {
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  //确认条码
+  void confirmTag({
+    required Function(String) success,
+    required String command,
+  }) {
+    httpGet(
+      loading: 'carton_label_scan_verifying_label_barcode'.tr,
+      method: webApiConfirmTag,
+      params: {
+        'MtoNo': command,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }
