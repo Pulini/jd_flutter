@@ -92,7 +92,8 @@ class ProcessReportStoreState {
   //提交条码信息
   void submitBarCode({
     required WorkerInfo worker,
-    required BarCodeProcessInfo process,
+    required bool isSingle,
+    required List<BarCodeProcessInfo> processList,
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -107,8 +108,8 @@ class ProcessReportStoreState {
             }
         ],
         'EmpCode': worker.empCode,
-        'ProcessFlowID': process.processFlowID,
-        'ProcessNodeName': process.processNodeName,
+        'ProcessFlowID': processList.first.processFlowID,
+        'ProcessNodeName':isSingle?processList.first.processNodeName: processList.map((v)=>v.processNodeName).join(','),
         'UserID': userInfo?.userID,
       },
     ).then((response) {

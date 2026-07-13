@@ -32,8 +32,8 @@ bool isTestUrl() => mesBaseUrl != BaseUrl.baseUrlMes.value;
 enum BaseUrl {
   ///MES正式库
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
-
-  baseUrlSpringBoot('Spring Boot正式库', 'https://geapp.goldemperor.com:1299/', 'Spring Boot'),
+  baseUrlSpringBoot(
+      'Spring Boot正式库', 'https://geapp.goldemperor.com:1299/', 'Spring Boot'),
 
   ///SAP正式库
   baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
@@ -163,8 +163,8 @@ Future<BaseData> _doHttp({
   } on DioException catch (e) {
     // 如果是 DNS 或连接错误，且重试次数小于 2，则重试
     if ((e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.unknown) &&
+            e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.unknown) &&
         retryCount < 2) {
       logger.w('🔄 网络请求失败（${e.type}），第 ${retryCount + 1} 次重试...');
 
@@ -211,6 +211,9 @@ Future<BaseData> _doHttp({
         e.error.toString().startsWith('HandshakeException')
             ? base.message = 'http_ssl_verification_failed'.tr
             : base.message = 'http_unknown_error'.tr;
+        break;
+      case DioExceptionType.transformTimeout:
+        base.message = 'http_transform_timeout'.tr;
         break;
     }
   } on Exception catch (e) {
@@ -320,7 +323,6 @@ Future<BaseData> sapGet({
       method: method,
     );
 
-
 //spring boot post请求
 Future<BaseData> springBootPost({
   String? loading,
@@ -330,7 +332,7 @@ Future<BaseData> springBootPost({
 }) =>
     _doHttp(
       loading: loading,
-      params:params,
+      params: params,
       body: body,
       baseUrl: getSpringBootBaseUrl().value,
       isPost: true,
@@ -351,7 +353,6 @@ Future<BaseData> springBootGet({
       isPost: false,
       method: method,
     );
-
 
 //网络测试接口
 const webApiLNetTest = 'api/Public/NetTest';
@@ -899,8 +900,10 @@ const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
 const webApiGetCartonLabelScanHistoryNew = 'api/OutBoxScanNew/GetOrderScanNew';
 
 //订单扫码情况明细表
-const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';
-const webApiGetCartonLabelScanHistoryDetailNew = 'api/OutBoxScanNew/GetOrderScanDetailNew';
+const webApiGetCartonLabelScanHistoryDetail =
+    'api/OutBoxScan/GetOrderScanDetail';
+const webApiGetCartonLabelScanHistoryDetailNew =
+    'api/OutBoxScanNew/GetOrderScanDetailNew';
 
 //获取品质异常详情
 const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
@@ -1174,6 +1177,9 @@ const webApiGetBarCodeStatus = 'api/BarCode/GetBarCodeStatus';
 //根据条形码数据,获得对应的制程
 const webApiGetProcessFlowInfoByBarCode =
     'api/ProcessFlow/GetProcessFlowInfoByBarCode';
+//根据条形码数据,获得对应的制程和选择制成的数量
+const webApiGetReportableProcessByBarcode =
+    'api/ProcessFlow/GetReportableProcessByBarcode';
 
 //金灿领料出库
 const webApiJinCanMaterialOutStockSubmit =
@@ -1613,10 +1619,12 @@ const webApiGetCardDetail = 'api/Package/GetCardDetail';
 const webApiSplitOrMergePackageLabel = 'api/Package/SplitOrMergePackageLabel';
 
 //获取派工单部件及包装方案
-const webApiGetWorkCardMtoNoListByQrCode = 'api/WorkCard/GetWorkCardMtoNoListByQrCode';
+const webApiGetWorkCardMtoNoListByQrCode =
+    'api/WorkCard/GetWorkCardMtoNoListByQrCode';
 
 //修改派工单包装方案
-const webApiCreatePackageByWorkCardIDAndQty = 'api/WorkCard/CreatePackageByWorkCardIDAndQty';
+const webApiCreatePackageByWorkCardIDAndQty =
+    'api/WorkCard/CreatePackageByWorkCardIDAndQty';
 
 //通过选中的派工单分录自增长ID获取派工单列表
 const webApiGetPartWorkCardListNew = 'api/WorkCard/GetPartWorkCardListNew';
@@ -1678,16 +1686,12 @@ const webApiSubMantissaData = 'api/OutBoxScan/SubMantissaData';
 const webApiSubMantissaDataNew = 'api/OutBoxScanNew/SubMantissaDataNew';
 
 //外箱鞋盒贴标 - 查尾数详情
-const webApiGetTailNumberReportDataNew = 'api/OutBoxScanNew/GetTailNumberReportDataNew';
+const webApiGetTailNumberReportDataNew =
+    'api/OutBoxScanNew/GetTailNumberReportDataNew';
 
 // 订单生产执行情况表查询
-const webApiGetTailNumberListDataNew = 'api/OutBoxScanNew/GetTailNumberListDataNew';
+const webApiGetTailNumberListDataNew =
+    'api/OutBoxScanNew/GetTailNumberListDataNew';
 
 // 确认标签
 const webApiConfirmTag = 'api/OutBoxScanNew/ConfirmTag';
-
-
-
-
-
-
