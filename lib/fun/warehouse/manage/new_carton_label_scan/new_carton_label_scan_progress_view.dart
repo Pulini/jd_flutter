@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 import 'new_carton_label_scan_logic.dart';
 
@@ -29,7 +30,17 @@ class _NewCartonLabelScanProgressPageState
         logic.queryScanHistory(customerPO);
       }
     });
+    _scan();
     super.initState();
+  }
+
+  void _scan() {
+    pdaScanner(scan: (barCode) {
+        if(barCode.isNotEmpty){
+          controller.text = barCode;
+          logic.queryScanHistory(barCode);
+        }
+    });
   }
 
   @override

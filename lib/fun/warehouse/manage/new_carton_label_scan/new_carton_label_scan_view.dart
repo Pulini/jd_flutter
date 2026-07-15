@@ -376,7 +376,9 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                                   arguments: {
                                     'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
                                   },
-                                );
+                                )?.then((v) {
+                                  _scan();
+                                });
                               },
                             ),
                           ),

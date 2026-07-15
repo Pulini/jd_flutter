@@ -18,7 +18,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
+        state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
         state.priorityCartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.priorityCartonLabel.value =
@@ -41,7 +41,7 @@ class NewCartonLabelScanLogic extends GetxController {
     state.queryCartonLabelInfo(
       code: code,
       success: (data) {
-        state.isAutoSubmit.value = data.isUniqueBarCode ?? true;
+        state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
         state.cartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
         state.cartonLabel.value = state.cartonLabelInfo?.outBoxBarCode ?? '';
@@ -91,8 +91,7 @@ class NewCartonLabelScanLogic extends GetxController {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
     } else {
-      if (code == state.cartonLabel.value &&
-          state.cartonLabelInfo?.isUniqueBarCode == false) {
+      if (code == state.cartonLabel.value && state.cartonLabelInfo?.isNeedInnerBoxLabel == false) { //是否需要扫内盒
         final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
         final piece = state.cartonLabelInfo?.piece ?? 0;
         final scan = state.cartonLabelInfo?.scannedCount ?? 0;
