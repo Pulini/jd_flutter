@@ -77,7 +77,7 @@ void checkBarCodeProcessDialog({
                                         ),
                                       ),
                                       Text(
-                                        data.process![i].processNodeName ?? '',
+                                        data.process![i].processFlowShowName ?? '',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.blue,

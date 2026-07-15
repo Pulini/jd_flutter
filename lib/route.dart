@@ -460,7 +460,7 @@ class RouteConfig {
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    211,
+    212,
     const ProcessReportStorePage(),
   );
 
