@@ -38,7 +38,16 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
     saveKey: '${RouteConfig.sapNoLabelStockIn.name}${PickerType.endDate}',
   );
 
-  late OptionsPickerController processController;
+  var opcProcess = OptionsPickerController(
+    PickerType.sapProcessFlow,
+    saveKey:
+        '${RouteConfig.sapNoLabelStockIn.name}${PickerType.sapProcessFlow}',
+  );
+  var opcFactoryAndWarehouse = LinkOptionsPickerController(
+    PickerType.sapFactoryWarehouse,
+    saveKey:
+        '${RouteConfig.sapNoLabelStockIn.name}${PickerType.sapFactoryWarehouse}',
+  );
 
   Container _item(List<SapNoLabelStockInItemInfo> list) {
     return Container(
@@ -141,7 +150,8 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                             Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: 'sap_no_label_stock_in_wait_stock_in'.tr,
+                                  hint:
+                                      'sap_no_label_stock_in_wait_stock_in'.tr,
                                   text: m.notReceivedQty.toShowString(),
                                   isBold: false,
                                 ),
@@ -170,24 +180,19 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
     );
   }
 
-  void _query(String process) {
+  void _query() {
     logic.query(
       reportStartDate: dpcStartDate.getDateFormatSapYMD(),
       reportEndDate: dpcEndDate.getDateFormatSapYMD(),
       dispatchNumber: dispatchOrderController.text,
       materialCode: materialController.text,
-      process: process,
+      process: opcProcess.getPickItem().pickerId(),
+      factory: opcFactoryAndWarehouse.getPickItem1().pickerId(),
+      warehouse: opcFactoryAndWarehouse.getPickItem2().pickerId(),
     );
   }
-
   @override
   void initState() {
-    processController = OptionsPickerController(
-      PickerType.sapProcessFlow,
-      saveKey:
-          '${RouteConfig.sapNoLabelStockIn.name}${PickerType.sapProcessFlow}',
-      onSelected: (i) => _query(i.pickerId()),
-    );
     super.initState();
   }
 
@@ -205,9 +210,10 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
         ),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
-        OptionsPicker(pickerController: processController),
+        OptionsPicker(pickerController: opcProcess),
+        OptionsPicker(pickerController: opcProcess),
       ],
-      query: () => _query(processController.selectedId.value),
+      query: () => _query(),
       body: Obx(() => Column(
             children: [
               Expanded(
@@ -229,9 +235,8 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                         userNumber: un,
                         userSignature: us,
                         postingDate: d,
-                        process: processController.selectedId.value,
-                        success: () =>
-                            _query(processController.selectedId.value),
+                        process: opcProcess.selectedId.value,
+                        success: () => _query(),
                       ),
                     ),
                   ),

@@ -16,6 +16,8 @@ class SapNoLabelStockInLogic extends GetxController {
     required String dispatchNumber,
     required String materialCode,
     required String process,
+    required String factory,
+    required String warehouse,
   }) {
     state.queryOrderList(
       reportStartDate: reportStartDate,
@@ -23,6 +25,8 @@ class SapNoLabelStockInLogic extends GetxController {
       dispatchNumber: dispatchNumber,
       materialCode: materialCode,
       process: process,
+      factory: factory,
+      warehouse: warehouse,
       error: (msg) => errorDialog(content: msg),
     );
   }

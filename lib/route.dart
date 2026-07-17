@@ -320,7 +320,7 @@ class RouteConfig {
   //sap生产领料
   static Routes sapProductionPicking = Routes(
     '/sap_production_picking',
-    204,
+    205,
     const SapProductionPickingPage(),
   );
 
@@ -341,7 +341,7 @@ class RouteConfig {
   //sap无标入库
   static Routes sapNoLabelStockIn = Routes(
     '/sap_no_label_stock_in',
-    202,
+    203,
     const SapNoLabelStockInPage(),
   );
 
@@ -537,7 +537,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    210,
+    211,
     const DeliveryOrderPage(),
   );
 

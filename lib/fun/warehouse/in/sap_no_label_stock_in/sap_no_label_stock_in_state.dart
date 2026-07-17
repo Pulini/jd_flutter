@@ -19,6 +19,8 @@ class SapNoLabelStockInState {
     required String dispatchNumber,
     required String materialCode,
     required String process,
+    required String factory,
+    required String warehouse,
     required Function(String) error,
   }) {
     sapPost(
@@ -30,6 +32,8 @@ class SapNoLabelStockInState {
         'DISPATCH_NO': dispatchNumber,
         'MATNR': materialCode,
         'KTSCH': process,
+        'WERKS': factory,
+        'LGORT': warehouse,
         'ERDAT_F': '',
         'ERDAT_T': '',
       },

@@ -36,6 +36,7 @@ class SapProductionPickingLogic extends GetxController {
       startDate: startDate,
       endDate: endDate,
       workCenter: workCenter,
+      factory: factory,
       warehouse: warehouse,
       error: (msg) => errorDialog(content: msg),
     );
