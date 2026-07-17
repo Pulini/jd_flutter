@@ -211,7 +211,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
         OptionsPicker(pickerController: opcProcess),
-        OptionsPicker(pickerController: opcProcess),
+        LinkOptionsPicker(pickerController: opcFactoryAndWarehouse),
       ],
       query: () => _query(),
       body: Obx(() => Column(
