@@ -91,6 +91,7 @@ Future<BaseData> _doHttp({
   Object? body,
   int retryCount = 0,
 }) async {
+  print('DIAG _doHttp called: method=$method, baseUrl=$baseUrl');
   // if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
   //   params = {
   //     'sap-client':
@@ -1695,3 +1696,13 @@ const webApiGetTailNumberListDataNew =
 
 // 确认标签
 const webApiConfirmTag = 'api/OutBoxScanNew/ConfirmTag';
+
+// 清尾确认
+const webApiConfirmTailCartonRecords = 'api/OutBoxScanNew/ConfirmTailCartonRecords';
+
+// 尾数提交
+const webApiUPSERTTailCartonRecordsTotal = 'api/OutBoxScanNew/UPSERTTailCartonRecordsTotal';
+
+
+
+

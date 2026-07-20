@@ -1,4 +1,9 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -7,7 +12,7 @@ import 'package:jd_flutter/bean/http/response/carton_label_scan_clear_tail_info.
 import 'package:jd_flutter/fun/report/order_production_table/order_production_table_logic.dart';
 import 'package:jd_flutter/fun/report/order_production_table/order_production_table_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class OrderProductionTableDetailPage extends StatefulWidget {
   const OrderProductionTableDetailPage({super.key});
@@ -23,98 +28,80 @@ class _OrderProductionTableDetailPageState
   final OrderProductionTableState state =
       Get.find<OrderProductionTableLogic>().state;
 
-  var titleStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.blue.shade700,
-    fontSize: 14,
-  );
+  late AudioPlayer player;
+  var ae1 = 'audios/audio_error1.mp3';
 
-  var titleLine = VerticalDivider(
-    width: 1,
-    thickness: 1,
-    color: Colors.blue.shade300,
-    indent: 5,
-    endIndent: 5,
-  );
+  void playAudio(String as) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+      if (player.state != PlayerState.completed) {
+        player.stop();
+        player.setSource(AssetSource(as));
+        player.resume();
+      } else {
+        player.play(AssetSource(as));
+      }
+    }
+  }
 
-  var subStyle = const TextStyle(
-    color: Colors.black87,
-    fontSize: 13,
-  );
-
-  var subLine = VerticalDivider(
-    width: 1,
-    thickness: 1,
-    color: Colors.blue.shade300,
-  );
+  void scan() {
+    pdaScanner(scan: (barCode) {
+      if (barCode.isNotEmpty) {
+        logic.addUnFull(code: barCode, fullError: () {
+          playAudio(ae1);
+        });
+      };
+    });
+  }
 
   Widget _item(ClearTailListInfo data) {
+    bool isTotal = data.size == 'carton_label_scan_order_total'.tr;
     return Row(
       children: [
-        item(data.size ?? '', true),
-        item(data.orderQty.toString(), true),
-        item(data.fullBoxQty.toString(), true),
-        item(data.unFullBoxQty.toString(), true),
-        item((data.unFullBoxQty! + data.fullBoxQty!).toString(), true),
-        item(data.arrears.toString(), true),
+        item(data.size ?? '', true, isTotal: isTotal),
+        item(data.orderQty.toString(), true, isTotal: isTotal),
+        item(data.fullBoxQty.toString(), true, isTotal: isTotal),
+        item((data.unFullBoxQty!+data.thisScanQty!).toString(), true, isTotal: isTotal),
+        item((data.unFullBoxQty! + data.fullBoxQty!).toString(), true,
+            isTotal: isTotal),
+        // 欠数列：与其它列同款格子，仅文字显示为红色
+        item(data.arrears.toString(), true,
+            isTotal: isTotal, textColor: isTotal ? null : Colors.red),
       ],
     );
   }
 
-  Widget item(String text, bool isSub) => ExpandedFrameText(
+  Widget item(String text, bool isSub,
+          {bool isTotal = false, Color? textColor}) =>
+      ExpandedFrameText(
         text: text,
         borderColor: Colors.blue,
         alignment: Alignment.center,
         isBold: !isSub,
-        textColor: isSub ? Colors.black : Colors.blue.shade700,
-        backgroundColor:isSub? Colors.white:Colors.grey.shade300,
+        textColor: textColor ??
+            (isTotal
+                ? Colors.white
+                : (isSub ? Colors.black : Colors.blue.shade700)),
+        backgroundColor: isTotal
+            ? Colors.blue.shade800
+            : (isSub ? Colors.white : Colors.grey.shade300),
       );
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      title: '订单尺码详情',
       body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: Obx(() => InkWell(
-                          child: textSpan(
-                              hint: 'forming_code_collection_factory'.tr,
-                              text: state.factoryBody.value),
-                          onTap: () {
-                            msgDialog(content: state.factoryBody.value);
-                          },
-                        ))),
-                Expanded(
-                    child: Obx(() => textSpan(
-                        hint: 'forming_code_collection_order'.tr,
-                        text: state.salesOrder.value)))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    child: Obx(() => InkWell(
-                          child: textSpan(
-                              hint: 'forming_code_collection_group'.tr,
-                              text: state.groupName.value),
-                          onTap: () {
-                            msgDialog(content: state.groupName.value);
-                          },
-                        ))),
-                Expanded(
-                    child: Obx(() => textSpan(
-                        hint: 'forming_code_collection_customer_order'.tr,
-                        text: state.customerOrderNumber.value)))
-              ],
-            ),
+            // 顶部信息卡片（含"生产中"角标）
+            _buildInfoCard(),
+            const SizedBox(height: 10),
+            // 表格标题栏
+            _buildTableTitle(),
             const SizedBox(height: 5),
+            // 表头
             Row(
               children: [
                 item('carton_label_scan_order_size'.tr, false),
@@ -125,6 +112,7 @@ class _OrderProductionTableDetailPageState
                 item('carton_label_scan_order_arrears'.tr, false),
               ],
             ),
+            // 尺码数据列表
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -134,14 +122,206 @@ class _OrderProductionTableDetailPageState
                 ),
               ),
             ),
+            const SizedBox(height: 10),
+            // 底部按钮
+            _buildBottomButtons(),
           ],
         ),
       ),
     );
   }
 
+  // 顶部信息卡片（白底圆角 + 右上角"生产中"角标）
+  Widget _buildInfoCard() {
+    return Obx(
+      () => Container(
+        foregroundDecoration: const RotatedCornerDecoration.withColor(
+          color: Colors.blue,
+          badgeCornerRadius: Radius.circular(8),
+          badgeSize: Size(60, 60),
+          textSpan: TextSpan(
+            text: '生产中',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        padding: const EdgeInsets.only(left: 8, top: 5, right: 8, bottom: 5),
+        child: Column(
+          children: [
+            _infoGridRow(
+              icon: '🏭',
+              label: '工厂型体',
+              value: state.factoryBody.value,
+              valueColor: Colors.blue.shade700,
+              icon2: '📋',
+              label2: '销售订单',
+              value2: state.salesOrder.value,
+              valueColor2: Colors.green.shade600,
+            ),
+            _infoGridRow(
+              icon: '👷',
+              label: '当前组别',
+              value: state.groupName.value,
+              valueColor: Colors.blue.shade700,
+              icon2: '✏️',
+              label2: '派工单号',
+              value2: state.showDispatchNumber.value,
+              valueColor2: Colors.black87,
+            ),
+            _infoGridRow(
+              icon: '📄',
+              label: '客户单号',
+              value: state.customerOrderNumber.value,
+              valueColor: Colors.blue.shade700,
+              icon2: '📦',
+              label2: '品牌',
+              value2: state.brand.value,
+              valueColor2: Colors.green.shade600,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 信息网格行：左右各一个字段（icon + 标签 + 值）
+  Widget _infoGridRow({
+    required String icon,
+    required String label,
+    required String value,
+    required Color valueColor,
+    required String icon2,
+    required String label2,
+    required String value2,
+    required Color valueColor2,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: _infoCell(icon: icon, label: label, value: value, valueColor: valueColor)),
+          const SizedBox(width: 16),
+          Expanded(child: _infoCell(icon: icon2, label: label2, value: value2, valueColor: valueColor2)),
+        ],
+      ),
+    );
+  }
+
+  /// 单个信息格子：图标+标签一行 + 值一行
+  Widget _infoCell({
+    required String icon,
+    required String label,
+    required String value,
+    required Color valueColor,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            Text(icon, style: const TextStyle(fontSize: 13)),
+            const SizedBox(width: 3),
+            Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 11)),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(color: valueColor, fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  // 表格标题栏：蓝竖条 + "尺码明细" + 右侧"单位：双"
+  Widget _buildTableTitle() {
+    return Row(
+      children: [
+        Container(width: 3, height: 16, color: Colors.blue),
+        const SizedBox(width: 6),
+        const Text(
+          '尺码明细',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const Spacer(),
+        const Text(
+          '单位：双',
+          style: TextStyle(fontSize: 14, color: Colors.black87),
+        ),
+      ],
+    );
+  }
+
+  // 底部两个按钮：尾数重置 / 尾数提交
+  Widget _buildBottomButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton.icon(
+            onPressed: () => logic.resetTailNumber(),
+            icon: const Icon(Icons.refresh, size: 16),
+            label: const Text('尾数重置'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: ElevatedButton.icon(
+            onPressed: () => logic.submitTailNumber(),
+            icon: const Icon(Icons.upload_outlined, size: 16),
+            label: const Text('尾数提交'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+
   @override
   void initState() {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+      player = AudioPlayer();
+    }
+    scan();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
   }
 }

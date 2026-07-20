@@ -92,6 +92,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 
+import 'fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_view.dart';
 import 'fun/report/order_production_table/order_production_table_view.dart';
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
@@ -744,6 +745,13 @@ class RouteConfig {
     const OrderProductionTablePage(),
   );
 
+  //组长派工
+  static Routes teamLeaderAssignsTask = Routes(
+    '/team_leader_assigns_tasks',
+    202,
+    const TeamLeaderAssignsTaskPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -837,6 +845,7 @@ class RouteConfig {
     partLabelPrintPage,
     partLabelManagePage,
     orderProductionTable,
+    teamLeaderAssignsTask,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1216,6 +1225,10 @@ class RouteConfig {
     GetPage(
       name: orderProductionTable.name,
       page: () => orderProductionTable.page,
+    ),
+    GetPage(
+      name: teamLeaderAssignsTask.name,
+      page: () => teamLeaderAssignsTask.page,
     ),
   ];
 }
