@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -342,11 +343,13 @@ void stockOutDialog({
 }) {
   var locationController = OptionsPickerController(
     PickerType.ghost,
+    saveKey: '${RouteConfig.processReportWarehouse.name}-StorageLocation',
     buttonName: 'delivery_order_dialog_location'.tr,
     dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
   );
   var departmentController = OptionsPickerController(
     PickerType.sapDepartment,
+    saveKey: '${RouteConfig.processReportWarehouse.name}-${PickerType.sapDepartment}',
     buttonName: 'delivery_order_dialog_picking_department'.tr,
   );
   Get.dialog(AlertDialog(
