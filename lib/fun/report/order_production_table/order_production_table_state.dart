@@ -33,8 +33,10 @@ class OrderProductionTableState {
   var salesOrder = ''.obs; //销售订单
   var customerOrderNumber = ''.obs; //客户订单
   var showDispatchNumber = ''.obs; //派工单号
-  var brand = ''.obs; //品牌
+  var upMono = -1; //上传的指令
+  var upWorkCardInterID = -1; //上传的id
   CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
+  OrderProductionExecutionInfo? searcherData;
   var reportBoxList = <ClearTailListInfo>[].obs; //
   var tailNumberList = <OrderProductionExecutionInfo>[].obs; //外箱列表
   var copyTailNumberList = <OrderProductionExecutionInfo>[].obs; //外箱列表
@@ -51,14 +53,15 @@ class OrderProductionTableState {
   var waitingClearTail = ''.obs; // 待清尾
   var completed = ''.obs; // 已完成
 
-  // 当前选中的 Tab（0:正单未生产 1:正在生产 2:待清尾 3:已完成）
-  var selectedTabIndex = 0.obs;
+  // 当前选中的 Tab（1:正单未生产 2:正在生产 3:待清尾 4:已完成）
+  var selectedTabIndex = 1.obs;
   var selectIndex = 0; //线别
   var message = ''.obs; //显示内容
+  var showBand = ''; //品牌
 
   void getTailNumberReportData({
+    required OrderProductionExecutionInfo needData,
     required String barCode,
-    required String dispatchNumber,
     required bool isGetTo,
   }) {
     httpGet(
@@ -66,7 +69,7 @@ class OrderProductionTableState {
       method: webApiGetTailNumberReportDataNew,
       params: {
         'CartonBarCode': barCode,
-        'DispatchNumber': dispatchNumber,
+        'DispatchNumber': needData.workCardNo,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -84,10 +87,14 @@ class OrderProductionTableState {
               cartonLabelScanClearTailInfo!.salesOrder.toString();
           customerOrderNumber.value =
               cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
-          showDispatchNumber.value =dispatchNumber;
-              cartonLabelScanClearTailInfo!.dispatchNumber ?? '';
-          brand.value = cartonLabelScanClearTailInfo!.brand ?? '';
-          if(isGetTo) Get.to(() => const OrderProductionTableDetailPage());
+          showDispatchNumber.value = needData.workCardNo ?? '';
+          if (isGetTo) {
+            Get.to(() => const OrderProductionTableDetailPage());
+            upMono = needData.moID ?? -1;
+            upWorkCardInterID = needData.workCardInterID ?? -1;
+            showBand = needData.band ?? '';
+            searcherData = needData;
+          }
         }
       } else {
         factoryBody.value = '';
@@ -95,7 +102,6 @@ class OrderProductionTableState {
         salesOrder.value = '';
         customerOrderNumber.value = '';
         showDispatchNumber.value = '';
-        brand.value = '';
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
@@ -147,7 +153,6 @@ class OrderProductionTableState {
         'DateType': type.value == true ? 1 : 2,
         'SeOrderNo': tecCommand.text,
         'OrganizeID': getUserInfo()!.organizeID,
-        'SearchType': '0',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -155,6 +160,7 @@ class OrderProductionTableState {
           for (var i = 0; i < response.data.length; ++i)
             OrderProductionExecutionInfo.fromJson(response.data[i])
         ];
+        copyTailNumberList.clear();
         copyTailNumberList.addAll(tailNumberList);
         arrangeFactory(success: () {
           countByStatus();
@@ -162,6 +168,7 @@ class OrderProductionTableState {
         });
       } else {
         tailNumberList.value = [];
+        copyTailNumberList.value = [];
         lineList = ['carton_label_scan_order_all_lines'.tr];
         notProduced.value = '';
         inProduction.value = '';
@@ -176,17 +183,17 @@ class OrderProductionTableState {
   void countByStatus() {
     int n0 = 0, n1 = 0, n2 = 0, n3 = 0;
     for (var item in tailNumberList) {
-      switch (item.searchType) {
-        case 0:
+      switch (item.status) {
+        case 1:
           n0++;
           break;
-        case 1:
+        case 2:
           n1++;
           break;
-        case 2:
+        case 3:
           n2++;
           break;
-        case 3:
+        case 4:
           n3++;
           break;
       }
@@ -202,34 +209,45 @@ class OrderProductionTableState {
   // 根据当前 Tab 拼接统计文案，赋值给 message
   void updateMessage() {
     final tab = selectedTabIndex.value;
-    // 基于全量 copyTailNumberList 按 searchType 分组
-    final list0 = copyTailNumberList.where((e) => e.searchType == 0).toList();
-    final list1 = copyTailNumberList.where((e) => e.searchType == 1).toList();
-    final list2 = copyTailNumberList.where((e) => e.searchType == 2).toList();
-    final list3 = copyTailNumberList.where((e) => e.searchType == 3).toList();
+    // 基于全量 copyTailNumberList 按 status 分组
+    final list0 = copyTailNumberList.where((e) => e.status == 1).toList();
+    final list1 = copyTailNumberList.where((e) => e.status == 2).toList();
+    final list2 = copyTailNumberList.where((e) => e.status == 3).toList();
+    final list3 = copyTailNumberList.where((e) => e.status == 4).toList();
 
     String msg;
-    // switch (tab) {
-    //   case 0:
-    //     msg = '共 ${list0.length} 个工单，其中 $ov个已逾期';
-    //     break;
-    //   case 1:
-    //     int done = list1.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
-    //     int total = list1.fold<int>(0, (s, e) => s + (e.seOrderQty ?? 0).toInt());
-    //     msg = '共 ${list1.length} 个工单，其中 $nd个临期，完工 $done / $total 双';
-    //     break;
-    //   case 2:
-    //     int remain = list2.fold<int>(
-    //         0, (s, e) => s + ((e.seOrderQty ?? 0).toInt() - (e.scanQty ?? 0)).clamp(0, double.maxFinite).toInt());
-    //     msg = '共 ${list2.length} 个工单，其中 $ov个已逾期，待清尾共$remain双';
-    //     break;
-    //   case 3:
-    //   default:
-    //     int finished = list3.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
-    //     msg = '共 ${list3.length} 个工单，已结案 $_formatNum$finished 双';
-    //     break;
-    // }
-    message.value = '待处理';
+    switch (tab) {
+      case 0:
+        // 逾期：DaysDifference < 0 算一条（只统计当前 tab 数据）
+        int ov = list0.where((e) => (e.daysDifference ?? 0) < 0).length;
+        msg = '共 ${list0.length} 个工单，其中 $ov 个已逾期';
+        break;
+      case 1:
+        int done = list1.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
+        int total =
+            list1.fold<int>(0, (s, e) => s + (e.seOrderQty ?? 0).toInt());
+        // 临期：剩余天数在 0~3 天（只统计当前 tab 数据，没数据自然为 0）
+        int nd = list1
+            .where((e) =>
+                (e.daysDifference ?? 0) >= 0 && (e.daysDifference ?? 0) < 3)
+            .length;
+        msg = '共 ${list1.length} 个工单，其中 $nd 个临期，完工 $done / $total 双';
+        break;
+      case 2:
+        // 逾期：DaysDifference < 0 算一条（只统计当前 tab 数据）
+        int ov = list2.where((e) => (e.daysDifference ?? 0) < 0).length;
+        // 待清尾数量 = 未完工数量之和（只统计当前 tab 数据，没数据自然为 0）
+        int remain =
+            list2.fold<int>(0, (s, e) => s + (e.unFinishQty ?? 0).toInt());
+        msg = '共 ${list2.length} 个工单，其中 $ov 个已逾期，待清尾共 $remain 双';
+        break;
+      case 3:
+      default:
+        int finished = list3.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
+        msg = '共 ${list3.length} 个工单，已结案 $finished 双';
+        break;
+    }
+    message.value = msg;
   }
 
   void arrangeFactory({
@@ -252,14 +270,16 @@ class OrderProductionTableState {
     required bool isSubmit,
     required Function(String) success,
   }) {
-    print('DIAG state.confirmTailCartonRecords called');
     httpPost(
       loading: 'carton_label_scan_confirm_clean_tail'.tr,
       method: webApiConfirmTailCartonRecords,
       body: {
         'UserID': userInfo?.userID,
         'items': [
-          {"WorkCardInterID": item.workCardNo, "IsConfirm": isSubmit? 1 : 0},
+          {
+            "WorkCardInterID": item.workCardInterID,
+            "IsConfirm": isSubmit ? 1 : 0
+          },
         ],
       },
     ).then((response) {
@@ -281,14 +301,17 @@ class OrderProductionTableState {
       method: webApiUPSERTTailCartonRecordsTotal,
       body: {
         'UserID': userInfo?.userID,
-        'WorkCardInterID': '',
-        'MoID': '',
+        'WorkCardInterID': upWorkCardInterID,
+        'CustOrderNumber': cartonLabelScanClearTailInfo!.customerOrderNumber?? '',
+        'MoID': upMono,
         'SizeItems': [
           for (var data in reportBoxList)
-            {
-              "Size": data.size,
-              "ShortQty": data.thisScanQty.toString(),
-            }
+            if (data.size != '合计' && data.thisScanQty! > 0)
+              {
+                "Size": data.size,
+                "ShortQty": ((data.thisScanQty ?? 0) + (data.unFullBoxQty ?? 0))
+                    .toString(),
+              }
         ],
       },
     ).then((response) {

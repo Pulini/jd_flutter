@@ -648,7 +648,6 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (subContent2.isNotEmpty) {
     list.add(await _tscBitmapText(2 * _dpi, 32 * _dpi, 28, subContent2));
   }
-  // bottomLeftText1='金帝贴合机台机台';
 
   if (bottomLeftText1.isNotEmpty) {
     if (bottomLeftText2.isNotEmpty) {
@@ -1023,12 +1022,12 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
       //行高
       var lineHeight = 4;
       list.add(await _tscBitmapText(
-          subTitleX, subTitleY + lineHeight * i * _dpi, 30, format2[i]));
+          subTitleX, subTitleY + lineHeight * i * _dpi, 27, format2[i]));
     }
   }
 
   if (tableTitle.isNotEmpty) {
-    list.add(await _tscBitmapText(tableTitleX, tableTitleY, 30, tableTitle));
+    list.add(await _tscBitmapText(tableTitleX, tableTitleY, 27, tableTitle));
   }
 
   if (tableTitleTips.isNotEmpty) {
@@ -1094,19 +1093,19 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   }
   if (bottomLeftText1.isNotEmpty) {
     list.add(
-        await _tscBitmapText(bLeftText1X, bLeftText1Y, 30, bottomLeftText1));
+        await _tscBitmapText(bLeftText1X, bLeftText1Y, 27, bottomLeftText1));
   }
   if (bottomLeftText2.isNotEmpty) {
     list.add(
-        await _tscBitmapText(bLeftText2X, bLeftText2Y, 30, bottomLeftText2));
+        await _tscBitmapText(bLeftText2X, bLeftText2Y, 27, bottomLeftText2));
   }
   if (bottomRightText1.isNotEmpty) {
     list.add(
-        await _tscBitmapText(bRightText1X, bRightText1Y, 30, bottomRightText1));
+        await _tscBitmapText(bRightText1X, bRightText1Y, 27, bottomRightText1));
   }
   if (bottomRightText2.isNotEmpty) {
     list.add(
-        await _tscBitmapText(bRightText2X, bRightText2Y, 30, bottomRightText2));
+        await _tscBitmapText(bRightText2X, bRightText2Y, 27, bottomRightText2));
   }
   list.add(_tscLine(
       (padding + qrCodeWidth) * _dpi, margin * _dpi, 2, qrCodeWidth * _dpi));

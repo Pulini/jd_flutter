@@ -17,7 +17,10 @@ class OrderProductionTableLogic extends GetxController {
 
   void getDetail(OrderProductionExecutionInfo data) {
     state.getTailNumberReportData(
-        barCode: '', dispatchNumber: data.workCardNo!, isGetTo: true);
+      needData: data,
+      barCode: '',
+      isGetTo: true,
+    );
   }
 
   // 线别 + 状态 + 搜索关键词 组合筛选（基于全量 copyTailNumberList）
@@ -27,7 +30,7 @@ class OrderProductionTableLogic extends GetxController {
         .where((data) =>
             (state.selectIndex == 0 ||
                 data.departmentName == state.lineList[state.selectIndex]) &&
-            data.searchType == state.selectedTabIndex.value &&
+            data.status == state.selectedTabIndex.value + 1 &&
             (key.isEmpty ||
                 (data.seOrderNo ?? '').toLowerCase().contains(key) ||
                 (data.workCardNo ?? '').toLowerCase().contains(key)))
@@ -37,8 +40,8 @@ class OrderProductionTableLogic extends GetxController {
   }
 
   //清尾确认与取消
-  void confirmTailCartonRecords(OrderProductionExecutionInfo item,bool submitType) {
-    print('DIAG logic.confirmTailCartonRecords called submitType=$submitType');
+  void confirmTailCartonRecords(
+      OrderProductionExecutionInfo item, bool submitType) {
     state.confirmTailCartonRecords(
         item: item,
         success: (mes) {
@@ -57,16 +60,33 @@ class OrderProductionTableLogic extends GetxController {
   void addUnFull({
     required String code,
     required Function() fullError,
+    required Function() addSuccess,
   }) {
     for (var v in state.reportBoxList) {
-      if (code == v.barCode &&
-          (v.unFullBoxQty! + v.thisScanQty! + 1 <= v.arrears!)) {
-        v.thisScanQty = v.thisScanQty! + 1;
-        showScanTips();
-      } else {
-        fullError.call();
+      if (code == v.barCode) {
+        // 命中对应箱码：容量校验，已扫 + 当前这 1 件不能超过欠数
+        if (v.unFullBoxQty! + v.thisScanQty! + 1 <= v.arrears!) {
+          v.thisScanQty = v.thisScanQty! + 1;
+          // 合计行同步 +1，保证合计"不满箱数"随扫描累加
+          // 合计行创建时 barCode 为空，尺码行的 barCode 非空，据此识别
+          for (var t in state.reportBoxList) {
+            if (t.size == '合计') {
+              t.thisScanQty = (t.thisScanQty ?? 0) + 1;
+              break;
+            }
+          }
+          showScanTips();
+          addSuccess.call();
+          state.reportBoxList.refresh();
+        } else {
+          // 容量已满，报错一次即可
+          fullError.call();
+        }
+        return; // 箱码唯一，命中即结束，避免重复处理/误报
       }
     }
+    // 没匹配到任何箱码，报错一次
+    fullError.call();
   }
 
   // 尾数重置：清空所有不满箱扫描数量
@@ -94,9 +114,10 @@ class OrderProductionTableLogic extends GetxController {
               content: mes,
               back: () {
                 state.getTailNumberReportData(
-                    barCode: '',
-                    dispatchNumber: state.showDispatchNumber.value,
-                    isGetTo: false);
+                  barCode: '',
+                  isGetTo: false,
+                  needData: state.searcherData!,
+                );
               });
         });
       },

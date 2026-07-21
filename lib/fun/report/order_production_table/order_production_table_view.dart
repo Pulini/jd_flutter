@@ -158,8 +158,9 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
 
   // ===== 主卡片组件（根据 searchType 渲染不同布局）=====
   Widget _item(OrderProductionExecutionInfo item) {
-    int type = item.searchType ?? 0;
-    Color accent = _cardBorderColors[type.clamp(0, 3)];
+    int type = item.status ?? 1;
+    // status 是 1 基（1,2,3,4），颜色数组是 0 基，故 -1 取索引
+    Color accent = _cardBorderColors[(type - 1).clamp(0, 3)];
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
@@ -251,28 +252,36 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
         ),
         const SizedBox(width: 8),
         // 颜色
-        Row(
-          mainAxisSize: MainAxisSize.min,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.palette_outlined, size: 14, color: Colors.green),
-            const SizedBox(width: 3),
-            Text(item.colorName ?? '',
-                style: const TextStyle(fontSize: 12, color: Color(0xFF555555))),
-          ],
-        ),
-        const SizedBox(width: 8),
-        // 尺码
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Transform.rotate(
-              angle: 0.4,
-              child: const Icon(Icons.straighten_outlined,
-                  size: 14, color: Color(0xFF5C6BC0)),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.palette_outlined,
+                    size: 14, color: Colors.green),
+                const SizedBox(width: 3),
+                Text(item.color ?? '',
+                    style: const TextStyle(
+                        fontSize: 12, color: Color(0xFF555555))),
+              ],
             ),
-            const SizedBox(width: 3),
-            Text(item.sizeRange ?? '',
-                style: const TextStyle(fontSize: 12, color: Color(0xFF555555))),
+            const SizedBox(width: 8),
+            // 尺码
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Transform.rotate(
+                  angle: 0.4,
+                  child: const Icon(Icons.straighten_outlined,
+                      size: 14, color: Color(0xFF5C6BC0)),
+                ),
+                const SizedBox(width: 3),
+                Text(item.sizeRange ?? '',
+                    style: const TextStyle(
+                        fontSize: 12, color: Color(0xFF555555))),
+              ],
+            ),
           ],
         ),
         const Spacer(),
@@ -284,7 +293,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
             borderRadius: BorderRadius.circular(14),
           ),
           child: Text(
-            item.organizeName ?? 'DHM',
+            item.band ?? '',
             style: const TextStyle(
                 color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
           ),
@@ -297,13 +306,13 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
   Widget _buildCardContent(
       OrderProductionExecutionInfo item, int type, Color accent) {
     switch (type) {
-      case 0:
-        return _buildPendingContent(item, accent);
       case 1:
-        return _buildProducingContent(item, accent);
+        return _buildPendingContent(item, accent);
       case 2:
-        return _buildClearTailContent(item, accent);
+        return _buildProducingContent(item, accent);
       case 3:
+        return _buildClearTailContent(item, accent);
+      case 4:
         return _buildCompletedContent(item, accent);
       default:
         return _buildPendingContent(item, accent);
@@ -311,59 +320,56 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
   }
 
   // ===== 日期状态标签 =====
-  Widget _buildDateBadge(String dateStr) {
-    try {
-      final d = DateTime.parse(dateStr.split(' ')[0]);
-      final now = DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day);
-      final diff = d.difference(now).inDays;
-
-      String label;
-      Color bgColor;
-      Color dotColor;
-
-      if (diff < 0) {
-        label = '已超${diff.abs()}天';
-        bgColor = const Color(0xFFFFEBEE);
-        dotColor = const Color(0xFFE53935);
-      } else if (diff == 0) {
-        label = '今天到期';
-        bgColor = const Color(0xFFFFF3E0);
-        dotColor = const Color(0xFFF2994A);
-      } else if (diff <= 3) {
-        label = '${diff}天后到期';
-        bgColor = const Color(0xFFFFF8E1);
-        dotColor = const Color(0xFFF9A825);
-      } else {
-        return Text(dateStr,
-            style: const TextStyle(fontSize: 13, color: Color(0xFF555555)));
-      }
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-            color: bgColor, borderRadius: BorderRadius.circular(16)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                width: 7,
-                height: 7,
-                decoration:
-                    BoxDecoration(color: dotColor, shape: BoxShape.circle)),
-            const SizedBox(width: 6),
-            Text('$dateStr $label',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: dotColor)),
-          ],
-        ),
-      );
-    } catch (_) {
+  Widget _buildDateBadge(String dateStr, int? daysDifference) {
+    if (daysDifference == null) {
       return Text(dateStr,
           style: const TextStyle(fontSize: 13, color: Color(0xFF555555)));
     }
+
+    final diff = daysDifference;
+    String label;
+    Color bgColor;
+    Color dotColor;
+
+    if (diff < 0) {
+      label = '已超${diff.abs()}天';
+      bgColor = const Color(0xFFFFEBEE);
+      dotColor = const Color(0xFFE53935);
+    } else if (diff == 0) {
+      label = '今天到期';
+      bgColor = const Color(0xFFFFF3E0);
+      dotColor = const Color(0xFFF2994A);
+    } else if (diff <= 3) {
+      label = '剩$diff天';
+      bgColor = const Color(0xFFFFF3E0);
+      dotColor = const Color(0xFFF2994A);
+    } else {
+      label = '剩$diff天';
+      bgColor = const Color(0xFFF5F5F5);
+      dotColor = const Color(0xFF9E9E9E);
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+          color: bgColor, borderRadius: BorderRadius.circular(16)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              width: 7,
+              height: 7,
+              decoration:
+                  BoxDecoration(color: dotColor, shape: BoxShape.circle)),
+          const SizedBox(width: 6),
+          Text('$dateStr $label',
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: dotColor)),
+        ],
+      ),
+    );
   }
 
   // ===== 进度条组件 =====
@@ -410,7 +416,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_plan_finish_date'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          _buildDateBadge(item.fetchDate ?? '')
+          _buildDateBadge(item.planEndDate ?? '', item.daysDifference)
         ]),
         const SizedBox(height: 6),
         // 产线
@@ -426,37 +432,36 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)))
         ]),
-        const SizedBox(height: 8),
-        // 安排生产按钮（右对齐）
-        Align(
-            alignment: Alignment.centerRight,
-            child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                    onTap: () => logic.getDetail(item),
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 9),
-                        decoration: BoxDecoration(
-                            color: const Color(0xFF1976D2),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  color:
-                                      const Color(0xFF1976D2).withOpacity(0.3),
-                                  blurRadius: 6)
-                            ]),
-                        child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          const Icon(Icons.assignment,
-                              size: 16, color: Colors.white),
-                          const SizedBox(width: 6),
-                          Text('carton_label_scan_arrange_produce'.tr,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600))
-                        ]))))),
+        // const SizedBox(height: 8),
+        // // 安排生产按钮（右对齐）
+        // Align(
+        //     child: Material(
+        //         color: Colors.transparent,
+        //         child: InkWell(
+        //             onTap: () => logic.getDetail(item),
+        //             borderRadius: BorderRadius.circular(20),
+        //             child: Container(
+        //                 padding: const EdgeInsets.symmetric(
+        //                     horizontal: 20, vertical: 9),
+        //                 decoration: BoxDecoration(
+        //                     color: const Color(0xFF1976D2),
+        //                     borderRadius: BorderRadius.circular(20),
+        //                     boxShadow: [
+        //                       BoxShadow(
+        //                           color:
+        //                               const Color(0xFF1976D2).withOpacity(0.3),
+        //                           blurRadius: 6)
+        //                     ]),
+        //                 child: Row(mainAxisSize: MainAxisSize.min, children: [
+        //                   const Icon(Icons.assignment,
+        //                       size: 16, color: Colors.white),
+        //                   const SizedBox(width: 6),
+        //                   Text('carton_label_scan_arrange_produce'.tr,
+        //                       style: const TextStyle(
+        //                           color: Colors.white,
+        //                           fontSize: 14,
+        //                           fontWeight: FontWeight.w600))
+        //                 ]))))),
       ],
     );
   }
@@ -513,25 +518,6 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   color: Color(0xFFF2994A)))
         ]),
         const SizedBox(height: 6),
-        // 当前工序 + 紫色标签
-        Row(children: [
-          const Icon(Icons.build, size: 16, color: Color(0xFF673AB7)),
-          const SizedBox(width: 6),
-          Text('carton_label_scan_current_process'.tr,
-              style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
-          const Spacer(),
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                  color: const Color(0xFFEDE7F6),
-                  borderRadius: BorderRadius.circular(14)),
-              child: Text(item.currentProcess ?? '',
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF673AB7))))
-        ]),
-        const SizedBox(height: 6),
         // 计划完工日期 + 日期标签
         Row(children: [
           const Icon(Icons.calendar_today, size: 16, color: Color(0xFFF2994A)),
@@ -539,7 +525,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_plan_finish_date'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          _buildDateBadge(item.fetchDate ?? '')
+          _buildDateBadge(item.fetchDate ?? '', item.daysDifference)
         ]),
         const SizedBox(height: 8),
         // 底部按钮行：待确认 | 详情 | 清尾确认
@@ -552,10 +538,6 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                     child: Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 9),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color(0xFFF2994A), width: 1.5),
-                            borderRadius: BorderRadius.circular(20)),
                         child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -612,7 +594,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                               content:
                                   'carton_label_scan_confirm_clear_tail_tip'.tr,
                               confirm: () {
-                                logic.confirmTailCartonRecords(item,true);
+                                logic.confirmTailCartonRecords(item, true);
                               });
                         },
                         borderRadius: BorderRadius.circular(20),
@@ -722,7 +704,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_plan_finish_date'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          _buildDateBadge(item.fetchDate ?? '')
+          _buildDateBadge(item.fetchDate ?? '', item.daysDifference)
         ]),
         const SizedBox(height: 8),
         // 底部按钮：取消清尾确认
@@ -735,7 +717,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                 askDialog(
                     content: 'carton_label_scan_cancel_clear_tail_tip'.tr,
                     confirm: () {
-                      logic.confirmTailCartonRecords(item,false);
+                      logic.confirmTailCartonRecords(item, false);
                     });
               },
               borderRadius: BorderRadius.circular(20),
@@ -809,7 +791,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_case_close_date'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text(item.completeDate ?? '',
+          Text(item.lastDate ?? '',
               style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

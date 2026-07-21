@@ -91,7 +91,6 @@ Future<BaseData> _doHttp({
   Object? body,
   int retryCount = 0,
 }) async {
-  print('DIAG _doHttp called: method=$method, baseUrl=$baseUrl');
   // if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
   //   params = {
   //     'sap-client':

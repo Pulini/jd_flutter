@@ -1,5 +1,3 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-
 /// WorkCardInterID : 1231836
 /// WorkCardNo : "P26124283"
 /// WorkCardDate : "2026-06-24"
@@ -16,18 +14,25 @@ class OrderProductionExecutionInfo {
       this.departmentName,
       this.seOrderQty,
       this.productName,
-      this.searchType,
       this.scanQty,
       this.seOrderNo,
       this.status,
-      this.colorName,
+      this.color,
       this.sizeRange,
-      this.organizeName,
-      this.currentProcess,
-      this.completeDate,});
+      this.band,
+      this.unFinishQty,
+      this.planEndDate,
+      this.daysDifference,
+      this.lastDate,
+      this.isTailConfirm,
+      this.moID,
+
+  });
 
   OrderProductionExecutionInfo.fromJson(dynamic json) {
     workCardInterID = json['WorkCardInterID'];
+    isTailConfirm = json['IsTailConfirm'];
+    unFinishQty = json['UnFinishQty'];
     workCardNo = json['WorkCardNo'];
     workCardDate = json['WorkCardDate'];
     fetchDate = json['FetchDate'];
@@ -36,34 +41,41 @@ class OrderProductionExecutionInfo {
     seOrderNo = json['SeOrderNo'];
     seOrderQty = json['SeOrderQty'];
     scanQty = json['ScanQty'];
-    searchType = json['SearchType'];
-    status = json['Status'] ?? json['State'];
-    colorName = json['ColorName'] ?? json['Color'];
-    sizeRange = json['SizeRange'] ?? json['Size'];
-    organizeName = json['OrganizeName'] ?? json['FactoryCode'];
-    currentProcess = json['CurrentProcess'] ?? json['ProcessName'];
-    completeDate = json['CompleteDate'] ?? json['FinishDate'] ?? json['CloseDate'];
+    color = json['Color'];
+    status = json['Status'];
+    sizeRange = json['SizeRange'];
+    band = json['Band'];
+    planEndDate = json['PlanEndDate'];
+    daysDifference = json['DaysDifference'];
+    lastDate = json['LastDate'];
+    moID = json['MoID'];
   }
   int? workCardInterID;
-  double? seOrderQty;
-  int? scanQty;
+  double? seOrderQty; //订单数量
+  double? unFinishQty;
+  int? scanQty;  //完工数量
+  int? daysDifference;
   String? workCardNo;
   String? workCardDate;
   String? fetchDate;
   String? departmentName;
   String? productName;
   String? seOrderNo;
-  int? searchType;
-  int? status; // 工单状态：0=正单未生产 1=正在生产 2=待清尾 3=已完成
-  String? colorName;      // 颜色名称（如"红/白"）
+  int? isTailConfirm;
+  int? status; // 工单状态：1=正单未生产 2=正在生产 3=待清尾 4=已完成
+  String? color;      // 颜色名称（如"红/白"）
   String? sizeRange;      // 尺码范围（如"35-44"）
-  String? organizeName;   // 工厂/组织简称（如"DHM"）
-  String? currentProcess; // 当前工序（如"计车"）
-  String? completeDate;   // 结案日期
+  String? band;   // 工厂/组织简称（如"DHM"）
+  String? planEndDate;
+  String? lastDate;
+  int? moID;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['ScanQty'] = scanQty;
+    map['UnFinishQty'] = unFinishQty;
+    map['PlanEndDate'] = planEndDate;
+    map['DaysDifference'] = daysDifference;
     map['SeOrderQty'] = seOrderQty;
     map['WorkCardInterID'] = workCardInterID;
     map['WorkCardNo'] = workCardNo;
@@ -72,13 +84,13 @@ class OrderProductionExecutionInfo {
     map['DepartmentName'] = departmentName;
     map['ProductName'] = productName;
     map['SeOrderNo'] = seOrderNo;
-    map['SearchType'] = searchType;
     map['Status'] = status;
-    map['ColorName'] = colorName;
+    map['Color'] = color;
     map['SizeRange'] = sizeRange;
-    map['OrganizeName'] = organizeName;
-    map['CurrentProcess'] = currentProcess;
-    map['CompleteDate'] = completeDate;
+    map['Band'] = band;
+    map['LastDate'] = lastDate;
+    map['IsTailConfirm'] = isTailConfirm;
+    map['MoID'] = moID;
     return map;
   }
 

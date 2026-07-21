@@ -2,21 +2,27 @@
 // GroupName : "金帝PUMA成型5线后段"
 // SalesOrder : "JZ2400002"
 // CustomerOrderNumber : "202301040002"
-// SizeList : [{"Size":"35","OrderQty":2,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230091"},{"Size":"36","OrderQty":3,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230115"},{"Size":"37","OrderQty":4,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230117"},{"Size":"38","OrderQty":5,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230119"}]
+// DispatchNumber : "P26115469"
+// Brand : "DHM"
+// SizeList : [{"Size":"35","OrderQty":2,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230091"},{"Size":"36","OrderQty":3,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230115"},{"Size":"37","OrderQty":4,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230117"},{"Size":"38":"OrderQty":5,"FullBoxQty":0,"UnFullBoxQty":0,"Arrears":0,"BarCode":"12001230119"}]
 
 class CartonLabelScanClearTailInfo {
   CartonLabelScanClearTailInfo({
-      this.factoryBody, 
-      this.groupName, 
-      this.salesOrder, 
-      this.customerOrderNumber, 
-      this.sizeList,});
+      this.factoryBody,
+      this.groupName,
+      this.salesOrder,
+      this.customerOrderNumber,
+      this.dispatchNumber,
+      this.sizeList,
+
+  });
 
   CartonLabelScanClearTailInfo.fromJson(dynamic json) {
     factoryBody = json['FactoryBody'];
     groupName = json['GroupName'];
     salesOrder = json['SalesOrder'];
     customerOrderNumber = json['CustomerOrderNumber'];
+    dispatchNumber = json['DispatchNumber'];
     if (json['SizeList'] != null) {
       sizeList = [];
       json['SizeList'].forEach((v) {
@@ -28,6 +34,7 @@ class CartonLabelScanClearTailInfo {
   String? groupName;
   String? salesOrder;
   String? customerOrderNumber;
+  String? dispatchNumber;
   List<ClearTailListInfo>? sizeList;
 
   Map<String, dynamic> toJson() {
@@ -36,6 +43,7 @@ class CartonLabelScanClearTailInfo {
     map['GroupName'] = groupName;
     map['SalesOrder'] = salesOrder;
     map['CustomerOrderNumber'] = customerOrderNumber;
+    map['DispatchNumber'] = dispatchNumber;
     if (sizeList != null) {
       map['SizeList'] = sizeList?.map((v) => v.toJson()).toList();
     }
@@ -53,11 +61,11 @@ class CartonLabelScanClearTailInfo {
 
 class ClearTailListInfo {
   ClearTailListInfo({
-      this.size, 
-      this.orderQty, 
-      this.fullBoxQty, 
-      this.unFullBoxQty, 
-      this.arrears, 
+      this.size,
+      this.orderQty,
+      this.fullBoxQty,
+      this.unFullBoxQty,
+      this.arrears,
       this.barCode,});
 
   ClearTailListInfo.fromJson(dynamic json) {
@@ -73,6 +81,7 @@ class ClearTailListInfo {
   int? fullBoxQty;
   int? unFullBoxQty;
   int? arrears;
+  int? thisScanQty=0;
   String? barCode;
 
   Map<String, dynamic> toJson() {

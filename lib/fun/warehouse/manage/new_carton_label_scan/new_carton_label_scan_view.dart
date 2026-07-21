@@ -13,6 +13,7 @@ import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 import 'new_carton_label_scan_clear_tail.dart';
+import 'new_carton_label_scan_end_order_view.dart';
 import 'new_carton_label_scan_logic.dart';
 import 'new_carton_label_scan_state.dart';
 
@@ -282,7 +283,8 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
   void showBottomIconDialog() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 必须开启，键盘才能顶起弹窗
+      isScrollControlled: true,
+      // 必须开启，键盘才能顶起弹窗
       enableDrag: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -324,87 +326,18 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                                 iconColor: Colors.blue,
                                 foregroundColor: Colors.black,
                                 backgroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:4), // 压缩按钮高度
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4), // 压缩按钮高度
                               ),
-                              label: Text('carton_label_scan_analysis_report'.tr),
+                              label:
+                                  Text('carton_label_scan_analysis_report'.tr),
                               onPressed: () {
                                 Navigator.pop(ctx);
                                 logic.getAnalyze();
                               },
-                            ),
+                            ), //分析报告
                           ),
-                          const SizedBox(width:8),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              icon: const Icon(Icons.published_with_changes_sharp),
-                              style: ElevatedButton.styleFrom(
-                                iconColor: Colors.blue,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:4),
-                              ),
-                              label: Text('carton_label_scan_order_clean'.tr),
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                Get.to(() => const NewCartonLabelScanClearTail())
-                                    ?.then((v) {
-                                  _scan();
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height:6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              icon: const Icon(Icons.menu_book),
-                              style: ElevatedButton.styleFrom(
-                                iconColor: Colors.blue,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:4),
-                              ),
-                              label: Text('carton_label_scan_scanning_progress'.tr),
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                Get.to(
-                                      () => const NewCartonLabelScanProgressPage(),
-                                  arguments: {
-                                    'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
-                                  },
-                                )?.then((v) {
-                                  _scan();
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(width:8),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              icon: const Icon(Icons.low_priority),
-                              style: ElevatedButton.styleFrom(
-                                iconColor: Colors.blue,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:4),
-                              ),
-                              label: Text('carton_label_scan_dialog_change_priority'.tr),
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                Get.to(() => const NewCartonLabelScanPriorityPage())?.then((v) => _scan());
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height:6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
+                          const SizedBox(width: 8),
                           Expanded(
                             child: ElevatedButton.icon(
                               icon: const Icon(Icons.note_alt),
@@ -412,9 +345,11 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                                 iconColor: Colors.blue,
                                 foregroundColor: Colors.black,
                                 backgroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:4),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
                               ),
-                              label: Text('carton_label_scan_label_confirmation'.tr),
+                              label: Text(
+                                  'carton_label_scan_label_confirmation'.tr),
                               onPressed: () {
                                 // 点击先关闭底部sheet，再打开输入弹窗（关键！）
                                 Navigator.pop(ctx);
@@ -422,19 +357,22 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                                   title: [
                                     Center(
                                       child: Text(
-                                        'carton_label_scan_label_confirmation'.tr,
-                                        style: const TextStyle(fontSize: 20, color: Colors.white),
+                                        'carton_label_scan_label_confirmation'
+                                            .tr,
+                                        style: const TextStyle(
+                                            fontSize: 20, color: Colors.white),
                                       ),
                                     )
                                   ],
-                                  hintText: 'carton_label_scan_input_instructions'.tr,
+                                  hintText:
+                                      'carton_label_scan_input_instructions'.tr,
                                   isCanCancel: true,
                                   confirm: (mes) {
                                     logic.checkCode(
                                         success: (String msg) {
                                           successDialog(
                                               content: msg,
-                                              back: (){
+                                              back: () {
                                                 Get.back();
                                               });
                                         },
@@ -443,10 +381,113 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                                   cancel: () => Get.back(),
                                 );
                               },
+                            ), //标签确认
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                              child: ElevatedButton.icon(
+                            icon: const Icon(Icons.menu_book),
+                            style: ElevatedButton.styleFrom(
+                              iconColor: Colors.blue,
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                            ),
+                            label:
+                                Text('carton_label_scan_scanning_progress'.tr),
+                            onPressed: () {
+                              Navigator.pop(ctx);
+                              Get.to(
+                                () => const NewCartonLabelScanProgressPage(),
+                                arguments: {
+                                  'CustomerPO':
+                                      state.cartonLabelInfo?.custOrderNumber ??
+                                          ''
+                                },
+                              )?.then((v) {
+                                _scan();
+                              });
+                            },
+                          ) //扫码进度,
+                              ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.low_priority),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                              ),
+                              label: Text(
+                                  'carton_label_scan_dialog_change_priority'
+                                      .tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(() =>
+                                        const NewCartonLabelScanPriorityPage())
+                                    ?.then((v) => _scan());
+                              },
+                            ), // 更改优先级
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(
+                                  Icons.published_with_changes_sharp),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                              ),
+                              label: Text('carton_label_scan_order_clean'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(() =>
+                                        const NewCartonLabelScanClearTail())
+                                    ?.then((v) {
+                                  _scan();
+                                });
+                              },
+                            ),
+                          ), //清单清尾
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              icon: const Icon(
+                                  Icons.published_with_changes_sharp),
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.blue,
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                              ),
+                              label: Text('carton_label_scan_order_clean_order'.tr),
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                Get.to(() =>
+                                        const NewCartonLabelScanEndOrderPage())
+                                    ?.then((v) {
+                                  _scan();
+                                });
+                              },
                             ),
                           ),
-                          const SizedBox(width:8),
-                          const Expanded(child: SizedBox()),
                         ],
                       )
                     ],

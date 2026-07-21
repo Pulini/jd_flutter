@@ -29,10 +29,12 @@ class _OrderProductionTableDetailPageState
       Get.find<OrderProductionTableLogic>().state;
 
   late AudioPlayer player;
-  var ae1 = 'audios/audio_error1.mp3';
+  var ae1 = 'audios/audio_error1.mp3'; // 错误
+  var as1 = 'audios/audio_success1.mp3'; // 成功
 
   void playAudio(String as) {
-    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
+        8) {
       if (player.state != PlayerState.completed) {
         player.stop();
         player.setSource(AssetSource(as));
@@ -46,10 +48,16 @@ class _OrderProductionTableDetailPageState
   void scan() {
     pdaScanner(scan: (barCode) {
       if (barCode.isNotEmpty) {
-        logic.addUnFull(code: barCode, fullError: () {
-          playAudio(ae1);
-        });
-      };
+        logic.addUnFull(
+            code: barCode,
+            fullError: () {
+              playAudio(ae1);
+            },
+            addSuccess: () {
+              playAudio(as1);
+            });
+      }
+      ;
     });
   }
 
@@ -60,7 +68,8 @@ class _OrderProductionTableDetailPageState
         item(data.size ?? '', true, isTotal: isTotal),
         item(data.orderQty.toString(), true, isTotal: isTotal),
         item(data.fullBoxQty.toString(), true, isTotal: isTotal),
-        item((data.unFullBoxQty!+data.thisScanQty!).toString(), true, isTotal: isTotal),
+        item((data.unFullBoxQty! + data.thisScanQty!).toString(), true,
+            isTotal: isTotal),
         item((data.unFullBoxQty! + data.fullBoxQty!).toString(), true,
             isTotal: isTotal),
         // 欠数列：与其它列同款格子，仅文字显示为红色
@@ -91,7 +100,8 @@ class _OrderProductionTableDetailPageState
     return pageBody(
       title: '订单尺码详情',
       body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -180,7 +190,7 @@ class _OrderProductionTableDetailPageState
               icon2: '✏️',
               label2: '派工单号',
               value2: state.showDispatchNumber.value,
-              valueColor2: Colors.black87,
+              valueColor2: Colors.green.shade600,
             ),
             _infoGridRow(
               icon: '📄',
@@ -189,7 +199,7 @@ class _OrderProductionTableDetailPageState
               valueColor: Colors.blue.shade700,
               icon2: '📦',
               label2: '品牌',
-              value2: state.brand.value,
+              value2: state.showBand,
               valueColor2: Colors.green.shade600,
             ),
           ],
@@ -214,9 +224,19 @@ class _OrderProductionTableDetailPageState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: _infoCell(icon: icon, label: label, value: value, valueColor: valueColor)),
+          Expanded(
+              child: _infoCell(
+                  icon: icon,
+                  label: label,
+                  value: value,
+                  valueColor: valueColor)),
           const SizedBox(width: 16),
-          Expanded(child: _infoCell(icon: icon2, label: label2, value: value2, valueColor: valueColor2)),
+          Expanded(
+              child: _infoCell(
+                  icon: icon2,
+                  label: label2,
+                  value: value2,
+                  valueColor: valueColor2)),
         ],
       ),
     );
@@ -237,13 +257,15 @@ class _OrderProductionTableDetailPageState
           children: [
             Text(icon, style: const TextStyle(fontSize: 13)),
             const SizedBox(width: 3),
-            Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 11)),
+            Text(label,
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 11)),
           ],
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: TextStyle(color: valueColor, fontSize: 14, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: valueColor, fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -309,10 +331,10 @@ class _OrderProductionTableDetailPageState
     );
   }
 
-
   @override
   void initState() {
-    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
+        8) {
       player = AudioPlayer();
     }
     scan();

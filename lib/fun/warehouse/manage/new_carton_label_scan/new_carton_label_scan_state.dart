@@ -25,6 +25,7 @@ class NewCartonLabelScanState {
   var priorityPo = ''.obs;
   var dispatchNumber = ''.obs;
   var tailDispatchNumber = ''.obs;
+  var dhmDispatchNumber = ''.obs;
   CartonLabelScanNewInfo? priorityCartonLabelInfo;
 
   var outBoxList = <OutBoxLabelsInfo>[].obs; //外箱数据
