@@ -7,6 +7,7 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 import 'view_instruction_details_logic.dart';
 
@@ -29,51 +30,48 @@ class _ViewInstructionDetailsPageState
         '${RouteConfig.viewInstructionDetails.name}${PickerType.mesProcessFlow}',
   );
 
-  late WebViewController webViewController;
+  late final WebViewController webViewController;
 
   @override
   void initState() {
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(Colors.transparent)
-        ..setNavigationDelegate(
-            NavigationDelegate(
-              onPageStarted: (String url) {
-                debugPrint('onPageStarted------$url');
-                loadingShow('加载中');
-              },
-              onPageFinished: (String url) {
-                debugPrint('onPageFinished------$url');
-                loadingDismiss();
-              },
-              onHttpError: (HttpResponseError error) {
-                debugPrint('onHttpError------${error.response?.statusCode}');
-                debugPrint('onHttpError URL------${error.response?.uri}');
-                loadingDismiss();
-              },
-              onWebResourceError: (WebResourceError error) {
-                debugPrint('onWebResourceError------${error.description}');
-                debugPrint('onWebResourceError Type------${error.errorType}');
-                debugPrint('onWebResourceError URL------${error.url}');
-                loadingDismiss();
-              },
-            ),
-        );
-    }
+    webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            loadingShow('加载中');
+          },
+          onPageFinished: (String url) {
+            loadingDismiss();
+          },
+          onHttpError: (HttpResponseError error) {
+            loadingDismiss();
+          },
+          onWebResourceError: (WebResourceError error) {
+            loadingDismiss();
+          },
+        ),
+      );
     super.initState();
   }
 
-  void _query() {
-/*    logic.queryPDF(
-      processFlowId: pickerControllerProcessFlow.selectedId.value,
-      instruction: tecInstruction.text,
-      loadUri: (uri) {
-        webViewController.clearCache();
-        webViewController.loadRequest(uri);
-      },
-    );*/
+  /// 构建WebView。Android上强制使用Hybrid Composition(displayWithHybridComposition:true)，
+  /// 使WebView成为真实原生View、能接收触摸手势并内部滚动——否则默认Surface(虚拟显示)模式下
+  /// 原生触摸不转发给WebView，导致"无法拖动"(hwbr等引擎尤为明显)。
+  Widget _webViewWidget() {
+    if (GetPlatform.isAndroid) {
+      return WebViewWidget.fromPlatformCreationParams(
+        params: AndroidWebViewWidgetCreationParams(
+          controller: webViewController.platform,
+          displayWithHybridComposition: true,
+        ),
+      );
+    }
+    return WebViewWidget(controller: webViewController);
+  }
 
+  void _query() {
     logic.queryFile(
       processFlowID: pickerControllerProcessFlow.selectedId.value,
       instruction: tecInstruction.text,
@@ -93,7 +91,7 @@ class _ViewInstructionDetailsPageState
       ],
       query: () => _query(),
       body: GetPlatform.isAndroid || GetPlatform.isIOS
-          ? WebViewWidget(controller: webViewController)
+          ? _webViewWidget()
           : Container(),
     );
   }

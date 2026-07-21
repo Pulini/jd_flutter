@@ -36,7 +36,9 @@ class ViewInstructionDetailsState {
     required Function(String html) success,
     required Function(String msg) error,
   }) {
-    // loadingShow( 'view_instruction_details_querying'.tr);
+    // 网络请求期间即显示loading，覆盖"服务端拼HTML + WebView渲染"全过程，
+    // 避免无提示的2-3秒空白等待；loading由onPageFinished统一dismiss
+    loadingShow('view_instruction_details_querying'.tr);
     Dio()
       ..interceptors.add(DioManager.simpleInterceptors)
       ..post(
@@ -52,13 +54,16 @@ class ViewInstructionDetailsState {
           'language':language,
         },
       ).then((response) {
-        // loadingDismiss();
+        loadingDismiss();
         var json=jsonDecode(response.data);
         if (json['successed']) {
           success.call(json['data']);
         } else {
           error.call(json['message']?? '');
         }
+      }).catchError((e) {
+        loadingDismiss();
+        error.call(e.toString());
       });
   }
 }

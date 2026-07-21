@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/login/login_lark/login_lark_web_helper.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -10,6 +11,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 /// 飞书登录 Widget
 /// - 移动端（Android/iOS）：使用 webview_flutter 加载 feishu.html
@@ -40,7 +42,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
           onPageFinished: (String url) {
             debugPrint('onPageFinished------$url');
             // 移动端：关闭 GPU 加速，避免 Android 7 canvas 空白
-            if (!kIsWeb) disableWebViewGpu();
+            // if (!kIsWeb) disableWebViewGpu();
             larkAuthorize(url);
           },
           onHttpError: (HttpResponseError error) {
@@ -56,7 +58,17 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
       );
   }
 
-
+  Widget _webViewWidget() {
+    if (GetPlatform.isAndroid) {
+      return WebViewWidget.fromPlatformCreationParams(
+        params: AndroidWebViewWidgetCreationParams(
+          controller: webViewController.platform,
+          displayWithHybridComposition: true,
+        ),
+      );
+    }
+    return WebViewWidget(controller: webViewController);
+  }
 
   /// 加载 feishu.html
   void _loadAssetUrl() {
@@ -219,7 +231,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
   void initState() {
     super.initState();
     if (kIsWeb) {
-      LarkWebHelper.initIframeWebListener((msg){
+      LarkWebHelper.initIframeWebListener((msg) {
         if (!msg.contains('code=')) return;
         final url = msg.startsWith('?') ? '$redirectUri$msg' : msg;
         if (url.startsWith(redirectUri)) {
@@ -241,15 +253,18 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
         border: Border.all(color: Colors.blue, width: 4),
       ),
       margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(2),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [
-            if (kIsWeb)
-              const HtmlElementView(viewType: 'feishu-login-iframe')
-            else
-              WebViewWidget(controller: webViewController),
+            Transform.scale(
+              scale: 0.95,
+              alignment: Alignment.bottomCenter,
+              child: kIsWeb
+                  ? const HtmlElementView(viewType: 'feishu-login-iframe')
+                  : _webViewWidget(),
+            ),
+            // WebViewWidget(controller: webViewController),
             Positioned(
               top: 10,
               left: 5,
@@ -279,6 +294,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
 
   @override
   void dispose() {
+    webViewController.clearLocalStorage();
     super.dispose();
   }
 }

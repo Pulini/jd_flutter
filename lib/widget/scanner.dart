@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
@@ -136,24 +137,25 @@ void scannerDialog({
 void pdaScanner({required Function(String) scan}) {
   debugPrint('PdaScanner 注册监听');
   const MethodChannel(channelScan).setMethodCallHandler((call) {
-    switch (call.method) {
-      case 'PdaScanner':
-        {
-          scan.call(call.arguments);
-        }
-        break;
-      case 'AkxPdaScanner':
-        {
-          for (var element in call.arguments) {
-            scan.call(element);
+    if (!isErrorDialogShowing) {//异常弹窗显示的时候禁止扫码操作
+      switch (call.method) {
+        case 'PdaScanner':
+          {
+            scan.call(call.arguments);
           }
-        }
-        break;
+          break;
+        case 'AkxPdaScanner':
+          {
+            for (var element in call.arguments) {
+              scan.call(element);
+            }
+          }
+          break;
+      }
     }
     return Future.value(call);
   });
 }
-
 
 void closePdaScanner() {
   debugPrint('PdaScanner 取消监听');

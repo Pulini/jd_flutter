@@ -208,7 +208,7 @@ class _LoginPickState extends State<LoginPick>
   Widget build(BuildContext context) {
     return SizedBox(
       width: 320,
-      height: 400,
+      height: 380,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,

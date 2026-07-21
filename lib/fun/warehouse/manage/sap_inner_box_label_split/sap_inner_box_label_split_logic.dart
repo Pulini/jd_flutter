@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/preview_web_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
 
 import 'sap_inner_box_label_split_state.dart';
@@ -78,6 +79,23 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       .any((v) => v.factoryNo == '1098');
 
   void printLabel({bool? hasNotes}) {
+    var selected = state.newLabelList.where((v) => v.isSelected.value).toList();
+    if (selected.isNotEmpty) {
+      Get.to(() => PreviewWebLabelList(
+            labelCodes: selected
+                .map((v) => {
+                      'Note': hasNotes ?? false ? v.remarks ?? '' : '',
+                      'BQID': v.labelID ?? '',
+                      'ZBQLX': v.labelType ?? '',
+                    })
+                .toList(),
+          ));
+    } else {
+      errorDialog(content: '没有可打印的标签');
+    }
+  }
+
+/*  void printLabel({bool? hasNotes}) {
 //1、缅甸工厂打专属标（只需判断工厂是否1098）
 //2、先打大标
 //    是否选择打印带物料标签 是 打印物料大标 否 打印大标
@@ -104,21 +122,20 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
           labelList.add(myanmarLabel(label, hasNotes ?? false));
         }
       } else if (label.factoryNo == '1095' || label.factoryNo == '1096') {
-
-          if (label.isMixMaterial) {
-            //无尺码标
-            labelList.add(inBoxLabel(label,hasNotes??false));
-          } else {
-            //尺码物料标
-            labelList.add(materialStandardLabel(label,hasNotes??false));
-          }
+        if (label.isMixMaterial) {
+          //无尺码标
+          labelList.add(inBoxLabel(label, hasNotes ?? false));
+        } else {
+          //尺码物料标
+          labelList.add(materialStandardLabel(label, hasNotes ?? false));
+        }
       } else {
         //国内标签
-        labelList.add(materialLabel110xN(label,hasNotes??false));
+        labelList.add(materialLabel110xN(label, hasNotes ?? false));
       }
     });
     toPrintView(labelList);
-  }
+  }*/
 
   void toPrintView(List<Widget> labelView) {
     Get.to(() => labelView.length > 1
@@ -188,7 +205,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         notes: label.remarks ?? '',
       );
 
-  Widget materialLabel110xN(SapPrintLabelInfo label,bool hasNotes) =>
+  Widget materialLabel110xN(SapPrintLabelInfo label, bool hasNotes) =>
       dynamicDomesticMaterialLabel(
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
@@ -199,13 +216,14 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         materialDescription: label.subLabel!.first.materialDescription ?? '',
         materialList: label.subLabel!.length > 1
             ? createSizeList(
-          label: label,
-          sizeTitle: '尺码',
-          totalTitle: '总计',
-        )
+                label: label,
+                sizeTitle: '尺码',
+                totalTitle: '总计',
+              )
             : {},
         inBoxQty: label.getInBoxQty().toShowString(),
-        customsDeclarationUnit: label.subLabel!.first.customsDeclarationUnit ?? '',
+        customsDeclarationUnit:
+            label.subLabel!.first.customsDeclarationUnit ?? '',
         customsDeclarationType: label.customsDeclarationType ?? '',
         pieceID: label.pieceID ?? '',
         pieceNo: label.pieceNo ?? '',
@@ -219,7 +237,8 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         hasNotes: hasNotes,
         notes: label.remarks ?? '',
       );
-  Widget materialStandardLabel(SapPrintLabelInfo label,bool hasNotes) =>
+
+  Widget materialStandardLabel(SapPrintLabelInfo label, bool hasNotes) =>
       dynamicSizeMaterialLabel1095n1096(
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
@@ -253,8 +272,9 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         notes: label.remarks ?? '',
       );
 
-  Widget inBoxLabel(SapPrintLabelInfo label,bool hasNotes) => dynamicInBoxLabel1095n1096(
-    haveSupplier: true,
+  Widget inBoxLabel(SapPrintLabelInfo label, bool hasNotes) =>
+      dynamicInBoxLabel1095n1096(
+        haveSupplier: true,
         productName: label.materialDeclarationName ?? '',
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',
@@ -272,8 +292,8 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         pieceID: '${label.pieceID}',
         manufactureDate: label.manufactureDate ?? '',
         supplier: label.supplierNumber ?? '',
-    hasNotes: hasNotes,
-    notes: label.remarks ?? '',
+        hasNotes: hasNotes,
+        notes: label.remarks ?? '',
       );
 
   Widget myanmarLabel(SapPrintLabelInfo label, bool hasNotes) =>

@@ -265,7 +265,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    209,
+    210,
     const CartonLabelScanPage(),
   );
 
@@ -633,10 +633,10 @@ class RouteConfig {
     const SapCartonLabelBindingPage(),
   );
 
-  //SAP内箱标拆分
+  //SAP内标拆分
   static Routes sapInnerBoxLabelSplit = Routes(
     '/sap_inner_box_label_split',
-    200,
+    201,
     const SapInnerBoxLabelSplitPage(),
   );
 

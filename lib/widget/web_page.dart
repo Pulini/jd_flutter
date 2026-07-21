@@ -10,8 +10,6 @@ import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// import 'package:pdf/pdf.dart';
-// import 'package:pdf/widgets.dart' as pw;
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
