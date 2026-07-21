@@ -1,19 +1,15 @@
 import 'dart:convert';
 import 'dart:core';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
-import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// import 'package:pdf/pdf.dart';
-// import 'package:pdf/widgets.dart' as pw;
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -365,109 +361,4 @@ class PdfPrintReview extends StatelessWidget {
       ),
     );
   }
-}
-
-
-
-
-/// 将API返回的HTML内容包裹在完整的文档模板中。
-/// 最小注入：仅overflow-y:scroll和viewport meta，不碰宽度/高度/边距等布局属性。
-String _buildCompleteHtml(String html) {
-  // 最小化：只设overflow-y:scroll强制启用滚动，不干扰原布局
-  const scrollCss = 'html,body{overflow-y:scroll!important;overflow-x:hidden!important}';
-  const viewportMeta =
-      '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">';
-
-  if (html.contains('<html') && html.contains('<head') && html.contains('<body')) {
-    // 强制使用我们的viewport：先删除API自带的viewport(其width=980/1200会导致布局视口过宽、内容超出控件)，
-    // 再把我们的viewport+样式插到</head>前，使其成为“最后一个viewport”，浏览器以其为准
-    html = html.replaceAll(
-        RegExp(r'<meta[^>]*viewport[^>]*>', caseSensitive: false), '');
-    html = html.replaceFirst(
-        '</head>', '$viewportMeta<style>$scrollCss</style></head>');
-    return html;
-  }
-  return '''
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-$viewportMeta
-<style>$scrollCss</style>
-</head>
-<body>
-$html
-</body>
-</html>''';
-}
-
-/// 本地HTTP Server，用于向WebView提供HTML内容。
-/// file:// 在Android上被安全策略拦截(ERR_ACCESS_DENIED)，
-/// data: URI 在鸿蒙hwbr_engine上布局异常(ShouldDoAdaptiveRelayout returns 0)，
-/// 通过127.0.0.1 HTTP服务可同时绕过两类限制。
-class _LocalHtmlServer {
-  static _LocalHtmlServer? _instance;
-  HttpServer? _server;
-  int _port = 0;
-  String _html = '';
-
-  static _LocalHtmlServer get instance => _instance ??= _LocalHtmlServer._();
-
-  _LocalHtmlServer._();
-
-  bool get isRunning => _server != null;
-
-  Future<String> serve(String html) async {
-    _html = html;
-    if (_server != null) return 'http://127.0.0.1:$_port/';
-    _server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
-    _port = _server!.port;
-    _server!.listen((request) {
-      debugPrint('_LocalHtmlServer request: ${request.uri}');
-      if (request.uri.path == '/' || request.uri.path.isEmpty) {
-        final bytes = utf8.encode(_html);
-        request.response
-          ..statusCode = 200
-          ..headers.set('Content-Type', 'text/html; charset=utf-8')
-          ..headers.set('Content-Length', bytes.length.toString())
-          ..headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
-          ..headers.set('Pragma', 'no-cache')
-          ..headers.set('Expires', '0')
-          ..headers.set('Connection', 'close')
-          ..add(bytes);
-      } else {
-        request.response.statusCode = 404;
-      }
-      request.response.close();
-    });
-    return 'http://127.0.0.1:$_port/';
-  }
-
-  void update(String html) {
-    _html = html;
-  }
-
-  void close() {
-    _server?.close();
-    _server = null;
-    _instance = null;
-  }
-}
-
-/// 通过本地HTTP Server加载HTML到WebView。
-/// loadRequest + http://127.0.0.1:PORT/ 在hwbr_engine下能正常渲染；
-/// loadHtmlString则触发"url has no host"导致空白。
-Future<void> _loadHtmlViaServer(WebViewController controller, String html) async {
-  final completeHtml = _buildCompleteHtml(html);
-  debugPrint(
-    '_loadHtmlViaServer: rawLen=${html.length}, completeLen=${completeHtml.length}, '
-        'preview=${completeHtml.substring(0, completeHtml.length < 200 ? completeHtml.length : 200)}',
-  );
-  final url = await _LocalHtmlServer.instance.serve(completeHtml);
-  controller.loadRequest(Uri.parse(url));
-}
-
-/// 鸿蒙2.0 hwbr_engine兼容：本地HTTP Server加载HTML
-void loadFixedHtml(WebViewController controller, String html) {
-  _loadHtmlViaServer(controller, html);
 }

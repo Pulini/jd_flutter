@@ -632,7 +632,7 @@ class RouteConfig {
     const SapCartonLabelBindingPage(),
   );
 
-  //SAP内箱标拆分
+  //SAP内标拆分
   static Routes sapInnerBoxLabelSplit = Routes(
     '/sap_inner_box_label_split',
     201,
