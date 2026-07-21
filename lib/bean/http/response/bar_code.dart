@@ -187,7 +187,7 @@ class BarCodeProcessInfo {
 
   @override
   String toString() {
-    return '$processNodeShowName/$processFlowShowName';
+    return '$processNodeShowName / $processFlowShowName';
   }
 }
 

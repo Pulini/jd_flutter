@@ -110,6 +110,7 @@ void checkBarCodeProcessDialog({
                 ),
               ],
             );
+
       Get.dialog(
         PopScope(
           canPop: true,
