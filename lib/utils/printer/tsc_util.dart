@@ -395,7 +395,7 @@ List<List<String>> tableFormat(
       }
     }
   });
-  titleList = titleList.sorted();
+  titleList.sort((a, b) => a.toDoubleTry().compareTo(b.toDoubleTry()));
   //指令缺的尺码做补位处理
   tableData.forEach((k, v) {
     var text = <List<String>>[];
