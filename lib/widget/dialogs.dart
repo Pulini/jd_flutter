@@ -12,6 +12,10 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'downloader.dart';
 import 'loading.dart';
 
+// errorDialog是否处于显示状态(供外部判断是否正在展示错误弹窗)
+bool _isErrorDialogShowing = false;
+bool get isErrorDialogShowing => _isErrorDialogShowing;
+
 // 提示弹窗
 void msgDialog({
   String title = '',
@@ -128,6 +132,7 @@ void errorDialog({
   Function()? back,
 }) {
   loadingDismiss();
+  _isErrorDialogShowing = true;
   Get.dialog(
     PopScope(
       //拦截返回键
@@ -139,6 +144,7 @@ void errorDialog({
         actions: <Widget>[
           TextButton(
             onPressed: () {
+              _isErrorDialogShowing = false;
               Get.back();
               back?.call();
             },
@@ -148,7 +154,7 @@ void errorDialog({
       ),
     ),
     barrierDismissible: false, //拦截dialog外部点击
-  );
+  ).then((_) => _isErrorDialogShowing = false); // 兜底：被外部关闭时也复位
 }
 
 void doUpdate({

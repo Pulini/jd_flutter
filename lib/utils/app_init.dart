@@ -26,6 +26,15 @@ import 'package:sqflite/sqflite.dart';
 
 BaseDeviceInfo deviceInfo() => AppInitService.to.deviceInfo;
 
+/// 是否鸿蒙系统。
+bool isHarmonyOS() => AppInitService.to.isHarmonyOS;
+
+/// 是否需要WebView走本地HTTP Server加载HTML。
+/// 仅鸿蒙2.x的hwbr_engine需要(loadHtmlString会"url has no host"空白)；
+/// 鸿蒙3.0+及其他系统均可正常loadHtmlString。
+bool needServerLoadHtml() =>
+    AppInitService.to.isHarmonyOS && AppInitService.to.harmonyOSVersion < 3;
+
 SharedPreferences sharedPreferences() => AppInitService.to.sharedPreferences;
 
 PackageInfo packageInfo() => AppInitService.to.packageInfo;
@@ -45,6 +54,8 @@ class AppInitService extends GetxService {
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
   double androidXDpi = 0.0;
+  bool isHarmonyOS = false; // 是否鸿蒙系统
+  double harmonyOSVersion = 0; // 鸿蒙主版本号(如2.0/3.0/4.0)，非鸿蒙为0
   late BaseDeviceInfo deviceInfo;
   List<CameraDescription>? cameras;
   late JPushFlutterInterface jpush;
@@ -205,6 +216,26 @@ class AppInitService extends GetxService {
       packageInfo = await PackageInfo.fromPlatform();
       version.value=packageInfo.version;
       deviceInfo = await DeviceInfoPlugin().deviceInfo;
+      // 鸿蒙判定：复用原生getDeviceInfo对com.huawei.system.BuildEx的反射结果
+      if (GetPlatform.isAndroid) {
+        try {
+          final inf = await const MethodChannel(channelOther)
+              .invokeMethod<dynamic>('GetDeviceInfo');
+          debugPrint('isHarmonyOS: $inf');
+          if (inf is Map) {
+            final v = inf['isHarmonyOS'];
+            isHarmonyOS = v == true || v == 'true';
+            if (isHarmonyOS) {
+              // version对鸿蒙是从Build.DISPLAY提取的鸿蒙版本号(如"2.0.0")，取其数值主版本
+              final m = RegExp(r'(\d+(?:\.\d+)?)')
+                  .firstMatch(inf['version']?.toString() ?? '');
+              harmonyOSVersion = double.tryParse(m?.group(1) ?? '') ?? 0;
+            }
+          }
+        } catch (e) {
+          debugPrint('isHarmonyOS detect error: $e');
+        }
+      }
       androidXDpi = await getAndroidXDpi();
       debugPrint('androidXDpi: $androidXDpi');
       if (GetPlatform.isMobile) {
