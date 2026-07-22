@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/order_production_execution_info.dart';
@@ -886,6 +887,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                     onChanged: (index) {
                       state.selectIndex = index;
                       logic.selectShow();
+                      Get.back();
                     });
               });
             },

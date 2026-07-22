@@ -1554,7 +1554,7 @@ class Translation extends Translations {
           'carton_label_scan_current_process':'当前工序',
           'carton_label_scan_wait_confirm':'待确认',
           'carton_label_scan_detail':'详情',
-          'carton_label_scan_confirm_clear_tail_tip':'确定要进行清尾吗？',
+          'carton_label_scan_confirm_clear_tail_tip':'确定要清尾确认吗？',
           'carton_label_scan_clear_tail_confirm':'清尾确认',
           'carton_label_scan_wait_clear_tail':'待清尾',
           'carton_label_scan_wait_rework':'待返工',

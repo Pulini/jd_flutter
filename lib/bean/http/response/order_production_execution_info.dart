@@ -50,6 +50,7 @@ class OrderProductionExecutionInfo {
     daysDifference = json['DaysDifference'];
     lastDate = json['LastDate'];
     moID = json['MoID'];
+    isNeedInnerBoxLabel = json['IsNeedInnerBoxLabel'];
   }
   int? workCardInterID;
   double? seOrderQty; //订单数量

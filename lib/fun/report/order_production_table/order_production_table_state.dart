@@ -86,8 +86,8 @@ class OrderProductionTableState {
               cartonLabelScanClearTailInfo!.customerOrderNumber.toString();
           showDispatchNumber.value = needData.workCardNo ?? '';
           if (isGetTo) {
-            Get.to(() => const OrderProductionTableDetailPage());
             searcherData = needData;
+            Get.to(() => const OrderProductionTableDetailPage());
           }
         }
       } else {
@@ -204,10 +204,10 @@ class OrderProductionTableState {
   void updateMessage() {
     final tab = selectedTabIndex.value;
     // 基于全量 copyTailNumberList 按 status 分组
-    final list0 = copyTailNumberList.where((e) => e.status == 1).toList();
-    final list1 = copyTailNumberList.where((e) => e.status == 2).toList();
-    final list2 = copyTailNumberList.where((e) => e.status == 3).toList();
-    final list3 = copyTailNumberList.where((e) => e.status == 4).toList();
+    final list0 = tailNumberList.where((e) => e.status == 1).toList();
+    final list1 = tailNumberList.where((e) => e.status == 2).toList();
+    final list2 = tailNumberList.where((e) => e.status == 3).toList();
+    final list3 = tailNumberList.where((e) => e.status == 4).toList();
 
     String msg;
     switch (tab) {
