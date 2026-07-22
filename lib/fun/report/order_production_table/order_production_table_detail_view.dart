@@ -57,7 +57,6 @@ class _OrderProductionTableDetailPageState
               playAudio(as1);
             });
       }
-      ;
     });
   }
 
