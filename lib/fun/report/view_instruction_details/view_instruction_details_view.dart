@@ -6,6 +6,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
@@ -34,25 +35,27 @@ class _ViewInstructionDetailsPageState
 
   @override
   void initState() {
-    webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            loadingShow('加载中');
-          },
-          onPageFinished: (String url) {
-            loadingDismiss();
-          },
-          onHttpError: (HttpResponseError error) {
-            loadingDismiss();
-          },
-          onWebResourceError: (WebResourceError error) {
-            loadingDismiss();
-          },
-        ),
-      );
+    if(GetPlatform.isAndroid || GetPlatform.isIOS){
+      webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (String url) {
+              loadingShow('加载中');
+            },
+            onPageFinished: (String url) {
+              loadingDismiss();
+            },
+            onHttpError: (HttpResponseError error) {
+              loadingDismiss();
+            },
+            onWebResourceError: (WebResourceError error) {
+              loadingDismiss();
+            },
+          ),
+        );
+    }
     super.initState();
   }
 
@@ -75,7 +78,13 @@ class _ViewInstructionDetailsPageState
     logic.queryFile(
       processFlowID: pickerControllerProcessFlow.selectedId.value,
       instruction: tecInstruction.text,
-      toWeb: (html) => webViewController.loadHtmlString(html),
+      toWeb: (html) {
+        if(GetPlatform.isAndroid || GetPlatform.isIOS){
+          webViewController.loadHtmlString(html);
+        }else{
+          launchUrlString(html);
+        }
+      },
     );
   }
 

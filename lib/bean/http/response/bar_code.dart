@@ -165,26 +165,29 @@ class BarCodeProcessInfo {
   int? processFlowID; //制程id
   String? processFlowName; //名称
   String? processNodeName; //节点名称
+  String? processNodeShowName; //节点名称
   String? processFlowShowName; //节点显示名称
   RxBool isSelected=false.obs;
 
   BarCodeProcessInfo({
     this.processFlowID,
     this.processFlowName,
-    this.processNodeName,
     this.processFlowShowName,
+    this.processNodeName,
+    this.processNodeShowName,
   });
 
   BarCodeProcessInfo.fromJson(dynamic json) {
     processFlowID = json['ProcessFlowID'];
     processFlowName = json['ProcessFlowName'];
-    processNodeName = json['ProcessNodeName'];
     processFlowShowName = json['ProcessFlowShowName'];
+    processNodeName = json['ProcessNodeName'];
+    processNodeShowName = json['ProcessNodeShowName'];
   }
 
   @override
   String toString() {
-    return '$processFlowName/$processFlowShowName';
+    return '$processNodeShowName / $processFlowShowName';
   }
 }
 
