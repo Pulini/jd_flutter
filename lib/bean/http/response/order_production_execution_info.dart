@@ -26,6 +26,7 @@ class OrderProductionExecutionInfo {
       this.lastDate,
       this.isTailConfirm,
       this.moID,
+      this.isNeedInnerBoxLabel,  //true不需要扫码，false扫码
 
   });
 
@@ -69,6 +70,7 @@ class OrderProductionExecutionInfo {
   String? planEndDate;
   String? lastDate;
   int? moID;
+  bool? isNeedInnerBoxLabel;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -91,6 +93,7 @@ class OrderProductionExecutionInfo {
     map['LastDate'] = lastDate;
     map['IsTailConfirm'] = isTailConfirm;
     map['MoID'] = moID;
+    map['IsNeedInnerBoxLabel'] = isNeedInnerBoxLabel;
     return map;
   }
 

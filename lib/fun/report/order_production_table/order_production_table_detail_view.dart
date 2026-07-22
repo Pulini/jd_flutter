@@ -98,7 +98,7 @@ class _OrderProductionTableDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '订单尺码详情',
+      title: 'carton_label_scan_order_size_detail'.tr,
       body: Padding(
         padding:
             const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
@@ -134,7 +134,8 @@ class _OrderProductionTableDetailPageState
             ),
             const SizedBox(height: 10),
             // 底部按钮
-            _buildBottomButtons(),
+            if (state.searcherData?.isNeedInnerBoxLabel == false)
+              _buildBottomButtons(),
           ],
         ),
       ),
@@ -145,13 +146,13 @@ class _OrderProductionTableDetailPageState
   Widget _buildInfoCard() {
     return Obx(
       () => Container(
-        foregroundDecoration: const RotatedCornerDecoration.withColor(
+        foregroundDecoration: RotatedCornerDecoration.withColor(
           color: Colors.blue,
-          badgeCornerRadius: Radius.circular(8),
-          badgeSize: Size(60, 60),
+          badgeCornerRadius: const Radius.circular(8),
+          badgeSize: const Size(60, 60),
           textSpan: TextSpan(
-            text: '生产中',
-            style: TextStyle(
+            text: 'carton_label_scan_in_production'.tr,
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.white,
             ),
@@ -174,32 +175,32 @@ class _OrderProductionTableDetailPageState
           children: [
             _infoGridRow(
               icon: '🏭',
-              label: '工厂型体',
+              label: 'carton_label_scan_factory_model'.tr,
               value: state.factoryBody.value,
               valueColor: Colors.blue.shade700,
               icon2: '📋',
-              label2: '销售订单',
+              label2: 'carton_label_scan_sales_order'.tr,
               value2: state.salesOrder.value,
               valueColor2: Colors.green.shade600,
             ),
             _infoGridRow(
               icon: '👷',
-              label: '当前组别',
+              label: 'carton_label_scan_current_group_title'.tr,
               value: state.groupName.value,
               valueColor: Colors.blue.shade700,
               icon2: '✏️',
-              label2: '派工单号',
+              label2: 'carton_label_scan_work_order_no'.tr,
               value2: state.showDispatchNumber.value,
               valueColor2: Colors.green.shade600,
             ),
             _infoGridRow(
               icon: '📄',
-              label: '客户单号',
+              label: 'carton_label_scan_customer_order_no'.tr,
               value: state.customerOrderNumber.value,
               valueColor: Colors.blue.shade700,
               icon2: '📦',
-              label2: '品牌',
-              value2: state.showBand,
+              label2: 'carton_label_scan_brand'.tr,
+              value2: state.searcherData!.band ?? '',
               valueColor2: Colors.green.shade600,
             ),
           ],
@@ -277,18 +278,18 @@ class _OrderProductionTableDetailPageState
       children: [
         Container(width: 3, height: 16, color: Colors.blue),
         const SizedBox(width: 6),
-        const Text(
-          '尺码明细',
-          style: TextStyle(
+        Text(
+          'carton_label_scan_size_detail'.tr,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
         ),
         const Spacer(),
-        const Text(
-          '单位：双',
-          style: TextStyle(fontSize: 14, color: Colors.black87),
+        Text(
+          'carton_label_scan_unit_pair'.tr,
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
         ),
       ],
     );
@@ -302,7 +303,7 @@ class _OrderProductionTableDetailPageState
           child: ElevatedButton.icon(
             onPressed: () => logic.resetTailNumber(),
             icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('尾数重置'),
+            label:  Text('carton_label_scan_remain_reset'.tr),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orange,
               foregroundColor: Colors.white,
@@ -317,7 +318,7 @@ class _OrderProductionTableDetailPageState
           child: ElevatedButton.icon(
             onPressed: () => logic.submitTailNumber(),
             icon: const Icon(Icons.upload_outlined, size: 16),
-            label: const Text('尾数提交'),
+            label:  Text('carton_label_scan_remain_submit'.tr),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
@@ -337,7 +338,9 @@ class _OrderProductionTableDetailPageState
         8) {
       player = AudioPlayer();
     }
-    scan();
+    if (state.searcherData?.isNeedInnerBoxLabel == false) {
+      scan();
+    }
     super.initState();
   }
 

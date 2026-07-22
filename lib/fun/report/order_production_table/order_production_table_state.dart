@@ -33,8 +33,6 @@ class OrderProductionTableState {
   var salesOrder = ''.obs; //销售订单
   var customerOrderNumber = ''.obs; //客户订单
   var showDispatchNumber = ''.obs; //派工单号
-  var upMono = -1; //上传的指令
-  var upWorkCardInterID = -1; //上传的id
   CartonLabelScanClearTailInfo? cartonLabelScanClearTailInfo;
   OrderProductionExecutionInfo? searcherData;
   var reportBoxList = <ClearTailListInfo>[].obs; //
@@ -57,7 +55,6 @@ class OrderProductionTableState {
   var selectedTabIndex = 1.obs;
   var selectIndex = 0; //线别
   var message = ''.obs; //显示内容
-  var showBand = ''; //品牌
 
   void getTailNumberReportData({
     required OrderProductionExecutionInfo needData,
@@ -90,9 +87,6 @@ class OrderProductionTableState {
           showDispatchNumber.value = needData.workCardNo ?? '';
           if (isGetTo) {
             Get.to(() => const OrderProductionTableDetailPage());
-            upMono = needData.moID ?? -1;
-            upWorkCardInterID = needData.workCardInterID ?? -1;
-            showBand = needData.band ?? '';
             searcherData = needData;
           }
         }
@@ -301,9 +295,9 @@ class OrderProductionTableState {
       method: webApiUPSERTTailCartonRecordsTotal,
       body: {
         'UserID': userInfo?.userID,
-        'WorkCardInterID': upWorkCardInterID,
+        'WorkCardInterID': searcherData!.workCardInterID,
         'CustOrderNumber': cartonLabelScanClearTailInfo!.customerOrderNumber?? '',
-        'MoID': upMono,
+        'MoID': searcherData!.moID,
         'SizeItems': [
           for (var data in reportBoxList)
             if (data.size != '合计' && data.thisScanQty! > 0)

@@ -336,7 +336,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
       bgColor = const Color(0xFFFFEBEE);
       dotColor = const Color(0xFFE53935);
     } else if (diff == 0) {
-      label = '今天到期';
+      label = 'carton_label_scan_due_today'.tr;
       bgColor = const Color(0xFFFFF3E0);
       dotColor = const Color(0xFFF2994A);
     } else if (diff <= 3) {
@@ -402,7 +402,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_order_qty'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$qty 双',
+          Text('$qty${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -432,36 +432,6 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF333333)))
         ]),
-        // const SizedBox(height: 8),
-        // // 安排生产按钮（右对齐）
-        // Align(
-        //     child: Material(
-        //         color: Colors.transparent,
-        //         child: InkWell(
-        //             onTap: () => logic.getDetail(item),
-        //             borderRadius: BorderRadius.circular(20),
-        //             child: Container(
-        //                 padding: const EdgeInsets.symmetric(
-        //                     horizontal: 20, vertical: 9),
-        //                 decoration: BoxDecoration(
-        //                     color: const Color(0xFF1976D2),
-        //                     borderRadius: BorderRadius.circular(20),
-        //                     boxShadow: [
-        //                       BoxShadow(
-        //                           color:
-        //                               const Color(0xFF1976D2).withOpacity(0.3),
-        //                           blurRadius: 6)
-        //                     ]),
-        //                 child: Row(mainAxisSize: MainAxisSize.min, children: [
-        //                   const Icon(Icons.assignment,
-        //                       size: 16, color: Colors.white),
-        //                   const SizedBox(width: 6),
-        //                   Text('carton_label_scan_arrange_produce'.tr,
-        //                       style: const TextStyle(
-        //                           color: Colors.white,
-        //                           fontSize: 14,
-        //                           fontWeight: FontWeight.w600))
-        //                 ]))))),
       ],
     );
   }
@@ -484,7 +454,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_order_complete_qty'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$orderQty / $doneQty 双',
+          Text('$orderQty / $doneQty ${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -498,7 +468,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_order_owe_qty'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$pendingCount 双',
+          Text('$pendingCount${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -648,7 +618,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_order_complete_qty'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$orderQty / $doneQty 双',
+          Text('$orderQty / $doneQty${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -663,7 +633,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_wait_clear_tail'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$tailQty 双',
+          Text('$tailQty${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -687,9 +657,6 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
         Row(children: [
           const Icon(Icons.edit_note, size: 16, color: Color(0xFFF9A825)),
           const SizedBox(width: 6),
-          const Text('尾数原因',
-              style: TextStyle(fontSize: 13, color: Color(0xFF666666))),
-          const Spacer(),
           Text('carton_label_scan_wait_rework'.tr,
               style: const TextStyle(
                   fontSize: 14,
@@ -762,7 +729,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           Text('carton_label_scan_order_complete_qty'.tr,
               style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
-          Text('$orderQty / $doneQty 双',
+          Text('$orderQty / $doneQty${'carton_label_scan_pair'.tr}',
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -773,8 +740,8 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
         Row(children: [
           const Icon(Icons.factory, size: 16, color: Color(0xFF009688)),
           const SizedBox(width: 6),
-          const Text('产线',
-              style: TextStyle(fontSize: 13, color: Color(0xFF666666))),
+           Text('carton_label_scan_production_line'.tr,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF666666))),
           const Spacer(),
           Text(item.departmentName ?? '',
               style: const TextStyle(

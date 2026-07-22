@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jd_flutter/bean/http/response/order_production_execution_info.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -92,12 +93,12 @@ class OrderProductionTableLogic extends GetxController {
   // 尾数重置：清空所有不满箱扫描数量
   void resetTailNumber() {
     askDialog(
-      title: '尾数重置',
-      content: '确定清空所有不满箱扫描数量？',
-      confirmText: '重置',
+      title: 'carton_label_scan_remain_reset'.tr,
+      content: 'carton_label_scan_confirm_clear_unfull_box'.tr,
+      confirmText: 'carton_label_scan_reset'.tr,
       confirm: () {
         state.resetUnFullBoxQty();
-        showSnackBar(message: '已重置');
+        showSnackBar(message: 'carton_label_scan_already_reset'.tr);
       },
     );
   }
@@ -105,9 +106,9 @@ class OrderProductionTableLogic extends GetxController {
   // 尾数提交
   void submitTailNumber() {
     askDialog(
-      title: '尾数提交',
-      content: '确定提交当前尾数数据？',
-      confirmText: '提交',
+      title: 'carton_label_scan_remain_submit'.tr,
+      content: 'carton_label_scan_confirm_submit_remain_data'.tr,
+      confirmText: 'carton_label_scan_submit'.tr,
       confirm: () {
         state.tailCartonRecordsTotal(success: (mes) {
           successDialog(

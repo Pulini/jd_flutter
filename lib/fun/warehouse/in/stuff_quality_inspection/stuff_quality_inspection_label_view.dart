@@ -295,7 +295,7 @@ class _StuffQualityInspectionLabelPageState
                               text: 'quality_inspection_submit'.tr,
                               click: () {
                                 if (logic.submitSelect()) {
-                                  // Get.back(result: true);
+                                  Get.back(result: true);
                                 }
                               },
                               combination: Combination.middle,
