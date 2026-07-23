@@ -138,7 +138,8 @@ class OrderProductionTableState {
     reportBoxList
         .removeWhere((v) => v.size == 'carton_label_scan_order_total'.tr);
     for (var v in reportBoxList) {
-      v.thisScanQty = v.unFullBoxQty; // 重置扫描数量
+      v.thisScanQty = 0;
+      v.unFullBoxQty = 0;
     }
     reportBoxList.refresh();
     setDataList();
