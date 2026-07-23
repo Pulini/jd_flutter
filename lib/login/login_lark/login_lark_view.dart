@@ -6,6 +6,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/login/login_lark/login_lark_web_helper.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
@@ -41,7 +42,7 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
           onPageFinished: (String url) {
             debugPrint('onPageFinished------$url');
             // 移动端：关闭 GPU 加速，避免 Android 7 canvas 空白
-            // if (!kIsWeb) disableWebViewGpu();
+            if (!kIsWeb) disableWebViewGpu();
             larkAuthorize(url);
           },
           onHttpError: (HttpResponseError error) {
