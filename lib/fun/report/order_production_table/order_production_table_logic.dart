@@ -15,27 +15,36 @@ class OrderProductionTableLogic extends GetxController {
     });
   }
 
-  void getDetail(OrderProductionExecutionInfo data) {
+  void getDetail({
+    required OrderProductionExecutionInfo data,
+    required Function() successTo,
+  }) {
     state.getTailNumberReportData(
       needData: data,
       barCode: '',
       isGetTo: true,
+      getTo: () {
+        successTo.call();
+      },
     );
   }
 
   // 线别 + 状态 + 搜索关键词 组合筛选（基于全量 copyTailNumberList）
   void selectShow() {
     final key = state.searchKey.value.trim().toLowerCase();
-    state.tailNumberList.value = state.copyTailNumberList
-        .where((data) =>
-            (state.selectIndex == 0 ||
-                data.departmentName == state.lineList[state.selectIndex]) &&
-            data.status == state.selectedTabIndex.value + 1 &&
-            (key.isEmpty ||
-                (data.seOrderNo ?? '').toLowerCase().contains(key) ||
-                (data.workCardNo ?? '').toLowerCase().contains(key)))
+    // 先按 线别 + 搜索关键字 过滤（不含状态），用于统计各状态数量
+    final base = state.copyTailNumberList.where((data) =>
+        (state.selectIndex == 0 ||
+            data.departmentName == state.lineList[state.selectIndex]) &&
+        (key.isEmpty ||
+            (data.seOrderNo ?? '').toLowerCase().contains(key) ||
+            (data.workCardNo ?? '').toLowerCase().contains(key))).toList();
+    // 再按 当前 Tab 状态 过滤，得到要展示的列表
+    state.tailNumberList.value = base
+        .where((data) => data.status == state.selectedTabIndex.value + 1)
         .toList();
-    state.countByStatus();
+    // 用不含状态过滤的 base 统计 4 个数量，保证每个 Tab 的数量角标恒等于真实值
+    state.countByStatus(base);
     state.tailNumberList.refresh();
   }
 
@@ -117,10 +126,121 @@ class OrderProductionTableLogic extends GetxController {
                   barCode: '',
                   isGetTo: false,
                   needData: state.searcherData!,
+                  getTo: () {},
                 );
               });
         });
       },
     );
+  }
+
+  void setTailDetail({
+    required int index,
+    required Function goActivity,
+  }) {
+    state.showIndex = index;
+    if (state.outBoxList[index].mantissaDataSizeList!.isNotEmpty) {
+      setTotalQty();
+      goActivity.call();
+    } else {
+      errorDialog(content: 'carton_label_scan_order_no_last_data'.tr);
+    }
+  }
+
+  Future<void> cleanDetailScanned() async {
+    for (var v in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+      v.thisShortQty = v.shortQty;
+    }
+    setTotalQty();
+    state.outBoxList.refresh();
+  }
+
+  void setTotalQty() {
+    int totalLabelCount = 0;
+    int totalShortQty = 0;
+    for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+      totalLabelCount += a.labelCount ?? 0;
+      totalShortQty += a.thisShortQty ?? 0;
+    }
+    state.tailLabelTotal.value = totalLabelCount;
+    state.tailScannedLabelTotal.value = totalShortQty;
+  }
+
+  void subMantissa(Function refresh) {
+    state.subMantissaData(
+      success: (msg) {
+        refresh.call(msg);
+      },
+      error: (msg) {
+        errorDialog(content: msg);
+      },
+    );
+  }
+
+  void tailDetailScan({
+    required String barCode,
+    required Function() full,
+    required Function() add,
+  }) {
+    if (barCode.isNotEmpty) {
+      bool found = false;
+      for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+        if (a.priceBarCode == barCode) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        if (Get.isDialogOpen == true) Get.back();
+        errorDialog(
+          content: 'carton_label_scan_label_placement_error_tips'.trArgs(
+            [barCode],
+          ),
+        );
+      } else {
+        for (var a in state.outBoxList[state.showIndex].mantissaDataSizeList!) {
+          if (a.priceBarCode == barCode) {
+            if (state.outBoxList[state.showIndex].guid!.isEmpty) {
+              final currentShortQty = a.thisShortQty ?? 0;
+              final currentLabelCount = a.labelCount ?? 0;
+
+              if (currentShortQty < currentLabelCount) {
+                if (state.tailScannedLabelTotal.value + 1 <
+                    state.tailLabelTotal.value) {
+                  a.thisShortQty = currentShortQty + 1;
+
+                  showScanTips();
+                  state.tailScannedLabelTotal.value += 1;
+                  add.call();
+                } else {
+                  full.call();
+                  if (Get.isDialogOpen == true) Get.back();
+                  errorDialog(
+                    content: 'carton_label_scan_order_not_full'.tr,
+                  );
+                }
+              } else {
+                full.call();
+              }
+            } else {
+              final currentShortQty = a.thisShortQty ?? 0;
+              final currentLabelCount = a.labelCount ?? 0;
+
+              if (currentShortQty < currentLabelCount) {
+                a.thisShortQty = currentShortQty + 1;
+
+                showScanTips();
+                state.tailScannedLabelTotal.value += 1;
+                add.call();
+              } else {
+                full.call();
+              }
+            }
+          }
+        }
+      }
+    } else {
+      showSnackBar(message: 'carton_label_scan_order_real_code'.tr);
+    }
   }
 }

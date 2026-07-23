@@ -125,7 +125,7 @@ class RouteConfig {
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    203,
+    204,
     const ViewInstructionDetailsPage(),
   );
 
@@ -738,10 +738,10 @@ class RouteConfig {
     const PartLabelManagePage(),
   );
 
-  //生产订单执行情况表
+  //我的工单
   static Routes orderProductionTable = Routes(
     '/order_production_table',
-    202,
+    203,
     const OrderProductionTablePage(),
   );
 

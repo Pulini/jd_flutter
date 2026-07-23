@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
@@ -8,6 +11,7 @@ import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_i
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -37,6 +41,7 @@ class ProductionDispatchState {
   var cbIsEnabledPrintMaterialHead = false.obs;
   var cbIsEnabledReportSap = false.obs;
   var cbIsEnabledPush = false.obs;
+  var showInstructionWeb = false.obs; // 指令表：是否在当前页内显示 WebView
 
   var workCardTitle = WorkCardTitle().obs;
   var workProcedure = <WorkCardList>[].obs;
@@ -162,6 +167,43 @@ class ProductionDispatchState {
     );
   }
 
+  void getFile({
+    required String processFlowID,
+    required String instruction,
+    required Function(String html) success,
+    required Function(String msg) error,
+  }) {
+    // 网络请求期间即显示loading，覆盖"服务端拼HTML + WebView渲染"全过程，
+    // 避免无提示的2-3秒空白等待；loading由onPageFinished统一dismiss
+    loadingShow('view_instruction_details_querying'.tr);
+    Dio()
+      ..interceptors.add(DioManager.simpleInterceptors)
+      ..post(
+        isTestUrl()
+            ? 'http://192.168.99.103:9095/m'
+            : 'https://erp.goldemperor.com:9051/m',
+        queryParameters: {
+          'xwl': 'public/interfaces/app/getOrderSheet',
+        },
+        data: {
+          'orderNo': instruction,
+          'processFlow': processFlowID,
+          'language': language,
+        },
+      ).then((response) {
+        loadingDismiss();
+        var json = jsonDecode(response.data);
+        if (json['successed']) {
+          success.call(json['data']);
+        } else {
+          error.call(json['message'] ?? '');
+        }
+      }).catchError((e) {
+        loadingDismiss();
+        error.call(e.toString());
+      });
+  }
+
   //工艺书
   void getManufactureInstructions({
     required int routeID,
@@ -250,7 +292,7 @@ class ProductionDispatchState {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call(response.message??'');
+          success.call(response.message ?? '');
         } else {
           error.call(response.message ?? '');
         }
@@ -270,7 +312,7 @@ class ProductionDispatchState {
         params: {'WorkCardID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call(response.message??'');
+          success.call(response.message ?? '');
         } else {
           error.call(response.message ?? '');
         }
@@ -293,7 +335,7 @@ class ProductionDispatchState {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call(response.message??'');
+          success.call(response.message ?? '');
         } else {
           error.call(response.message ?? '');
         }
@@ -313,7 +355,7 @@ class ProductionDispatchState {
         params: {'InterID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call(response.message?? '');
+          success.call(response.message ?? '');
         } else {
           error.call(response.message ?? '');
         }

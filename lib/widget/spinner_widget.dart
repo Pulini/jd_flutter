@@ -21,6 +21,12 @@ class SpinnerController {
         .map<DropdownMenuItem<String>>(
             (v) => DropdownMenuItem<String>(value: v, child: Text(v)))
         .toList(growable: false);
+    // 空列表保护：未保存任何历史时下拉无选项，避免 dataList[0] 越界
+    if (dataList.isEmpty) {
+      select.value = '';
+      selectIndex = 0;
+      return;
+    }
     selectIndex = getSave();
     select.value = dataList[selectIndex];
     onSelected?.call(selectIndex);
@@ -64,6 +70,21 @@ class Spinner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 空数据时不渲染 DropdownButton（value 无法匹配空 items），显示占位
+    if (controller.dataList.isEmpty) {
+      return Container(
+        height: 40,
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.only(left: 10, right: 5),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Center(
+          child: Text('—', style: TextStyle(color: Colors.grey)),
+        ),
+      );
+    }
     return Container(
       height: 40,
       margin: const EdgeInsets.all(5),

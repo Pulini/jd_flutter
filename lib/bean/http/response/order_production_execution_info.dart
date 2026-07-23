@@ -27,6 +27,7 @@ class OrderProductionExecutionInfo {
       this.isTailConfirm,
       this.moID,
       this.isNeedInnerBoxLabel,  //true不需要扫码，false扫码
+      this.unit,
 
   });
 
@@ -51,6 +52,7 @@ class OrderProductionExecutionInfo {
     lastDate = json['LastDate'];
     moID = json['MoID'];
     isNeedInnerBoxLabel = json['IsNeedInnerBoxLabel'];
+    unit = json['Unit'] ;
   }
   int? workCardInterID;
   double? seOrderQty; //订单数量
@@ -68,6 +70,7 @@ class OrderProductionExecutionInfo {
   String? color;      // 颜色名称（如"红/白"）
   String? sizeRange;      // 尺码范围（如"35-44"）
   String? band;   // 工厂/组织简称（如"DHM"）
+  String? unit;   // 单位（如"双"）
   String? planEndDate;
   String? lastDate;
   int? moID;
@@ -91,6 +94,7 @@ class OrderProductionExecutionInfo {
     map['Color'] = color;
     map['SizeRange'] = sizeRange;
     map['Band'] = band;
+    map['Unit'] = unit;
     map['LastDate'] = lastDate;
     map['IsTailConfirm'] = isTailConfirm;
     map['MoID'] = moID;

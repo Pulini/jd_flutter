@@ -57,7 +57,6 @@ class _OrderProductionTableDetailPageState
               playAudio(as1);
             });
       }
-      ;
     });
   }
 
@@ -133,8 +132,9 @@ class _OrderProductionTableDetailPageState
               ),
             ),
             const SizedBox(height: 10),
-            // 底部按钮
-            if (state.searcherData?.isNeedInnerBoxLabel == false)
+            // 底部按钮：仅"生产中"模块显示（待办/待清尾/已办进入不显示按钮）
+            if (state.searcherData?.isNeedInnerBoxLabel == false &&
+                state.searcherData?.status == 2)
               _buildBottomButtons(),
           ],
         ),
@@ -142,22 +142,52 @@ class _OrderProductionTableDetailPageState
     );
   }
 
-  // 顶部信息卡片（白底圆角 + 右上角"生产中"角标）
+  // 右上角角标配置：根据来源模块显示 待生产/生产中/待清尾/已结案
+  ({String text, Color color}) _cornerBadge() {
+    switch (state.searcherData?.status) {
+      case 3:
+        return (
+          text: 'carton_label_scan_pending_clear_tail'.tr,
+          color: const Color(0xFFE53935)
+        );
+      case 4:
+        return (
+          text: 'carton_label_scan_case_closed'.tr,
+          color: const Color(0xFF27AE60)
+        );
+      case 1:
+        return (
+          text: 'carton_label_scan_pending_production'.tr,
+          color: const Color(0xFF321321)
+        );
+      case 2:
+      default:
+        return (
+          text: 'carton_label_scan_in_production'.tr,
+          color: const Color(0xFF1976D2)
+        );
+    }
+  }
+
+  // 顶部信息卡片（白底圆角 + 右上角动态角标）
   Widget _buildInfoCard() {
     return Obx(
       () => Container(
-        foregroundDecoration: RotatedCornerDecoration.withColor(
-          color: Colors.blue,
-          badgeCornerRadius: const Radius.circular(8),
-          badgeSize: const Size(60, 60),
-          textSpan: TextSpan(
-            text: 'carton_label_scan_in_production'.tr,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white,
+        foregroundDecoration: () {
+          final badge = _cornerBadge();
+          return RotatedCornerDecoration.withColor(
+            color: badge.color,
+            badgeCornerRadius: const Radius.circular(8),
+            badgeSize: const Size(60, 60),
+            textSpan: TextSpan(
+              text: badge.text,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ),
+          );
+        }(),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -288,8 +318,8 @@ class _OrderProductionTableDetailPageState
         ),
         const Spacer(),
         Text(
-          'carton_label_scan_unit_pair'.tr,
-          style: const TextStyle(fontSize: 14, color: Colors.black87),
+          '${'carton_label_scan_unit_pair_sprit'.tr}${state.searcherData!.unit}',
+          style: const TextStyle(fontSize: 12, color: Color(0xFF5A98CF)),
         ),
       ],
     );
