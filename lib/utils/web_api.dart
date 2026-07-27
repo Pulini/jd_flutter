@@ -885,7 +885,7 @@ const webApiSmartDeliveryResumeRobot = 'api/Autoworkshopbatch/ResumeRobot';
 
 //外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
-const webApiGetCartonLabelInfoNew = 'api/OutBoxScanNew/GetLinkDataNew';
+const webApiGetCartonLabelInfoNew = 'api/OutBoxScanNew/GetPOLinkDataNew';
 
 //外箱鞋盒贴标数据提交
 const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';

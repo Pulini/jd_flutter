@@ -20,19 +20,22 @@ class NewCartonLabelScanLogic extends GetxController {
       success: (data) {
         state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
         state.priorityCartonLabelInfo = data;
-        state.dispatchNumber.value = data.dispatchNumber ?? '';
-        state.priorityCartonLabel.value =
-            state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
-        state.priorityPo.value =
-            state.priorityCartonLabelInfo?.custOrderNumber ?? '';
-        state.priorityCartonInsideLabelList.value =
-            state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
+        state.priorityPo.value = data. custOrderNumber.toString();
+        state.priorityCartonLabel.value = data.outBoxBarCode.toString();
+        state.priorityCartonInsideLabelList.value = data.linkDataSizeList ?? [];
       },
       error: (msg) {
         state.clearPriority();
         errorDialog(content: msg);
       },
     );
+  }
+
+  void clearPriority() {
+    scanController.clear();
+    state.priorityPo.value = '';
+    state.priorityCartonLabel.value = '';
+    state.priorityCartonInsideLabelList.value = [];
   }
 
   void queryCartonLabelInfo(String code) {
@@ -91,7 +94,9 @@ class NewCartonLabelScanLogic extends GetxController {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
     } else {
-      if (code == state.cartonLabel.value && state.cartonLabelInfo?.isNeedInnerBoxLabel == false) { //是否需要扫内盒
+      if (code == state.cartonLabel.value &&
+          state.cartonLabelInfo?.isNeedInnerBoxLabel == false) {
+        //是否需要扫内盒
         final scanned = state.cartonLabelInfo?.scanned.value ?? 0;
         final piece = state.cartonLabelInfo?.piece ?? 0;
         final scan = state.cartonLabelInfo?.scannedCount ?? 0;
@@ -172,7 +177,8 @@ class NewCartonLabelScanLogic extends GetxController {
   }
 
   void changePriority() {
-    if (scanController.text.isEmpty && state.priorityCartonLabelInfo == null) {
+    if (scanController.text.isEmpty &&
+        state.priorityCartonInsideLabelList.isEmpty) {
       showSnackBar(message: 'carton_label_scan_input_or_scan'.tr);
     } else {
       state.changePOPriority(
@@ -184,9 +190,7 @@ class NewCartonLabelScanLogic extends GetxController {
                   state.clearPriority();
                 });
           },
-          poNumber: scanController.text.length != 20
-              ? scanController.text.toString()
-              : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
+          poNumber: state.priorityPo.value.toString());
     }
   }
 

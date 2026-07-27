@@ -233,7 +233,9 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                       content: 'process_report_sure_to_submit'.tr,
                       confirm: () {
                         logic.submitProcess(success: (String msg) {
-                          logic.cleanData();
+                            successDialog(content: msg,back: (){
+                              logic.cleanData();
+                            });
                         });
                       });
                 },
