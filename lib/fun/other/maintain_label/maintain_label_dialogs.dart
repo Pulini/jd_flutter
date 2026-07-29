@@ -357,13 +357,13 @@ void selectInstructDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('选择指令'),
+              Text('carton_label_scan_select_instruction'.tr),
               TextButton(
                   onPressed: () {
                     Get.back();
                     allCallback.call();
                   },
-                  child: const Text('整单生成'))
+                  child: Text('carton_label_scan_generate_full_order'.tr))
             ],
           ),
           content: SizedBox(

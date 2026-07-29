@@ -15,6 +15,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -214,6 +215,24 @@ class MaintainLabelLogic extends GetxController {
       success: () => refreshDataList(),
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  //贴标维护，快捷设置满箱
+  void setFull() {
+    if (state.createCustomLabelsData.isNotEmpty) {
+      for (var v in state.createCustomLabelsData) {
+        if (v.isSelect.value == true) {
+          // 按每箱容量 capacity 向下取整（去掉不满一箱的零头）；容量异常(<=0)时保持原剩余货数，避免除零/NaN
+          final cap = v.capacity.value;
+          final fullValue = cap > 0
+              ? ((v.surplusGoods / cap).floor() * cap).toDouble()
+              : v.surplusGoods;
+          v.createGoodsController!.text = fullValue.toShowString();
+          v.createGoods.value = fullValue;
+        }
+      }
+      state.createCustomLabelsData.refresh();
+    }
   }
 
   void toCustomLabelCreate() {

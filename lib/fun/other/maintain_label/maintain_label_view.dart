@@ -380,7 +380,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       title: 'maintain_label_label_maintenance'.tr,
       actions: [
         CombinationButton(
-          text: '打印机设置',
+          text: 'Printer_settings'.tr,
           click: () => printSetDialog(),
           combination: Combination.left,
         ),
