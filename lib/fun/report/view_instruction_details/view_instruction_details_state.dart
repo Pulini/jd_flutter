@@ -8,6 +8,9 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 
 class ViewInstructionDetailsState {
+  // 是否已成功加载并显示 html 内容（控制 WebView 显隐）
+  var showHtml = false.obs;
+
 
   void getInstructionDetailsFile({
     required String processFlowID,

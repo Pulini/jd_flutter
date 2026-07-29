@@ -33,12 +33,13 @@ class ViewInstructionDetailsLogic extends GetxController {
     required String processFlowID,
     required String instruction,
     required Function(String) toWeb,
+    required Function(String) errorToWeb,
   }) {
     state.getFile(
       processFlowID: processFlowID,
       instruction: instruction,
       success: toWeb,
-      error: (msg)=>errorDialog(content: msg),
+      error:(msg)=> errorToWeb.call(msg),
     );
   }
 }

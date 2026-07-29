@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
-
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 import 'new_carton_label_scan_logic.dart';
@@ -13,12 +13,15 @@ class NewCartonLabelScanPriorityPage extends StatefulWidget {
   const NewCartonLabelScanPriorityPage({super.key});
 
   @override
-  State<NewCartonLabelScanPriorityPage> createState() => _NewCartonLabelScanPriorityPageState();
+  State<NewCartonLabelScanPriorityPage> createState() =>
+      _NewCartonLabelScanPriorityPageState();
 }
 
-class _NewCartonLabelScanPriorityPageState extends State<NewCartonLabelScanPriorityPage> {
+class _NewCartonLabelScanPriorityPageState
+    extends State<NewCartonLabelScanPriorityPage> {
   final NewCartonLabelScanLogic logic = Get.find<NewCartonLabelScanLogic>();
-  final NewCartonLabelScanState state = Get.find<NewCartonLabelScanLogic>().state;
+  final NewCartonLabelScanState state =
+      Get.find<NewCartonLabelScanLogic>().state;
 
   @override
   void initState() {
@@ -32,100 +35,109 @@ class _NewCartonLabelScanPriorityPageState extends State<NewCartonLabelScanPrior
   }
 
   @override
+  void dispose() {
+    logic.clearPriority();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: 'carton_label_scan_change_priority'.tr,
       body: Obx(() => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            height: 40,
-            child: TextField(
-              controller: logic.scanController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 15, right: 10),
-                filled: true,
-                fillColor: Colors.white54,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(color: Colors.transparent),
-                ),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                hintText:
-                'carton_label_scan_input_or_scan'.tr,
-                hintStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: IconButton(
-                  onPressed: () => logic.scanController.clear(),
-                  icon: const Icon(
-                    Icons.replay_circle_filled,
-                    color: Colors.red,
-                  ),
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () =>
-                      logic.queryCartonLabelInfo(logic.scanController.text),
-                  icon: const Icon(
-                    Icons.loupe_rounded,
-                    color: Colors.green,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(5),
+                height: 40,
+                child: TextField(
+                  controller: logic.scanController,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 15, right: 10),
+                    filled: true,
+                    fillColor: Colors.white54,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    hintText: 'carton_label_scan_input_or_scan'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: IconButton(
+                      onPressed: () => logic.scanController.clear(),
+                      icon: const Icon(
+                        Icons.replay_circle_filled,
+                        color: Colors.red,
+                      ),
+                    ),
+                    suffixIcon: IconButton(
+                      onPressed: () => logic.queryPriorityCartonLabelInfo(
+                          code: logic.scanController.text.toString()),
+                      icon: const Icon(
+                        Icons.loupe_rounded,
+                        color: Colors.green,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.green.shade100,
-                  Colors.blue.shade200,
-                ],
+              Container(
+                margin: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.green.shade100,
+                      Colors.blue.shade200,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    textSpan(
+                      hint: 'carton_label_scan_outside_code'.tr,
+                      text: state.priorityCartonLabel.value,
+                    ),
+                    textSpan(
+                      hint: 'carton_label_scan_po_number'.tr,
+                      text: state.priorityPo.value,
+                    ),
+                  ],
+                ),
               ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                textSpan(
-                  hint: 'carton_label_scan_outside_code'.tr,
-                  text: state.priorityCartonLabel.value,
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: state.priorityCartonInsideLabelList.length,
+                  itemBuilder: (c, i) => _PriorityInsideLabelItem(
+                      data: state.priorityCartonInsideLabelList[i]),
                 ),
-                textSpan(
-                  hint: 'carton_label_scan_po_number'.tr,
-                  text: state.priorityPo.value,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.priorityCartonInsideLabelList.length,
-              itemBuilder: (c, i) =>
-                  _PriorityInsideLabelItem(data: state.priorityCartonInsideLabelList[i]),
-            ),
-          ),
-          CombinationButton(
-            text: 'carton_label_scan_submit'.tr,
-            click: () {
-                  logic.changePriority();
-            },
-          )
-        ],
-      )),
+              ),
+              CombinationButton(
+                text: 'carton_label_scan_submit'.tr,
+                click: () {
+                  askDialog(
+                      content: 'forming_code_collection_sure_submit'.tr,
+                      confirm: () {
+                        logic.changePriority();
+                      });
+                },
+              )
+            ],
+          )),
     );
   }
-
 }
 
 class _PriorityInsideLabelItem extends StatelessWidget {
   final LinkDataSizeNewList data;
+
   const _PriorityInsideLabelItem({required this.data});
 
   @override

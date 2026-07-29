@@ -3,17 +3,20 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_state.dart';
-
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 import 'package:jd_flutter/widget/web_page.dart';
 import 'package:marquee/marquee.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'production_dispatch_logic.dart';
 import 'package:jd_flutter/route.dart';
@@ -50,8 +53,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     PickerType.endDate,
     saveKey: '${RouteConfig.productionDispatch.name}${PickerType.endDate}',
   );
-
   var tecInstruction = TextEditingController();
+  late final WebViewController webViewController;
 
   List<Widget> _queryWidgets() {
     return [
@@ -168,6 +171,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         state: state,
         logic: logic,
         onQuery: () => _query(),
+        onOpenInstruction: _openInstruction,
       );
 
   dynamic _query() => logic.query(
@@ -176,41 +180,114 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       instruction: tecInstruction.text);
 
   @override
+  void initState() {
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (String url) {
+              loadingShow('picker_loading'.tr);
+            },
+            onPageFinished: (String url) {
+              loadingDismiss();
+            },
+            onHttpError: (HttpResponseError error) {
+              loadingDismiss();
+            },
+            onWebResourceError: (WebResourceError error) {
+              loadingDismiss();
+            },
+          ),
+        );
+    }
+    super.initState();
+  }
+
+  /// 构建WebView（参考 ViewInstructionDetailsPage：直接渲染在当前页面 body 内）
+  Widget _webViewWidget() {
+    if (GetPlatform.isAndroid) {
+      return WebViewWidget.fromPlatformCreationParams(
+        params: AndroidWebViewWidgetCreationParams(
+          controller: webViewController.platform,
+          displayWithHybridComposition: true,
+        ),
+      );
+    }
+    return WebViewWidget(controller: webViewController);
+  }
+
+  // 指令表：移动端把 html 加载进当前页 WebView 并切换显示；桌面端直接打开浏览器
+  void _openInstruction(String html) {
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController.loadHtmlString(html);
+      state.showInstructionWeb.value = true;
+    } else {
+      launchUrlString(html);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: _queryWidgets(),
       query: () => _query(),
       body: Obx(
-        () => Column(
-          children: [
-            Expanded(
-              child: state.isSelectedMergeOrder.value
-                  ? ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.orderGroupList.length,
-                      itemBuilder: (c, i) => _item2(
-                        state.orderGroupList.entries.elementAt(i++).value,
+        () {
+          final web = state.showInstructionWeb.value;
+          return PopScope(
+            // 列表模式：允许原生返回（行为和改之前一致，正常退出页面）
+            // 网页模式：拦截返回，先关掉网页、回到派工单列表（不退出页面）
+            canPop: !web,
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop && web) {
+                state.showInstructionWeb.value = false;
+              }
+            },
+            child: web
+                ? Column(
+                    children: [
+                      Expanded(child: _webViewWidget()),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: state.isSelectedMergeOrder.value
+                            ? ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: state.orderGroupList.length,
+                                itemBuilder: (c, i) => _item2(
+                                  state.orderGroupList.entries
+                                      .elementAt(i++)
+                                      .value,
+                                ),
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: state.orderList.length,
+                                itemBuilder: (c, i) => _item1(state.orderList, i),
+                              ),
                       ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.orderList.length,
-                      itemBuilder: (c, i) => _item1(state.orderList, i),
-                    ),
-            ),
-            state.isSelectedMergeOrder.value
-                ? Container()
-                : state.orderList.isEmpty
-                    ? Container()
-                    : _bottomButtons()
-          ],
-        ),
+                      state.isSelectedMergeOrder.value
+                          ? Container()
+                          : state.orderList.isEmpty
+                              ? Container()
+                              : _bottomButtons()
+                    ],
+                  ),
+          );
+        },
       ),
     );
   }
 
   @override
   void dispose() {
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController.clearLocalStorage();
+    }
     Get.delete<ProductionDispatchLogic>();
     super.dispose();
   }
@@ -613,11 +690,13 @@ class _ProductionDispatchBottomButtons extends StatelessWidget {
   final ProductionDispatchState state;
   final ProductionDispatchLogic logic;
   final VoidCallback onQuery;
+  final Function(String)? onOpenInstruction;
 
   const _ProductionDispatchBottomButtons({
     required this.state,
     required this.logic,
     required this.onQuery,
+    this.onOpenInstruction,
   });
 
   @override
@@ -653,8 +732,8 @@ class _ProductionDispatchBottomButtons extends StatelessWidget {
                           combination: Combination.middle,
                           isEnabled: state.cbIsEnabledInstruction.value,
                           text: 'production_dispatch_bt_instruction'.tr,
-                          click: () => logic.instructionList(
-                            (url) => Get.to(() => WebPage(url: url)),
+                          click: () => logic.queryFile(
+                            toWeb: (html) => onOpenInstruction?.call(html),
                           ),
                         ),
                   state.isSelectedMany.value

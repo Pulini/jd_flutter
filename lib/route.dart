@@ -125,7 +125,7 @@ class RouteConfig {
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    203,
+    204,
     const ViewInstructionDetailsPage(),
   );
 
@@ -265,14 +265,14 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    209,
+    210,
     const CartonLabelScanPage(),
   );
 
   //订单产量采集
   static Routes newCartonLabelScan = Routes(
     '/new_carton_label_scan_page',
-    212,
+    213,
     const NewCartonLabelScanPage(),
   );
 
@@ -524,7 +524,7 @@ class RouteConfig {
   //工序汇报
   static Routes processReport = Routes(
     '/process_report',
-    201,
+    202,
     const ProcessReportPage(),
   );
 
@@ -738,10 +738,10 @@ class RouteConfig {
     const PartLabelManagePage(),
   );
 
-  //生产订单执行情况表
+  //我的工单
   static Routes orderProductionTable = Routes(
     '/order_production_table',
-    202,
+    203,
     const OrderProductionTablePage(),
   );
 

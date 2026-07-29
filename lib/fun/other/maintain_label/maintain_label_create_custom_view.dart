@@ -64,6 +64,15 @@ class _MaintainLabelCreateCustomPageState
                       batchCreateGoodsController.text.toIntTry(),
                     ),
                   )),
+              Obx(
+                () => CombinationButton(
+                  isEnabled: state.createCustomLabelsData.isNotEmpty &&
+                      state.createCustomLabelsData.any((v) => v.isCanCreate()),
+                  text: 'maintain_label_dialog_set_full'.tr,
+                  click: () => logic.setFull(),
+                  combination: Combination.middle,
+                ),
+              ),
               Obx(() => CombinationButton(
                     combination: Combination.right,
                     isEnabled: state.createCustomLabelsData.isNotEmpty &&
@@ -113,7 +122,7 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
-        gradient:  LinearGradient(
+        gradient: LinearGradient(
           colors: [Colors.blue.shade50, Colors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -156,8 +165,7 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
                         ],
                         controller: data.capacityController,
                         decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.only(top: 0, bottom: 15),
+                          contentPadding: EdgeInsets.only(top: 0, bottom: 15),
                           filled: true,
                           fillColor: Colors.transparent,
                         ),
@@ -175,8 +183,7 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                textSpan(
-                    hint: '已生成贴标：', text: data.createdLabels.toString()),
+                textSpan(hint: '已生成贴标：', text: data.createdLabels.toString()),
                 textSpan(
                   hint: '已生成货数：',
                   text: data.createdGoodsValue,
@@ -205,8 +212,7 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
                         ],
                         controller: data.createGoodsController,
                         decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.only(top: 0, bottom: 15),
+                          contentPadding: EdgeInsets.only(top: 0, bottom: 15),
                           filled: true,
                           fillColor: Colors.transparent,
                         ),

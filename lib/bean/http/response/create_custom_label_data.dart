@@ -83,4 +83,20 @@ class CreateCustomLabelsData {
 
   bool isCanCreate() =>
       isSelect.value && capacity.value > 0 && createGoods.value > 0;
+
+  @override
+  String toString() {
+    return 'CreateCustomLabelsData('
+        'type: $type, '
+        'isSelect: ${isSelect.value}, '
+        'capacity: ${capacity.value}, '
+        'createGoods: ${createGoods.value}, '
+        'size: $size, '
+        'instruct: $instruct, '
+        'createdLabels: $createdLabels, '
+        'goodsTotal: $goodsTotal, '
+        'createdGoods: $createdGoods, '
+        'surplusGoods: $surplusGoods'
+        ')';
+  }
 }

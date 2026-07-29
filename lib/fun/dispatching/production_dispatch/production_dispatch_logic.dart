@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
@@ -108,11 +107,14 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //指令表
-  void instructionList(Function(String url) callback) {
-    state.instructionList(
-      success: callback,
-      error: (msg) => errorDialog(content: msg),
-    );
+  void queryFile({
+    required Function(String) toWeb,
+  }) {
+    state.getSelectOne((v) => state.getFile(
+      processFlowID: v.processFlowID.toString(), instruction: v.planBill.toString(),
+          success: toWeb,
+          error: (msg) => errorDialog(content: msg),
+        ));
   }
 
   //工艺指导书

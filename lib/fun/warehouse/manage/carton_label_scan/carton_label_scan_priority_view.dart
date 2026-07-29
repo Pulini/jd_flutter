@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 import 'carton_label_scan_logic.dart';
@@ -29,6 +30,12 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    logic.clearPriority();
+    super.dispose();
   }
 
   @override
@@ -66,7 +73,7 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                 ),
                 suffixIcon: IconButton(
                   onPressed: () =>
-                      logic.queryCartonLabelInfo(logic.scanController.text),
+                      logic.queryPriorityCartonLabelInfo(code: logic.scanController.text.toString()),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
@@ -114,7 +121,11 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
           CombinationButton(
             text: 'carton_label_scan_submit'.tr,
             click: () {
-                  logic.changePriority();
+              askDialog(
+                  content: 'forming_code_collection_sure_submit'.tr,
+                  confirm: () {
+                    logic.changePriority();
+                  });
             },
           )
         ],

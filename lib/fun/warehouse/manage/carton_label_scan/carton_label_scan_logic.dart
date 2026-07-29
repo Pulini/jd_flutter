@@ -20,10 +20,8 @@ class CartonLabelScanLogic extends GetxController {
       success: (data) {
         state.priorityCartonLabelInfo = data;
         state.dispatchNumber.value = data.dispatchNumber ?? '';
-        state.priorityCartonLabel.value =
-            state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
-        state.priorityPo.value =
-            state.priorityCartonLabelInfo?.custOrderNumber ?? '';
+        state.priorityCartonLabel.value = data.outBoxBarCode ?? '';
+        state.priorityPo.value = data.custOrderNumber ?? '';
         state.priorityCartonInsideLabelList.value =
             state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
       },
@@ -32,6 +30,13 @@ class CartonLabelScanLogic extends GetxController {
         errorDialog(content: msg);
       },
     );
+  }
+
+  void clearPriority() {
+    scanController.clear();
+    state.priorityPo.value = '';
+    state.priorityCartonLabel.value = '';
+    state.priorityCartonInsideLabelList.value = [];
   }
 
   void queryCartonLabelInfo(String code) {
@@ -93,7 +98,7 @@ class CartonLabelScanLogic extends GetxController {
     } else {
       try {
         var exist = state.cartonInsideLabelList.singleWhere(
-              (v) => v.priceBarCode == code,
+          (v) => v.priceBarCode == code,
         );
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
@@ -153,7 +158,8 @@ class CartonLabelScanLogic extends GetxController {
   }
 
   void changePriority() {
-    if (scanController.text.isEmpty && state.priorityCartonLabelInfo == null) {
+    if (scanController.text.isEmpty &&
+        state.priorityCartonInsideLabelList.isEmpty) {
       showSnackBar(message: 'carton_label_scan_input_or_scan'.tr);
     } else {
       state.changePOPriority(
@@ -165,9 +171,7 @@ class CartonLabelScanLogic extends GetxController {
                   state.clearPriority();
                 });
           },
-          poNumber: scanController.text.length != 20
-              ? scanController.text.toString()
-              : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
+          poNumber: state.priorityPo.value.toString());
     }
   }
 
@@ -185,7 +189,6 @@ class CartonLabelScanLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
-
 
   void setTailDetail({
     required int index,
@@ -227,22 +230,22 @@ class CartonLabelScanLogic extends GetxController {
               final currentShortQty = a.thisShortQty ?? 0;
               final currentLabelCount = a.labelCount ?? 0;
 
-              if (currentShortQty < currentLabelCount){
-                if(state.tailScannedLabelTotal.value +1<state.tailLabelTotal.value){
+              if (currentShortQty < currentLabelCount) {
+                if (state.tailScannedLabelTotal.value + 1 <
+                    state.tailLabelTotal.value) {
                   a.thisShortQty = currentShortQty + 1;
 
                   showScanTips();
                   state.tailScannedLabelTotal.value += 1;
                   add.call();
-
-                }else{
+                } else {
                   full.call();
                   if (Get.isDialogOpen == true) Get.back();
                   errorDialog(
                     content: 'carton_label_scan_order_not_full'.tr,
                   );
                 }
-              }else{
+              } else {
                 full.call();
               }
             } else {
