@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -44,6 +48,32 @@ class LoginLogic extends GetxController {
     }
   }
 
+  void loginSuccess({
+    required String loginType,
+    required String account,
+  }) {
+    spSave(spSaveUserInfo, jsonEncode(userInfo!.toJson()).toString());
+    spSave(spSaveLoginType, loginType);
+    switch (loginType) {
+      case spSaveLoginTypePhone:
+        spSave(spSaveLoginPhone, account);
+        break;
+      case spSaveLoginTypeFace:
+        spSave(spSaveLoginFace, account);
+        break;
+      case spSaveLoginTypeWorkNumber:
+        spSave(spSaveLoginWork, account);
+        break;
+      case spSaveLoginTypeMachine:
+        spSave(spSaveLoginMachine, account);
+        break;
+      case spSaveLoginTypeFeiShu:
+        //飞书授权登录无需记录账号
+        break;
+    }
+    state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+  }
+
   //根据手机号码获取用户头像并登录
   void faceLogin(String phone) {
     state.faceLogin(
@@ -57,12 +87,27 @@ class LoginLogic extends GetxController {
               password: '',
               vCode: '',
               type: 2,
-              success: (userInfo) {
-                spSave(spSaveLoginType, spSaveLoginTypeFace);
-                spSave(spSaveLoginFace, phone);
-                state.isReLogin
-                    ? Get.back()
-                    : Get.offAll(() => const HomePage());
+              success: (data) {
+                userInfo = UserInfo.fromJson(data);
+                if (userInfo!.mustChangePassword == 1) {
+                  changePasswordDialog(
+                    account: phone,
+                    oldPassword: '',
+                    success: (password) {
+                      userInfo!.empPassWord = password;
+                      userInfo!.passWord = password.md5Encode().toUpperCase();
+                      loginSuccess(
+                        loginType: spSaveLoginTypeFace,
+                        account: phone,
+                      );
+                    },
+                  );
+                } else {
+                  loginSuccess(
+                    loginType: spSaveLoginTypeFace,
+                    account: phone,
+                  );
+                }
               },
               error: (msg) => errorDialog(content: msg),
             ),
@@ -76,17 +121,33 @@ class LoginLogic extends GetxController {
     String machine,
     String password,
   ) {
-
     state.login(
       jiGuangID: getJPushID(),
       phone: machine,
       password: password,
       vCode: '',
       type: 1,
-      success: (userInfo) {
-        spSave(spSaveLoginType, spSaveLoginTypeMachine);
-        spSave(spSaveLoginMachine, machine);
-        state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+      success: (data) {
+        userInfo = UserInfo.fromJson(data);
+        if (userInfo!.mustChangePassword == 1) {
+          changePasswordDialog(
+            account: machine,
+            oldPassword: password,
+            success: (password) {
+              userInfo!.empPassWord = password;
+              userInfo!.passWord = password.md5Encode().toUpperCase();
+              loginSuccess(
+                loginType: spSaveLoginTypeMachine,
+                account: machine,
+              );
+            },
+          );
+        } else {
+          loginSuccess(
+            loginType: spSaveLoginTypeMachine,
+            account: machine,
+          );
+        }
       },
       error: (msg) => errorDialog(content: msg),
     );
@@ -114,8 +175,6 @@ class LoginLogic extends GetxController {
     );
   }
 
-
-
   // 手机号码登录
   void phoneLogin(
     String phone,
@@ -128,10 +187,27 @@ class LoginLogic extends GetxController {
       password: password,
       vCode: vCode,
       type: 0,
-      success: (userInfo) {
-        spSave(spSaveLoginType, spSaveLoginTypePhone);
-        spSave(spSaveLoginPhone, phone);
-        state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+      success: (data) {
+        userInfo = UserInfo.fromJson(data);
+        if (userInfo!.mustChangePassword == 1) {
+          changePasswordDialog(
+            account: phone,
+            oldPassword: password,
+            success: (password) {
+              userInfo!.empPassWord = password;
+              userInfo!.passWord = password.md5Encode().toUpperCase();
+              loginSuccess(
+                loginType: spSaveLoginTypePhone,
+                account: phone,
+              );
+            },
+          );
+        } else {
+          loginSuccess(
+            loginType: spSaveLoginTypePhone,
+            account: phone,
+          );
+        }
       },
       error: (msg) => errorDialog(content: msg),
     );
@@ -148,27 +224,62 @@ class LoginLogic extends GetxController {
       password: password,
       vCode: '',
       type: 3,
-      success: (userInfo) {
-        spSave(spSaveLoginType, spSaveLoginTypeMachine);
-        spSave(spSaveLoginWork, workNumber);
-        state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+      success: (data) {
+        userInfo = UserInfo.fromJson(data);
+        if (userInfo!.mustChangePassword == 1) {
+          changePasswordDialog(
+            account: workNumber,
+            oldPassword: password,
+            success: (password) {
+              userInfo!.empPassWord = password;
+              userInfo!.passWord = password.md5Encode().toUpperCase();
+              loginSuccess(
+                loginType: spSaveLoginTypeWorkNumber,
+                account: workNumber,
+              );
+            },
+          );
+        } else {
+          loginSuccess(
+            loginType: spSaveLoginTypeWorkNumber,
+            account: workNumber,
+          );
+        }
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  void larkLogin(String userId){
+  void larkLogin(String userId) {
     state.login(
       jiGuangID: getJPushID(),
       phone: userId,
       password: '',
       vCode: '',
       type: 4,
-      success: (userInfo) {
-        spSave(spSaveLoginType, spSaveLoginTypeFeiShu);
-        state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+      success: (data) {
+        userInfo = UserInfo.fromJson(data);
+        if (userInfo!.mustChangePassword == 1) {
+          changePasswordDialog(
+            account: userId,
+            oldPassword: '',
+            success: (password) {
+              userInfo!.empPassWord = password;
+              userInfo!.passWord = password.md5Encode().toUpperCase();
+              loginSuccess(
+                loginType: spSaveLoginTypeFeiShu,
+                account: '',
+              );
+            },
+          );
+        } else {
+          loginSuccess(
+            loginType: spSaveLoginTypeFeiShu,
+            account: '',
+          );
+        }
       },
-      error: (msg)=>errorDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
     );
   }
 }

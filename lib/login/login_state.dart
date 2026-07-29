@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/user_info.dart';
-import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -67,7 +63,7 @@ class LoginState {
     required String password,
     required String vCode,
     required int type,
-    required Function(UserInfo userInfo) success,
+    required Function(dynamic userInfo) success,
     required Function(String msg) error,
   }) {
     httpPost(
@@ -83,13 +79,10 @@ class LoginState {
     ).then((response) {
       reLoginDialogIsShowing = false;
       if (response.resultCode == resultSuccess) {
-        spSave(spSaveUserInfo, jsonEncode(response.data).toString());
-        userInfo = UserInfo.fromJson(response.data);
-        success.call(userInfo!);
+        success.call(response.data);
       } else {
         error.call(response.message ?? 'login_failed'.tr);
       }
     });
   }
-
 }

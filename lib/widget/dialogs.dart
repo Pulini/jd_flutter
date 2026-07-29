@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'loading.dart';
 
 // errorDialog是否处于显示状态(供外部判断是否正在展示错误弹窗)
 bool _isErrorDialogShowing = false;
+
 bool get isErrorDialogShowing => _isErrorDialogShowing;
 
 // 提示弹窗
@@ -234,9 +236,17 @@ void doUpdate({
                         Get.back();
                         Downloader(
                           url: version.url!,
-                          completed: (path) =>
-                              const MethodChannel(channelOther)
-                                  .invokeMethod('OpenFile', path),
+                          isShowCancel: !version.force!,
+                          completed: (path) {
+                            if(version.force ?? false){
+                              installDialog(
+                                filePath: path,
+                                isForcedUpdate: version.force ?? false,
+                              );
+                            }
+                            const MethodChannel(channelOther)
+                                .invokeMethod('OpenFile', path);
+                          },
                         );
                         return;
                       }
@@ -308,6 +318,43 @@ void doUpdate({
       //拦截返回键
       canPop: false,
       child: dialog,
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
+void installDialog({
+  required String filePath,
+  required bool isForcedUpdate,
+}) {
+Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: Text('open_file_dialog_title'.tr),
+        content: Text('open_file_dialog_tips'.trArgs([getFileName(filePath)])),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => const MethodChannel(channelOther)
+                .invokeMethod('OpenFile', filePath),
+            child: Text('open_file_dialog_open'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              if (isForcedUpdate) {
+                exit(0);
+              } else {
+                Get.back();
+              }
+            },
+            child: Text(
+              isForcedUpdate ? 'open_file_dialog_close_app'.tr : 'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
     ),
     barrierDismissible: false, //拦截dialog外部点击
   );
@@ -581,6 +628,108 @@ void exitDialog({
       ],
     ),
   ));
+}
+
+//修改密码弹窗
+void changePasswordDialog({
+  required String account,
+  required String oldPassword,
+  required Function(String password) success,
+}) {
+  var newPassword = TextEditingController();
+  showCupertinoModalPopup<void>(
+    context: Get.overlayContext!,
+    builder: (context) => AlertDialog(
+      title: Text('change_password_dialog_title'.tr),
+      content: SizedBox(
+        height: 150,
+        width: 200,
+        child: ListView(
+          children: [
+            Text('change_password_dialog_tips'.tr),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 50,
+              width: 200,
+              child: TextField(
+                controller: newPassword,
+                style: const TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  hintText: 'change_password_dialog_new_password'.tr,
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  counterStyle: const TextStyle(color: Colors.grey),
+                  prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.grey),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                    onPressed: () {
+                      newPassword.clear();
+                    },
+                  ),
+                ),
+                maxLength: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => _changePassword(
+            account: account,
+            oldPassword:oldPassword,
+            newPassword: newPassword.text,
+            success: (msg) => successDialog(
+              content: msg,
+              back: () {
+                Get.back();
+                success.call(newPassword.text);
+              },
+            ),
+            error: (msg) => errorDialog(content: msg),
+          ),
+          child: Text('change_password_dialog_submit'.tr),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+void _changePassword({
+  required String account,
+  required String oldPassword,
+  required String newPassword,
+  required Function(String msg) success,
+  required Function(String msg) error,
+}) {
+  if (newPassword.isEmpty) {
+    errorDialog(content: 'change_password_dialog_new_password'.tr);
+    return;
+  }
+  httpPost(
+    loading: 'change_password_dialog_submitting'.tr,
+    method: webApiChangePassword,
+    params: {
+      'OldPassWord': oldPassword,
+      'NewPassWord': newPassword,
+      'Account': account
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call(response.message ?? '');
+    } else {
+      error.call(response.message ?? '');
+    }
+  });
 }
 
 void loadingShow(String? content) {

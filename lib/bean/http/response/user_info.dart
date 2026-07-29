@@ -64,6 +64,7 @@ class UserInfo {
     number = json['Number'];
     organizeID = json['OrganizeID'];
     name = json['Name'];
+    mustChangePassword = json['MustChangePassword'];
     sex = json['Sex'];
     userID = json['UserID'];
     departmentName = json['DepartmentName'];
@@ -88,6 +89,11 @@ class UserInfo {
         jurisdictionList?.add(JurisdictionList.fromJson(v));
       });
     }
+    roleList = [
+      if (json['RoleList'] != null)
+        for (var v in json['RoleList']) RoleList.fromJson(v)
+    ];
+    roleLevel = json['RoleLevel'];
     reportDeptmentID = json['ReportDeptmentID'];
   }
 
@@ -98,6 +104,7 @@ class UserInfo {
   String? number;
   int? organizeID;
   String? name;
+  int? mustChangePassword;
   String? sex;
   int? userID;
   String? departmentName;
@@ -117,6 +124,8 @@ class UserInfo {
   String? sapFactory;
   int? useStorageLocation; //是否启用库位管理
   List<JurisdictionList>? jurisdictionList;
+  List<RoleList>? roleList; // 角色列表
+  int? roleLevel;
   int? reportDeptmentID;
 
   Map<String, dynamic> toJson() {
@@ -128,6 +137,7 @@ class UserInfo {
     map['Number'] = number;
     map['OrganizeID'] = organizeID;
     map['Name'] = name;
+    map['MustChangePassword'] = mustChangePassword;
     map['Sex'] = sex;
     map['UserID'] = userID;
     map['DepartmentName'] = departmentName;
@@ -150,6 +160,8 @@ class UserInfo {
       map['JurisdictionList'] =
           jurisdictionList?.map((v) => v.toJson()).toList();
     }
+    map['RoleList'] = roleList?.map((v) => v.toJson()).toList();
+    map['RoleLevel'] = roleLevel;
     map['ReportDeptmentID'] = reportDeptmentID;
     return map;
   }
@@ -171,6 +183,37 @@ class JurisdictionList {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['JID'] = jid;
+    return map;
+  }
+}
+
+// {
+//   "RoleID": 15,
+//   "RoleName": "董事长",
+//   "Level": 6
+// }
+class RoleList {
+  int? roleID;
+  String? roleName;
+  int? level;
+
+  RoleList({
+    this.roleID,
+    this.roleName,
+    this.level,
+  });
+
+  RoleList.fromJson(dynamic json) {
+    roleID = json['RoleID'];
+    roleName = json['RoleName'];
+    level = json['Level'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['RoleID'] = roleID;
+    map['RoleName'] = roleName;
+    map['Level'] = level;
     return map;
   }
 }

@@ -798,17 +798,8 @@ Orientation getScreenOrientation() {
       : Orientation.portrait;
 }
 
-String getFileName(String url, {int num = 2}) {
-  final code = unicodeDecode(url.replaceAll('%u', '\\u'));
-  var name = code;
-  for (var i = 1; i < num; i++) {
-    name = name.substring(0, name.lastIndexOf('/'));
-    if (i == num - 1) {
-      name = code.substring(name.lastIndexOf('/') + 1);
-    }
-  }
-  return name;
-}
+String getFileName(String url)=> url.substring(url.lastIndexOf('/') + 1);
+
 
 String unicodeDecode(String string) {
   var str = string;

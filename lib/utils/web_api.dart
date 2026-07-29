@@ -358,25 +358,25 @@ Future<BaseData> springBootGet({
 const webApiLNetTest = 'api/Public/NetTest';
 
 //登录接口
-const webApiLogin = 'api/User/Login';
+const webApiLogin = 'api/Account/Login';
 
 //获取用户头像
-const webApiGetUserPhoto = 'api/User/GetEmpPhotoByPhone';
+const webApiGetUserPhoto = 'api/Account/GetEmpPhotoByPhone';
 
 //获取验证码接口
-const webApiVerificationCode = 'api/User/SendVerificationCode';
+const webApiVerificationCode = 'api/Account/SendVerificationCode';
 
 //获取主页入口列表
 const webApiGetMenuFunction = 'api/AppMenuFunction/GetAppMenuFunction';
 
 //修改头像接口
-const webApiChangeUserAvatar = 'api/User/UploadEmpPicture';
+const webApiChangeUserAvatar = 'api/Account/UploadEmpPicture';
 
 //修改密码接口
-const webApiChangePassword = 'api/User/ChangePassWord';
+const webApiChangePassword = 'api/Account/ChangePassword';
 
 //修改部门组别接口
-const webApiChangeDepartment = 'api/User/GetLoginInfo';
+const webApiChangeDepartment = 'api/Account/GetLoginInfo';
 
 //检查版本更新接口
 const webApiCheckVersion = 'api/Public/FlutterVersionUpgrade';
@@ -403,7 +403,7 @@ const webApiPickerMesDepartment = 'api/Department/GetDeptInfoByOrganizeID';
 const webApiPickerMesWorkShop = 'api/Department/GetMESWorkShop';
 
 //获取mes组织列表接口
-const webApiPickerMesOrganization = 'api/User/GetOrganization';
+const webApiPickerMesOrganization = 'api/Account/GetOrganization';
 
 //获取sap制程列表接口
 const webApiPickerSapProcessFlow = 'api/ProcessFlow/GetSAPProcessFlow';
@@ -418,7 +418,7 @@ const webApiPickerSapMachine = 'api/CompoundDispatching/GetDrillingCrewList';
 const webApiPickerSapWorkCenterNew = 'api/Department/GetSAP_WorkCenterNew';
 
 //获取sap组别列表接口
-const webApiPickerSapGroup = 'api/User/GetDepListByEmpID';
+const webApiPickerSapGroup = 'api/Account/GetDepListByEmpID';
 
 //获取sap工厂及仓库列表接口
 const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
@@ -484,10 +484,10 @@ const webApiInstructionsLog =
     'api/NeedleCartDispatch/InsertManufactureInstructionsLog';
 
 //检查设备是否授权查看PDF
-const webApiCheckAuthorize = 'api/User/CheckAuthorize';
+const webApiCheckAuthorize = 'api/Account/CheckAuthorize';
 
 //申请授权
-const webApiAuthorizedApplication = 'api/User/AuthorizedApplication';
+const webApiAuthorizedApplication = 'api/Account/AuthorizedApplication';
 
 //获取包装区报表
 const webApiGetMoldingPackAreaReport = 'api/Package/GetMoldingPackAreaReport';
@@ -515,7 +515,7 @@ const webApiBatchPushProductionOrder =
     'api/NeedleCartDispatch/GetProcessWorkCardForWorkCardBatch';
 
 //根据组别获取本组组员信息
-const webApiGetWorkerInfo = 'api/User/GetEmpByFNumber';
+const webApiGetWorkerInfo = 'api/Account/GetEmpByFNumber';
 
 //查询财产审核列表
 const webApiQueryProperty = 'api/FixedAsset/SearchUnnumberedProperty';
@@ -936,7 +936,7 @@ const webApiGetResponsibleDepartmentList = 'api/Department/GetDeptInfoByUserID';
 const webApiSapSaveDeliveryCheck = 'sap/zapp/ZFUN_APP_RECEIVE_1500';
 
 //获取仓库是否启用了人脸识别
-const webApiGetStockFaceConfig = 'api/User/Flutter_GetLiableInfoByEmpCode';
+const webApiGetStockFaceConfig = 'api/Account/Flutter_GetLiableInfoByEmpCode';
 
 //sap送货单入库
 const webApiSapDeliveryOrderStockIn = 'sap/zapp/ZFUN_RES_ZCLCGRUKU_1500';
@@ -1072,7 +1072,7 @@ const webApiGetRepairOrderList = 'api/EquipmentRepair/GetRepairOrderList';
 const webApiRepairOrderVoid = 'api/EquipmentRepair/RepairOrderVoid';
 
 //通过保管人工号获取保管人，监管人信息以及保管人部门
-const webApiGetEmpAndLiableByEmpCode = 'api/User/GetEmpAndLiableByEmpCode';
+const webApiGetEmpAndLiableByEmpCode = 'api/Account/GetEmpAndLiableByEmpCode';
 
 //获取设备维修记录单故障原因列表
 const webApiGetIssueCauseType = 'api/EquipmentRepair/GetIssueCauseType';
@@ -1121,7 +1121,7 @@ const webApiGetProductionOrderScheduleDetail =
     'api/Package/GetProductionOrderScheduleBillorPO';
 
 //检查工号是否合法
-const webApiJudgeEmpNumber = 'api/User/JudgeEmpNumber';
+const webApiJudgeEmpNumber = 'api/Account/JudgeEmpNumber';
 
 //获得已入库条形码数据
 const webApiGetBarCodeStatusByDepartmentID =
@@ -1290,7 +1290,7 @@ const webApiSaveDeliveryOrderCheck = 'api/DeliveryNote/SendLetterOfAdvice';
 const webApiGetStockFaceEnable = 'api/Stock/GetStockEnableFaceRec';
 
 //人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
-const webApiGetLiableInfo = 'api/User/GetLiableInfoByEmpCode';
+const webApiGetLiableInfo = 'api/Account/GetLiableInfoByEmpCode';
 
 //SAP包材批量入库
 const webApiDeliveryOrderStockIn =

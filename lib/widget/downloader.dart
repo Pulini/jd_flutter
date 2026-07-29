@@ -18,7 +18,11 @@ class Downloader {
   final Function(String filePath) completed;
   var isDownloading = false.obs;
 
-  Downloader({required this.url, required this.completed}) {
+  Downloader({
+    required this.url,
+    bool isShowCancel = true,
+    required this.completed,
+  }) {
     fileName = url.substring(url.lastIndexOf('/') + 1);
     var height = MediaQuery.of(Get.overlayContext!).size.height;
     var width = MediaQuery.of(Get.overlayContext!).size.width;
@@ -77,16 +81,17 @@ class Downloader {
                                   style: TextStyle(color: Colors.green),
                                 ),
                               ),
-                            TextButton(
-                              onPressed: () {
-                                if (isDownloading.value) cancel.cancel();
-                                Get.back();
-                              },
-                              child: const Text(
-                                '取消',
-                                style: TextStyle(color: Colors.grey),
+                            if (isShowCancel)
+                              TextButton(
+                                onPressed: () {
+                                  if (isDownloading.value) cancel.cancel();
+                                  Get.back();
+                                },
+                                child: const Text(
+                                  '取消',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
-                            ),
                           ],
                         ))
                   ],
