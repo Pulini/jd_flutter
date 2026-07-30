@@ -154,26 +154,15 @@ class LoginLogic extends GetxController {
   }
 
   //获取验证码
-  void getVerifyCode(String phone) {
-    //按钮名称不是获取验证码，直接返回
-    if (state.countTimer.value > 0) return;
-
-    //手机号为空，提示
-    if (phone.isEmpty) {
-      errorDialog(content: 'login_hint_phone'.tr);
-      return;
-    }
+ void getVerifyCode({required String phone, required Function() success}) async {
     state.getVerificationCode(
       phone: phone,
-      success: () {
-        showSnackBar(
-          title: 'get_verify_code'.tr,
-          message: 'phone_login_get_verify_code_success'.tr,
-        );
-      },
+      success: success,
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+
 
   // 手机号码登录
   void phoneLogin(
@@ -261,7 +250,7 @@ class LoginLogic extends GetxController {
         userInfo = UserInfo.fromJson(data);
         if (userInfo!.mustChangePassword == 1) {
           changePasswordDialog(
-            account: userId,
+            account: userInfo?.number ?? '',
             oldPassword: '',
             success: (password) {
               userInfo!.empPassWord = password;

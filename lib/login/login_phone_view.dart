@@ -4,12 +4,13 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/field.dart';
 
 class PhoneLoginWidget extends StatefulWidget {
   final Function(String phone, String password, String vCode) login;
-  final Function(String phone) getVCode;
+  final Function(String phone, Function() success) getVCode;
   final Function() longClick;
 
   const PhoneLoginWidget({
@@ -34,12 +35,17 @@ class _PhoneLoginWidgetState extends State<PhoneLoginWidget> {
   void startCountdown() {
     if (vCodeCountdown.value > 0) return;
     vCodeCountdown.value = 60;
-    widget.getVCode.call(phoneController.text);
-    Future.doWhile(() async {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return false;
-      vCodeCountdown.value--;
-      return vCodeCountdown.value > 0;
+    widget.getVCode.call(phoneController.text, () {
+      showSnackBar(
+        title: 'get_verify_code'.tr,
+        message: 'phone_login_get_verify_code_success'.tr,
+      );
+      Future.doWhile(() async {
+        await Future.delayed(const Duration(seconds: 1));
+        if (!mounted) return false;
+        vCodeCountdown.value--;
+        return vCodeCountdown.value > 0;
+      });
     });
   }
 

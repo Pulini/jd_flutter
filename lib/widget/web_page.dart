@@ -10,6 +10,7 @@ import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -193,9 +194,16 @@ class WebPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           title: Text(title),
         ),
-        body: GetPlatform.isAndroid || GetPlatform.isIOS
-            ? WebViewWidget(controller: webViewController)
-            : null,
+        body: GetPlatform.isAndroid
+            ? WebViewWidget.fromPlatformCreationParams(
+                params: AndroidWebViewWidgetCreationParams(
+                  controller: webViewController.platform,
+                  displayWithHybridComposition: true,
+                ),
+              )
+            : GetPlatform.isIOS
+                ? WebViewWidget(controller: webViewController)
+                : null,
       ),
     );
   }
@@ -324,7 +332,14 @@ class _WebPrinterState extends State<WebPrinter> {
                 ),
               ],
             ),
-            body: GetPlatform.isAndroid || GetPlatform.isIOS
+        body: GetPlatform.isAndroid
+            ? WebViewWidget.fromPlatformCreationParams(
+                params: AndroidWebViewWidgetCreationParams(
+                  controller: webViewController.platform,
+                  displayWithHybridComposition: true,
+                ),
+              )
+            : GetPlatform.isIOS
                 ? WebViewWidget(controller: webViewController)
                 : null,
           ),

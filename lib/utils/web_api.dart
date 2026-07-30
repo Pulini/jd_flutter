@@ -366,6 +366,9 @@ const webApiGetUserPhoto = 'api/Account/GetEmpPhotoByPhone';
 //获取验证码接口
 const webApiVerificationCode = 'api/Account/SendVerificationCode';
 
+//发送密码重置短信验证码
+const webApiSendResetCode = 'api/Account/SendResetCode';
+
 //获取主页入口列表
 const webApiGetMenuFunction = 'api/AppMenuFunction/GetAppMenuFunction';
 
@@ -374,6 +377,9 @@ const webApiChangeUserAvatar = 'api/Account/UploadEmpPicture';
 
 //修改密码接口
 const webApiChangePassword = 'api/Account/ChangePassword';
+
+//凭短信验证码自助重置密码
+const webApiResetPassword = 'api/Account/ResetPasswordByCode';
 
 //修改部门组别接口
 const webApiChangeDepartment = 'api/Account/GetLoginInfo';

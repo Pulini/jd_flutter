@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -238,7 +239,7 @@ void doUpdate({
                           url: version.url!,
                           isShowCancel: !version.force!,
                           completed: (path) {
-                            if(version.force ?? false){
+                            if (version.force ?? false) {
                               installDialog(
                                 filePath: path,
                                 isForcedUpdate: version.force ?? false,
@@ -327,7 +328,7 @@ void installDialog({
   required String filePath,
   required bool isForcedUpdate,
 }) {
-Get.dialog(
+  Get.dialog(
     PopScope(
       //拦截返回键
       canPop: false,
@@ -349,7 +350,9 @@ Get.dialog(
               }
             },
             child: Text(
-              isForcedUpdate ? 'open_file_dialog_close_app'.tr : 'dialog_default_cancel'.tr,
+              isForcedUpdate
+                  ? 'open_file_dialog_close_app'.tr
+                  : 'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
           ),
@@ -363,7 +366,8 @@ Get.dialog(
 bool reLoginDialogIsShowing = false;
 
 void reLoginPopup() {
-  if (reLoginDialogIsShowing) return;
+  if (Get.currentRoute ==RouteConfig.login) return;
+  if (reLoginDialogIsShowing ) return;
   reLoginDialogIsShowing = true;
   showCupertinoModalPopup(
     context: Get.overlayContext!,
@@ -677,7 +681,7 @@ void changePasswordDialog({
         TextButton(
           onPressed: () => _changePassword(
             account: account,
-            oldPassword:oldPassword,
+            oldPassword: oldPassword,
             newPassword: newPassword.text,
             success: (msg) => successDialog(
               content: msg,

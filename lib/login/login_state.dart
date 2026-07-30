@@ -4,7 +4,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class LoginState {
-  var countTimer = 0.obs;
   var isReLogin = false;
 
   // 添加计时相关变量
@@ -39,23 +38,16 @@ class LoginState {
       loading: 'phone_login_getting_verify_code'.tr,
       method: webApiVerificationCode,
       params: {'phone': phone},
-    ).then((verifyCodeCallback) {
-      if (verifyCodeCallback.resultCode == resultSuccess) {
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
         success.call();
-        //开始倒计时
-        Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-          countTimer.value++;
-          if (countTimer.value == 60) {
-            timer.cancel();
-            countTimer.value = 0;
-          }
-        });
       } else {
-        error.call(verifyCodeCallback.message ??
-            'phone_login_get_verify_code_failed'.tr);
+        error.call(response.message ?? 'phone_login_get_verify_code_failed'.tr);
       }
     });
   }
+
+
 
   void login({
     required String jiGuangID,

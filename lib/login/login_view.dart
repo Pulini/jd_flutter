@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/forgot_password/forgot_password_view.dart';
 import 'package:jd_flutter/login/login_dialog.dart';
 import 'package:jd_flutter/login/login_lark/login_lark_view.dart';
 import 'package:jd_flutter/login/login_work_view.dart';
@@ -21,7 +22,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var language = ''.obs;
-
   void refreshLanguage() {
     language.value = languages[
         locales.indexWhere((v) => v.languageCode == Get.locale!.languageCode)];
@@ -97,15 +97,31 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Obx(() => Text(
-                    'v:${getVersion()}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      decoration: TextDecoration.none,
+              padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
+              child: Row(
+                children: [
+                  Obx(() => Text(
+                        'v:${getVersion()}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          decoration: TextDecoration.none,
+                        ),
+                      )),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => Get.to(() => const ForgotPasswordPage()),
+                    child: Text(
+                      'forgot_password'.tr,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        decoration: TextDecoration.none,
+                      ),
                     ),
-                  )),
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -142,7 +158,7 @@ class _LoginPickState extends State<LoginPick>
   void initTab() {
     tabList = [
       // if (GetPlatform.isMobile)
-        Tab(icon: Image.asset('assets/images/ic_feishu.png')),
+      Tab(icon: Image.asset('assets/images/ic_feishu.png')),
       const Tab(icon: Icon(Icons.phone)),
       if (hasFrontCamera() && GetPlatform.isMobile)
         const Tab(icon: Icon(Icons.account_circle_outlined)),
@@ -151,9 +167,9 @@ class _LoginPickState extends State<LoginPick>
     ];
     tabPageList = [
       // if (GetPlatform.isMobile)
-        LarkLoginWidget(
-          login: (userId) => logic.larkLogin(userId),
-        ),
+      LarkLoginWidget(
+        login: (userId) => logic.larkLogin(userId),
+      ),
       PhoneLoginWidget(
         login: (phone, password, vCode) => logic.phoneLogin(
           phone,
@@ -161,7 +177,7 @@ class _LoginPickState extends State<LoginPick>
           vCode,
         ),
         longClick: longClick,
-        getVCode: (phone) => logic.getVerifyCode(phone),
+        getVCode: (phone, success) => logic.getVerifyCode(phone: phone, success: success),
       ),
       if (hasFrontCamera() && GetPlatform.isMobile)
         FaceLoginWidget(

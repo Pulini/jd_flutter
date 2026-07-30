@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide FormData;
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -391,7 +392,7 @@ class _UserSettingState extends State<UserSetting> {
           spSave(spSaveUserInfo, '');
           spSave(spSaveFeishuUserWikiTokenData, '');
           spSave(spSaveFeishuUserCloudDocTokenData, '');
-          Get.offAll(() => const LoginPage());
+          Get.offAllNamed(RouteConfig.login);
         },
         child: Text('home_user_setting_logout'.tr,
             style: const TextStyle(fontSize: 20)),

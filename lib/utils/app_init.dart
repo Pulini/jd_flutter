@@ -12,6 +12,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/message_center/message_info.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -257,7 +258,11 @@ class AppInitService extends GetxService {
       debugPrint('应用初始化过程中出现错误: $e');
     } finally {
       // 确保无论如何都会导航到适当页面
-      Get.offAll(() => userInfo == null ? const LoginPage() : const HomePage());
+      if (userInfo == null) {
+        Get.offAllNamed(RouteConfig.login);
+      } else {
+        Get.offAll(const HomePage());
+      }
     }
   }
 
