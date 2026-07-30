@@ -92,7 +92,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
           decoration: BoxDecoration(
             gradient: selected
                 ? LinearGradient(
-                    colors: [accent, accent.withOpacity(0.75)],
+                    colors: [accent, accent.withValues(alpha: 0.75)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -106,7 +106,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
             boxShadow: selected
                 ? [
                     BoxShadow(
-                      color: accent.withOpacity(0.35),
+                      color: accent.withValues(alpha: 0.35),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     )
