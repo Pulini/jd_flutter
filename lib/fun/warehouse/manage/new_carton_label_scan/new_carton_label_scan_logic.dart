@@ -31,6 +31,25 @@ class NewCartonLabelScanLogic extends GetxController {
     );
   }
 
+  void queryPriorityPOCartonLabelInfo({
+    required String code,
+  }) {
+    state.queryPriorityCartonLabelInfo(
+      code: code,
+      success: (data) {
+        state.isAutoSubmit.value = data.isNeedInnerBoxLabel ?? true;
+        state.priorityCartonLabelInfo = data;
+        state.priorityPo.value = data. custOrderNumber.toString();
+        state.priorityCartonLabel.value = data.outBoxBarCode.toString();
+        state.priorityCartonInsideLabelList.value = data.linkDataSizeList ?? [];
+      },
+      error: (msg) {
+        state.clearPriority();
+        errorDialog(content: msg);
+      },
+    );
+  }
+
   void clearPriority() {
     scanController.clear();
     state.priorityPo.value = '';

@@ -28,7 +28,7 @@ class _NewCartonLabelScanPriorityPageState
     pdaScanner(scan: (barCode) {
       logic.scanController.text = barCode;
       if(barCode.length==20){
-        logic.queryPriorityCartonLabelInfo(code: barCode);
+        logic.queryPriorityPOCartonLabelInfo(code: barCode);
       }
     });
     super.initState();
@@ -73,7 +73,7 @@ class _NewCartonLabelScanPriorityPageState
                       ),
                     ),
                     suffixIcon: IconButton(
-                      onPressed: () => logic.queryPriorityCartonLabelInfo(
+                      onPressed: () => logic.queryPriorityPOCartonLabelInfo(
                           code: logic.scanController.text.toString()),
                       icon: const Icon(
                         Icons.loupe_rounded,

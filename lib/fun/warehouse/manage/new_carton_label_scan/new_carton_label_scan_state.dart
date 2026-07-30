@@ -62,6 +62,33 @@ class NewCartonLabelScanState {
     });
   }
 
+  void queryPriorityCartonLabelInfo({
+    required String code,
+    required Function(CartonLabelScanNewInfo) success,
+    required Function(String) error,
+  }) {
+    if (isCheckingCartonBarCode) {
+      return;
+    }
+    isCheckingCartonBarCode = true;
+    httpGet(
+      loading: 'carton_label_scan_querying_outside_label_detail'.tr,
+      method: webApiGetPOCartonLabelInfoNew,
+      params: {
+        'CartonBarCode': code,
+        'DispatchNumber': dispatchNumber.value,
+        'OrganizeID': userInfo?.organizeID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(CartonLabelScanNewInfo.fromJson(response.data));
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+      isCheckingCartonBarCode = false;
+    });
+  }
+
   //清理优先级界面数据
   void clearPriority() {
     priorityCartonLabelInfo = CartonLabelScanNewInfo();
