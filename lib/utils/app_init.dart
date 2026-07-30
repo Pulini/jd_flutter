@@ -10,7 +10,6 @@ import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/bean/jpush_notification.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
-import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/message_center/message_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/translation.dart';

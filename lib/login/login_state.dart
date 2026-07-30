@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

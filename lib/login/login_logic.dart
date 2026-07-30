@@ -7,7 +7,6 @@ import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'login_state.dart';
