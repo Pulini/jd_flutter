@@ -26,7 +26,7 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
     pdaScanner(scan: (barCode) {
       logic.scanController.text = barCode;
       if(barCode.length==20){
-        logic.queryPriorityCartonLabelInfo(code: barCode);
+        logic.queryPriorityPOCartonLabelInfo(code: barCode);
       }
     });
     super.initState();
@@ -73,7 +73,7 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
                 ),
                 suffixIcon: IconButton(
                   onPressed: () =>
-                      logic.queryPriorityCartonLabelInfo(code: logic.scanController.text.toString()),
+                      logic.queryPriorityPOCartonLabelInfo(code: logic.scanController.text.toString()),
                   icon: const Icon(
                     Icons.loupe_rounded,
                     color: Colors.green,
