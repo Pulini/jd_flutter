@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 var _border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
