@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/fun/other/maintain_label/maintain_label_logic.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -24,12 +25,14 @@ class _MaintainLabelCreateCustomPageState
   final state = Get.find<MaintainLabelLogic>().state;
   var batchBoxCapacityController = TextEditingController();
   var batchCreateGoodsController = TextEditingController();
+  var mixCapacityController = TextEditingController();
 
   Widget _item(CreateCustomLabelsData data) =>
       _MaintainLabelCreateCustomItem(data: data);
 
   @override
   void dispose() {
+    state.mixCapacityControllerText.value='';
     batchBoxCapacityController.dispose();
     batchCreateGoodsController.dispose();
     super.dispose();
@@ -53,11 +56,21 @@ class _MaintainLabelCreateCustomPageState
               Expanded(
                 child: NumberEditText(controller: batchCreateGoodsController),
               ),
+              const Text('混码箱容：'),
+              Expanded(
+                child: NumberEditText(
+                  controller: mixCapacityController,
+                  onChanged: (s) {
+                      state.mixCapacityControllerText.value = s;
+                      if(s.isEmpty){
+                        logic.cleanMixedAssemble();
+                      }
+                  },
+                ),
+              ),
               Obx(() => CombinationButton(
                     combination: Combination.left,
-                    isEnabled: state.createCustomLabelsData.isNotEmpty &&
-                        state.createCustomLabelsData
-                            .any((v) => v.isSelect.value),
+                    isEnabled: state.createCustomLabelsData.isNotEmpty && state.createCustomLabelsData.any((v) => v.isSelect.value && state.mixCapacityControllerText.value.isEmpty),
                     text: '批量设置',
                     click: () => logic.customLabelsBatchSet(
                       batchBoxCapacityController.text.toIntTry(),
@@ -67,9 +80,17 @@ class _MaintainLabelCreateCustomPageState
               Obx(
                 () => CombinationButton(
                   isEnabled: state.createCustomLabelsData.isNotEmpty &&
-                      state.createCustomLabelsData.any((v) => v.isCanCreate()),
+                      state.createCustomLabelsData.any((v) => v.isCanCreate() && state.mixCapacityControllerText.value.isEmpty),
                   text: 'maintain_label_dialog_set_full'.tr,
                   click: () => logic.setFull(),
+                  combination: Combination.middle,
+                ),
+              ),
+              Obx(
+                () => CombinationButton(
+                  isEnabled: state.mixCapacityControllerText.value.isNotEmpty,
+                  text: '混码拼装',
+                  click: () => logic.mixedAssemble(mixCapacityController.text),
                   combination: Combination.middle,
                 ),
               ),
@@ -77,7 +98,7 @@ class _MaintainLabelCreateCustomPageState
                     combination: Combination.right,
                     isEnabled: state.createCustomLabelsData.isNotEmpty &&
                         state.createCustomLabelsData
-                            .any((v) => v.isCanCreate()),
+                            .any((v) => v.isCanCreate() && state.mixCapacityControllerText.value.isEmpty),
                     text: '创建',
                     click: () => logic.createCustomLabels(widget.labelType),
                   )),

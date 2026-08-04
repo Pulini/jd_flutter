@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_s
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -20,7 +22,7 @@ void subItemReportDialog(
   BuildContext context,
   MaterialDispatchInfo data,
   Children subData,
-  Function(double, double, double, double, double, double) callback,
+  Function(double, double, double, double, double, double, int) callback,
 ) {
   var qty = 0.0;
   var longQty = 0.0;
@@ -29,6 +31,9 @@ void subItemReportDialog(
   var grossWeightQty = 0.0;
   var netWeightQty = 0.0;
   var max = 0.0;
+  var domestic = true.obs;  //国内
+  var myanmar = false.obs;
+  var indonesia = false.obs;
   if (subData.codeQty.toDoubleTry() == 0.0) {
     qty = subData.noCodeQty.toDoubleTry();
     max = subData.qty.toDoubleTry().sub(subData.finishQty.toDoubleTry());
@@ -50,10 +55,12 @@ void subItemReportDialog(
         scrollable: true,
         title: data.mustEnter == '0'
             ? Text('material_dispatch_dialog_label_progress'.tr)
-            : Text('material_dispatch_dialog_label_progress_must'.tr,style: const TextStyle(
-            color: Colors.red),),
+            : Text(
+                'material_dispatch_dialog_label_progress_must'.tr,
+                style: const TextStyle(color: Colors.red),
+              ),
         content: SizedBox(
-          height: 230,
+          height: 280,
           width: getScreenSize().width * 0.4 < 400
               ? 400
               : getScreenSize().width * 0.5,
@@ -61,6 +68,59 @@ void subItemReportDialog(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => CheckBox(
+                        onChanged: (c) {
+                          domestic.value = c;
+                          if (c) {
+                            myanmar.value = false;
+                            indonesia.value = false;
+                          }
+                          // 印尼标/缅甸标都没勾 → 默认勾选国内
+                          if (!indonesia.value && !myanmar.value) {
+                            domestic.value = true;
+                          }
+                        },
+                        name: '默认国内',
+                        value: domestic.value,
+                        needSave: false,
+                      )),
+                  Obx(() => CheckBox(
+                        onChanged: (c) {
+                          indonesia.value = c;
+                          if (c) {
+                            domestic.value = false;
+                            myanmar.value = false;
+                          }
+                          // 印尼标/缅甸标都没勾 → 默认勾选国内
+                          if (!indonesia.value && !myanmar.value) {
+                            domestic.value = true;
+                          }
+                        },
+                        name: '印尼标',
+                        value: indonesia.value,
+                        needSave: false,
+                      )),
+                  Obx(() => CheckBox(
+                        onChanged: (c) {
+                          myanmar.value = c;
+                          if (c) {
+                            domestic.value = false;
+                            indonesia.value = false;
+                          }
+                          // 印尼标/缅甸标都没勾 → 默认勾选国内
+                          if (!indonesia.value && !myanmar.value) {
+                            domestic.value = true;
+                          }
+                        },
+                        name: '缅甸标',
+                        value: myanmar.value,
+                        needSave: false,
+                      )),
+                ],
+              ),
               Text(
                 data.materialName ?? '',
                 maxLines: 2,
@@ -177,7 +237,12 @@ void subItemReportDialog(
                   isWarning: true,
                 );
               } else {
-                if (data.mustEnter == '1') {
+                // 国内=0 / 印尼=1 / 缅甸=2（三选一）
+                final int destination = indonesia.value ? 1 : (myanmar.value ? 2 : 0);
+                // 是否必填毛净重：印尼标/缅甸标必填；国内标按 mustEnter 决定（'0'=不必填）
+                final bool needWeight =
+                    indonesia.value || myanmar.value || data.mustEnter != '0';
+                if (needWeight) {
                   if (longQty == 0 ||
                       wideQty == 0 ||
                       heightQty == 0 ||
@@ -188,14 +253,16 @@ void subItemReportDialog(
                       isWarning: true,
                     );
                   } else {
+                    if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
                     Get.back();
                     callback.call(qty, longQty, wideQty, heightQty,
-                        grossWeightQty, netWeightQty);
+                        grossWeightQty, netWeightQty, destination);
                   }
                 } else {
+                  if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
                   Get.back();
                   callback.call(qty, longQty, wideQty, heightQty,
-                      grossWeightQty, netWeightQty);
+                      grossWeightQty, netWeightQty, destination);
                 }
               }
             },
@@ -281,7 +348,7 @@ void labelListDialog(
                                   width: 110,
                                   child: CombinationButton(
                                     text: 'material_dispatch_dialog_reprint'.tr,
-                                    click: () =>printCallback.call( data),
+                                    click: () => printCallback.call(data),
                                     combination: Combination.left,
                                   ),
                                 ),
@@ -293,7 +360,9 @@ void labelListDialog(
                                             .tr,
                                     click: () {
                                       askDialog(
-                                          content: 'material_dispatch_dialog_sure_delete_label'.tr,
+                                          content:
+                                              'material_dispatch_dialog_sure_delete_label'
+                                                  .tr,
                                           confirm: () {
                                             _deleteLabel(
                                               guid: data.guid!,
@@ -652,8 +721,7 @@ Future<dynamic> showAreaPhoto(BuildContext context) => Get.dialog(
         child: AlertDialog(
           title: Text('material_dispatch_dialog_map'.tr),
           content: CachedNetworkImage(
-            imageUrl:
-                'https://geapp.goldemperor.com:8084/PDF/贴合区域规划图.png',
+            imageUrl: 'https://geapp.goldemperor.com:8084/PDF/贴合区域规划图.png',
           ),
           actions: [
             TextButton(
@@ -935,6 +1003,60 @@ class PickPalletController {
       _getPalletList();
     }
   }
+}
+
+void createLabelSelect({
+  required Function() domestic,
+  required Function() indonesia,
+  required Function() myanmar,
+}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (context) => CupertinoActionSheet(
+      title: Text(
+        'maintain_label_dialog_create_label'.tr,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      message: Text('maintain_label_dialog_select_label_type'.tr),
+      actions: [
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            domestic.call();
+          },
+          child: Text('国内'),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            indonesia.call();
+          },
+          child: Text('印尼'),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            myanmar.call();
+          },
+          child: Text('缅甸'),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Get.back(),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class PickPallet extends StatelessWidget {

@@ -38,7 +38,7 @@ class LabelInfo {
     this.barCodeTypeID,
     this.packType,
     this.interID,
-    this.fCustomFactoryID,
+    this.customFactoryID,
     this.labelType,
     this.departName,
     this.myanmarApprovalDocument,
@@ -50,9 +50,13 @@ class LabelInfo {
     this.volume,
     this.manufactureDate,
     this.notes,
+    this.productName,
+    this.orderType,
   });
 
   LabelInfo.fromJson(dynamic json) {
+    orderType = json['OrderType'];
+    productName = json['ProductName'];
     barCode = json['BarCode'];
     grossWeight = json['GrossWeight'];
     netWeight = json['NetWeight'];
@@ -66,15 +70,15 @@ class LabelInfo {
     barCodeTypeID = json['BarCodeTypeID'];
     packType = json['PackType'];
     interID = json['InterID'];
-    fCustomFactoryID = json['FCustomFactoryID'];
-    myanmarApprovalDocument = json['MyanmarApprovaLDocument'];
+    customFactoryID = json['CustomFactoryID'];
+    myanmarApprovalDocument = json['MyanmarApprovalDocument'];
     trackNo = json['TrackNo'];
     customsDeclarationUnit = json['CustomsDeclarationUnit'];
     customsDeclarationType = json['CustomsDeclarationType'];
     pieceNo = json['PieceNo'];
     pieceID = json['PieceID'];
     volume = json['Volume'];
-    manufactureDate = json['manufactureDate'];
+    manufactureDate = json['ManufactureDate'];
     notes = json['Notes'];
     labelType = json['LabelType'];
     labelModel = json['LabelModel'];
@@ -88,6 +92,8 @@ class LabelInfo {
 
   bool select = false;
 
+  String? orderType;
+  String? productName;
   String? barCode;
   List<LabelMaterialInfo>? subList;
   double? grossWeight;
@@ -102,7 +108,7 @@ class LabelInfo {
   int? barCodeTypeID;
   bool? packType;
   int? interID;
-  String? fCustomFactoryID;
+  String? customFactoryID;
   int? labelType;
   String? labelModel;
   String? departName;
@@ -118,6 +124,8 @@ class LabelInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['OrderType'] = orderType;
+    map['ProductName'] = productName;
     map['BarCode'] = barCode;
     map['GrossWeight'] = grossWeight;
     map['NetWeight'] = netWeight;
@@ -131,17 +139,17 @@ class LabelInfo {
     map['BarCodeTypeID'] = barCodeTypeID;
     map['PackType'] = packType;
     map['InterID'] = interID;
-    map['FCustomFactoryID'] = fCustomFactoryID;
+    map['CustomFactoryID'] = customFactoryID;
     map['LabelType'] = labelType;
     map['DepartName'] = departName;
-    map['MyanmarApprovaLDocument'] = myanmarApprovalDocument;
+    map['MyanmarApprovalDocument'] = myanmarApprovalDocument;
     map['TrackNo'] = trackNo;
     map['CustomsDeclarationUnit'] = customsDeclarationUnit;
     map['CustomsDeclarationType'] = customsDeclarationType;
     map['PieceNo'] = pieceNo;
     map['PieceID'] = pieceID;
     map['Volume'] = volume;
-    map['manufactureDate'] = manufactureDate;
+    map['ManufactureDate'] = manufactureDate;
     map['Notes'] = notes;
     map['SubList'] = subList?.map((v) => v.toJson()).toList();
     return map;

@@ -89,6 +89,7 @@ class ProductionDispatchOrderInfo {
     this.machine,
     this.shift,
     this.pastDay,
+    this.exitLabelType,
   });
 
   ProductionDispatchOrderInfo.fromJson(dynamic json) {
@@ -140,6 +141,7 @@ class ProductionDispatchOrderInfo {
     machine = json['Machine'];
     shift = json['Shift'];
     pastDay = json['PastDay'];
+    exitLabelType = json['ExitLabelType'];
   }
 
   RxBool select = false.obs;
@@ -187,6 +189,7 @@ class ProductionDispatchOrderInfo {
   String? machine;
   String? shift;
   bool? pastDay;
+  int? exitLabelType;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -235,6 +238,7 @@ class ProductionDispatchOrderInfo {
     map['Machine'] = machine;
     map['Shift'] = shift;
     map['PastDay'] = pastDay;
+    map['ExitLabelType'] = exitLabelType;
     return map;
   }
 

@@ -10,6 +10,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart'
     show getDateYMD, getProcessManual, checkUrlType, checkUserPermission;
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -119,7 +120,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   Get.back(); // 关闭弹窗
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   // 增加内边距
                   minimumSize: const Size(100, 50),
                   // 设置最小尺寸
@@ -155,7 +157,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           context,
           data,
           subData,
-          (d, longQty, wideQty, heightQty, gwQty, nwQty) {
+          (d, longQty, wideQty, heightQty, gwQty, nwQty, destination) {
             logic.subItemReport(
               context: context,
               qty: d.toShowString(),
@@ -167,6 +169,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               gw: gwQty.toShowString(),
               nw: nwQty.toShowString(),
               isPrint: false,
+              destination: destination,
             );
           },
         );
@@ -193,7 +196,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           context,
           data,
           subData,
-          (d, longQty, wideQty, heightQty, gwQty, nwQty) {
+          (d, longQty, wideQty, heightQty, gwQty, nwQty, destination) {
             logic.subItemReport(
               context: context,
               qty: d.toShowString(),
@@ -205,6 +208,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               height: heightQty.toShowString(),
               gw: gwQty.toShowString(),
               nw: nwQty.toShowString(),
+              destination: destination,
             );
           },
         );
@@ -359,12 +363,41 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         ),
         CombinationButton(
           text: 'material_dispatch_report_to_sap'.tr,
-          click: () => askDialog(
-            content: 'material_dispatch_report_to_sap_tips'.tr,
-            confirm: () => logic.reportToSAP(refresh: () => _query()),
-          ),
+          click: () {
+            // ===== TEMP DEBUG 假数据预览，确认效果后请删除 =====
+            final fakeData = MaterialDispatchInfo(
+              materialName: '0.22mm*1.5m 白色JY28可特（针织布/100%涤纶）',
+              mustEnter: '1', // '1'=必填(红色标题)  '0'=非必填
+            );
+            final fakeSub = Children(
+              billNo: 'MO-2026-0001',
+              codeQty: '0',
+              // 为0 → 报工数量默认=noCodeQty，max=qty-finishQty
+              noCodeQty: '20',
+              qty: '100',
+              finishQty: '10',
+              sapColorBatch: 'BATCH-2026-001',
+            );
+            subItemReportDialog(
+              context,
+              fakeData,
+              fakeSub,
+              (q, l, w, h, gw, nw, destination) {
+                logger.f('提交----');
+              },
+            );
+            // ===== TEMP DEBUG END =====
+          },
           combination: Combination.right,
         ),
+        // CombinationButton(
+        //   text: 'material_dispatch_report_to_sap'.tr,
+        //   click: () => askDialog(
+        //     content: 'material_dispatch_report_to_sap_tips'.tr,
+        //     confirm: () => logic.reportToSAP(refresh: () => _query()),
+        //   ),
+        //   combination: Combination.right,
+        // ),
         const SizedBox(width: 10),
       ],
       queryWidgets: [
@@ -792,46 +825,44 @@ class _MaterialDispatchItem extends StatelessWidget {
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
                 click: () => labelListDialog(data, printCallback: (label) {
-                  var bill = '';
-                  // var batch = '';
-                  var labelDate = '';
-                  // if (info.children!.isNotEmpty) {
-                  //   bill = info.children![0].billNo!;
-                  //   batch = info.children![0].sapColorBatch!;
-                  // }
-                  if (label.sapColorBatch.isNullOrEmpty()) {
-                    bill = data.children!.first.billNo!;
-                  } else {
-                    bill = data.children!
-                        .firstWhere(
-                            (v) => v.sapColorBatch == label.sapColorBatch)
-                        .billNo!;
-                  }
-                  if (label.insertDateTime != '' &&
-                      label.insertDateTime!.length > 10) {
-                    labelDate = label.insertDateTime!.substring(0, 10);
-                  } else {
-                    labelDate = getDateYMD();
-                  }
-                  logic.printLabel(
-                      date: labelDate,
-                      context: context,
-                      data: data,
-                      billNo: bill,
-                      color: label.sapColorBatch ?? '',
-                      guid: label.guid!,
-                      pick: label.pickUpCode!,
-                      bill: <MaterialDispatchLabelDetail>[],
-                      qty: label.qty.toShowString(),
-                      specifications: label.length
-                          .div(100)
-                          .mul(label.width.div(100))
-                          .mul(label.height.div(100))
-                          .toShowString(),
-                      specificationSplit:
-                          '${label.length.toShowString()}x${label.width.toShowString()}x${label.height.toShowString()}',
-                      gw: label.gw.toShowString(),
-                      ew: label.nw.toShowString());
+                  final bill = label.sapColorBatch.isNullOrEmpty()
+                      ? data.children!.first.billNo!
+                      : data.children!
+                          .firstWhere(
+                              (v) => v.sapColorBatch == label.sapColorBatch)
+                          .billNo!;
+                  final dt = label.insertDateTime ?? '';
+                  final labelDate =
+                      dt.length > 10 ? dt.substring(0, 10) : getDateYMD();
+                  final specifications = label.length
+                      .div(100)
+                      .mul(label.width.div(100))
+                      .mul(label.height.div(100))
+                      .toShowString();
+                  final specificationSplit =
+                      '${label.length.toShowString()}x${label.width.toShowString()}x${label.height.toShowString()}';
+                  // 国内=0 / 印尼=1 / 缅甸=2
+                  void printTo(int destination) => logic.printLabel(
+                        date: labelDate,
+                        context: context,
+                        data: data,
+                        billNo: bill,
+                        color: label.sapColorBatch ?? '',
+                        guid: label.guid!,
+                        pick: label.pickUpCode!,
+                        bill: <MaterialDispatchLabelDetail>[],
+                        qty: label.qty.toShowString(),
+                        specifications: specifications,
+                        specificationSplit: specificationSplit,
+                        gw: label.gw.toShowString(),
+                        ew: label.nw.toShowString(),
+                        destination: destination,
+                      );
+                  createLabelSelect(
+                    domestic: () => printTo(0),
+                    indonesia: () => printTo(1),
+                    myanmar: () => printTo(2),
+                  );
                 }, refreshCallBack: () {
                   onQuery();
                 }),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 var _border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
@@ -12,6 +13,18 @@ var _smallStyle = const TextStyle(
   height: 0,
 );
 var _textPadding = const EdgeInsets.only(left: 3, right: 3);
+
+// 去除小数尾部多余的 0：0.035000 -> 0.035，12.000 -> 12；非数字或整数保持不变
+String _trimTrailingZeros(String? text) {
+  if (text == null || text.isEmpty) return '';
+  if (!text.contains('.')) return text;
+  var s = text;
+  while (s.length > 1 && s.endsWith('0')) {
+    s = s.substring(0, s.length - 1);
+  }
+  if (s.endsWith('.')) s = s.substring(0, s.length - 1);
+  return s;
+}
 
 Widget _paddingTextLeft({
   required String text,
@@ -80,6 +93,8 @@ IntrinsicHeight _createRowText({
 List<Widget> _createSizeList({
   required Map<String, List> list,
   TextStyle? style,
+  int headerFlex = 2,
+  bool repeatHeader = true,
 }) {
   frameText({
     int flex = 1,
@@ -104,13 +119,22 @@ List<Widget> _createSizeList({
   var tableList = <Widget>[];
   if (list.isNotEmpty) {
     int max = 5;
-    final maxColumns = (list.values.toList()[0].length / max).ceil();
+    int needFlex = 2;
+    if(repeatHeader){
+       max = 5;
+       needFlex = 2;
+    }else{
+       max = 7;
+       needFlex=3;
+    }
+    // 去掉末尾合计项后再算段数，避免 5 尺码(6列)被算成 2 段而产生空行
+    final maxColumns = ((list.values.toList()[0].length - 1) / max).ceil();
     for (int i = 0; i < maxColumns; i++) {
       //轮次
       list.forEach((ins, data) {
         var line = <Widget>[];
         //添加表格第一列指令列
-        line.add(frameText(flex: 2, text: ins));
+        line.add(frameText(flex: needFlex, text: ins));
 
         var sizeList = data.sublist(0, data.length - 1);
         var start = i * max;
@@ -132,8 +156,8 @@ List<Widget> _createSizeList({
           ));
         }
 
-        if (to - start < max) {
-          //添加末尾列（合计）
+        if (repeatHeader && i == maxColumns - 1) {
+          //添加末尾列（合计）：仅最后一段且允许重复表头时绘制
           line.add(frameText(alignment: Alignment.center, text: data.last));
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
@@ -161,7 +185,7 @@ Widget _labelContainer({required List<Widget> widgets}) => Container(
 ///动态格式 1098无尺码物料
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料规格','装箱数量','报关单位'],['物料编码','物料规格','装箱数量','报关单位']]
-Widget dynamicMaterialLabel1098({
+Widget dynamicMaterialLabel1098({ //缅甸标
   required String labelID, //标签ID
   required String myanmarApprovalDocument, //缅甸批文
   required String typeBody, //工厂型体
@@ -294,7 +318,7 @@ Widget dynamicMaterialLabel1098({
           title: 'MEA.:(LxWxH)CM',
           rw: [
             _paddingTextCenter(text: specifications, flex: 5),
-            _paddingTextCenter(text: volume, flex: 5),
+            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
             _paddingTextCenter(text: 'CBM', flex: 5),
           ],
         ),
@@ -475,7 +499,7 @@ Widget dynamicSizeMaterialLabel1098({
           flex: 10,
           rw: [
             _paddingTextCenter(text: specifications, flex: 18),
-            _paddingTextCenter(text: volume, flex: 5),
+            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
             _paddingTextCenter(text: 'CBM', flex: 7),
           ],
         ),
@@ -618,7 +642,7 @@ Widget dynamicOutBoxLabel1095n1096({
           title: '规格/MEA/Spesifikasi',
           rw: [
             _paddingTextCenter(text: specifications, flex: 10),
-            _paddingTextCenter(text: volume, flex: 3),
+            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 3),
             _paddingTextCenter(text: 'cbm', flex: 2),
           ],
         ),
@@ -646,6 +670,7 @@ Widget dynamicOutBoxLabel1095n1096({
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
 Widget dynamicInBoxLabel1095n1096({
+  ////印尼标
   required String productName, //品名
   required String companyOrderType, //公司订单类型
   required String customsDeclarationType, //报关形式
@@ -774,6 +799,7 @@ Widget dynamicInBoxLabel1095n1096({
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
 Widget dynamicSizeMaterialLabel1095n1096({
+  //印尼标
   required String labelID, //二维码ID
   required String productName, //品名
   required String orderType, //补单
@@ -797,6 +823,8 @@ Widget dynamicSizeMaterialLabel1095n1096({
   required String consignee, //收货方
   required bool hasNotes, //是否打印备注行
   required String notes, //备注
+  bool repeatHeader = true, //是否重复表头/绘制合计列（默认原行为）
+  int headerFlex = 2, //首列（指令/标题列）宽度
 }) =>
     _labelContainer(
       widgets: [
@@ -835,7 +863,12 @@ Widget dynamicSizeMaterialLabel1095n1096({
             )
           ],
         ),
-        if (materialList.isNotEmpty) ..._createSizeList(list: materialList),
+        if (materialList.isNotEmpty)
+          ..._createSizeList(
+            list: materialList,
+            repeatHeader: repeatHeader,
+            headerFlex: headerFlex,
+          ),
         _createRowText(
           title: '数量/Qty/kuantitas:',
           style: _bigStyle,
@@ -917,7 +950,7 @@ Widget dynamicSizeMaterialLabel1095n1096({
           title: '规格/MEA/Spesifikasi',
           rw: [
             _paddingTextCenter(text: specifications, flex: 10),
-            _paddingTextCenter(text: volume, flex: 3),
+            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 3),
             _paddingTextCenter(text: 'cbm', flex: 2),
           ],
         ),
@@ -1086,7 +1119,7 @@ Widget dynamicDomesticMaterialLabel({
           title: '规格:',
           rw: [
             _paddingTextCenter(text: specifications, flex: 5),
-            _paddingTextCenter(text: volume, flex: 5),
+            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
             _paddingTextCenter(text: 'cbm', flex: 5),
           ],
         ),
@@ -1287,8 +1320,6 @@ Widget dynamicPalletDetail({
   );
 }
 
-
-
 List<Widget> getTableWidget({required List table}) {
   //尺码列数
   var column = 5;
@@ -1339,16 +1370,18 @@ List<Widget> getTableWidget({required List table}) {
     var pieceNo = piece.keys.first;
     var sizeList = piece.values.first.toList();
     //拆分重组单码装数据
-    var list =sizeList.length>column? List.generate(
-      mixGroupCount,
-      (i) {
-        var start = i * column;
-        var end = (start + column < sizeList.length)
-            ? start + column
-            : sizeList.length;
-        return sizeList.sublist(start, end);
-      },
-    ):[sizeList];
+    var list = sizeList.length > column
+        ? List.generate(
+            mixGroupCount,
+            (i) {
+              var start = i * column;
+              var end = (start + column < sizeList.length)
+                  ? start + column
+                  : sizeList.length;
+              return sizeList.sublist(start, end);
+            },
+          )
+        : [sizeList];
     //如果最后一组数据不足列数，则填充空数据
     for (var i = 0; i < mixGroupCount; i++) {
       if (list[i].length < column) {
@@ -1368,7 +1401,11 @@ List<Widget> getTableWidget({required List table}) {
   var singleMaterialWidget = IntrinsicHeight(
     child: Row(
       children: [
-        _paddingTextCenter(text: '单', flex: 1,  style: _bigStyle,),
+        _paddingTextCenter(
+          text: '单',
+          flex: 1,
+          style: _bigStyle,
+        ),
         Expanded(
           flex: 10,
           child: Column(
@@ -1382,7 +1419,7 @@ List<Widget> getTableWidget({required List table}) {
                         Expanded(
                           flex: 2,
                           child: Column(
-                            children: line.isEmpty||line.values.first.isEmpty
+                            children: line.isEmpty || line.values.first.isEmpty
                                 ? [
                                     _paddingTextCenter(text: '', flex: 1),
                                     _paddingTextCenter(text: '', flex: 1),
@@ -1460,7 +1497,11 @@ List<Widget> getTableWidget({required List table}) {
   var mixMaterialWidget = IntrinsicHeight(
     child: Row(
       children: [
-        _paddingTextCenter(text: '混', flex: 1,  style: _bigStyle,),
+        _paddingTextCenter(
+          text: '混',
+          flex: 1,
+          style: _bigStyle,
+        ),
         Expanded(
           flex: 14,
           child: Column(

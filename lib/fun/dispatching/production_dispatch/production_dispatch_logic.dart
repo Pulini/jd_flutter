@@ -179,6 +179,7 @@ class ProductionDispatchLogic extends GetxController {
           'interID': v.interID,
           'isMaterialLabel': false,
           'SapProcessName': v.sapProcessName,
+          'ExitLabelType': v.exitLabelType,
         });
       });
     } else {
@@ -197,6 +198,7 @@ class ProductionDispatchLogic extends GetxController {
         'interID': data.interID,
         'isMaterialLabel': true,
         'SapProcessName': data.sapProcessName,
+        'ExitLabelType': data.exitLabelType,
       });
     } else {
       showSnackBar(
@@ -215,6 +217,7 @@ class ProductionDispatchLogic extends GetxController {
         'isMaterialLabel': true,
         'isPartOrder': true,
         'SapProcessName': list.first.sapProcessName,
+        'ExitLabelType': list.first.exitLabelType,
       });
     } else {
       showSnackBar(

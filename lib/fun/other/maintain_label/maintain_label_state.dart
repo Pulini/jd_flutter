@@ -14,6 +14,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class MaintainLabelState {
   var materialCodes = <String>[];
   var sapProcessName = '';
+  var exitLabelType = -1;
   var interID = 0;
   var isMaterialLabel = false.obs;
   var isPartOrder = false;
@@ -30,8 +31,13 @@ class MaintainLabelState {
   var createMixLabelsData = <List<PickingBarCodeInfo>>[].obs;
   var maxLabel = 0.obs;
   var createCustomLabelsData = <CreateCustomLabelsData>[].obs;
+  var mixCapacityControllerText =''.obs;
+  // 混码拼装结果：每一组（箱）装了哪些条目
+  var packedBoxes = <List<CreateCustomLabelsData>>[];
+
 
   MaintainLabelState() {
+    exitLabelType = Get.arguments['ExitLabelType'] ?? -1;
     sapProcessName = Get.arguments['SapProcessName'] ?? '';
     materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
@@ -283,7 +289,7 @@ class MaintainLabelState {
     });
   }
 
-  void createMixLabel({
+  void createMixLabel({ //创建混码标
     required int maxLabel,
     required List<PickingBarCodeInfo> submitList,
     required int labelType,
@@ -315,7 +321,7 @@ class MaintainLabelState {
     });
   }
 
-  void createCustomLabel({
+  void createCustomLabel({  // 创建自定义标
     required List<CreateCustomLabelsData> selectList,
     required int labelType,
     required Function(String) success,
@@ -344,5 +350,35 @@ class MaintainLabelState {
         error.call(response.message ?? '');
       }
     });
+  }
+
+  // 创建单个自定义混码标（一箱），成功返回服务端消息；失败抛异常由调用方统一处理
+  Future<String> createCustomizeMixLabel({
+    required List<CreateCustomLabelsData> submitList,
+    required int labelType,
+  }) async {
+    final response = await httpPost(
+      method: webApiCreateMixLabel,
+      loading: 'maintain_label_dialog_generating_label'.tr,
+      body: {
+        'InterID': interID.toString(),
+        'BarcodeQty': 1,
+        'UserID': userInfo?.userID,
+        'SizeList': [
+          for (var item in submitList)
+            {
+              'Size': item.size,
+              'Capacity': item.surplusGoods.toShowString(),
+              'MtoNo': item.instruct,
+            }
+        ],
+        'LabelType': labelType,
+      },
+    );
+    if (response.resultCode == resultSuccess) {
+      return response.message ?? '';
+    } else {
+      throw Exception(response.message ?? '');
+    }
   }
 }

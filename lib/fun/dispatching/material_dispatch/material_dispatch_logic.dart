@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
@@ -141,6 +143,7 @@ class MaterialDispatchLogic extends GetxController {
     required String height,
     required String gw,
     required String nw,
+    required int destination,
   }) {
     state.subItemReport(
       reportQty: qty,
@@ -175,6 +178,7 @@ class MaterialDispatchLogic extends GetxController {
               gw: gw,
               ew: nw,
               date: getDateYMD(),
+              destination: destination,
             );
           } else {
             state.getLabelDetail(
@@ -194,6 +198,7 @@ class MaterialDispatchLogic extends GetxController {
                   gw: gw,
                   ew: nw,
                   date: getDateYMD(),
+                  destination: destination,
                 );
               },
             );
@@ -232,311 +237,239 @@ class MaterialDispatchLogic extends GetxController {
     required String specificationSplit,
     required String gw,
     required String ew,
+    required int destination,
   }) {
-    if (data.exitLabelType == '101') {
-      if (state.allInstruction.value) {
-        //全部指令
-        var list = <String>[];
-        billNo.split(',').forEach((data) {
-          if (data.isNotEmpty) {
-            list.add(data);
-          }
-        });
-        var chunked = [
-          for (int i = 0; i < list.length; i += 4)
-            list.sublist(i, (i + 4).clamp(0, list.length))
-        ];
-        var subList = <String>[];
-        for (var data in chunked) {
-          var splitData = '';
-          for (var subData in data) {
-            splitData = '$splitData$subData,';
-          }
-          subList.add(splitData.substring(0, splitData.length - 1));
-        }
-        if (state.isBigLabel.value) {
-          //国内大标的连标
+    // 统一打印：loading + 成功/失败提示
+    void doPrint(Future<List<Uint8List>> labelFuture) {
+      labelFuture.then((label) {
+        PrintUtil().printLabel(
+          label: label,
+          start: () => loadingShow('print_printing'.tr),
+          success: () {
+            loadingDismiss();
+            showSnackBar(message: 'print_printing_success'.tr);
+          },
+          failed: () {
+            loadingDismiss();
+            showSnackBar(message: 'print_printing_fail'.tr);
+          },
+        );
+      });
+    }
+    // 正单 / 补单
+    String orderType() =>
+        data.billStyle == '0' ? '${data.factoryID} 正单' : '${data.factoryID} 补单';
 
-          labelMultipurposeBigDynamicFixed(
-            qrCode: guid,
-            title: data.productName ?? '',
-            subTitle: '${data.partName}<${data.processName}>$billNo',
-            subTitleWrap: true,
-            tableSubTitle2: subList,
-            content: '${data.materialName}  (${data.materialNumber})',
-            bottomLeftText1: data.drillingCrewName ?? '',
-            bottomMiddleText1: '$color/$qty${data.unitName}',
-            bottomRightText1: data.sapDecideArea ?? '',
-            speed: spGet(spSavePrintSpeed) ?? 3.0,
-            density: spGet(spSavePrintDensity) ?? 13.0,
-          ).then((printLabel) {
-            PrintUtil().printLabel(
-                label: printLabel,
-                start: () {
-                  loadingShow('print_printing'.tr);
-                },
-                success: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_success'.tr);
-                },
-                failed: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_fail'.tr);
-                });
-          });
-        } else {
-          labelMultipurposeDynamic(
-            isCut: false,
-            qrCode: guid,
-            title: data.productName ?? '',
-            subTitle: data.materialName ?? '',
-            tableTitle:
-                '部件：${data.partName}(${data.materialNumber})<${data.processName}>',
-            tableSubTitle2: subList,
-            bottomLeftText1: data.sapDecideArea ?? '',
-            bottomLeftText2: data.drillingCrewName ?? '',
-            bottomRightText1: '色系:$color/$qty${data.unitName}',
-            bottomRightText2: '取件码:$pick',
-          ).then((printLabel) {
-            PrintUtil().printLabel(
-                label: printLabel,
-                start: () {
-                  loadingShow('print_printing'.tr);
-                },
-                success: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_success'.tr);
-                },
-                failed: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_fail'.tr);
-                });
-          });
-        }
-      } else {
-        if (state.isBigLabel.value) {
-          labelMultipurposeBigFixed(
-            qrCode: guid,
-            title: data.productName ?? '',
-            subTitle: '${data.partName}<${data.processName}>$billNo',
-            subTitleWrap: true,
-            content: '${data.materialName}  (${data.materialNumber})',
-            bottomLeftText1: data.drillingCrewName ?? '',
-            bottomMiddleText1: '$color/$qty${data.unitName}',
-            bottomRightText1: data.sapDecideArea ?? '',
-            speed: spGet(spSavePrintSpeed) ?? 3.0,
-            density: spGet(spSavePrintDensity) ?? 13.0,
-          ).then((printLabel) {
-            PrintUtil().printLabel(
-                label: printLabel,
-                start: () {
-                  loadingShow('print_printing'.tr);
-                },
-                success: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_success'.tr);
-                },
-                failed: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_fail'.tr);
-                });
-          });
-        } else {
-          labelMultipurposeFixed(
-            //国内小标
-            qrCode: guid,
-            title: data.productName ?? '',
-            subTitleWrap: true,
-            subTitle: '${data.partName}<${data.processName}>$billNo',
-            content: '(${data.materialNumber})${data.materialName}',
-            bottomLeftText1: data.drillingCrewName ?? '',
-            bottomMiddleText1: '色系:$color/$qty${data.unitName}',
-            bottomMiddleText2: '取件码:$pick',
-            bottomRightText1: data.sapDecideArea ?? '',
-            speed: spGet(spSavePrintSpeed) ?? 3.0,
-            density: spGet(spSavePrintDensity) ?? 12.0,
-          ).then((printLabel) {
-            PrintUtil().printLabel(
-                label: printLabel,
-                start: () {
-                  loadingShow('print_printing'.tr);
-                },
-                success: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_success'.tr);
-                },
-                failed: () {
-                  loadingDismiss();
-                  showSnackBar(message: 'print_printing_fail'.tr);
-                });
-          });
-        }
-      }
-    } else if (data.exitLabelType == '202') {
-      var order = '';
-      if (data.billStyle == '0') {
-        order = '${data.factoryID} 正单';
-      } else {
-        order = '${data.factoryID} 补单';
-      }
+    // 国内小标（多处复用）
+    domesticSmallLabel() => labelMultipurposeFixed(
+          qrCode: guid,
+          title: data.productName ?? '',
+          subTitleWrap: true,
+          subTitle: '${data.partName}<${data.processName}>$billNo',
+          content: '(${data.materialNumber})${data.materialName}',
+          bottomLeftText1: data.drillingCrewName ?? '',
+          bottomMiddleText1: '色系:$color/$qty${data.unitName}',
+          bottomMiddleText2: '取件码:$pick',
+          bottomRightText1: data.sapDecideArea ?? '',
+          speed: spGet(spSavePrintSpeed) ?? 3.0,
+          density: spGet(spSavePrintDensity) ?? 12.0,
+        );
+
+    // 预览标签
+    void previewLabel(Widget labelWidget) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => PreviewLabel(
-            labelWidget: dynamicInBoxLabel1095n1096(
-              haveSupplier: false,
-              productName: data.description ?? '',
-              companyOrderType: order,
-              customsDeclarationType: data.cusdeclaraType ?? '',
-              pieceNo: '1-1',
-              qrCode: guid,
-              materialList: [
-                [data.materialNumber!, data.materialName, qty, data.unitName]
-              ],
-              pieceID: guid,
-              manufactureDate: date,
-              supplier: '',
-              hasNotes: false,
-              notes: '',
-            ),
+            labelWidget: labelWidget,
             isDynamic: true,
           ),
         ),
       );
-    } else if (data.exitLabelType == '103') {
-      if (state.isSmallLabel.value) {
-        labelMultipurposeFixed(
-          //国内小标
-          qrCode: guid,
-          title: data.productName ?? '',
-          subTitleWrap: true,
-          subTitle: '${data.partName}<${data.processName}>$billNo',
-          content: '(${data.materialNumber})${data.materialName}',
-          bottomLeftText1: data.drillingCrewName ?? '',
-          bottomMiddleText1: '色系:$color/$qty${data.unitName}',
-          bottomMiddleText2: '取件码:$pick',
-          bottomRightText1: data.sapDecideArea ?? '',
-          speed: spGet(spSavePrintSpeed) ?? 3.0,
-          density: spGet(spSavePrintDensity) ?? 12.0,
-        ).then((printLabel) {
-          PrintUtil().printLabel(
-              label: printLabel,
-              start: () {
-                loadingShow('print_printing'.tr);
-              },
-              success: () {
-                loadingDismiss();
-                showSnackBar(message: 'print_printing_success'.tr);
-              },
-              failed: () {
-                loadingDismiss();
-                showSnackBar(message: 'print_printing_fail'.tr);
-              });
-        });
-      } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PreviewLabel(
-              labelWidget: dynamicMaterialLabel1098(
-                labelID: guid,
-                myanmarApprovalDocument: data.description ?? '',
-                typeBody: data.productName ?? '',
-                trackNo: '',
-                instructionNo: billNo,
-                materialList: [
-                  [
-                    data.materialNumber ?? '',
-                    specificationSplit,
-                    qty,
-                    data.unitName,
-                  ]
-                ],
-                customsDeclarationType: data.cusdeclaraType ?? '',
-                pieceNo: '1-1',
-                pieceID: guid,
-                grossWeight: gw,
-                netWeight: ew,
-                specifications: specifications,
-                volume: specificationSplit,
-                supplier: data.sapSupplierNumber ?? '',
-                manufactureDate: date,
-                hasNotes: false,
-                notes: '',
-              ),
-              isDynamic: true,
-            ),
-          ),
-        );
-      }
-    } else if (data.exitLabelType == '102') {
-      if (state.isSmallLabel.value) {
-        labelMultipurposeFixed(
-          //国内小标
-          qrCode: guid,
-          title: data.productName ?? '',
-          subTitleWrap: true,
-          subTitle: '${data.partName}<${data.processName}>$billNo',
-          content: '(${data.materialNumber})${data.materialName}',
-          bottomLeftText1: data.drillingCrewName ?? '',
-          bottomMiddleText1: '色系:$color/$qty${data.unitName}',
-          bottomMiddleText2: '取件码:$pick',
-          bottomRightText1: data.sapDecideArea ?? '',
-          speed: spGet(spSavePrintSpeed) ?? 3.0,
-          density: spGet(spSavePrintDensity) ?? 12.0,
-        ).then((printLabel) {
-          PrintUtil().printLabel(
-              label: printLabel,
-              start: () {
-                loadingShow('print_printing'.tr);
-              },
-              success: () {
-                loadingDismiss();
-                showSnackBar(message: 'print_printing_success'.tr);
-              },
-              failed: () {
-                loadingDismiss();
-                showSnackBar(message: 'print_printing_fail'.tr);
-              });
-        });
-      } else {
-        var order = '';
-        if (data.billStyle == '0') {
-          order = '${data.factoryID} 正单';
+    }
+
+    if (destination == 0) {
+      if (data.exitLabelType == '101') {
+        if (state.allInstruction.value) {
+          //全部指令：按 4 个一组拆分指令号
+          final billList =
+              billNo.split(',').where((e) => e.isNotEmpty).toList();
+          final subList = [
+            for (var i = 0; i < billList.length; i += 4)
+              billList.sublist(i, (i + 4).clamp(0, billList.length)).join(',')
+          ];
+          if (state.isBigLabel.value) {
+            //国内大标的连标
+            doPrint(labelMultipurposeBigDynamicFixed(
+              qrCode: guid,
+              title: data.productName ?? '',
+              subTitle: '${data.partName}<${data.processName}>$billNo',
+              subTitleWrap: true,
+              tableSubTitle2: subList,
+              content: '${data.materialName}  (${data.materialNumber})',
+              bottomLeftText1: data.drillingCrewName ?? '',
+              bottomMiddleText1: '$color/$qty${data.unitName}',
+              bottomRightText1: data.sapDecideArea ?? '',
+              speed: spGet(spSavePrintSpeed) ?? 3.0,
+              density: spGet(spSavePrintDensity) ?? 13.0,
+            ));
+          } else {
+            doPrint(labelMultipurposeDynamic(
+              isCut: false,
+              qrCode: guid,
+              title: data.productName ?? '',
+              subTitle: data.materialName ?? '',
+              tableTitle:
+                  '部件：${data.partName}(${data.materialNumber})<${data.processName}>',
+              tableSubTitle2: subList,
+              bottomLeftText1: data.sapDecideArea ?? '',
+              bottomLeftText2: data.drillingCrewName ?? '',
+              bottomRightText1: '色系:$color/$qty${data.unitName}',
+              bottomRightText2: '取件码:$pick',
+            ));
+          }
         } else {
-          order = '${data.factoryID} 补单';
+          if (state.isBigLabel.value) {
+            doPrint(labelMultipurposeBigFixed(
+              qrCode: guid,
+              title: data.productName ?? '',
+              subTitle: '${data.partName}<${data.processName}>$billNo',
+              subTitleWrap: true,
+              content: '${data.materialName}  (${data.materialNumber})',
+              bottomLeftText1: data.drillingCrewName ?? '',
+              bottomMiddleText1: '$color/$qty${data.unitName}',
+              bottomRightText1: data.sapDecideArea ?? '',
+              speed: spGet(spSavePrintSpeed) ?? 3.0,
+              density: spGet(spSavePrintDensity) ?? 13.0,
+            ));
+          } else {
+            doPrint(domesticSmallLabel());
+          }
         }
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PreviewLabel(
-              labelWidget: dynamicSizeMaterialLabel1095n1096(
-                labelID: guid,
-                productName: data.description ?? '',
-                orderType: order,
-                typeBody: data.productName ?? '',
-                trackNo: color,
-                instructionNo: billNo,
-                generalMaterialNumber: data.materialNumber ?? '',
-                materialDescription: data.materialName ?? '',
-                materialList: {},
-                inBoxQty: qty,
-                customsDeclarationUnit: data.unitName ?? '',
-                customsDeclarationType: data.cusdeclaraType ?? '',
-                pieceID: guid,
-                pieceNo: '1-1',
-                grossWeight: gw,
-                netWeight: ew,
-                specifications: '${specificationSplit}CM(LxWxH)',
-                volume: specifications,
-                supplier: data.sapSupplierNumber ?? '',
-                manufactureDate: date,
-                consignee: data.sourceFactoryName ?? '',
-                hasNotes: false,
-                notes: '',
-              ),
-              isDynamic: true,
-            ),
-          ),
-        );
+      } else if (data.exitLabelType == '202') {
+        previewLabel(dynamicInBoxLabel1095n1096(
+          haveSupplier: false,
+          productName: data.description ?? '',
+          companyOrderType: orderType(),
+          customsDeclarationType: data.cusdeclaraType ?? '',
+          pieceNo: '1-1',
+          qrCode: guid,
+          materialList: [
+            [data.materialNumber!, data.materialName, qty, data.unitName]
+          ],
+          pieceID: guid,
+          manufactureDate: date,
+          supplier: '',
+          hasNotes: false,
+          notes: '',
+        ));
+      } else if (data.exitLabelType == '103') {
+        if (state.isSmallLabel.value) {
+          doPrint(domesticSmallLabel());
+        } else {
+          previewLabel(dynamicMaterialLabel1098(
+            labelID: guid,
+            myanmarApprovalDocument: data.description ?? '',
+            typeBody: data.productName ?? '',
+            trackNo: '',
+            instructionNo: billNo,
+            materialList: [
+              [
+                data.materialNumber ?? '',
+                specificationSplit,
+                qty,
+                data.unitName,
+              ]
+            ],
+            customsDeclarationType: data.cusdeclaraType ?? '',
+            pieceNo: '1-1',
+            pieceID: guid,
+            grossWeight: gw,
+            netWeight: ew,
+            specifications: specifications,
+            volume: specificationSplit,
+            supplier: data.sapSupplierNumber ?? '',
+            manufactureDate: date,
+            hasNotes: false,
+            notes: '',
+          ));
+        }
+      } else if (data.exitLabelType == '102') {
+        if (state.isSmallLabel.value) {
+          doPrint(domesticSmallLabel());
+        } else {
+          previewLabel(dynamicSizeMaterialLabel1095n1096(
+            labelID: guid,
+            productName: data.description ?? '',
+            orderType: orderType(),
+            typeBody: data.productName ?? '',
+            trackNo: color,
+            instructionNo: billNo,
+            generalMaterialNumber: data.materialNumber ?? '',
+            materialDescription: data.materialName ?? '',
+            materialList: {},
+            inBoxQty: qty,
+            customsDeclarationUnit: data.unitName ?? '',
+            customsDeclarationType: data.cusdeclaraType ?? '',
+            pieceID: guid,
+            pieceNo: '1-1',
+            grossWeight: gw,
+            netWeight: ew,
+            specifications: '${specificationSplit}CM(LxWxH)',
+            volume: specifications,
+            supplier: data.sapSupplierNumber ?? '',
+            manufactureDate: date,
+            consignee: data.sourceFactoryName ?? '',
+            hasNotes: false,
+            notes: '',
+          ));
+        }
       }
+    } else if (destination == 1) {
+      //印尼
+      previewLabel(dynamicInBoxLabel1095n1096(
+        haveSupplier: false,
+        productName: data.description ?? '',
+        companyOrderType: orderType(),
+        customsDeclarationType: data.cusdeclaraType ?? '',
+        pieceNo: '1-1',
+        qrCode: guid,
+        materialList: [
+          [data.materialNumber!, data.materialName, qty, data.unitName]
+        ],
+        pieceID: guid,
+        manufactureDate: date,
+        supplier: '',
+        hasNotes: false,
+        notes: '',
+      ));
+    } else if (destination == 2) {
+      //缅甸
+      previewLabel(dynamicMaterialLabel1098(
+        labelID: guid,
+        myanmarApprovalDocument: data.description ?? '',
+        typeBody: data.productName ?? '',
+        trackNo: '',
+        instructionNo: billNo,
+        materialList: [
+          [
+            data.materialNumber ?? '',
+            specificationSplit,
+            qty,
+            data.unitName,
+          ]
+        ],
+        customsDeclarationType: data.cusdeclaraType ?? '',
+        pieceNo: '1-1',
+        pieceID: guid,
+        grossWeight: gw,
+        netWeight: ew,
+        specifications: specifications,
+        volume: specificationSplit,
+        supplier: data.sapSupplierNumber ?? '',
+        manufactureDate: date,
+        hasNotes: false,
+        notes: '',
+      ));
     }
   }
 }

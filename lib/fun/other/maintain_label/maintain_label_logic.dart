@@ -15,6 +15,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -453,17 +454,19 @@ class MaintainLabelLogic extends GetxController {
       errorDialog(content: 'maintain_label_select_label'.tr);
       return;
     }
-    if (select.first.labelType == 1002) {
+    if (state.exitLabelType == 1002) {
       state.setLabelState(
         selectLabels: select,
-        success: (msg) =>
-            createIndonesiaLabel(list: select, labels: labelsCallback),
+        success: (msg) => createIndonesiaLabel(
+            list: select,
+            labels: labelsCallback),
       );
-    } else if (select.first.labelType == 1003) {
+    } else if (state.exitLabelType == 1003) {
       state.setLabelState(
         selectLabels: select,
-        success: (msg) =>
-            createMyanmarLabel(list: select, labels: labelsCallback),
+        success: (msg) => createMyanmarLabel(
+            list: select,
+            labels: labelsCallback),
       );
     } else {
       var languageList = <String>[];
@@ -508,7 +511,7 @@ class MaintainLabelLogic extends GetxController {
         errorDialog(content: 'maintain_label_select_label_not_same'.tr);
         return;
       }
-      if(select.every((v)=>v.labelModel!='')){
+      if (select.every((v) => v.labelModel != '')) {
         if (languageList.length > 1) {
           selectLanguageDialog(
             list: languageList,
@@ -704,6 +707,7 @@ class MaintainLabelLogic extends GetxController {
     required LabelInfo label,
     required String sizeTitle,
     required String totalTitle,
+    List<String>? sizes,
   }) {
     var materials = <String, List>{};
     if (label.subList!
@@ -711,7 +715,8 @@ class MaintainLabelLogic extends GetxController {
       var sizeList = <String>[];
       for (var sub in label.subList!) {
         for (var label in sub.items!) {
-          if (!sizeList.contains(label.size)) {
+          if (!sizeList.contains(label.size) &&
+              (sizes == null || sizes.contains(label.size))) {
             sizeList.add(label.size ?? '');
           }
         }
@@ -1190,6 +1195,23 @@ class MaintainLabelLogic extends GetxController {
     return materialList.join('、');
   }
 
+  // 下发打标前校验：毛重(grossWeight)、净重(netWeight)、体积(volume)、
+  // 以及 subList 内每个 meas（规格）都不允许为空。
+  // 返回 null 表示通过，否则返回具体的缺失信息（含单号）。
+  String? _validateLabelRequiredFields(LabelInfo data) {
+    final missing = <String>[];
+    if (data.grossWeight==0.0) missing.add('毛重(GrossWeight)');
+    if (data.netWeight==0.0) missing.add('净重(NetWeight)');
+    if (data.volume.isNullOrEmpty()) missing.add('体积(Volume)');
+    // 仅在 subList 不为空时校验 meas；subList 为空不报错
+    if (!data.subList.isNullOrEmpty() &&
+        data.subList!.any((v) => v.meas.isNullOrEmpty())) {
+      missing.add('规格(Meas)');
+    }
+    if (missing.isEmpty) return null;
+    return '${data.barCode ?? '未知单号'} 缺少必填项：${missing.join('、')}';
+  }
+
 //缅甸标
   void createMyanmarLabel({
     required List<LabelInfo> list,
@@ -1197,9 +1219,14 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
+      // 下发打标前：毛重/净重/体积/subList 内 meas 任一为空则拦截，不生成标签
+      final requiredErr = _validateLabelRequiredFields(data);
+      if (requiredErr != null) {
+        errorDialog(content: requiredErr);
+        return;
+      }
       var qty = '';
       var size = '';
-      var dataList = <String, List>{};
       if (data.subList!.first.items!.isEmpty) {
         // 无尺码
       } else if (data.subList!.first.items!.length == 1) {
@@ -1207,40 +1234,46 @@ class MaintainLabelLogic extends GetxController {
         qty = data.subList!.first.items![0].qty!.toShowString();
         size = data.subList!.first.items![0].size ?? '';
       } else if (data.subList!.first.items!.length > 1) {
-        //多尺码
         qty = data.subList!.first.items!
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b))
             .toShowString();
-        dataList = createSizeList(
-          label: data,
-          sizeTitle: '尺码/Size/ukuran',
-          totalTitle: '总计/total',
-        );
       }
-      labelList.add(dynamicSizeMaterialLabel1098(
-        labelID: data.barCode ?? '',
-        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-        typeBody: data.subList!.first.factoryType ?? '',
-        trackNo: data.trackNo ?? '',
-        materialList: dataList,
-        instructionNo: data.subList!.first.billNo ?? '',
-        materialCode: data.subList!.first.materialCode ?? '',
-        size: size,
-        inBoxQty: qty,
-        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-        customsDeclarationType: data.customsDeclarationType ?? '',
-        pieceNo: data.pieceNo ?? '',
-        pieceID: data.pieceID ?? '',
-        grossWeight: data.grossWeight.toShowString(),
-        netWeight: data.netWeight.toShowString(),
-        specifications: data.subList!.first.meas ?? '',
-        volume: data.volume ?? '',
-        supplier: '',
-        manufactureDate: data.manufactureDate ?? '',
-        hasNotes: true,
-        notes: data.notes ?? '',
-      ));
+
+      // 构造单张标签（materialList / inBoxQty 随每张变化）
+      Widget buildLabel(Map<String, List> materialList, String boxQty) =>
+          dynamicSizeMaterialLabel1098(
+            labelID: data.barCode ?? '',
+            myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+            typeBody: data.subList!.first.factoryType ?? '',
+            trackNo: data.trackNo ?? '',
+            materialList: materialList,
+            instructionNo: data.subList!.first.billNo ?? '',
+            materialCode: data.subList!.first.materialCode ?? '',
+            size: size,
+            inBoxQty: boxQty,
+            customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+            customsDeclarationType: data.customsDeclarationType ?? '',
+            pieceNo: data.pieceNo ?? '',
+            pieceID: data.pieceID ?? '',
+            grossWeight: data.grossWeight.toShowString(),
+            netWeight: data.netWeight.toShowString(),
+            specifications: data.subList!.first.meas ?? '',
+            volume: data.volume ?? '',
+            supplier: '',
+            manufactureDate: data.manufactureDate ?? '',
+            hasNotes: true,
+            notes: data.notes ?? '',
+          );
+
+      final dm = data.subList!.first.items!.length > 1
+          ? createSizeList(
+              label: data,
+              sizeTitle: 'Size',
+              totalTitle: 'Total',
+            )
+          : <String, List>{};
+      labelList.add(buildLabel(dm, qty));
     }
     labels.call(labelList, true);
   }
@@ -1252,9 +1285,14 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
+      // 下发打标前：毛重/净重/体积/subList 内 meas 任一为空则拦截，不生成标签
+      final requiredErr = _validateLabelRequiredFields(data);
+      if (requiredErr != null) {
+        errorDialog(content: requiredErr);
+        return;
+      }
       var qty = '';
       var typeBody = '';
-      var dataList = <String, List>{};
       if (data.subList!.first.items!.isEmpty) {
         // 无尺码
       } else if (data.subList!.first.items!.length == 1) {
@@ -1263,43 +1301,52 @@ class MaintainLabelLogic extends GetxController {
             (data.subList!.first.items![0].size ?? '');
         qty = data.subList!.first.items![0].qty!.toShowString();
       } else if (data.subList!.first.items!.length > 1) {
-        //多尺码
+        //多尺码（qty 仅用于 printType==false 时的整单总数）
         typeBody = data.subList!.first.factoryType ?? '';
         qty = data.subList!.first.items!
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b))
             .toShowString();
-        dataList = createSizeList(
-          label: data,
-          sizeTitle: '尺码/Size/ukuran',
-          totalTitle: '总计/total',
-        );
       }
-      labelList.add(dynamicSizeMaterialLabel1095n1096(
-        labelID: data.barCode ?? '',
-        productName: 'productName',
-        orderType: 'orderType',
-        typeBody: typeBody,
-        trackNo: data.trackNo ?? '',
-        instructionNo: data.subList!.first.billNo ?? '',
-        generalMaterialNumber: data.subList!.first.materialCode ?? '',
-        materialDescription: data.subList!.first.materialName ?? '',
-        materialList: dataList,
-        inBoxQty: qty,
-        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-        customsDeclarationType: data.customsDeclarationType ?? '',
-        pieceID: data.pieceID ?? '',
-        pieceNo: data.pieceNo ?? '',
-        grossWeight: data.grossWeight.toShowString(),
-        netWeight: data.netWeight.toShowString(),
-        specifications: data.subList!.first.meas ?? '',
-        volume: data.volume ?? '',
-        supplier: '',
-        manufactureDate: data.manufactureDate ?? '',
-        consignee: '',
-        hasNotes: true,
-        notes: data.notes ?? '',
-      ));
+
+      // 构造单张标签（materialList / inBoxQty 随每张变化）
+      Widget buildLabel(Map<String, List> materialList, String boxQty) =>
+          dynamicSizeMaterialLabel1095n1096(
+            labelID: data.barCode ?? '',
+            productName: data.productName ?? '',
+            orderType: data.orderType ?? '',
+            typeBody: typeBody,
+            trackNo: data.trackNo ?? '',
+            instructionNo: data.subList!.first.billNo ?? '',
+            generalMaterialNumber: data.subList!.first.materialCode ?? '',
+            materialDescription: data.subList!.first.materialName ?? '',
+            materialList: materialList,
+            inBoxQty: boxQty,
+            customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+            customsDeclarationType: data.customsDeclarationType ?? '',
+            pieceID: data.pieceID ?? '',
+            pieceNo: data.pieceNo ?? '',
+            grossWeight: data.grossWeight.toShowString(),
+            netWeight: data.netWeight.toShowString(),
+            specifications: data.subList!.first.meas ?? '',
+            volume: data.volume ?? '',
+            supplier: '',
+            manufactureDate: data.manufactureDate ?? '',
+            consignee: '',
+            hasNotes: true,
+            notes: data.notes ?? '',
+            repeatHeader: false, // 印尼标：不重复表头、不绘制合计列
+            headerFlex: 5, // 首列(尺码/指令)与顶部字段名列(flex 5)等宽
+          );
+
+      final dm = data.subList!.first.items!.length > 1
+          ? createSizeList(
+              label: data,
+              sizeTitle: '尺码/Size/ukuran',
+              totalTitle: '总计/total',
+            )
+          : <String, List>{};
+      labelList.add(buildLabel(dm, qty));
     }
     labels.call(labelList, true);
   }
@@ -1412,7 +1459,9 @@ class MaintainLabelLogic extends GetxController {
           .map((v) => v.getMaterialLanguage(languageInfo.languageCode ?? ''))
           .toSet()
           .toList();
-      var boxCapacity = data.subList?.map((v) => v.totalQty()).reduce((a, b) => a.add(b)) ?? 0;
+      var boxCapacity =
+          data.subList?.map((v) => v.totalQty()).reduce((a, b) => a.add(b)) ??
+              0;
       var titleText = languageInfo.languageCode == 'zh'
           ? '尺码'
           : languageInfo.languageCode == 'id'
@@ -1502,5 +1551,202 @@ class MaintainLabelLogic extends GetxController {
       item.createGoods.value = batchCreateGoods.toDouble();
       item.createGoodsController!.text = batchCreateGoods.toString();
     }
+  }
+
+  void cleanMixedAssemble() {
+    for (var v in state.createCustomLabelsData) {
+      v.isSelect.value = false;
+    }
+    state.packedBoxes.clear();
+    state.createCustomLabelsData.refresh();
+  }
+
+  // 自动混码拼装（多箱）：根据输入的混码箱容，循环把全部条目装箱，
+  // 每箱尽量装满、合计不超过箱容，且每箱拼接的尺码（条目）数不超过 maxSizesPerBox；
+  // 最后在弹窗里展示每箱明细。
+  void mixedAssemble(String mixCapacity) {
+    // 仅 1002（印尼标）控制每箱最多 5 个尺码混装；其余类型不限制尺码数。
+    final bool controlSize = state.exitLabelType == 1002;
+    final int maxSizesPerBox = controlSize ? 7 : state.createCustomLabelsData.length;
+    final target = mixCapacity.toDoubleTry();
+    final items = state.createCustomLabelsData;
+    if (items.isEmpty || target <= 0) {
+      return;
+    }
+
+    // 剩余未装箱条目的"原始索引"
+    final remaining = List<int>.generate(items.length, (i) => i);
+    final boxes = <List<int>>[]; // 每箱装的是哪些原始索引
+
+    while (remaining.isNotEmpty) {
+      // 单条剩余货数就超过箱容的条目无法在不超容前提下装入，直接忽略（不装箱）
+      remaining.removeWhere((idx) => items[idx].surplusGoods > target + 1e-9);
+      if (remaining.isEmpty) break;
+
+      // 取剩余条目对应的"剩余货数"作为贡献值
+      final values = remaining.map((idx) => items[idx].surplusGoods).toList();
+
+      final mask = values.length <= 40
+          ? _closestSubsetMask(values, target, maxSizesPerBox)
+          : _greedySubsetMask(values, target, maxSizesPerBox);
+
+      // 把掩码还原成这一箱装了哪些剩余条目（相对索引 -> 原始索引）
+      final box = <int>[];
+      for (var i = 0; i < values.length; i++) {
+        if ((mask & (1 << i)) != 0) box.add(remaining[i]);
+      }
+
+      boxes.add(box);
+      remaining.removeWhere((idx) => box.contains(idx));
+    }
+
+    // 把装箱结果存到 state，方便外部（如创建贴标）按"每一箱"取数据
+    state.packedBoxes =
+        boxes.map((b) => b.map((idx) => items[idx]).toList()).toList();
+
+    // 拼装提示文本：逐箱列出尺码+数量+每箱合计
+    final mes = StringBuffer();
+    mes.writeln(
+        '混码箱容=$target，${controlSize ? '每箱最多 $maxSizesPerBox 个尺码' : '不限制每箱尺码数'}，共需 ${boxes.length} 箱：');
+    for (var b = 0; b < boxes.length; b++) {
+      final box = boxes[b];
+      final total =
+          box.fold<double>(0.0, (s, idx) => s + items[idx].surplusGoods);
+      final over = total > target + 1e-9;
+      mes.writeln(
+          '【第 ${b + 1} 箱】合计 ${total.toShowString()}${over ? ' ⚠超过箱容' : ''}');
+      for (final idx in box) {
+        mes.writeln(
+            '   尺码：${items[idx].size}　数量：${items[idx].surplusGoods.toShowString()}');
+      }
+    }
+
+    askDialog(
+        content: mes.toString(),
+        confirm: () async {
+          try {
+            for (final box in state.packedBoxes) {
+              await state.createCustomizeMixLabel(
+                submitList: box,
+                labelType: getLabelType(LabelCreateType.mixed),
+              );
+            }
+            successDialog(
+              content: '混码标签已全部生成',
+              back: () => Get.back(result: true),
+            );
+          } catch (e) {
+            errorDialog(content: e.toString().replaceFirst('Exception: ', ''));
+          }
+        });
+  }
+
+  // 在 values 中找出一个子集，使其元素之和不超过 target、选中个数不超过 maxCount，
+  // 且尽量接近 target（即尽量装满）；返回对应的位掩码。
+  // maxCount 控制每箱最多拼接的尺码数。采用 meet-in-the-middle：左半 / 右半分别枚举
+  // 子集（和 + 选中个数 + 掩码），右半按"选中个数"分组后二分匹配。
+  int _closestSubsetMask(List<double> values, double target, int maxCount) {
+    final n = values.length;
+    final half = n ~/ 2;
+    final right = n - half;
+
+    // 左半：枚举所有子集的和、掩码、选中个数（位 0..half-1）
+    final left = <({double sum, int mask, int count})>[];
+    for (var mask = 0; mask < (1 << half); mask++) {
+      var s = 0.0;
+      var c = 0;
+      for (var i = 0; i < half; i++) {
+        if ((mask & (1 << i)) != 0) {
+          s += values[i];
+          c++;
+        }
+      }
+      left.add((sum: s, mask: mask, count: c));
+    }
+
+    // 右半：枚举所有子集的和、掩码、选中个数（位 0..right-1），
+    // 并按"选中个数"分组、组内按和排序，便于限制右半最多再选 (maxCount - 左半已选) 个。
+    final rightByCount =
+        List<List<({double sum, int mask, int count})>>.generate(
+            maxCount + 1, (_) => <({double sum, int mask, int count})>[]);
+    for (var mask = 0; mask < (1 << right); mask++) {
+      var s = 0.0;
+      var c = 0;
+      for (var i = 0; i < right; i++) {
+        if ((mask & (1 << i)) != 0) {
+          s += values[half + i];
+          c++;
+        }
+      }
+      if (c <= maxCount) rightByCount[c].add((sum: s, mask: mask, count: c));
+    }
+    for (final list in rightByCount) {
+      list.sort((a, b) => a.sum.compareTo(b.sum));
+    }
+
+    var bestMask = 0;
+    var bestTotal = -1.0; // 记录不超过箱容的最大合计
+
+    for (final l in left) {
+      if (l.count > maxCount) continue;
+      if (l.sum > target + 1e-9) continue; // 左半自身已超箱容，跳过
+      final need = target - l.sum;
+      final maxRight = maxCount - l.count;
+      if (maxRight < 0) continue;
+
+      // 在所有允许个数的右半子集中，找和 <= need 的最大和（使合计尽量接近 target 且不超）
+      var bestRight = (sum: -1.0, mask: 0, count: 0);
+      var found = false;
+      for (var c = 0; c <= maxRight; c++) {
+        final arr = rightByCount[c];
+        var lo = 0;
+        var hi = arr.length - 1;
+        var pos = -1;
+        while (lo <= hi) {
+          final mid = (lo + hi) ~/ 2;
+          if (arr[mid].sum <= need) {
+            pos = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+        if (pos < 0) continue;
+        // 浮点误差保护：若合计因精度略超目标，回退到更小的组合，确保绝对不超过箱容
+        var p = pos;
+        while (p >= 0 && l.sum + arr[p].sum > target) {
+          p--;
+        }
+        if (p >= 0 && (!found || arr[p].sum > bestRight.sum + 1e-9)) {
+          bestRight = arr[p];
+          found = true;
+        }
+      }
+      if (!found) continue;
+      final total = l.sum + bestRight.sum;
+      if (total > bestTotal + 1e-9) {
+        bestTotal = total;
+        bestMask = l.mask | (bestRight.mask << half);
+      }
+    }
+    return bestMask;
+  }
+
+  // 退化的贪心算法：数据量过大（>40）时退而求其次，优先装大值、不超目标、选中个数不超过 maxCount，精度有限。
+  int _greedySubsetMask(List<double> values, double target, int maxCount) {
+    final n = values.length;
+    final idx = List<int>.generate(n, (i) => i);
+    idx.sort((a, b) => values[b].compareTo(values[a]));
+    var mask = 0;
+    var sum = 0.0;
+    var count = 0;
+    for (final i in idx) {
+      if (count < maxCount && sum + values[i] <= target) {
+        sum += values[i];
+        count++;
+        mask |= (1 << i);
+      }
+    }
+    return mask;
   }
 }
