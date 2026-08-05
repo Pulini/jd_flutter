@@ -439,57 +439,6 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              icon: const Icon(
-                                  Icons.published_with_changes_sharp),
-                              style: ElevatedButton.styleFrom(
-                                iconColor: Colors.blue,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                              ),
-                              label: Text('carton_label_scan_order_clean'.tr),
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                Get.to(() =>
-                                        const NewCartonLabelScanClearTail())
-                                    ?.then((v) {
-                                  _scan();
-                                });
-                              },
-                            ),
-                          ), //清单清尾
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              icon: const Icon(
-                                  Icons.published_with_changes_sharp),
-                              style: ElevatedButton.styleFrom(
-                                iconColor: Colors.blue,
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.white,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                              ),
-                              label: Text('carton_label_scan_order_clean_order'.tr),
-                              onPressed: () {
-                                Navigator.pop(ctx);
-                                Get.to(() =>
-                                        const NewCartonLabelScanEndOrderPage())
-                                    ?.then((v) {
-                                  _scan();
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                   const SizedBox(height: 5),
