@@ -14,6 +14,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -1353,6 +1354,8 @@ class MaintainLabelLogic extends GetxController {
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
+
+    logger.f('---到这里打标了----');
     // 印尼标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
     // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
@@ -1421,6 +1424,7 @@ class MaintainLabelLogic extends GetxController {
             repeatHeader: false,
             // 印尼标：不重复表头、不绘制合计列
             headerFlex: 5, // 首列(尺码/指令)与顶部字段名列(flex 5)等宽
+            centerInstruction: true, // 尺码表指令列居中（_createSizeList 开关，修复印尼标实际打印仍左对齐）
           );
 
       final dm = data.subList!.first.items!.length > 1

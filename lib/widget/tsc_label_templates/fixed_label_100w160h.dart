@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 var _border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
@@ -139,7 +138,7 @@ List<Widget> _createSizeList({
         line.add(frameText(
           flex: needFlex,
           text: ins,
-          alignment: centerInstruction ? Alignment.center : Alignment.center,
+          alignment: centerInstruction ? Alignment.center : Alignment.centerLeft,
         ));
 
         var sizeList = data.sublist(0, data.length - 1);
@@ -231,6 +230,8 @@ Widget dynamicSizeMaterialLabel1095n1096height160({
   required String consignee, //收货方
   bool repeatHeader = true, //是否重复表头/绘制合计列（默认原行为）
   int headerFlex = 2, //首列（指令/标题列）宽度
+  bool centerInstruction = false, //尺码表指令列居中（透传 _createSizeList）
+  bool alignSegments = false, //多段尺码行对齐（透传 _createSizeList）
 }) =>
     _labelContainer(
       widgets: [
@@ -280,6 +281,8 @@ Widget dynamicSizeMaterialLabel1095n1096height160({
             list: materialList,
             repeatHeader: repeatHeader,
             headerFlex: headerFlex,
+            centerInstruction: centerInstruction,
+            alignSegments: alignSegments,
           ),
         _createRowText(
           title: '数量/Qty/kuantitas:',
