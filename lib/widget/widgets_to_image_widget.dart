@@ -140,7 +140,8 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
 /// [width] 标签宽度，110mm 模板为 110 * 5.5。
 Future<Map<String, dynamic>> captureWidgetOffScreen(
   Widget child, {
-  double width = 110 * 5.5,
+  double width = 100 * 5.5,
+  double height = 160 * 5.5,
 }) {
   var completer = Completer<Map<String, dynamic>>();
   late OverlayEntry entry;
@@ -153,6 +154,7 @@ Future<Map<String, dynamic>> captureWidgetOffScreen(
         color: Colors.white,
         child: SizedBox(
           width: width,
+          height: height,
           child: WidgetsToImage(
             image: (map) {
               if (!completer.isCompleted) completer.complete(map);

@@ -1245,7 +1245,7 @@ class MaintainLabelLogic extends GetxController {
       var image = await captureWidgetOffScreen(labelList[i]);
       printList.add(await imageResizeToLabel({
         ...image,
-        'isDynamic': true,
+        'isDynamic': false,
         'speed': speed.toInt(),
         'density': density.toInt(),
       }));
@@ -1355,7 +1355,6 @@ class MaintainLabelLogic extends GetxController {
     required Function(List<Widget>, bool) labels,
   }) {
 
-    logger.f('---到这里打标了----');
     // 印尼标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
     // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
@@ -1437,7 +1436,7 @@ class MaintainLabelLogic extends GetxController {
       labelList.add(buildLabel(dm, qty));
     }
     if (state.isShowPreview.value) {
-      labels.call(labelList, true);
+      labels.call(labelList, false);
     } else {
       //不显示预览：离屏渲染成图片后直接下发打印
       _printLabelWidgetsDirectly(labelList);
