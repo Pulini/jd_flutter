@@ -912,7 +912,7 @@ class LinkOptionsPickerController extends PickerController {
     var pick2 = pickerItems2[item2];
     selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
     selectItem1 =
-        pickerItems1.indexWhere((v) => v.pickerId() == pick1.pickerId());
+        pickerData.indexWhere((v) => v.pickerId() == pick1.pickerId());
     selectItem2 = pickerData[selectItem1]
         .subList()
         .indexWhere((v) => v.pickerId() == pick2.pickerId());
@@ -1008,15 +1008,10 @@ class LinkOptionsPickerController extends PickerController {
           )
           .toList();
       if (pickerItems1.isNotEmpty) {
-        var list = (pickerItems1[0] as LinkPickerItem).subList();
-        var searchList = list
+        pickerItems2.value = (pickerItems1.first as LinkPickerItem)
+            .subList()
             .where((v) => v.toShow().toUpperCase().contains(text.toUpperCase()))
             .toList();
-        if (searchList.isEmpty) {
-          pickerItems2.value = list;
-        } else {
-          pickerItems2.value = searchList;
-        }
       } else {
         pickerItems2.value = [];
       }

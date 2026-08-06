@@ -45,18 +45,23 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
       data: {'bqList': widget.labelCodes},
     ).then((response) async {
       loadingDismiss();
-      labelList.value = [
-        for (var json in jsonDecode(response.data)['data']) json
-      ];
-      for (var web in labelList) {
-        var bytes = await WebcontentConverter.contentToImage(content: web);
-        var map = await htmlImageResize(bytes);
-        reImageList.add({
-          'width': 110,
-          'height': (map['height'] / (map['width'] / 110)).toInt(),
-          'image': map['image'],
-        });
-        htmlImages.add(bytes);
+      var json=jsonDecode(response.data);
+      if(json['successed']==true){
+        labelList.value = [
+          for (var json in json['data']) json
+        ];
+        for (var web in labelList) {
+          var bytes = await WebcontentConverter.contentToImage(content: web);
+          var map = await htmlImageResize(bytes);
+          reImageList.add({
+            'width': 110,
+            'height': (map['height'] / (map['width'] / 110)).toInt(),
+            'image': map['image'],
+          });
+          htmlImages.add(bytes);
+        }
+      }else{
+        errorDialog(content:json['message'],back:()=> Get.back());
       }
     }, onError: (e) {
       loadingDismiss();

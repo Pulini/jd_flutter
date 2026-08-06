@@ -261,7 +261,11 @@ class LinkOptionsPicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           placeholder: 'picker_search'.tr,
-          onChanged: (String value) => pickerController.search(value),
+          onChanged: (String value){
+            controller1.jumpToItem(0);
+            controller2.jumpToItem(0);
+            pickerController.search(value);
+          },
         ),
       );
 

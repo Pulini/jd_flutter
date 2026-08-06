@@ -61,6 +61,7 @@ class ProcessReportStoreState {
   //获取汇总表
   void getBarCodeReport({
     required int processFlowID,
+    required String processNodeName,
     required Function(dynamic) success,
     required Function(String) error,
   }) {
@@ -75,6 +76,7 @@ class ProcessReportStoreState {
         'BillTypeID':BarCodeReportType.processReportInStock.value,
         'Red':  -1,
         'ProcessFlowID': processFlowID,
+        'ProcessNodeName':processNodeName,
         'OrganizeID': userInfo?.organizeID,
         'DefaultStockID': userInfo?.defaultStockID,
         'UserID': userInfo?.userID,

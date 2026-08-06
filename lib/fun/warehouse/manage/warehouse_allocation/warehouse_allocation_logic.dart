@@ -29,6 +29,7 @@ class WarehouseAllocationLogic extends GetxController {
             'BillTypeID': '6',
             'Red': 1,
             'ProcessFlowID': 0,
+            'ProcessNodeName':'',
             'OrganizeID': userInfo?.organizeID,
             'DefaultStockID': userInfo?.defaultStockID,
             'UserID': userInfo?.userID,

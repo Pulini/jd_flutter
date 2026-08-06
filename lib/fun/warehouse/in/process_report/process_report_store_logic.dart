@@ -195,6 +195,7 @@ class ProcessReportStoreLogic extends GetxController {
         } else {
           state.getBarCodeReport(
             processFlowID: processList.first.processFlowID ?? 0,
+            processNodeName: processList.map((v)=>v.processNodeName).join(','),
             success: (report) {
               Get.to(
                 () => const CodeListReportPage(),

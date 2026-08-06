@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_dialog.dart';
-import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -24,7 +23,6 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
       Get.put(SapCartonLabelBindingLogic());
   final SapCartonLabelBindingState state =
       Get.find<SapCartonLabelBindingLogic>().state;
-  PrintUtil pu = PrintUtil();
 
   @override
   void initState() {

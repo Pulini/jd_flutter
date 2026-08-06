@@ -182,6 +182,7 @@ class ProductionScanWarehouseLogic extends GetxController {
           'BillTypeID': BarCodeReportType.productionScanInStock.value,
           'Red': state.red.value ? 1 : -1,
           'ProcessFlowID': 0,
+          'ProcessNodeName':'',
           'OrganizeID': userInfo?.organizeID,
           'DefaultStockID': userInfo?.defaultStockID,
           'UserID': userInfo?.userID,
