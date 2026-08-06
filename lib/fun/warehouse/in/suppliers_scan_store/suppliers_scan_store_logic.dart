@@ -113,6 +113,7 @@ class SuppliersScanStoreLogic extends GetxController {
           'BillTypeID': BarCodeReportType.supplierScanInStock.value,
           'Red': state.red.value ? 1 : -1,
           'ProcessFlowID': 0,
+          'ProcessNodeName':'',
           'OrganizeID': userInfo?.organizeID,
           'DefaultStockID': userInfo?.defaultStockID,
           'UserID': userInfo?.userID,
