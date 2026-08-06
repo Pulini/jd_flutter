@@ -14,7 +14,6 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -1377,7 +1376,7 @@ class MaintainLabelLogic extends GetxController {
         // 无尺码
       } else if (data.subList!.first.items!.length == 1) {
         //单尺码
-        typeBody = '${data.subList!.first.factoryType ?? ''} / ${'${data.subList!.first.items![0].size!}码'?? ''}';
+        typeBody = '${data.subList!.first.factoryType ?? ''} / ${'${data.subList!.first.items![0].size!}码'}';
         qty = data.subList!.first.items![0].qty!.toShowString();
       } else if (data.subList!.first.items!.length > 1) {
         //多尺码（qty 仅用于 printType==false 时的整单总数）
