@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +19,10 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_100w160h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
+import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_state.dart';
@@ -242,6 +243,9 @@ class MaintainLabelLogic extends GetxController {
           final List<CreateCustomLabelsData> subList = [];
           for (var item in items) {
             final double surplus = (item.totalQty ?? 0.0) - (item.qty ?? 0.0);
+            final double? capacity = item.capacityQty != 0.0
+                ? item.capacityQty
+                : (surplus < 100 ? surplus : 100);
             subList.add(CreateCustomLabelsData(
               isSelect: dataList.length == 1,
               size: item.size ?? '0',
@@ -249,8 +253,10 @@ class MaintainLabelLogic extends GetxController {
               goodsTotal: item.totalQty ?? 0.0,
               createdGoods: item.qty ?? 0.0,
               surplusGoods: surplus,
-              capacity: surplus < 100 ? surplus : 100,
-              createGoods: surplus < 100 ? surplus : 100,
+              capacity: capacity,
+              createGoods: capacity != null && capacity > 0
+                  ? surplus - (surplus % capacity)
+                  : (surplus < 100 ? surplus : 100),
               instruct: ins,
             ));
           }
@@ -433,7 +439,9 @@ class MaintainLabelLogic extends GetxController {
       state.setLabelState(
         isPrint: false,
         selectLabels: select,
-        success: (msg) => successDialog(content: msg),
+        success: (msg) => successDialog(content: msg,back: (){
+          refreshDataList();
+        }),
       );
     }
   }
@@ -453,19 +461,30 @@ class MaintainLabelLogic extends GetxController {
       errorDialog(content: 'maintain_label_select_label'.tr);
       return;
     }
+    // 印尼标(1002)/缅甸标(1003) 下发打标前置校验：
+    // 毛重/净重/体积/subList 内 meas 任一为空则直接拦截，
+    // 必须在 setLabelState（设置打印标识）之前完成，
+    // 否则打印标识已置位、标签却生成不出来，状态会不一致。
+    if (state.exitLabelType == 1002 || state.exitLabelType == 1003) {
+      for (var data in select) {
+        final requiredErr = _validateLabelRequiredFields(data);
+        if (requiredErr != null) {
+          errorDialog(content: requiredErr);
+          return;
+        }
+      }
+    }
     if (state.exitLabelType == 1002) {
       state.setLabelState(
         selectLabels: select,
-        success: (msg) => createIndonesiaLabel(
-            list: select,
-            labels: labelsCallback),
+        success: (msg) =>
+            createIndonesiaLabel(list: select, labels: labelsCallback),
       );
     } else if (state.exitLabelType == 1003) {
       state.setLabelState(
         selectLabels: select,
-        success: (msg) => createMyanmarLabel(
-            list: select,
-            labels: labelsCallback),
+        success: (msg) =>
+            createMyanmarLabel(list: select, labels: labelsCallback),
       );
     } else {
       var languageList = <String>[];
@@ -1199,8 +1218,8 @@ class MaintainLabelLogic extends GetxController {
   // 返回 null 表示通过，否则返回具体的缺失信息（含单号）。
   String? _validateLabelRequiredFields(LabelInfo data) {
     final missing = <String>[];
-    if (data.grossWeight==0.0) missing.add('毛重(GrossWeight)');
-    if (data.netWeight==0.0) missing.add('净重(NetWeight)');
+    if (data.grossWeight == 0.0) missing.add('毛重(GrossWeight)');
+    if (data.netWeight == 0.0) missing.add('净重(NetWeight)');
     if (data.volume.isNullOrEmpty()) missing.add('体积(Volume)');
     // 仅在 subList 不为空时校验 meas；subList 为空不报错
     if (!data.subList.isNullOrEmpty() &&
@@ -1211,19 +1230,58 @@ class MaintainLabelLogic extends GetxController {
     return '${data.barCode ?? '未知单号'} 缺少必填项：${missing.join('、')}';
   }
 
+  // 不显示预览时：把标签控件离屏渲染成图片后直接下发打印。
+  // 印尼标(1002)/缅甸标(1003) 是 Widget 版式（dynamic_label_110w），
+  // tsc_util 中没有与之对应的指令模板，因此复用预览页同一套
+  // 「控件转图片 → imageResizeToLabel」链路，区别只是不跳转预览页面。
+  Future<void> _printLabelWidgetsDirectly(List<Widget> labelList) async {
+    if (labelList.isEmpty) return;
+    double speed = spGet(spSavePrintSpeed) ?? 4;
+    double density = spGet(spSavePrintDensity) ?? 15;
+    var printList = <List<Uint8List>>[];
+    for (var i = 0; i < labelList.length; ++i) {
+      loadingShow('正在生成标签(${i + 1}/${labelList.length})');
+      var image = await captureWidgetOffScreen(labelList[i]);
+      printList.add(await imageResizeToLabel({
+        ...image,
+        'isDynamic': true,
+        'speed': speed.toInt(),
+        'density': density.toInt(),
+      }));
+    }
+    loadingDismiss();
+    pu.printLabelList(
+      labelList: printList,
+      start: () => loadingShow('正在下发标签...'),
+      progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+      finished: (success, fail) => successDialog(
+        title: '标签下发结束',
+        content: '完成${success.length}张, 失败${fail.length}张',
+      ),
+    );
+  }
+
 //缅甸标
   void createMyanmarLabel({
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
-    var labelList = <Widget>[];
+    // 缅甸标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
+    // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
-      // 下发打标前：毛重/净重/体积/subList 内 meas 任一为空则拦截，不生成标签
-      final requiredErr = _validateLabelRequiredFields(data);
-      if (requiredErr != null) {
-        errorDialog(content: requiredErr);
+      final hasEn = data.subList?.first.materialOtherName
+              ?.any((v) => v.languageCode == 'en') ==
+          true;
+      if (!hasEn) {
+        errorDialog(
+          content: 'maintain_label_myanmar_label_lack_en_tips'
+              .trArgs([data.barCode ?? '']),
+        );
         return;
       }
+    }
+    var labelList = <Widget>[];
+    for (var data in list) {
       var qty = '';
       var size = '';
       if (data.subList!.first.items!.isEmpty) {
@@ -1239,9 +1297,17 @@ class MaintainLabelLogic extends GetxController {
             .toShowString();
       }
 
+      var subData = LabelLanguageInfo();
+
+      data.subList?.first.materialOtherName?.forEach((v){
+        if(v.languageCode=='en'){
+          subData = v;
+        }
+      });
+
       // 构造单张标签（materialList / inBoxQty 随每张变化）
       Widget buildLabel(Map<String, List> materialList, String boxQty) =>
-          dynamicSizeMaterialLabel1098(
+          dynamicSizeMaterialLabel1098height160(
             labelID: data.barCode ?? '',
             myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
             typeBody: data.subList!.first.factoryType ?? '',
@@ -1254,7 +1320,7 @@ class MaintainLabelLogic extends GetxController {
             customsDeclarationUnit: data.customsDeclarationUnit ?? '',
             customsDeclarationType: data.customsDeclarationType ?? '',
             pieceNo: data.pieceNo ?? '',
-            pieceID: data.pieceID ?? '',
+            pieceID: subData.pageNumber ?? '',
             grossWeight: data.grossWeight.toShowString(),
             netWeight: data.netWeight.toShowString(),
             specifications: data.subList!.first.meas ?? '',
@@ -1274,7 +1340,12 @@ class MaintainLabelLogic extends GetxController {
           : <String, List>{};
       labelList.add(buildLabel(dm, qty));
     }
-    labels.call(labelList, true);
+    if (state.isShowPreview.value) {
+      labels.call(labelList, true);
+    } else {
+      //不显示预览：离屏渲染成图片后直接下发打印
+      _printLabelWidgetsDirectly(labelList);
+    }
   }
 
 //印尼标
@@ -1282,22 +1353,29 @@ class MaintainLabelLogic extends GetxController {
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
-    var labelList = <Widget>[];
+    // 印尼标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
+    // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
-      // 下发打标前：毛重/净重/体积/subList 内 meas 任一为空则拦截，不生成标签
-      final requiredErr = _validateLabelRequiredFields(data);
-      if (requiredErr != null) {
-        errorDialog(content: requiredErr);
+      final hasEn = data.subList?.first.materialOtherName
+              ?.any((v) => v.languageCode == 'en') ==
+          true;
+      if (!hasEn) {
+        errorDialog(
+          content: 'maintain_label_indonesia_label_lack_en_tips'
+              .trArgs([data.barCode ?? '']),
+        );
         return;
       }
+    }
+    var labelList = <Widget>[];
+    for (var data in list) {
       var qty = '';
       var typeBody = '';
       if (data.subList!.first.items!.isEmpty) {
         // 无尺码
       } else if (data.subList!.first.items!.length == 1) {
         //单尺码
-        typeBody = (data.subList!.first.factoryType ?? '') +
-            (data.subList!.first.items![0].size ?? '');
+        typeBody = '${data.subList!.first.factoryType ?? ''} / ${'${data.subList!.first.items![0].size!}码'?? ''}';
         qty = data.subList!.first.items![0].qty!.toShowString();
       } else if (data.subList!.first.items!.length > 1) {
         //多尺码（qty 仅用于 printType==false 时的整单总数）
@@ -1308,9 +1386,17 @@ class MaintainLabelLogic extends GetxController {
             .toShowString();
       }
 
+      var subData = LabelLanguageInfo();
+
+      data.subList?.first.materialOtherName?.forEach((v){
+        if(v.languageCode=='en'){
+          subData = v;
+        }
+      });
+
       // 构造单张标签（materialList / inBoxQty 随每张变化）
       Widget buildLabel(Map<String, List> materialList, String boxQty) =>
-          dynamicSizeMaterialLabel1095n1096(
+          dynamicSizeMaterialLabel1095n1096height160(
             labelID: data.barCode ?? '',
             productName: data.productName ?? '',
             orderType: data.orderType ?? '',
@@ -1324,17 +1410,16 @@ class MaintainLabelLogic extends GetxController {
             customsDeclarationUnit: data.customsDeclarationUnit ?? '',
             customsDeclarationType: data.customsDeclarationType ?? '',
             pieceID: data.pieceID ?? '',
-            pieceNo: data.pieceNo ?? '',
+            pieceNo: subData.pageNumber ?? '',
             grossWeight: data.grossWeight.toShowString(),
             netWeight: data.netWeight.toShowString(),
             specifications: data.subList!.first.meas ?? '',
             volume: data.volume ?? '',
-            supplier: '',
+            supplier: data.supplier ?? '',
             manufactureDate: data.manufactureDate ?? '',
             consignee: '',
-            hasNotes: true,
-            notes: data.notes ?? '',
-            repeatHeader: false, // 印尼标：不重复表头、不绘制合计列
+            repeatHeader: false,
+            // 印尼标：不重复表头、不绘制合计列
             headerFlex: 5, // 首列(尺码/指令)与顶部字段名列(flex 5)等宽
           );
 
@@ -1347,7 +1432,12 @@ class MaintainLabelLogic extends GetxController {
           : <String, List>{};
       labelList.add(buildLabel(dm, qty));
     }
-    labels.call(labelList, true);
+    if (state.isShowPreview.value) {
+      labels.call(labelList, true);
+    } else {
+      //不显示预览：离屏渲染成图片后直接下发打印
+      _printLabelWidgetsDirectly(labelList);
+    }
   }
 
   void createPartOrderDynamicLabel({
@@ -1543,13 +1633,32 @@ class MaintainLabelLogic extends GetxController {
   }
 
   void customLabelsBatchSet(int batchBoxCapacity, int batchCreateGoods) {
-    for (var item
-        in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
-      item.capacity.value = batchBoxCapacity.toDouble();
-      item.capacityController!.text = batchBoxCapacity.toString();
-      item.createGoods.value = batchCreateGoods.toDouble();
-      item.createGoodsController!.text = batchCreateGoods.toString();
+    if(batchBoxCapacity>0 && batchCreateGoods==0){
+      for (var item
+      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+        item.capacity.value = batchBoxCapacity.toDouble();
+        item.capacityController!.text = batchBoxCapacity.toString();
+        // 仅设置箱容时，按“剩余数量向下取整到箱容倍数”重算应建货数
+        final cap = batchBoxCapacity.toDouble();
+        item.createGoods.value = item.surplusGoods - (item.surplusGoods % cap);
+        item.createGoodsController!.text = item.createGoods.value.toShowString();
+      }
+    } else if(batchBoxCapacity==0 && batchCreateGoods>0){
+      for (var item
+      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+        item.createGoods.value = batchCreateGoods.toDouble();
+        item.createGoodsController!.text = batchCreateGoods.toString();
+      }
+    }else if(batchBoxCapacity>0 && batchCreateGoods>0){
+      for (var item
+      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+        item.capacity.value = batchBoxCapacity.toDouble();
+        item.capacityController!.text = batchBoxCapacity.toString();
+        item.createGoods.value = batchCreateGoods.toDouble();
+        item.createGoodsController!.text = batchCreateGoods.toString();
+      }
     }
+    state.createCustomLabelsData.refresh();
   }
 
   void cleanMixedAssemble() {
@@ -1564,9 +1673,10 @@ class MaintainLabelLogic extends GetxController {
   // 每箱尽量装满、合计不超过箱容，且每箱拼接的尺码（条目）数不超过 maxSizesPerBox；
   // 最后在弹窗里展示每箱明细。
   void mixedAssemble(String mixCapacity) {
-    // 仅 1002（印尼标）控制每箱最多 5 个尺码混装；其余类型不限制尺码数。
+    // 仅 1002（印尼标）控制每箱最多 7 个尺码混装；其余类型不限制尺码数。
     final bool controlSize = state.exitLabelType == 1002;
-    final int maxSizesPerBox = controlSize ? 7 : state.createCustomLabelsData.length;
+    final int maxSizesPerBox =
+        controlSize ? 7 : state.createCustomLabelsData.length;
     final target = mixCapacity.toDoubleTry();
     final items = state.createCustomLabelsData;
     if (items.isEmpty || target <= 0) {

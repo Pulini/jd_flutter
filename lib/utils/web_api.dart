@@ -1710,6 +1710,15 @@ const webApiConfirmTailCartonRecords = 'api/OutBoxScanNew/ConfirmTailCartonRecor
 // 尾数提交
 const webApiUPSERTTailCartonRecordsTotal = 'api/OutBoxScanNew/UPSERTTailCartonRecordsTotal';
 
+// 获取事业部
+const webApiForDivision = 'sap/zapp/ZMM_GET_YZ';
+
+// 获取派工单（国外）
+const webApiGetProcessWorkCardInfo = 'api/ProcessWorkCard/GetProcessWorkCardInfo';
+
+// 派工
+const webApiSaveProcessWorkCardInfo = 'api/ProcessWorkCard/SaveProcessWorkCardInfo';
+
 
 
 

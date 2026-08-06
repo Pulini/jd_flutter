@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 
 //控件转图片byte
 class WidgetsToImage extends StatefulWidget {
@@ -127,4 +129,65 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       child: widget.child,
     );
   }
+}
+
+/// 离屏把标签控件渲染成图片（不跳转预览页，用于「不显示预览」时直接下发打印）。
+///
+/// 原理：借助 Overlay 把控件挂载到可视区域之外，它仍会正常参与布局与绘制，
+/// 等 [WidgetsToImage] 内部的 RepaintBoundary 绘制完成拿到图片后再移除。
+/// 返回值与 [WidgetsToImage] 的回调完全一致：{'image','width','height','pixelRatio'}
+///
+/// [width] 标签宽度，110mm 模板为 110 * 5.5。
+Future<Map<String, dynamic>> captureWidgetOffScreen(
+  Widget child, {
+  double width = 110 * 5.5,
+}) {
+  var completer = Completer<Map<String, dynamic>>();
+  late OverlayEntry entry;
+  entry = OverlayEntry(
+    builder: (_) => Positioned(
+      //移到可视区域外，不干扰界面，但依然会被布局和绘制
+      left: -(width + 100),
+      top: 0,
+      child: Material(
+        color: Colors.white,
+        child: SizedBox(
+          width: width,
+          child: WidgetsToImage(
+            image: (map) {
+              if (!completer.isCompleted) completer.complete(map);
+            },
+            child: child,
+          ),
+        ),
+      ),
+    ),
+  );
+  //多重策略获取 Overlay（Get.overlayContext 在异步回调链中可能失效，报 No Overlay widget found）
+  OverlayState? overlayState;
+  //策略1：从当前路由上下文取 Navigator.overlay（最可靠，不依赖 overlayContext）
+  try {
+    final ctx = Get.context;
+    if (ctx != null) overlayState = Navigator.of(ctx).overlay;
+  } catch (_) {}
+  //策略2：兜底用 Get.overlayContext（同步调用场景可用）
+  if (overlayState == null) {
+    try {
+      final ctx = Get.overlayContext;
+      if (ctx != null) overlayState = Overlay.of(ctx);
+    } catch (_) {}
+  }
+  if (overlayState == null) {
+    completer.completeError(StateError('No Overlay available'));
+    return completer.future;
+  }
+  overlayState.insert(entry);
+  return completer.future.whenComplete(() {
+    //延后一帧移除，避免在绘制过程中卸载导致异常
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        entry.remove();
+      } catch (_) {}
+    });
+  });
 }

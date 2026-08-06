@@ -767,3 +767,33 @@ class PickerSapDestination extends PickerItem {
     return destinationName ?? '';
   }
 }
+
+class PickerSapDivision extends PickerItem {
+  PickerSapDivision({
+    required this.divisionId,
+    required this.divisionName,
+  });
+
+  PickerSapDivision.fromJson(dynamic json) {
+    divisionId = json['DOMVALUE_L'];
+    divisionName = json['DDTEXT'];
+  }
+
+  String? divisionId;
+  String? divisionName;
+
+  @override
+  String pickerId() {
+    return divisionId??'';
+  }
+
+  @override
+  String pickerName() {
+    return divisionName ?? '';
+  }
+
+  @override
+  String toShow() {
+    return divisionName ?? '';
+  }
+}

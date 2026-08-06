@@ -340,7 +340,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
             list,
             state.interID,
             state.materialCodes.first,
-            () => logic.refreshDataList(),
+            () => logic.refreshDataList()
           ),
         ),
         boxCapacity: () => logic.getMaterialCapacity(

@@ -34,6 +34,7 @@ class QualityInspectionListLogic extends GetxController {
     required String supplier,
     required String sapCompany,
     required String factory,
+    required String division,
   }) {
     state.orderType.value = orderType;
     state.getInspectionList(
@@ -49,6 +50,7 @@ class QualityInspectionListLogic extends GetxController {
       supplier: supplier,
       sapCompany: sapCompany,
       factory: factory,
+      division: division,
       error: (msg) => errorDialog(content: msg),
     );
   }

@@ -69,7 +69,8 @@ class _MaintainLabelCreateCustomPageState
               ),
               Obx(() => CombinationButton(
                     combination: Combination.left,
-                    isEnabled: state.createCustomLabelsData.isNotEmpty && state.createCustomLabelsData.any((v) => v.isSelect.value && state.mixCapacityControllerText.value.isEmpty),
+                    isEnabled: state.createCustomLabelsData.isNotEmpty &&
+                        state.createCustomLabelsData.any((v) => v.isSelect.value),
                     text: '批量设置',
                     click: () => logic.customLabelsBatchSet(
                       batchBoxCapacityController.text.toIntTry(),
@@ -79,7 +80,7 @@ class _MaintainLabelCreateCustomPageState
               Obx(
                 () => CombinationButton(
                   isEnabled: state.createCustomLabelsData.isNotEmpty &&
-                      state.createCustomLabelsData.any((v) => v.isCanCreate() && state.mixCapacityControllerText.value.isEmpty),
+                      state.createCustomLabelsData.any((v) => v.isSelect.value),
                   text: 'maintain_label_dialog_set_full'.tr,
                   click: () => logic.setFull(),
                   combination: Combination.middle,

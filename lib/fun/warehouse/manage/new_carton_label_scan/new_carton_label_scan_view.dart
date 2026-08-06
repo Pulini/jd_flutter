@@ -12,8 +12,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
-import 'new_carton_label_scan_clear_tail.dart';
-import 'new_carton_label_scan_end_order_view.dart';
 import 'new_carton_label_scan_logic.dart';
 import 'new_carton_label_scan_state.dart';
 

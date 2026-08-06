@@ -117,15 +117,16 @@ List<Widget> _createSizeList({
 
   var tableList = <Widget>[];
   if (list.isNotEmpty) {
-    int max = 5;
-    int needFlex = 2;
-    if(repeatHeader){
-       max = 5;
-       needFlex = 2;
-    }else{
-       max = 7;
-       needFlex=3;
-    }
+    // 一行最多放 7 个尺码（印尼标每箱最多混装 7 个尺码，故一行恰好能放下）
+    const int max = 7;
+    // 本行尺码区的固定槽位数：repeatHeader==true 时末段还要画合计列，统一多留 1 格保证各段列宽一致
+    final int slots = repeatHeader ? max + 1 : max;
+    // 首列(尺码/指令列)宽度：
+    // repeatHeader==false(印尼标) 换算到与顶部 _createRowText 相同的份制(字段名 5 : 内容 15，共 20 份)，
+    // 使首列恒定占 headerFlex/20，不随本行实际尺码个数而伸缩；
+    // repeatHeader==true 保持原比例，不影响既有模板。
+    final int needFlex = repeatHeader ? headerFlex : headerFlex * slots;
+    final int cellFlex = repeatHeader ? 1 : (20 - headerFlex);
     // 去掉末尾合计项后再算段数，避免 5 尺码(6列)被算成 2 段而产生空行
     final maxColumns = ((list.values.toList()[0].length - 1) / max).ceil();
     for (int i = 0; i < maxColumns; i++) {
@@ -142,22 +143,28 @@ List<Widget> _createSizeList({
         for (var j = start; j < to; ++j) {
           //添加尺码列
           line.add(frameText(
+            flex: cellFlex,
             alignment: Alignment.center,
             text: sizeList[j],
           ));
         }
-        var fill = max - ((to + 1) - start);
+        //如果尺码不足一整段，则填充空白列，保证首列宽度恒定、各段列宽一致
+        var fill =
+            repeatHeader ? max - ((to + 1) - start) : slots - (to - start);
         if (fill > 0) {
-          //如果数据不足Max列，则填充空白列
           line.add(Expanded(
-            flex: max - ((to + 1) - start),
+            flex: fill * cellFlex,
             child: Container(decoration: _border),
           ));
         }
 
         if (repeatHeader && i == maxColumns - 1) {
           //添加末尾列（合计）：仅最后一段且允许重复表头时绘制
-          line.add(frameText(alignment: Alignment.center, text: data.last));
+          line.add(frameText(
+            flex: cellFlex,
+            alignment: Alignment.center,
+            text: data.last,
+          ));
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
       });

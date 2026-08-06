@@ -26,6 +26,7 @@ class TemporaryOrderState {
     required String materialCode,
     required String factoryArea,
     required String factoryNo,
+    required String divisionId,
     required String userNumber,
     required String trackNo,
     required Function(String) error,
@@ -49,6 +50,7 @@ class TemporaryOrderState {
         'TrackNo': trackNo,
         'Character': userInfo?.sapRole,
         'UserID': userInfo?.userID,
+        'division': divisionId,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

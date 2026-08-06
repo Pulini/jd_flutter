@@ -65,6 +65,12 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     saveKey: '${RouteConfig.qualityInspectionList.name}${PickerType.endDate}',
   );
 
+  var opcDivision = OptionsPickerController(
+    hasAll: true,
+    PickerType.sapDivision,
+    saveKey: '${RouteConfig.qualityInspectionList.name}${PickerType.sapDivision}',
+  );
+
   late SpinnerController scOrderType;
 
   var typeBodyController = TextEditingController();
@@ -95,6 +101,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       supplier: supplierController.selectedId.value,
       sapCompany: sapCompanyController.selectedId.value,
       factory: factoryController.selectedId.value,
+      division: opcDivision.selectedId.value,
     );
     state.allSelect.value = false;
   }
@@ -268,6 +275,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           OptionsPicker(pickerController: sapCompanyController),
           OptionsPicker(pickerController: factoryController),
           OptionsPicker(pickerController: supplierController),
+          OptionsPicker(pickerController: opcDivision),
           DatePicker(pickerController: dpcStartDate),
           DatePicker(pickerController: dpcEndDate),
           Spinner(controller: scOrderType),

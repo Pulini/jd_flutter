@@ -33,6 +33,11 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
   var tecTypeBody = TextEditingController();
   var tecTrackNo = TextEditingController();
   var tecInspectorNumber = TextEditingController();
+  var opcDivision = OptionsPickerController(
+    hasAll: true,
+    PickerType.sapDivision,
+    saveKey: '${RouteConfig.temporaryOrder.name}${PickerType.sapDivision}',
+  );
   var opcCompany = OptionsPickerController(
     hasAll: true,
     PickerType.sapCompany,
@@ -73,6 +78,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
       materialCode: tecMaterialCode.text,
       factoryArea: opcCompany.selectedId.value,
       factoryNo: opcFactory.selectedId.value,
+      divisionId: opcDivision.selectedId.value,
       userNumber: tecInspectorNumber.text,
       trackNo: tecTrackNo.text,
     );
@@ -171,9 +177,13 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
                       ),
                     ),
                     Expanded(
-                      flex: 2,
                       child: OptionsPicker(
                         pickerController: opcSupplier,
+                      ),
+                    ),
+                    Expanded(
+                      child: OptionsPicker(
+                        pickerController: opcDivision,
                       ),
                     ),
                   ],

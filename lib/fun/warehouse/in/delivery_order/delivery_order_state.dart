@@ -45,6 +45,7 @@ class DeliveryOrderState {
     required String workCenter,
     required String warehouse,
     required String factory,
+    required String division,
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -73,6 +74,7 @@ class DeliveryOrderState {
                     ? 'OutOfStock'
                     : 'All',
         'factoryNo': factory,
+        'division': division,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

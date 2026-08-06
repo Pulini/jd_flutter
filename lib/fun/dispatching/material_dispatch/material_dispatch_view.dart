@@ -363,41 +363,12 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         ),
         CombinationButton(
           text: 'material_dispatch_report_to_sap'.tr,
-          click: () {
-            // ===== TEMP DEBUG 假数据预览，确认效果后请删除 =====
-            final fakeData = MaterialDispatchInfo(
-              materialName: '0.22mm*1.5m 白色JY28可特（针织布/100%涤纶）',
-              mustEnter: '1', // '1'=必填(红色标题)  '0'=非必填
-            );
-            final fakeSub = Children(
-              billNo: 'MO-2026-0001',
-              codeQty: '0',
-              // 为0 → 报工数量默认=noCodeQty，max=qty-finishQty
-              noCodeQty: '20',
-              qty: '100',
-              finishQty: '10',
-              sapColorBatch: 'BATCH-2026-001',
-            );
-            subItemReportDialog(
-              context,
-              fakeData,
-              fakeSub,
-              (q, l, w, h, gw, nw, destination) {
-                logger.f('提交----');
-              },
-            );
-            // ===== TEMP DEBUG END =====
-          },
+          click: () => askDialog(
+            content: 'material_dispatch_report_to_sap_tips'.tr,
+            confirm: () => logic.reportToSAP(refresh: () => _query()),
+          ),
           combination: Combination.right,
         ),
-        // CombinationButton(
-        //   text: 'material_dispatch_report_to_sap'.tr,
-        //   click: () => askDialog(
-        //     content: 'material_dispatch_report_to_sap_tips'.tr,
-        //     confirm: () => logic.reportToSAP(refresh: () => _query()),
-        //   ),
-        //   combination: Combination.right,
-        // ),
         const SizedBox(width: 10),
       ],
       queryWidgets: [

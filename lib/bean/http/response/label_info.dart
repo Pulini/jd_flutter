@@ -52,6 +52,7 @@ class LabelInfo {
     this.notes,
     this.productName,
     this.orderType,
+    this.supplier,
   });
 
   LabelInfo.fromJson(dynamic json) {
@@ -78,6 +79,7 @@ class LabelInfo {
     pieceNo = json['PieceNo'];
     pieceID = json['PieceID'];
     volume = json['Volume'];
+    supplier = json['Supplier'];
     manufactureDate = json['ManufactureDate'];
     notes = json['Notes'];
     labelType = json['LabelType'];
@@ -92,6 +94,7 @@ class LabelInfo {
 
   bool select = false;
 
+  String? supplier;
   String? orderType;
   String? productName;
   String? barCode;
@@ -124,6 +127,7 @@ class LabelInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['Supplier'] = supplier;
     map['OrderType'] = orderType;
     map['ProductName'] = productName;
     map['BarCode'] = barCode;

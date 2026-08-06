@@ -22,6 +22,7 @@ class TemporaryOrderLogic extends GetxController {
     required String materialCode,
     required String factoryArea,
     required String factoryNo,
+    required String divisionId,
     required String userNumber,
     required String trackNo,
   }) {
@@ -35,6 +36,7 @@ class TemporaryOrderLogic extends GetxController {
       materialCode: materialCode,
       factoryArea: factoryArea,
       factoryNo: factoryNo,
+      divisionId:divisionId,
       userNumber: userNumber,
       trackNo: trackNo,
       error: (msg) => errorDialog(content: msg),

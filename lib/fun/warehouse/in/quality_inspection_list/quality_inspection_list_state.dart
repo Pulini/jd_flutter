@@ -36,6 +36,7 @@ class QualityInspectionListState {
     required String supplier,
     required String sapCompany,
     required String factory,
+    required String division,
     required Function(String) error,
   }) {
     httpPost(
@@ -57,6 +58,7 @@ class QualityInspectionListState {
         'Role': userInfo?.sapRole,
         'FactoryCode': factory, //工厂代码
         'TrackNo': trackingNumber, //跟踪号
+        'division': division, //事业部
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

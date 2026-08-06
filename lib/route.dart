@@ -223,7 +223,7 @@ class RouteConfig {
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    215,
+    216,
     const MaterialDispatchPage(),
   );
 
@@ -272,7 +272,7 @@ class RouteConfig {
   //订单产量采集
   static Routes newCartonLabelScan = Routes(
     '/new_carton_label_scan_page',
-    214,
+    215,
     const NewCartonLabelScanPage(),
   );
 

@@ -17,9 +17,11 @@ class PickingBarCodeInfo {
     this.qty,
     this.labelCount,
     this.totalQty,
+    this.capacityQty,
   });
 
   PickingBarCodeInfo.fromJson(dynamic json) {
+    capacityQty = json['CapacityQty'];
     interID = json['InterID'];
     mtono = json['Mtono'];
     size = json['Size'];
@@ -44,9 +46,11 @@ class PickingBarCodeInfo {
   double? qty;
   int? labelCount;
   double? totalQty;
+  double? capacityQty;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['CapacityQty'] = capacityQty;
     map['InterID'] = interID;
     map['Mtono'] = mtono;
     map['Size'] = size;

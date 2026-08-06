@@ -39,6 +39,12 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   var tecMaterialCode = TextEditingController();
   var tecWorkerNumber = TextEditingController();
 
+  var opcDivision = OptionsPickerController(
+    hasAll: true,
+    PickerType.sapDivision,
+    saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.sapDivision}',
+  );
+
   var opcCompany = OptionsPickerController(
     hasAll: true,
     PickerType.sapCompany,
@@ -92,6 +98,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       workCenter: opcWorkCenter.selectedId.value,
       warehouse: lopcFactoryWarehouse.getPickItem2().pickerId(),
       factory: lopcFactoryWarehouse.getPickItem1().pickerId(),
+      division: opcDivision.getPickItem().pickerId(),
     );
   }
 
@@ -174,10 +181,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           OptionsPicker(pickerController: opcSupplier),
           LinkOptionsPicker(pickerController: lopcFactoryWarehouse),
           OptionsPicker(pickerController: opcWorkCenter),
-          EditText(
-            hint: 'delivery_order_worker_number'.tr,
-            controller: tecWorkerNumber,
-          ),
+          OptionsPicker(pickerController: opcDivision),
           Row(
             children: [
               Expanded(child: DatePicker(pickerController: dpcStartDate)),
@@ -306,32 +310,36 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                 hint: 'delivery_order_worker_number'.tr,
                 controller: tecWorkerNumber,
               )),
+              Expanded(child: OptionsPicker(pickerController: opcDivision))
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
               Expanded(
-                flex: 3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Obx(() => CheckBox(
-                          onChanged: (v) => state.orderType.value = 1,
-                          name: 'delivery_order_all'.tr,
-                          value: state.orderType.value == 1,
-                        )),
-                    Obx(() => CheckBox(
-                          onChanged: (v) => v
-                              ? state.orderType.value = 2
-                              : state.orderType.value = 1,
-                          name: 'delivery_order_created_temporary'.tr,
-                          value: state.orderType.value == 2,
-                        )),
-                    Obx(() => CheckBox(
-                          onChanged: (v) => v
-                              ? state.orderType.value = 3
-                              : state.orderType.value = 1,
-                          name: 'delivery_order_not_created_temporary'.tr,
-                          value: state.orderType.value == 3,
-                        )),
-                  ],
-                ),
+                child: Obx(() => CheckBox(
+                      onChanged: (v) => state.orderType.value = 1,
+                      name: 'delivery_order_all'.tr,
+                      value: state.orderType.value == 1,
+                    )),
+              ),
+              Expanded(
+                child: Obx(() => CheckBox(
+                      onChanged: (v) => v
+                          ? state.orderType.value = 2
+                          : state.orderType.value = 1,
+                      name: 'delivery_order_created_temporary'.tr,
+                      value: state.orderType.value == 2,
+                    )),
+              ),
+              Expanded(
+                child: Obx(() => CheckBox(
+                      onChanged: (v) => v
+                          ? state.orderType.value = 3
+                          : state.orderType.value = 1,
+                      name: 'delivery_order_not_created_temporary'.tr,
+                      value: state.orderType.value == 3,
+                    )),
               ),
             ],
           ),
@@ -699,8 +707,9 @@ class _DeliveryOrderItem extends StatelessWidget {
                 ? 'delivery_order_in_and_out'.tr
                 : 'delivery_order_not_in_and_out'.tr,
             style: TextStyle(
-              color:
-                  data.first.isPackingMaterials == true ? Colors.blue : Colors.red,
+              color: data.first.isPackingMaterials == true
+                  ? Colors.blue
+                  : Colors.red,
             ),
           ),
         ],

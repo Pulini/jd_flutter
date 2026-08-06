@@ -31,7 +31,8 @@ enum PickerType {
   endDate,
   mesStockList,
   mesBillStockList,
-  sapDestination
+  sapDestination,
+  sapDivision
 }
 
 abstract class PickerController {
@@ -90,6 +91,8 @@ abstract class PickerController {
         return 'picker_type_order_stock_list'.tr;
       case PickerType.sapDestination:
         return 'picker_type_sap_destination'.tr;
+      case PickerType.sapDivision:
+        return 'picker_type_sap_division'.tr;
       default:
         return 'Picker';
     }
@@ -139,6 +142,8 @@ abstract class PickerController {
         return getOrderStockList();
       case PickerType.sapDestination:
         return getSapDestination();
+      case PickerType.sapDivision:
+        return getSapDivision();
       default:
         return 'picker_type_error'.tr;
     }
@@ -469,7 +474,7 @@ abstract class PickerController {
     var response = await httpGet(
       method: webApiPickerSapWorkCenterNew,
       params: {
-        'ShowType':'GetWorkcenterAndDevices',
+        'ShowType': 'GetWorkcenterAndDevices',
         'UserID': userInfo?.userID ?? 0,
       },
     );
@@ -728,6 +733,34 @@ abstract class PickerController {
           ParseJsonParams(
             response.data,
             PickerSapDestination.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  //获取sap事业部
+  Future getSapDivision() async {
+    var response = await sapPost(method: webApiForDivision, body: {
+      'I_DOMNAME': 'ZDIVISION',
+      'I_LANG': 1,
+    });
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapDivision(divisionId: '', divisionName: '无')
+        ];
+        list.addAll(await compute(
+          parseJsonToList,
+          ParseJsonParams(
+            response.data,
+            PickerSapDivision.fromJson,
           ),
         ));
         return list;
@@ -1001,8 +1034,8 @@ class DatePickerController extends PickerController {
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 7);
   final String? buttonName;
   int initDate;
-   Function(DateTime)? onChanged;
-   Function(DateTime)? onSelected;
+  Function(DateTime)? onChanged;
+  Function(DateTime)? onSelected;
 
   DatePickerController(
     super.pickerType, {

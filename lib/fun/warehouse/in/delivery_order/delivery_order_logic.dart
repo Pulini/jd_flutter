@@ -27,6 +27,7 @@ class DeliveryOrderLogic extends GetxController {
     required String workCenter,
     required String warehouse,
     required String factory,
+    required String division,
   }) {
     state.getDeliveryOrders(
       startDate: startDate,
@@ -41,6 +42,7 @@ class DeliveryOrderLogic extends GetxController {
       workCenter: workCenter,
       warehouse: warehouse,
       factory: factory,
+      division: division,
       success: (msg) {},
       error: (msg) => errorDialog(content: msg),
     );
