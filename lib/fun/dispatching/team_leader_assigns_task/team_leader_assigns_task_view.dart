@@ -158,45 +158,73 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 标题头（支持换行，与 includesProcess 交集的工序高亮为绿色）
-          RichText(
-            text: TextSpan(children: processSpans),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          InkWell(
+            child: RichText(
+              text: TextSpan(children: processSpans),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text('team_leader_process_flow'.tr,
+                      style: const TextStyle(color: Colors.orange)),
+                  content: SingleChildScrollView(
+                    child: RichText(
+                      text: TextSpan(children: processSpans),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(),
+                      child: Text('dialog_default_got_it'.tr),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           const Divider(height: 8, thickness: 1, color: Color(0xFFEEEEEE)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 左：部件缩略图
-              SizedBox(
-                width: 48,
-                height: 48,
-                child: data.fPictureUrl != null && data.fPictureUrl!.isNotEmpty
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: CachedNetworkImage(
-                          imageUrl: data.fPictureUrl!,
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) => Container(
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.image,
-                                size: 20, color: Colors.grey),
-                          ),
-                          errorWidget: (_, __, ___) => Container(
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.broken_image,
-                                size: 20, color: Colors.grey),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Icon(Icons.image,
-                            size: 20, color: Colors.grey),
-                      ),
+              // 左：部件缩略图（点击放大查看大图）
+              GestureDetector(
+                onTap: data.fPictureUrl != null && data.fPictureUrl!.isNotEmpty
+                    ? () => _showImagePreview(data.fPictureUrl!)
+                    : null,
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child:
+                      data.fPictureUrl != null && data.fPictureUrl!.isNotEmpty
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: CachedNetworkImage(
+                                imageUrl: data.fPictureUrl!,
+                                fit: BoxFit.cover,
+                                placeholder: (_, __) => Container(
+                                  color: Colors.grey.shade200,
+                                  child: const Icon(Icons.image,
+                                      size: 20, color: Colors.grey),
+                                ),
+                                errorWidget: (_, __, ___) => Container(
+                                  color: Colors.grey.shade200,
+                                  child: const Icon(Icons.broken_image,
+                                      size: 20, color: Colors.grey),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Icon(Icons.image,
+                                  size: 20, color: Colors.grey),
+                            ),
+                ),
               ),
               const SizedBox(width: 8),
               // 用料明细
@@ -218,6 +246,40 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  // 点击物料缩略图后弹出大图预览
+  void _showImagePreview(String url) {
+    if (!context.mounted) return;
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.black.withValues(alpha: 0.85),
+        insetPadding: const EdgeInsets.all(16),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            CachedNetworkImage(
+              imageUrl: url,
+              fit: BoxFit.contain,
+              placeholder: (_, __) => const CircularProgressIndicator(
+                color: Colors.white,
+              ),
+              errorWidget: (_, __, ___) =>
+                  const Icon(Icons.broken_image, size: 60, color: Colors.white),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -260,56 +322,63 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                     style: const TextStyle(fontSize: 13, color: Colors.black87),
                   ),
                 ),
+                // 工号输入（窄列）
                 Expanded(
-                  flex: 6,
+                  flex: 1,
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    height: 32,
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 24,
-                            child: TextField(
-                              controller: data.operatorController,
-                              onChanged: (v) =>
-                                  logic.checkOperatorInput(data, v),
-                              style: const TextStyle(fontSize: 12),
-                              textAlignVertical: TextAlignVertical.center,
-                              decoration: InputDecoration(
-                                hintText: 'team_leader_input_worker_no'.tr,
-                                hintStyle: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 4),
-                              ),
-                            ),
-                          ),
+                    child: SizedBox(
+                      height: 24,
+                      child: TextField(
+                        controller: data.operatorController,
+                        onChanged: (v) => logic.checkOperatorInput(data, v),
+                        style: const TextStyle(fontSize: 12),
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          hintText: 'team_leader_input_worker_no'.tr,
+                          hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
                         ),
-                        // 工号匹配状态：匹配到则显示姓名，否则统一显示未匹配
-                        Obx(() {
-                          var no = data.assignedOperator.value;
-                          var emp = no.isEmpty ? null : logic.findEmployee(no);
-                          return Text(
-                            emp?.fName ?? 'team_leader_worker_not_match'.tr,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: emp == null
-                                  ? FontWeight.normal
-                                  : FontWeight.bold,
-                              color: emp == null ? Colors.grey : Colors.green,
-                            ),
-                          );
-                        }),
-                      ],
+                      ),
                     ),
                   ),
+                ),
+                // 员工（姓名，按工号匹配；宽为工号列的 3 倍）
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    height: 32,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Obx(() {
+                      final no = data.operatorNo.value;
+                      final emp = no.isEmpty ? null : logic.findEmployee(no);
+                      return Text(
+                        emp?.fName ?? '',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12, color: Colors.black87),
+                      );
+                    }),
+                  ),
+                ),
+                // 状态：是否已匹配
+                Expanded(
+                  flex: 1,
+                  child: Obx(() => Icon(
+                        data.isMatched.value
+                            ? Icons.check_circle
+                            : Icons.check_circle,
+                        color: data.isMatched.value ? Colors.green : Colors.grey,
+                        size: 20,
+                      )),
                 ),
                 Expanded(
                   flex: 2,
@@ -339,7 +408,7 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                               isWarning: true,
                               message: val == null
                                   ? 'team_leader_input_valid_number'.tr
-                                  : '本次分配数量不能超过剩余未分配数量（$max）',
+                                  : 'team_leader_qty_exceed_remaining'.trArgs(['$max']),
                             );
                             return;
                           }
@@ -429,9 +498,25 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
             ),
           ),
           Expanded(
-            flex: 6,
+            flex: 1,
             child: Text(
-              'team_leader_assign_operator'.tr,
+              'team_leader_worker_no'.tr,
+              textAlign: TextAlign.center,
+              style: teStyle,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              'team_leader_employee'.tr,
+              textAlign: TextAlign.center,
+              style: teStyle,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'team_leader_match_status'.tr,
               textAlign: TextAlign.center,
               style: teStyle,
             ),
@@ -514,10 +599,9 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
     return Container(
       decoration: backgroundColor(),
       child: Scaffold(
-        // 关键：设为 false，页面布局区域始终是全屏高度、不被键盘压缩，
-        // 因此内部的 Expanded / 固定高度组合永远不会 overflow。
-        // 键盘遮挡的部分改由下方 ListView 底部垫空白 + 滚动来解决。
-        resizeToAvoidBottomInset: false,
+        // 设为 true：软键盘弹出时 Scaffold 主体高度自动减去键盘高度，
+        // 整页内容随之上移、底部正好贴在键盘上方，输入框天然不被遮挡。
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -541,10 +625,12 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                   TextButton(
                     style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     onPressed: () {
-                      logic.scanSearch();
                       // Get.to(() => const Scanner())?.then((v) {
-                      //   if (v != null) {}
+                      //   if (v != null) {
+                      //     logic.scanSearch(v);
+                      //   }
                       // });
+                      logic.scanSearch('GXPG250103321/1');
                     },
                     child: Text(
                       'team_leader_scan_work_order'.tr,
@@ -559,14 +645,11 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
         body: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // resizeToAvoidBottomInset 为 false，Scaffold 不会清零 viewInsets，
-              // 这里可以正常读到键盘高度。
-              final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+              // resizeToAvoidBottomInset 为 true：Scaffold 会自动把主体高度减掉键盘，
+              // 无需再手动读取 viewInsets 计算键盘高度。
               return ListView(
-                // 键盘弹出时才允许滚动，平时锁死，避免误触橡皮筋效果
-                physics: keyboardHeight > 0
-                    ? const ClampingScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
+                // 主体已随键盘自动收缩，内容可能略超出可视区，允许滚动兜底
+                physics: const ClampingScrollPhysics(),
                 children: [
                   // ListView 主轴高度无限，必须用 SizedBox 给出有界高度，
                   // 否则内部 Expanded 无法计算 flex，界面会塌陷成空白。
@@ -764,7 +847,7 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                                                       crossAxisCount: 2,
                                                       mainAxisSpacing: 8,
                                                       crossAxisSpacing: 8,
-                                                      childAspectRatio: 4,
+                                                      childAspectRatio: 7,
                                                     ),
                                                     itemCount: state
                                                         .materialDetailList
@@ -909,14 +992,7 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                                               Expanded(
                                                 child:
                                                     Obx(() => ListView.builder(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                            bottom:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .viewInsets
-                                                                    .bottom,
-                                                          ),
+                                                          padding: EdgeInsets.zero,
                                                           itemCount: state
                                                               .sizeAllocationList
                                                               .length,
@@ -958,10 +1034,10 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                                         padding: const EdgeInsets.all(8),
                                         gridDelegate:
                                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
+                                          crossAxisCount: 3,
                                           mainAxisSpacing: 2,
                                           crossAxisSpacing: 6,
-                                          childAspectRatio: 0.7,
+                                          childAspectRatio: 1,
                                         ),
                                         itemCount: state.personalList.length,
                                         itemBuilder: (context, index) =>
@@ -1014,9 +1090,6 @@ class _TeamLeaderAssignsTaskPageState extends State<TeamLeaderAssignsTaskPage> {
                       ],
                     ),
                   ),
-                  // 键盘占位：垫出与键盘等高的空白，
-                  // 使被遮挡的输入框和底部按钮可以滚动上来。
-                  SizedBox(height: keyboardHeight),
                 ],
               );
             },

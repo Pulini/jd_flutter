@@ -168,9 +168,8 @@ Future<BaseData> _doHttp({
         retryCount < 2) {
       logger.w('🔄 网络请求失败（${e.type}），第 ${retryCount + 1} 次重试...');
 
-      // 清除 DNS 缓存并重置 Dio
+      // 清除 DNS 缓存（不再全局 reset，避免误杀其它在途请求）
       DioManager.clearDnsCache();
-      DioManager().reset();
 
       // 等待一小段时间后重试
       await Future.delayed(Duration(milliseconds: 500 * (retryCount + 1)));

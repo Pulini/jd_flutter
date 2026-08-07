@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart' show TextSelection;
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_state.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/bean/http/response/label_for_work_card_info.dart';
@@ -19,19 +21,28 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
   // 设置某一行的操作工（唯一入口）：同时维护工号文本、匹配状态、以及接口要用的 EmpID。
   // 注意：EmpID 存的是员工内码 fItemID（int），不是工号 fNumber（String）——
   // 工号可能含字母，直接字符串转 int 只会得到 0，接口拿不到人。
-  void applyOperator(SizeList item, String empNo,
-      {bool syncController = false}) {
+  void setOperatorNo(SizeList item, String empNo) {
     var no = empNo.trim();
     var emp = findEmployee(no);
-    item.assignedOperator.value = no;
+    item.operatorNo.value = no;
     item.isMatched.value = emp != null;
     item.empID = emp?.fItemID; // 未匹配到人员时置空，避免残留上一个人的内码
-    if (syncController) item.operatorController.text = no;
   }
 
-  // 手动输入工号时校验：匹配右侧人员列表，未匹配到则状态置为未匹配
-  void checkOperatorInput(SizeList item, String empNo) {
-    applyOperator(item, empNo);
+  // 设工号并刷新输入框（输入框只显示工号；姓名由「员工」列单独展示）
+  void applyOperator(SizeList item, String empNo) {
+    setOperatorNo(item, empNo);
+    final no = item.operatorNo.value;
+    if (item.operatorController.text != no) {
+      item.operatorController.text = no;
+      item.operatorController.selection =
+          TextSelection.collapsed(offset: no.length);
+    }
+  }
+
+  // 手动输入：输入框只含工号，提取纯工号做匹配
+  void checkOperatorInput(SizeList item, String raw) {
+    setOperatorNo(item, raw.trim());
   }
 
   // 点击尺码行：在多选集合里切换该行的选中状态
@@ -61,8 +72,7 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     if (indexes.isEmpty) return; // 没有选中行，不做操作
     for (var index in indexes) {
       if (index < 0 || index >= state.sizeAllocationList.length) continue;
-      applyOperator(state.sizeAllocationList[index], empNo,
-          syncController: true);
+      applyOperator(state.sizeAllocationList[index], empNo);
     }
     state.selectedRowIndexes.clear(); // 分配完成后取消选中
   }
@@ -80,8 +90,10 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     final baseMap = <String?, SizeList>{};
     for (var item in state.sizeAllocationList) {
       final key = item.size;
-      totalMap[key] = (totalMap[key] ?? 0) + (item.totalQty ?? 0);
-      // 同尺码若被拆成多行，合并时各自的已分配量也要累加，否则历史已分配数据会丢失
+      // 同尺码只取一次总数量：接口每个尺码行（含不同分配人员）都带该尺码的总量，
+      // 累加会按人员数翻倍，故只取首个出现的 totalQty。
+      totalMap.putIfAbsent(key, () => item.totalQty ?? 0);
+      // 已分配量仍累加：合并拆分行或多人员行各自已分配量，保留历史已分配总量
       allocatedMap[key] = (allocatedMap[key] ?? 0) + (item.allocatedQty ?? 0);
       baseMap.putIfAbsent(key, () => item);
     }
@@ -110,28 +122,40 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     state.selectedRowIndexes.clear();
   }
 
-  // 复制尺码行：把原行的剩余未分配数量结转到新行，该尺码合计不变
+  // 复制/拆分尺码行：把原行「本次可分配上限(allocCap)」里未分配的部分结转到新行，
+  // 该尺码本次可分配总量不变。注意必须以 allocCap 为基准，而不是 totalQty——
+  // 已分配状态(isAllocated)下 totalQty 是全部尺码总数，不等于本次可分配上限。
   void copySizeAllocation(int index) {
     if (index < 0 || index >= state.sizeAllocationList.length) return;
     final data = state.sizeAllocationList[index];
-    final total = (data.totalQty ?? 0).toInt();
+    final cap = data.allocCap; // 本次可分配上限（已分配→allocatedQty，未分配→totalQty）
     final current = int.tryParse(data.currentQty.value) ?? 0;
-    final remaining = total - current; // 原行剩余未分配
-    if (remaining <= 0) {
-      errorDialog(content: '无剩余数量可分配');
-      return;
-    }
     if (current <= 0) {
-      errorDialog(content: '请先填写本次分配数量，再拆分该行');
+      errorDialog(content: 'team_leader_fill_qty_before_split'.tr);
       return;
     }
-    // 原行：总数量收为已分配数，本次分配与工号原样保留，剩余归 0
-    data.totalQty = current.toDouble();
-    // 新行：承接原行的剩余未分配，本次分配默认填满（= 该行剩余），工号留空待填
+    final remaining = cap - current; // 原行剩余未分配
+    if (remaining <= 0) {
+      errorDialog(content: 'team_leader_no_remaining_to_split'.tr);
+      return;
+    }
+    // 原行：承接本次已填分配量，剩余归 0。依据 isAllocated 口径更新上限基准字段，
+    // 否则 allocCap 仍指向旧总量，剩余未分配会一直挂在第一条。
+    if (data.isAllocated) {
+      data.allocatedQty = current;
+    } else {
+      data.totalQty = current.toDouble();
+    }
+    data.fillQtyByTotal(); // currentQty 填满上限 → 第一行剩余 0
+    // 新行：承接原行剩余未分配，沿用同尺码 isAllocated 口径，本次分配留空待填
     final newRow = SizeList(
       size: data.size,
+      fPrdMoID: data.fPrdMoID,
+      allocatedQty: data.isAllocated ? remaining : 0,
       totalQty: remaining.toDouble(),
     );
+    newRow.isAllocated = data.isAllocated;
+    newRow.fillQtyByTotal(); // 本次分配默认填满剩余量（= allocCap）
     state.sizeAllocationList.insert(index + 1, newRow);
     // 插入后，位于原 index 之后的选中行索引需整体 +1
     final shifted =
@@ -160,7 +184,7 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
       }
     }
     if (target == -1) {
-      errorDialog(content: '该尺码仅剩一行，无法删除');
+      errorDialog(content: 'team_leader_size_only_one_row'.tr);
       return;
     }
     // 归还整行总数量，该尺码合计不变；被删行已填的分配数一并作废
@@ -176,8 +200,8 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     state.selectedRowIndexes.value = shifted;
   }
 
-  void scanSearch() {
-    state.getProcessWorkCardInfo();
+  void scanSearch(String order) {
+    state.getProcessWorkCardInfo(order);
   }
 
   // 保存拆分工单
@@ -188,22 +212,22 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     var operatorErrors = <String>[];
     var qtyErrors = <String>[];
     for (var item in state.sizeAllocationList) {
-      var no = item.assignedOperator.value.trim();
+      var no = item.operatorNo.value.trim();
       if (no.isEmpty) {
-        operatorErrors.add('尺码 ${item.size ?? ''}：未分配人员');
+        operatorErrors.add('team_leader_size_operator_not_assigned'.trArgs([item.size ?? '']));
       } else if (findEmployee(no) == null) {
-        operatorErrors.add('尺码 ${item.size ?? ''}：工号 $no 未匹配到人员');
+        operatorErrors.add('team_leader_size_operator_not_matched'.trArgs([item.size ?? '', no]));
       }
       if (item.remainingQty > 0) {
-        qtyErrors.add('尺码 ${item.size ?? ''}：剩余 ${item.remainingQty} 未分配');
+        qtyErrors.add('team_leader_size_qty_not_fully_allocated'.trArgs([item.size ?? '', item.remainingQty.toString()]));
       }
     }
     var msg = '';
     if (operatorErrors.isNotEmpty) {
-      msg += '以下尺码未分配人员或工号无效：\n${operatorErrors.join('\n')}\n';
+      msg += 'team_leader_operator_invalid_msg'.trArgs([operatorErrors.join('\n')]);
     }
     if (qtyErrors.isNotEmpty) {
-      msg += '以下尺码数量未全部分配：\n${qtyErrors.join('\n')}';
+      msg += 'team_leader_qty_not_allocated_msg'.trArgs([qtyErrors.join('\n')]);
     }
     if (msg.isNotEmpty) {
       errorDialog(content: msg);
@@ -211,7 +235,7 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
     }
     // 兜底：提交前按工号统一回填 EmpID 内码；工号为空时不覆盖（保留接口原值，避免清掉已分配内码）
     for (var item in state.sizeAllocationList) {
-      final no = item.assignedOperator.value.trim();
+      final no = item.operatorNo.value.trim();
       if (no.isNotEmpty) {
         item.empID = findEmployee(no)?.fItemID;
       }
@@ -220,7 +244,7 @@ class TeamLeaderAssignsTaskLogic extends GetxController {
       successDialog(
           content: mes,
           back: () {
-            scanSearch();
+            scanSearch(state.scanOrder);
           });
     });
   }

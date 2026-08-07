@@ -86,7 +86,7 @@ class SizeList {
   int? fPrdMoID;
 
   // —— 交互 / UI 状态（非接口字段，不参与 toJson）——
-  var assignedOperator = ''.obs; // 工号输入
+  var operatorNo = ''.obs; // 纯工号（输入框只显示工号，姓名由「员工」列单独展示）
   var currentQty = ''.obs; // 本次分配数量（输入框）
   var isMatched = false.obs; // 是否匹配到员工
   final operatorController = TextEditingController();
@@ -118,7 +118,7 @@ class SizeList {
 
   // 重置：清空工号，本次分配回到默认值（= 总数量）
   void reset() {
-    assignedOperator.value = '';
+    operatorNo.value = '';
     isMatched.value = false;
     operatorController.clear();
     fillQtyByTotal();

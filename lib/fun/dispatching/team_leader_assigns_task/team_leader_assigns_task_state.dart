@@ -23,16 +23,16 @@ class TeamLeaderAssignsTaskState {
   var showButton = true.obs;
 
   //获取包装清单贴标总数量
-  void getProcessWorkCardInfo() {
+  void getProcessWorkCardInfo(String order) {
     httpGet(
       method: webApiGetProcessWorkCardInfo,
       loading: 'maintain_label_getting_label_info'.tr,
       params: {
-        'processNo': 'GXPG250103315/1',
+        'processNo': order,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        scanOrder = '';
+        scanOrder = order;
         workCardInfo = LabelForWorkCardInfo.fromJson(response.data);
         workCardInfo.processWorkCardInfo?.reportStatus == 0
             ? showButton.value = true
@@ -48,7 +48,7 @@ class TeamLeaderAssignsTaskState {
           // 接口给的是员工内码 empID，转成工号字符串回显（UI 以工号展示）
           for (var e in personalList) {
             if (e.fItemID == item.empID) {
-              item.assignedOperator.value = e.fNumber ?? '';
+              item.operatorNo.value = e.fNumber ?? '';
               item.isMatched.value = true;
               item.operatorController.text = e.fNumber ?? '';
               break;
@@ -59,11 +59,13 @@ class TeamLeaderAssignsTaskState {
         }
         factoryName.value = workCardInfo.processWorkCardInfo?.factoryName ?? '';
         workLine.value = workCardInfo.processWorkCardInfo?.departName ?? '';
-        productNumber.value = workCardInfo.processWorkCardInfo?.productNumber ?? '';
+        productNumber.value =
+            workCardInfo.processWorkCardInfo?.productNumber ?? '';
         orderDate.value = workCardInfo.processWorkCardInfo?.fDate ?? '';
         orderNo.value = workCardInfo.processWorkCardInfo?.fCardNo ?? '';
         packMessage.value = workCardInfo.processWorkCardInfo?.packag ?? '';
-        orderAllQty.value = workCardInfo.processWorkCardInfo?.totalQty.toString() ?? '';
+        orderAllQty.value =
+            workCardInfo.processWorkCardInfo?.totalQty.toString() ?? '';
       } else {
         scanOrder = '';
         workCardInfo = LabelForWorkCardInfo();
@@ -90,6 +92,7 @@ class TeamLeaderAssignsTaskState {
       loading: 'team_leader_issue_work_order'.tr,
       body: {
         'FInterID': workCardInfo.processWorkCardInfo!.interID,
+        'FCardNo': scanOrder,
         'SizeList': [
           for (var data in sizeAllocationList)
             {

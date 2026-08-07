@@ -316,6 +316,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const SizedBox(width: 30),
               Expanded(
                 child: Obx(() => CheckBox(
                       onChanged: (v) => state.orderType.value = 1,

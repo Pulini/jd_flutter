@@ -10,7 +10,10 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class DioManager {
-  static Dio? _dio;
+  /// 每个 baseUrl 维护一个独立的 Dio 实例。
+  /// 原先只保留单个 Dio，MES(geapp:1226) 与 SAP(webdispatcher:8007) 共用同一实例，
+  /// 切换 baseUrl 或重试 reset 时会 force close 掉正在飞行的另一个域名请求，造成“连坐”报错。
+  static final Map<String, Dio> _dioMap = {};
   static final DioManager _instance = DioManager._internal();
 
   // DNS 缓存
@@ -137,59 +140,54 @@ class DioManager {
   InterceptorsWrapper getFeiShuInterceptors() => simpleInterceptors;
 
   Dio getDio(String baseUrl) {
-    // 如果 baseUrl 变化或者 _dio 为空，创建新实例
-    if (_dio == null || _dio!.options.baseUrl != baseUrl) {
-      // 关闭旧的 Dio 实例
-      if (_dio != null) {
-        logger.i('🔄 baseUrl 变化，关闭旧实例: ${_dio!.options.baseUrl}');
-        _dio?.close(force: true);
-      }
-
-      _dio = Dio(BaseOptions(
-        baseUrl: baseUrl,
-        connectTimeout: const Duration(seconds: 10),
-        sendTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(minutes: 1),
-      ));
-
-      // 添加拦截器
-      _dio!.interceptors.add(geInterceptors);
-
-      // 为 Android 平台配置 HttpClient，解决 SSL 证书和 DNS 问题
-      if (GetPlatform.isAndroid) {
-        (_dio!.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-          final client = HttpClient();
-
-          // 允许自签名证书（测试环境必需）
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) {
-            logger.w('⚠️ 证书接受: $host:$port');
-            return true;
-          };
-
-          // 配置 DNS 超时
-          client.connectionTimeout = const Duration(seconds: 10);
-
-          // 禁用 HTTP 缓存，避免 DNS 问题
-          client.autoUncompress = true;
-
-          logger.i('✅ Dio HttpClient 已配置 for: $baseUrl');
-          return client;
-        };
-      }
-
-      logger.i('✅ 创建新的 Dio 实例: $baseUrl');
-    } else {
+    // 已存在该 baseUrl 的实例则直接复用，各域名互不干扰
+    if (_dioMap.containsKey(baseUrl)) {
       logger.i('📌 复用现有 Dio 实例: $baseUrl');
+      return _dioMap[baseUrl]!;
     }
 
-    return _dio!;
+    final dio = Dio(BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 10),
+      sendTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(minutes: 1),
+    ));
+
+    // 添加拦截器
+    dio.interceptors.add(geInterceptors);
+
+    // 为 Android 平台配置 HttpClient，解决 SSL 证书和 DNS 问题
+    if (GetPlatform.isAndroid) {
+      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+        final client = HttpClient();
+
+        // 允许自签名证书（测试环境必需）
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+          logger.w('⚠️ 证书接受: $host:$port');
+          return true;
+        };
+
+        // 配置 DNS 超时
+        client.connectionTimeout = const Duration(seconds: 10);
+
+        // 禁用 HTTP 缓存，避免 DNS 问题
+        client.autoUncompress = true;
+
+        logger.i('✅ Dio HttpClient 已配置 for: $baseUrl');
+        return client;
+      };
+    }
+
+    _dioMap[baseUrl] = dio;
+    logger.i('✅ 创建新的 Dio 实例: $baseUrl');
+    return dio;
   }
 
-  // 重置Dio实例
+  // 重置：仅清除 DNS 缓存，不再 force close 任何 Dio 实例。
+  // 原先 reset 会强关唯一的 Dio，导致其它 baseUrl 在途请求被连坐取消；
+  // 现在 Dio 按 baseUrl 各自独立，无需强关即可恢复（下次请求会重新解析 DNS）。
   void reset() {
-    _dio?.close(force: true);
-    _dio = null;
     clearDnsCache();
-    logger.i('🔄 Dio 实例和 DNS 缓存已重置');
+    logger.i('🔄 DNS 缓存已重置（Dio 实例保留，避免误杀在途请求）');
   }
 }
