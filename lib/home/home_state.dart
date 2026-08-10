@@ -129,7 +129,7 @@ class HomeState {
       params: {
         'OldPassWord': oldPassword,
         'NewPassWord': newPassword,
-        'PhoneNumber': account
+        'Account': account
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

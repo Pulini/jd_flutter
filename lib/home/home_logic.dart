@@ -204,7 +204,8 @@ class HomeLogic extends GetxController {
       errorDialog(content: 'change_password_dialog_old_password'.tr);
       return;
     }
-    if (oldPassword.md5Encode().toUpperCase() != userInfo!.passWord) {
+    debugPrint('oldPassword:${oldPassword.md5Encode().toUpperCase()},newPassword:${ userInfo!.empPassWord}');
+    if (oldPassword.md5Encode().toUpperCase() != userInfo!.empPassWord) {
       errorDialog(content: 'change_password_dialog_old_password_error'.tr);
       return;
     }
