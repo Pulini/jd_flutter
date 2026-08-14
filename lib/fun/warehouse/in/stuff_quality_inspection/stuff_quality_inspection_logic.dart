@@ -1541,7 +1541,7 @@ class StuffQualityInspectionLogic extends GetxController {
   void getHandleType() {
     sapPost(
       loading: 'quality_inspection_handle_type'.tr,
-      method: webApiForSapGetType,
+      method: webApiForDivision,
       body: {"I_DOMNAME": "ZTREATMETHOD", "I_LANG": "1"},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -1613,7 +1613,7 @@ class StuffQualityInspectionLogic extends GetxController {
   void getNgType() {
     sapPost(
       loading: 'quality_inspection_handle_type'.tr,
-      method: webApiForSapGetType,
+      method: webApiForDivision,
       body: {"I_DOMNAME": "ZEXPTYP", "I_LANG": "1"},
     ).then((response) {
       if (response.resultCode == resultSuccess) {

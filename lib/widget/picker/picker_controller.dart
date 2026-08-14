@@ -752,7 +752,7 @@ abstract class PickerController {
 
   //获取sap事业部
   Future getSapDivision() async {
-    var response = await sapPost(method: webApiForDivision, body: {
+    var response = await sapGet(method: webApiForDivision, body: {
       'I_DOMNAME': 'ZDIVISION',
       'I_LANG': 1,
     });

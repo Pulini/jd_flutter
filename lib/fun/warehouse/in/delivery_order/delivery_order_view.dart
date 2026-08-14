@@ -66,7 +66,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   var opcWorkCenter = OptionsPickerController(
     hasAll: true,
     PickerType.sapWorkCenter,
-    saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.sapSupplier}',
+    saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.sapWorkCenter}',
   );
 
   var dpcStartDate = DatePickerController(

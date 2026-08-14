@@ -166,9 +166,12 @@ Future<BaseData> _doHttp({
             e.type == DioExceptionType.connectionTimeout ||
             e.type == DioExceptionType.unknown) &&
         retryCount < 2) {
-      logger.w('🔄 网络请求失败（${e.type}），第 ${retryCount + 1} 次重试...');
+      logger.w('🔄$method 网络请求失败（${e.type}），第 ${retryCount + 1} 次重试...');
 
-      // 清除 DNS 缓存（不再全局 reset，避免误杀其它在途请求）
+      // 清除 DNS 缓存；注意：不要调用 DioManager().reset()，
+      // 它会 close 掉全局 Dio 单例并置空，导致同一时刻其它并发请求
+      // 报 "Can't establish connection after the adapter was closed"。
+      // getDio() 在 _dio 为 null 时会自动重建实例，重试时直接重新获取即可。
       DioManager.clearDnsCache();
 
       // 等待一小段时间后重试
@@ -1680,9 +1683,6 @@ const webApiArkImageServer = 'api/shared/AI/arkImageServer';
 
 //上传设备信息及安装目录
 const webApiUpsertDeviceInfo = 'api/shared/device/upsertDeviceInfo';
-
-//品检获取ng类型 收货/退货
-const webApiForSapGetType = 'sap/zapp/ZMM_GET_YZ';
 
 //外箱鞋盒贴标 - 查尾数
 const webApiGetMantissaData = 'api/OutBoxScan/GetMantissaData';

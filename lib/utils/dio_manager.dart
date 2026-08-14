@@ -126,11 +126,13 @@ class DioManager {
         logger.e('Socket Exception Port: ${socketError.port}');
 
         // 检测到连接拒绝或网络不可达时，清除 DNS 缓存
+        // 注意：不要在 onError 中调用 _instance.reset()，它会关闭正在使用的
+        // 底层 adapter，导致其它并发请求报
+        // "Can't establish connection after the adapter was closed"。
         if (socketError.osError?.errorCode == 111 ||
             socketError.osError?.errorCode == 101) {
           logger.w('⚠️ 检测到网络连接错误，清除 DNS 缓存');
           clearDnsCache();
-          _instance.reset();
         }
       }
       handler.next(e);

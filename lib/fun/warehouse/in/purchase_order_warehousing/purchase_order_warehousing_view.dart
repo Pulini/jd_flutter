@@ -392,7 +392,11 @@ class _PurchaseOrderWarehousingItem extends StatelessWidget {
             ],
           ),
           for (PurchaseOrderDetailsInfo sub in data.details ?? [])
-            _PurchaseOrderWarehousingSubItem(data: sub)
+            _PurchaseOrderWarehousingSubItem(
+              data: sub,
+              hasCheckBox:
+                  data.details!.every((v) => v.underNum.toDoubleTry() == 0),
+            )
         ],
       ),
     );
@@ -401,8 +405,10 @@ class _PurchaseOrderWarehousingItem extends StatelessWidget {
 
 class _PurchaseOrderWarehousingSubItem extends StatelessWidget {
   final PurchaseOrderDetailsInfo data;
+  final bool hasCheckBox;
 
-  const _PurchaseOrderWarehousingSubItem({required this.data});
+  const _PurchaseOrderWarehousingSubItem(
+      {required this.data, required this.hasCheckBox});
 
   @override
   Widget build(BuildContext context) {
@@ -543,6 +549,7 @@ class _PurchaseOrderWarehousingSubItem extends StatelessWidget {
                   }),
                 ),
         ),
+        Container(width: hasCheckBox ? 0 : 45)
       ],
     );
   }
