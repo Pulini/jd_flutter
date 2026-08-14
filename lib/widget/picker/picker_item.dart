@@ -376,15 +376,18 @@ class PickerSapWorkCenterNew extends PickerItem {
   PickerSapWorkCenterNew({
     required this.name,
     required this.number,
+    required this.departmentID,
   });
 
   PickerSapWorkCenterNew.fromJson(dynamic json) {
     name = json['Name'];
     number = json['SAPNumber'];
+    departmentID = json['DepartmentID'];
   }
 
   String? name;
   String? number;
+  int? departmentID;
 
   @override
   String pickerId() {

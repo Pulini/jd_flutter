@@ -5,8 +5,7 @@ class LabelForWorkCardInfo {
   LabelForWorkCardInfo({
       this.processWorkCardInfo, 
       this.componentList, 
-      this.employeeList, 
-      this.sizeList,
+      this.employeeList,
   });
 
   LabelForWorkCardInfo.fromJson(dynamic json) {
@@ -21,12 +20,6 @@ class LabelForWorkCardInfo {
       employeeList = [];
       json['EmployeeList'].forEach((v) {
         employeeList?.add(EmployeeList.fromJson(v));
-      });
-    }
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(SizeList.fromJson(v));
       });
     }
   }
@@ -67,51 +60,96 @@ class SizeList {
     this.empID,
     this.allocatedQty,
     this.fPrdMoID,
+    this.fMtono,
+    this.fRouteEntryFID,
+    this.fItemID,
+    this.fProcessName,
+    this.empNumber,
+    this.empName,
+
   }) {
     _initUiState();
   }
 
   SizeList.fromJson(dynamic json) {
+    empName = json['EmpName'];
+    empNumber = json['empNumber'];
+    fProcessName = json['FProcessName'];
+    fItemID = json['FItemID'];
+    fMtono = json['FMtono'];
     size = json['Size'];
     totalQty = json['TotalQty'];
     empID = json['EmpID'];
+    empNumber = json['EmpNumber'];
+    empName = json['EmpName'];
     allocatedQty = json['AllocatedQty'];
     fPrdMoID = json['FPrdMoID'];
+    fRouteEntryFID = json['FRouteEntryFID'];
     _initUiState();
   }
+  String? empName;
+  String? empNumber;
+  String? fMtono;
   String? size;
+  int? fItemID;
+  String? fProcessName;
   double? totalQty;
   int? empID;
   int? allocatedQty;
   int? fPrdMoID;
+  int? fRouteEntryFID; //工序id
+  // 已分配工单(allocationStatus==1 ⟺ isAllocated 【概念1：工单级】)：isScanTotal 锁定为历史已分配量 allocatedQty，
+  // 未分配时为 0。用 getter 实现「取 allocatedQty 且不可被改变」——没有 setter，外部无法赋值。
+  // 注意：isScanTotal 取的是「工单级」已派量（概念1），不是「本行是否已派」(概念2/qtyAllocated)。
+  int get isScanTotal => isAllocated ? (allocatedQty ?? 0) : 0;
 
   // —— 交互 / UI 状态（非接口字段，不参与 toJson）——
   var operatorNo = ''.obs; // 纯工号（输入框只显示工号，姓名由「员工」列单独展示）
+  var operatorName = ''.obs; // 接口按工号查回的员工姓名（未命中花名册时用于「员工」列展示）
   var currentQty = ''.obs; // 本次分配数量（输入框）
   var isMatched = false.obs; // 是否匹配到员工
   final operatorController = TextEditingController();
   final qtyController = TextEditingController();
 
-  // 是否已分配过（来自 ProcessWorkCardInfo.allocationStatus == 1）。
-  // 决定「本次可分配上限」取值口径：已分配→allocatedQty，未分配→totalQty
+  // —— 概念1：工单是否已分配（WORK-ORDER level）——
+  // 取自 ProcessWorkCardInfo.allocationStatus == 1，整张工单一个布尔，所有行共享。
+  // 它只决定「本次可分配上限 cap」的取值（见 allocCap / isScanTotal）：
+  //   已分配 → cap = isScanTotal(=历史 allocatedQty)；未分配 → cap = totalQty。
+  // 注意：它是「工单级」概念，不要把它当成「这一行数量已派」(概念2) 来用——
+  // 一张已分配工单里刚复制出来的新行，逻辑上「行数量未派」(概念2=false)，
+  // 但仍应继承本标记的 true（因为它同属这张已分配工单，cap 仍是 isScanTotal）。
   bool isAllocated = false;
 
-  // 本次可分配上限（max）：
-  //  - allocationStatus==1（已分配过）：取接口给的已分配量 allocatedQty
-  //  - allocationStatus==0（未分配）：取整行总数量 totalQty
-  int get allocCap {
-    final cap = isAllocated
-        ? (allocatedQty ?? 0)
-        : (totalQty?.toInt() ?? 0);
-    return cap < 0 ? 0 : cap;
-  }
+  // —— 概念2：本行数量是否已分配（ROW level）——
+  // 与「工单是否分配」(isAllocated) 是两个独立概念：isAllocated 是整单一个布尔，
+  // 本 getter 看「这一行自己的历史已派量 allocatedQty 是否 > 0」，逐行独立。
+  // 用途举例（当前未接入任何行为，仅澄清模型）：判断某行是否为历史已派行、是否需锁定等。
+  // 与 isAllocated 可能不一致：工单 status==1 但某尺码 allocatedQty==0 时，
+  // isAllocated=true 而 qtyAllocated=false。
+  bool get qtyAllocated => (allocatedQty ?? 0) > 0;
+
+  // 本次可分配上限（max 基准）= 该「指令+尺码」组合的「可分配总量」。
+  // 刻意使用【概念1：工单级】标记 isAllocated 决定上限取值（非概念2 行级 qtyAllocated）：
+  //  - 未分配(status!=1)：上限 = 总数量 totalQty。
+  //  - 已分配(status==1 ⟺ isAllocated)：上限 = isScanTotal（= 历史已分配量 allocatedQty），
+  //    即「能有个值来决定好上限」：已分配工单以历史已分配量为盘子重新分配，
+  //    不回退到 totalQty，避免把历史已分配量当新上限导致逻辑错乱。
+  //  实际可填量由「剩余未分配 = 上限 - 已填数量」动态求解（见 logic.rowMaxQty / groupRemainingQty）。
+  //  isScanTotal 为只读 getter，不会在别处被改写，故上限不会漂移到非预期值。
+  int get allocCap => isAllocated ? isScanTotal : (totalQty?.toInt() ?? 0);
 
   // 剩余未分配 = 上限 - 本次分配
   int get remainingQty => allocCap - (int.tryParse(currentQty.value) ?? 0);
 
-  // 把「本次分配」重设为上限（默认规则：本次分配 = 上限）
+  // 把「本次分配」重设为回显默认值：
+  //  - 已分配过 → 接口历史已分配量 allocatedQty（保留历史数据，不覆盖）
+  //  - 未分配   → 总数量 totalQty
+  // 注意与「上限 allocCap」解耦：上限已统一为 totalQty，此处仅决定首次加载默认值，
+  // 不参与上限计算，避免改动已分配场景的回显数据。
   void fillQtyByTotal() {
-    final cap = allocCap;
+    final cap = isAllocated
+        ? (allocatedQty ?? 0)
+        : (totalQty?.toInt() ?? 0);
     currentQty.value = cap.toString();
     qtyController.text = currentQty.value;
   }
@@ -119,6 +157,7 @@ class SizeList {
   // 重置：清空工号，本次分配回到默认值（= 总数量）
   void reset() {
     operatorNo.value = '';
+    operatorName.value = '';
     isMatched.value = false;
     operatorController.clear();
     fillQtyByTotal();
@@ -130,11 +169,17 @@ class SizeList {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['EmpName'] = empName;
+    map['EmpNumber'] = empNumber;
+    map['FProcessName'] = fProcessName;
+    map['FItemID'] = fItemID;
+    map['FMtono'] = fMtono;
     map['Size'] = size;
     map['TotalQty'] = totalQty;
     map['EmpID'] = empID;
     map['AllocatedQty'] = allocatedQty;
     map['FPrdMoID'] = fPrdMoID;
+    map['FRouteEntryFID'] = fRouteEntryFID;
     return map;
   }
 }
@@ -193,9 +238,17 @@ class ComponentList {
       this.componentName, 
       this.componentno, 
       this.processList, 
-      this.materialList,});
+      this.materialList,
+      this.sizeList,
+  });
 
   ComponentList.fromJson(dynamic json) {
+    if (json['SizeList'] != null) {
+      sizeList = [];
+      json['SizeList'].forEach((v) {
+        sizeList?.add(SizeList.fromJson(v));
+      });
+    }
     fInterID = json['FInterID'];
     fItemID = json['FItemID'];
     fPictureUrl = json['FPictureUrl'];
@@ -220,6 +273,24 @@ class ComponentList {
   String? componentno;
   List<String>? processList;
   List<MaterialList>? materialList;
+  List<SizeList>? sizeList;
+
+  // 该部件的尺码分配明细是否已经「首次加载并初始化」过。
+  // 用于 loadSizeAllocation：首次加载时从接口回显工号/默认数量，
+  // 之后切换部件再切回来，保留用户在面板里填的工号/数量，不再重置。
+  bool allocationLoaded = false;
+
+  // 该部件是否已「全部分配完」：sizeList 非空且每一行 allocatedQty >= totalQty
+  bool get isFullyAllocated {
+    final list = sizeList;
+    if (list == null || list.isEmpty) return false;
+    for (var e in list) {
+      final total = e.totalQty ?? 0;
+      final allocated = e.allocatedQty ?? 0;
+      if (total <= 0 || allocated < total) return false;
+    }
+    return true;
+  }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -233,6 +304,9 @@ class ComponentList {
     map['ProcessList'] = processList;
     if (materialList != null) {
       map['MaterialList'] = materialList?.map((v) => v.toJson()).toList();
+    }
+    if (sizeList != null) {
+      map['SizeList'] = sizeList?.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -322,6 +396,7 @@ class ProcessWorkCardInfo {
       this.totalQty, 
       this.packag, 
       this.fCardNo,
+      this.fBatchNo,
       this.interID,
       this.allocationStatus,
       this.reportStatus,
@@ -340,6 +415,7 @@ class ProcessWorkCardInfo {
     totalQty = json['TotalQty'];
     packag = json['Packag'];
     fCardNo = json['FCardNo'];
+    fBatchNo = json['FBatchNo'];
     interID = json['InterID'];
   }
   int? reportStatus; //0未汇报  1已汇报
@@ -354,6 +430,7 @@ class ProcessWorkCardInfo {
   int? totalQty;
   String? packag;
   String? fCardNo;
+  String? fBatchNo;
   int? interID;
 
   Map<String, dynamic> toJson() {
@@ -369,6 +446,7 @@ class ProcessWorkCardInfo {
     map['TotalQty'] = totalQty;
     map['Packag'] = packag;
     map['FCardNo'] = fCardNo;
+    map['FBatchNo'] = fBatchNo;
     map['InterID'] = interID;
     return map;
   }

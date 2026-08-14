@@ -70,7 +70,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
           Expanded(
             flex: 4,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end, // 右侧内容右对齐
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   code.isUsed ? 'production_scan_is_submit'.tr : '',
