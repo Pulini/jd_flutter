@@ -185,10 +185,10 @@ List<Widget> _createSizeList({
   return tableList;
 }
 
-Widget _labelContainer({required List<Widget> widgets}) => Container(
+Widget _labelContainer({required List<Widget> widgets,required double labelHeight}) => Container(
       color: Colors.white,
       width: 100 * 5.5,
-      height: 160 * 5.5,
+      height: labelHeight * 5.5,
       child: Padding(
         padding: const EdgeInsets.all(2 * 5.5),
         child: Container(
@@ -234,6 +234,7 @@ Widget dynamicSizeMaterialLabel1095n1096height160({
   bool alignSegments = false, //多段尺码行对齐（透传 _createSizeList）
 }) =>
     _labelContainer(
+      labelHeight: 160,
       widgets: [
         _createRowText(
           title: '品名/Product/Produk',
@@ -419,6 +420,7 @@ Widget dynamicSizeMaterialLabel1098height160({
   required String notes, //备注
 }) =>
     _labelContainer(
+      labelHeight: 110,
       widgets: [
         _createRowText(
           title: 'Description:',
