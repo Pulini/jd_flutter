@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 
 //控件转图片byte
 class WidgetsToImage extends StatefulWidget {
@@ -36,7 +35,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
           key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
       if (boundary.debugNeedsPaint) {
         await Future.delayed(const Duration(milliseconds: 30));
-        return capture(key); // 递归调用直到组件绘制完成
+        capture(key); // 递归调用直到组件绘制完成
       }
       ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
 

@@ -14,7 +14,6 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -22,7 +21,6 @@ import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
-import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_state.dart';
