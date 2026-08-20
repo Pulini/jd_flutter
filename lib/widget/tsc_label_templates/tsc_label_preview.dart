@@ -429,8 +429,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       ],
       [
         true,
-        '(110 x N)mm 1098 尺码物料标 单尺码',
-        dynamicSizeMaterialLabel1098(
+        '(110 x N)mm 1098 1003 尺码物料标 单尺码',
+        dynamicSizeMaterialLabel1098n1003(
           labelID: 'labelID',
           myanmarApprovalDocument: 'myanmarApprovalDocument',
           typeBody: 'typeBody',
@@ -456,8 +456,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       ],
       [
         true,
-        '(110 x N)mm 1098 尺码物料标   多尺码',
-        dynamicSizeMaterialLabel1098(
+        '(110 x N)mm 1098 1003 尺码物料标   多尺码',
+        dynamicSizeMaterialLabel1098n1003(
           labelID: 'labelID',
           myanmarApprovalDocument: 'myanmarApprovalDocument',
           typeBody: 'typeBody',
@@ -584,8 +584,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       ],
       [
         true,
-        '(110 x N)mm 1095 1096 多尺码物料标',
-        dynamicSizeMaterialLabel1095n1096(
+        '(110 x N)mm 1095 1096 1002 多尺码物料标',
+        dynamicSizeMaterialLabel1095n1096n1002(
           labelID: 'labelID',
           productName: 'productName',
           orderType: 'orderType',
@@ -618,8 +618,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       ],
       [
         true,
-        '(110 x N)mm 1095 1096 单尺码/无尺码物料标',
-        dynamicSizeMaterialLabel1095n1096(
+        '(110 x N)mm 1095 1096 1002 单尺码/无尺码物料标',
+        dynamicSizeMaterialLabel1095n1096n1002(
           labelID: 'labelID',
           productName: 'productName',
           orderType: 'orderType',

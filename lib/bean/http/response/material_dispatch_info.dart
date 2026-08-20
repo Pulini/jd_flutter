@@ -74,6 +74,7 @@ class MaterialDispatchInfo {
     noCodeQty = (json['NoCodeQty'] as String).toDoubleTry().toShowString();
     finishQty = (json['FinishQty'] as String).toDoubleTry().toShowString();
     unitName = json['UnitName'];
+    specification = json['Specification'];
     printLabel = json['PrintLabel'];
     routeEntryFIDs = json['RouteEntryFIDs'];
     billStyle = json['BillStyle'];
@@ -110,6 +111,7 @@ class MaterialDispatchInfo {
   String? noCodeQty; //未生成贴标数量
   String? finishQty; //完成数量
   String? unitName; //单位
+  String? specification; //规格
   String? printLabel; //1.需要打印贴标 0.不用打印贴标
   String? routeEntryFIDs; //工艺路线分录IDs
   String? billStyle; //正单补单
@@ -142,6 +144,7 @@ class MaterialDispatchInfo {
     map['NoCodeQty'] = noCodeQty;
     map['FinishQty'] = finishQty;
     map['UnitName'] = unitName;
+    map['Specification'] = specification;
     map['PrintLabel'] = printLabel;
     map['RouteEntryFIDs'] = routeEntryFIDs;
     map['BillStyle'] = billStyle;

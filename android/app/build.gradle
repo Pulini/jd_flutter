@@ -97,7 +97,7 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.12.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     //JDK编译异常处理
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.0"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.3.20"))
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //json解析 https://github.com/google/gson

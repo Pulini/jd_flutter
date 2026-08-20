@@ -52,8 +52,6 @@ class PrintUtil {
         return;
       }
       deviceList.value = await _getScannedDevices();
-      debugPrint(
-          'label.size=${label.map((v) => v.lengthInBytes).reduce((a, b) => a + b)}');
       if (deviceList.any((v) => v.deviceIsConnected)) {
         _send(
             mChannel: bluetoothChannel,

@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart' show TextSelection, WidgetsBinding;
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_state.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/bean/http/response/label_for_work_card_info.dart';
 

@@ -13,17 +13,6 @@ var _smallStyle = const TextStyle(
 );
 var _textPadding = const EdgeInsets.only(left: 3, right: 3);
 
-// 去除小数尾部多余的 0：0.035000 -> 0.035，12.000 -> 12；非数字或整数保持不变
-String _trimTrailingZeros(String? text) {
-  if (text == null || text.isEmpty) return '';
-  if (!text.contains('.')) return text;
-  var s = text;
-  while (s.length > 1 && s.endsWith('0')) {
-    s = s.substring(0, s.length - 1);
-  }
-  if (s.endsWith('.')) s = s.substring(0, s.length - 1);
-  return s;
-}
 
 Widget _paddingTextLeft({
   required String text,
@@ -173,9 +162,12 @@ List<Widget> _createSizeList({
   return tableList;
 }
 
-Widget _labelContainer({required List<Widget> widgets}) => Container(
+Widget _labelContainer({double? labelHeight, required List<Widget> widgets}) =>
+    Container(
       color: Colors.white,
       width: 110 * 5.5,
+      height: labelHeight == null ? null : labelHeight * 5.5,
+      alignment: Alignment.center,
       child: Padding(
         padding: const EdgeInsets.all(2 * 5.5),
         child: Container(
@@ -191,7 +183,8 @@ Widget _labelContainer({required List<Widget> widgets}) => Container(
 ///动态格式 1098无尺码物料
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料规格','装箱数量','报关单位'],['物料编码','物料规格','装箱数量','报关单位']]
-Widget dynamicMaterialLabel1098({ //缅甸标
+Widget dynamicMaterialLabel1098({
+  //缅甸标
   required String labelID, //标签ID
   required String myanmarApprovalDocument, //缅甸批文
   required String typeBody, //工厂型体
@@ -324,7 +317,7 @@ Widget dynamicMaterialLabel1098({ //缅甸标
           title: 'MEA.:(LxWxH)CM',
           rw: [
             _paddingTextCenter(text: specifications, flex: 5),
-            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
+            _paddingTextCenter(text: volume.trimTrailingZeros(), flex: 5),
             _paddingTextCenter(text: 'CBM', flex: 5),
           ],
         ),
@@ -353,7 +346,7 @@ Widget dynamicMaterialLabel1098({ //缅甸标
 ///动态格式 1098尺码物料小标
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料规格'],['物料编码','物料规格'],['物料编码','物料规格']]
-Widget dynamicSizeMaterialLabel1098({
+Widget dynamicSizeMaterialLabel1098n1003({
   required String labelID, //标签ID
   required String myanmarApprovalDocument, //缅甸批文
   required String typeBody, //工厂型体
@@ -375,8 +368,10 @@ Widget dynamicSizeMaterialLabel1098({
   required String manufactureDate, //生产日期
   required bool hasNotes, //是否打印备注行
   required String notes, //备注
+  double? labelHeight,
 }) =>
     _labelContainer(
+      labelHeight: labelHeight,
       widgets: [
         _createRowText(
           title: 'Description:',
@@ -505,7 +500,7 @@ Widget dynamicSizeMaterialLabel1098({
           flex: 10,
           rw: [
             _paddingTextCenter(text: specifications, flex: 18),
-            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
+            _paddingTextCenter(text: volume.trimTrailingZeros(), flex: 5),
             _paddingTextCenter(text: 'CBM', flex: 7),
           ],
         ),
@@ -648,7 +643,7 @@ Widget dynamicOutBoxLabel1095n1096({
           title: '规格/MEA/Spesifikasi',
           rw: [
             _paddingTextCenter(text: specifications, flex: 10),
-            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 3),
+            _paddingTextCenter(text: volume.trimTrailingZeros(), flex: 3),
             _paddingTextCenter(text: 'cbm', flex: 2),
           ],
         ),
@@ -804,8 +799,7 @@ Widget dynamicInBoxLabel1095n1096({
 ///动态格式尺码物料标
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
-Widget dynamicSizeMaterialLabel1095n1096({
-  //印尼标
+Widget dynamicSizeMaterialLabel1095n1096n1002({
   required String labelID, //二维码ID
   required String productName, //品名
   required String orderType, //补单
@@ -829,8 +823,7 @@ Widget dynamicSizeMaterialLabel1095n1096({
   required String consignee, //收货方
   required bool hasNotes, //是否打印备注行
   required String notes, //备注
-  bool repeatHeader = true, //是否重复表头/绘制合计列（默认原行为）
-  int headerFlex = 2, //首列（指令/标题列）宽度
+  double? labelHeight,
 }) =>
     _labelContainer(
       widgets: [
@@ -869,12 +862,7 @@ Widget dynamicSizeMaterialLabel1095n1096({
             )
           ],
         ),
-        if (materialList.isNotEmpty)
-          ..._createSizeList(
-            list: materialList,
-            repeatHeader: repeatHeader,
-            headerFlex: headerFlex,
-          ),
+        if (materialList.isNotEmpty)..._createSizeList(list: materialList),
         _createRowText(
           title: '数量/Qty/kuantitas:',
           style: _bigStyle,
@@ -956,7 +944,7 @@ Widget dynamicSizeMaterialLabel1095n1096({
           title: '规格/MEA/Spesifikasi',
           rw: [
             _paddingTextCenter(text: specifications, flex: 10),
-            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 3),
+            _paddingTextCenter(text: volume.trimTrailingZeros(), flex: 3),
             _paddingTextCenter(text: 'cbm', flex: 2),
           ],
         ),
@@ -1125,7 +1113,7 @@ Widget dynamicDomesticMaterialLabel({
           title: '规格:',
           rw: [
             _paddingTextCenter(text: specifications, flex: 5),
-            _paddingTextCenter(text: _trimTrailingZeros(volume), flex: 5),
+            _paddingTextCenter(text: volume.trimTrailingZeros(), flex: 5),
             _paddingTextCenter(text: 'cbm', flex: 5),
           ],
         ),

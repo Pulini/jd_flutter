@@ -144,7 +144,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
   }
 
   Widget myanmarSizeListLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicSizeMaterialLabel1098(
+      dynamicSizeMaterialLabel1098n1003(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -177,7 +177,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       );
 
   Widget myanmarSizeLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicSizeMaterialLabel1098(
+      dynamicSizeMaterialLabel1098n1003(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -239,7 +239,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       );
 
   Widget materialStandardLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicSizeMaterialLabel1095n1096(
+      dynamicSizeMaterialLabel1095n1096n1002(
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
         orderType: '${label.factoryNo}${label.supplementType}',

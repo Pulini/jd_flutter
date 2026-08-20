@@ -277,6 +277,10 @@ extension StringExt on String? {
     // 如果描述字符串中没有找到匹配的颜色字样，则返回默认颜色，这里以透明色为例
     return Colors.transparent;
   }
+
+  // 去除小数尾部多余的 0：0.035000 -> 0.035，12.000 -> 12；非数字或整数保持不变
+  String trimTrailingZeros()=> toDoubleTry().toShowString();
+
 }
 
 extension RequestOptionsExt on RequestOptions {

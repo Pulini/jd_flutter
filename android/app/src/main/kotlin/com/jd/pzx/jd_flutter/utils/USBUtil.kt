@@ -11,6 +11,7 @@ import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -26,8 +27,7 @@ private const val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
 fun usbQuickSendCommand(
     context: Context,
-    dataList: ArrayList<List<ByteArray>>,
-    progress: (Int, Int) -> Unit,
+    dataList: List<ByteArray>,
     sendCallback: (Int) -> Unit
 ) {
     try {
@@ -51,57 +51,67 @@ fun usbQuickSendCommand(
                         getBroadcast(context, 0, Intent(ACTION_USB_PERMISSION), FLAG_IMMUTABLE)
                     )
                 } else {//以获取指定USB串口权限
-                    val usbInterface = device!!.getInterface(0)
+                    val usbInterface = device.getInterface(0)
                     val usbEndpoint = usbInterface.getEndpoint(0)
                     val usbConnection = usbManager.openDevice(device)
+
                     usbConnection?.claimInterface(usbInterface, true)
                     //串口打开成功 开始发送数据
-                    var index = 0
                     Thread {
+                        var status=-1
                         try {
-                            var status: Int
-                            do {
-                                val byte = bytesMerger(dataList[index])
-                                status = usbConnection.bulkTransfer(
-                                    usbEndpoint,
-                                    byte,
-                                    byte.size,
-                                    100
-                                )
-                                index++
-                                Thread.sleep(300)
-                                runBlocking(Dispatchers.Main) {
-                                    progress.invoke(index, dataList.size)
-                                }
-                            } while (status == 0 && index <= dataList.size)
-
+                            val byte = bytesMerger(dataList)
+                            status  = usbConnection.bulkTransfer(
+                                usbEndpoint,
+                                byte,
+                                byte.size,
+                                100
+                            )
+                            Thread.sleep(300)
                         } catch (e: Exception) {
-                            Log.e("Pan", "USB操作异常：发送数据失败", e)
+                            runBlocking(Dispatchers.Main) {
+                                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
+                            }
                         } finally {
                             runBlocking(Dispatchers.Main) {
-                                if (index == dataList.size) {
+                                if (status >= 0) {
                                     sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
                                 } else {
-                                    sendCallback.invoke(SEND_COMMAND_STATE_PART_SUCCESS)
+                                    sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
                                 }
                             }
                         }
                     }.start()
                 }
             } else {
-                Log.e("Pan", "USB操作异常：没有找到指定设备")
+                Toast.makeText(context, "USB操作异常：没有找到指定设备", Toast.LENGTH_LONG).show()
                 sendCallback.invoke(SEND_COMMAND_STATE_NO_DEVICE)
             }
         } else {
-            Log.e("Pan", "USB操作异常：USB设备异常")
+            Toast.makeText(context, "USB操作异常：USB设备异常", Toast.LENGTH_LONG).show()
             sendCallback.invoke(SEND_COMMAND_STATE_USB_ERROR)
         }
     } catch (e: Exception) {
-        Log.e("Pan", "USB操作异常：检查usb状态", e)
+        Toast.makeText(context, "USB操作异常：${e.message}", Toast.LENGTH_LONG).show()
         sendCallback.invoke(SEND_COMMAND_STATE_USB_ERROR)
     }
 }
 
+fun usbPrinterIsAttached(context: Context):Boolean{
+    val usbManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        context.getSystemService(UsbManager::class.java)
+    } else {
+        context.getSystemService(Context.USB_SERVICE) as UsbManager
+    }
+    var device: UsbDevice? = null
+    usbManager?.deviceList?.forEach {
+        if (it.value.vendorId == DEVICE_VENDOR_ID) {
+            device = it.value
+            return@forEach
+        }
+    }
+    return  device!=null
+}
 
 /**
  * 初始化usb

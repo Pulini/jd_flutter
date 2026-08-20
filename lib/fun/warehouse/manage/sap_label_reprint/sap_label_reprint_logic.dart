@@ -138,7 +138,7 @@ class SapLabelReprintLogic extends GetxController {
       );
 
   Widget multipleSizeLabel1098(SapPrintLabelInfo label) =>
-      dynamicSizeMaterialLabel1098(
+      dynamicSizeMaterialLabel1098n1003(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -168,7 +168,7 @@ class SapLabelReprintLogic extends GetxController {
       );
 
   Widget singleSizeLabel1098(SapPrintLabelInfo label) =>
-      dynamicSizeMaterialLabel1098(
+      dynamicSizeMaterialLabel1098n1003(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -257,7 +257,7 @@ class SapLabelReprintLogic extends GetxController {
       );
 
   Widget multipleSizeMaterialLabel1095n1096(SapPrintLabelInfo label) =>
-      dynamicSizeMaterialLabel1095n1096(
+      dynamicSizeMaterialLabel1095n1096n1002(
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
         orderType: '${label.factoryNo}${label.supplementType}',

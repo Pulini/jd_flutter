@@ -99,58 +99,58 @@ class TSCUtil(context: Context) {
     fun refreshBleAdapter() {
         bleUtil.refreshBleAdapter()
     }
+/*
 
-//    private fun bluetoothScan() {
-//        if (bleUtil.isSearching()) {
-//            bleUtil.cancelScan { bleDialog.finishScan() }
-//        } else {
-//            bleUtil.startScan(
-//                bleScanStart = {
-//                    bleDialog.startScan()
-//                },
-//                bleFindDevice = { device ->
-//                    bleDialog.findDevice(device)
-//                },
-//                bleScanFinished = {
-//                    bleDialog.finishScan()
-//                },
-//            )
-//        }
-//    }
-//
-//     fun bluetoothConnect(device: BlueToothDevice?) {
-//        if (device == null) return
-//        bleUtil.cancelScan { bleDialog.finishScan() }
-//        bleUtil.connect(device) { isConnected, dev ->
-//            if (isConnected) {
-//                bleDialog.connect(true, dev)
-//            } else {
-//                bleDialog.connect(false, null)
-//            }
-//        }
-//    }
+    private fun bluetoothScan() {
+        if (bleUtil.isSearching()) {
+            bleUtil.cancelScan { bleDialog.finishScan() }
+        } else {
+            bleUtil.startScan(
+                bleScanStart = {
+                    bleDialog.startScan()
+                },
+                bleFindDevice = { device ->
+                    bleDialog.findDevice(device)
+                },
+                bleScanFinished = {
+                    bleDialog.finishScan()
+                },
+            )
+        }
+    }
 
+     fun bluetoothConnect(device: BlueToothDevice?) {
+        if (device == null) return
+        bleUtil.cancelScan { bleDialog.finishScan() }
+        bleUtil.connect(device) { isConnected, dev ->
+            if (isConnected) {
+                bleDialog.connect(true, dev)
+            } else {
+                bleDialog.connect(false, null)
+            }
+        }
+    }
 
+    */
+/**
+     * 打印前检测设备状态
+     *//*
 
-
-//
-//    /**
-//     * 打印前检测设备状态
-//     */
-//    fun printCheck(ready: () -> Unit) {
-//        if (usbUtil.usbState == USB_STATE_READY) {
-//            ready.invoke()
-//        } else {
-//            if (bleUtil.bleState == BT_STATE_READY) {
-//                ready.invoke()
-//            } else {
-//                if (!bleDialog.isShowing) {
-//                    bleUtil.setConnectListener(ready)
-//                    bleDialog.show(bleUtil.hasBlueTooth())
-//                }
-//            }
-//        }
-//    }
+    fun printCheck(ready: () -> Unit) {
+        if (usbUtil.usbState == USB_STATE_READY) {
+            ready.invoke()
+        } else {
+            if (bleUtil.bleState == BT_STATE_READY) {
+                ready.invoke()
+            } else {
+                if (!bleDialog.isShowing) {
+                    bleUtil.setConnectListener(ready)
+                    bleDialog.show(bleUtil.hasBlueTooth())
+                }
+            }
+        }
+    }
+*/
 
     /**
      * 发送单张标签打印指令

@@ -1,4 +1,4 @@
-package com.jd.pzx.jd_flutter.utils.print
+package com.jd.pzx.jd_flutter.utils
 
 import android.app.Activity
 import android.content.Context
@@ -12,7 +12,6 @@ import android.print.PrintDocumentAdapter
 import android.print.PrintDocumentInfo
 import android.print.PrintManager
 import androidx.print.PrintHelper
-import com.jd.pzx.jd_flutter.utils.base64ToBitmap
 import java.io.FileOutputStream
 import java.io.IOException
 

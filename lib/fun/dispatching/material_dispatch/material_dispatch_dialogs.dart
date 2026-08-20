@@ -1028,7 +1028,7 @@ void createLabelSelect({
             Get.back();
             domestic.call();
           },
-          child: Text('国内'),
+          child: Text('maintain_label_dialog_select_label_language_chinese'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1036,7 +1036,7 @@ void createLabelSelect({
             Get.back();
             indonesia.call();
           },
-          child: Text('印尼'),
+          child: Text('maintain_label_dialog_select_label_language_indonesia'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1044,7 +1044,7 @@ void createLabelSelect({
             Get.back();
             myanmar.call();
           },
-          child: Text('缅甸'),
+          child: Text('maintain_label_dialog_select_label_language_myanmar'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,

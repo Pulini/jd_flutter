@@ -138,10 +138,11 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
 /// 返回值与 [WidgetsToImage] 的回调完全一致：{'image','width','height','pixelRatio'}
 ///
 /// [width] 标签宽度，110mm 模板为 110 * 5.5。
+/*
 Future<Map<String, dynamic>> captureWidgetOffScreen(
   Widget child, {
   double width = 100 * 5.5,
-  double height = 160 * 5.5,
+  required double height ,
 }) {
   var completer = Completer<Map<String, dynamic>>();
   late OverlayEntry entry;
@@ -193,3 +194,4 @@ Future<Map<String, dynamic>> captureWidgetOffScreen(
     });
   });
 }
+*/

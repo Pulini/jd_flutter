@@ -29,8 +29,7 @@ import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
 import com.jd.pzx.jd_flutter.utils.deviceList
 import com.jd.pzx.jd_flutter.utils.locationOn
 import com.jd.pzx.jd_flutter.utils.openFile
-import com.jd.pzx.jd_flutter.utils.print.USBUtil
-import com.jd.pzx.jd_flutter.utils.print.printPdf
+import com.jd.pzx.jd_flutter.utils.printPdf
 import com.jd.pzx.jd_flutter.utils.getDeviceInfo
 import com.jd.pzx.jd_flutter.utils.getInstalledApps
 import com.jd.pzx.jd_flutter.utils.keyInterceptor
@@ -44,10 +43,10 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
 import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
 import com.jd.pzx.jd_flutter.utils.disableHardwareAcceleration
-import com.jd.pzx.jd_flutter.utils.findWebView
+import com.jd.pzx.jd_flutter.utils.usbPrinterIsAttached
+import com.jd.pzx.jd_flutter.utils.usbQuickSendCommand
 
 
 @SuppressLint("MissingPermission")
@@ -112,11 +111,9 @@ class MainActivity : FlutterActivity() {
         super.onDestroy()
     }
 
-    lateinit var usbUtil: USBUtil
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        usbUtil = USBUtil(this, 4611)
         //人脸识别通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -192,8 +189,9 @@ class MainActivity : FlutterActivity() {
                 "GetScannedDevices" -> result.success(mutableListOf<HashMap<String, Any>>().apply {
                     deviceList.forEach { add(it.getDeviceMap()) }
                 })
-
                 "SendTSC" -> deviceList.find { it.socket.isConnected }?.let {
+//                    val data=call.arguments as List<ByteArray>;
+//                    Toast.makeText(context, "BLE ${data.size}", Toast.LENGTH_SHORT).show()
                     bluetoothSendCommand(
                         it.socket,
                         call.arguments as List<ByteArray>,
@@ -257,12 +255,14 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, result ->
             if (call.method == "isAttached") {
                 // 直接检查当前是否有匹配的USB设备连接
-                val isAttached = usbUtil.findDevice(4611) != null
-                result.success(isAttached)
+                result.success(usbPrinterIsAttached(this))
             } else if (call.method == "SendTSC") {
-                usbUtil.sendCommand(call.arguments as List<ByteArray>) {
-                    result.success(if (it) SEND_COMMAND_STATE_SUCCESS else SEND_COMMAND_STATE_FAILED)
-                }
+//                val data=call.arguments as List<ByteArray>
+//                Toast.makeText(context, "USB ${data.size}", Toast.LENGTH_SHORT).show()
+                usbQuickSendCommand(this, call.arguments as List<ByteArray>,{code->
+                    result.success(code)
+                })
+
             }
         }
 

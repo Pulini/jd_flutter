@@ -14,12 +14,12 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_100w160h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
@@ -690,7 +690,7 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      labelList.add(dynamicSizeMaterialLabel1098(
+      labelList.add(dynamicSizeMaterialLabel1098n1003(
         labelID: data.barCode ?? '',
         myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
         typeBody: data.subList!.first.factoryType ?? '',
@@ -777,7 +777,7 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      labelList.add(dynamicSizeMaterialLabel1098(
+      labelList.add(dynamicSizeMaterialLabel1098n1003(
         labelID: data.barCode ?? '',
         myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
         typeBody: data.subList!.first.factoryType ?? '',
@@ -1230,42 +1230,11 @@ class MaintainLabelLogic extends GetxController {
     return '${data.barCode ?? '未知单号'} 缺少必填项：${missing.join('、')}';
   }
 
-  // 不显示预览时：把标签控件离屏渲染成图片后直接下发打印。
-  // 印尼标(1002)/缅甸标(1003) 是 Widget 版式（dynamic_label_110w），
-  // tsc_util 中没有与之对应的指令模板，因此复用预览页同一套
-  // 「控件转图片 → imageResizeToLabel」链路，区别只是不跳转预览页面。
-  Future<void> _printLabelWidgetsDirectly(List<Widget> labelList) async {
-    if (labelList.isEmpty) return;
-    double speed = spGet(spSavePrintSpeed) ?? 4;
-    double density = spGet(spSavePrintDensity) ?? 15;
-    var printList = <List<Uint8List>>[];
-    for (var i = 0; i < labelList.length; ++i) {
-      loadingShow('正在生成标签(${i + 1}/${labelList.length})');
-      var image = await captureWidgetOffScreen(labelList[i]);
-      printList.add(await imageResizeToLabel({
-        ...image,
-        'isDynamic': false,
-        'speed': speed.toInt(),
-        'density': density.toInt(),
-      }));
-    }
-    loadingDismiss();
-    pu.printLabelList(
-      labelList: printList,
-      start: () => loadingShow('正在下发标签...'),
-      progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
-      finished: (success, fail) => successDialog(
-        title: '标签下发结束',
-        content: '完成${success.length}张, 失败${fail.length}张',
-      ),
-    );
-  }
-
 //缅甸标
-  void createMyanmarLabel({
+  Future<void> createMyanmarLabel({
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
+  }) async {
     // 缅甸标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
     // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
@@ -1281,6 +1250,7 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     var labelList = <Widget>[];
+    var labelList2 = <List<Uint8List>>[];
     for (var data in list) {
       var qty = '';
       var size = '';
@@ -1299,61 +1269,88 @@ class MaintainLabelLogic extends GetxController {
 
       var subData = LabelLanguageInfo();
 
-      data.subList?.first.materialOtherName?.forEach((v){
-        if(v.languageCode=='en'){
+      data.subList?.first.materialOtherName?.forEach((v) {
+        if (v.languageCode == 'en') {
           subData = v;
         }
       });
 
-      // 构造单张标签（materialList / inBoxQty 随每张变化）
-      Widget buildLabel(Map<String, List> materialList, String boxQty) =>
-          dynamicSizeMaterialLabel1098height160(
-            labelID: data.barCode ?? '',
-            myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-            typeBody: data.subList!.first.factoryType ?? '',
-            trackNo: data.trackNo ?? '',
-            materialList: materialList,
-            instructionNo: data.subList!.first.billNo ?? '',
-            materialCode: data.subList!.first.materialCode ?? '',
-            size: size,
-            inBoxQty: boxQty,
-            customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-            customsDeclarationType: data.customsDeclarationType ?? '',
-            pieceNo: data.pieceNo ?? '',
-            pieceID: subData.pageNumber ?? '',
-            grossWeight: data.grossWeight.toShowString(),
-            netWeight: data.netWeight.toShowString(),
-            specifications: data.subList!.first.meas ?? '',
-            volume: data.volume ?? '',
-            supplier: '',
-            manufactureDate: data.manufactureDate ?? '',
-            hasNotes: true,
-            notes: data.notes ?? '',
-          );
-
-      final dm = data.subList!.first.items!.length > 1
-          ? createSizeList(
-              label: data,
-              sizeTitle: 'Size',
-              totalTitle: 'Total',
-            )
-          : <String, List>{};
-      labelList.add(buildLabel(dm, qty));
+      if (state.isShowPreview.value) {
+        labelList.add( dynamicSizeMaterialLabel1098n1003(
+          labelID: data.barCode ?? '',
+          myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+          typeBody: data.subList!.first.factoryType ?? '',
+          trackNo: data.trackNo ?? '',
+          materialList: {},
+          instructionNo: data.subList!.first.billNo ?? '',
+          materialCode: data.subList!.first.materialCode ?? '',
+          size: size,
+          inBoxQty: qty,
+          customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+          customsDeclarationType: data.customsDeclarationType ?? '',
+          pieceNo: data.pieceNo ?? '',
+          pieceID: subData.pageNumber ?? '',
+          grossWeight: data.grossWeight.toShowString(),
+          netWeight: data.netWeight.toShowString(),
+          specifications: data.subList!.first.meas ?? '',
+          volume: data.volume ?? '',
+          supplier: '',
+          manufactureDate: data.manufactureDate ?? '',
+          hasNotes: true,
+          notes: data.notes ?? '',
+          labelHeight: 110,
+        ));
+      } else {
+        labelList2.add(await fixedLabelMyanmar(
+          labelID: data.barCode ?? '',
+          myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+          typeBody: data.subList!.first.factoryType ?? '',
+          trackNo: data.trackNo ?? '',
+          instructionNo: data.subList!.first.billNo ?? '',
+          materialCode: data.subList!.first.materialCode ?? '',
+          size: size,
+          inBoxQty: qty,
+          customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+          customsDeclarationType: data.customsDeclarationType ?? '',
+          pieceNo: data.pieceNo ?? '',
+          pieceID: subData.pageNumber ?? '',
+          grossWeight: data.grossWeight.toShowString(),
+          netWeight: data.netWeight.toShowString(),
+          specifications: data.subList!.first.meas ?? '',
+          volume: data.volume ?? '',
+          supplier: '',
+          manufactureDate: data.manufactureDate ?? '',
+          hasNotes: true,
+          notes: data.notes ?? '',
+        ));
+      }
     }
     if (state.isShowPreview.value) {
       labels.call(labelList, true);
     } else {
-      //不显示预览：离屏渲染成图片后直接下发打印
-      _printLabelWidgetsDirectly(labelList);
+      pu.printLabelList(
+        labelList: labelList2,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
     }
   }
 
 //印尼标
-  void createIndonesiaLabel({
+  Future<void> createIndonesiaLabel({
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-
+  }) async {
     // 印尼标前置校验：物料多语言(MaterialOtherName)必须包含英文(en)，
     // 否则标签内容缺失，提示用户先维护英文语言数据
     for (var data in list) {
@@ -1369,6 +1366,8 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     var labelList = <Widget>[];
+    var labelList2 = <List<Uint8List>>[];
+
     for (var data in list) {
       var qty = '';
       var typeBody = '';
@@ -1376,7 +1375,8 @@ class MaintainLabelLogic extends GetxController {
         // 无尺码
       } else if (data.subList!.first.items!.length == 1) {
         //单尺码
-        typeBody = '${data.subList!.first.factoryType ?? ''} / ${'${data.subList!.first.items![0].size!}码'}';
+        typeBody =
+            '${data.subList!.first.factoryType ?? ''} / ${'${data.subList!.first.items![0].size!}码'}';
         qty = data.subList!.first.items![0].qty!.toShowString();
       } else if (data.subList!.first.items!.length > 1) {
         //多尺码（qty 仅用于 printType==false 时的整单总数）
@@ -1389,56 +1389,81 @@ class MaintainLabelLogic extends GetxController {
 
       var subData = LabelLanguageInfo();
 
-      data.subList?.first.materialOtherName?.forEach((v){
-        if(v.languageCode=='en'){
+      data.subList?.first.materialOtherName?.forEach((v) {
+        if (v.languageCode == 'en') {
           subData = v;
         }
       });
 
-      // 构造单张标签（materialList / inBoxQty 随每张变化）
-      Widget buildLabel(Map<String, List> materialList, String boxQty) =>
-          dynamicSizeMaterialLabel1095n1096height160(
-            labelID: data.barCode ?? '',
-            productName: data.productName ?? '',
-            orderType: data.orderType ?? '',
-            typeBody: typeBody,
-            trackNo: data.trackNo ?? '',
-            instructionNo: data.subList!.first.billNo ?? '',
-            generalMaterialNumber: data.subList!.first.materialCode ?? '',
-            materialDescription: data.subList!.first.materialName ?? '',
-            materialList: materialList,
-            inBoxQty: boxQty,
-            customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-            customsDeclarationType: data.customsDeclarationType ?? '',
-            pieceID: data.pieceID ?? '',
-            pieceNo: subData.pageNumber ?? '',
-            grossWeight: data.grossWeight.toShowString(),
-            netWeight: data.netWeight.toShowString(),
-            specifications: data.subList!.first.meas ?? '',
-            volume: data.volume ?? '',
-            supplier: data.supplier ?? '',
-            manufactureDate: data.manufactureDate ?? '',
-            consignee: '',
-            repeatHeader: false,
-            // 印尼标：不重复表头、不绘制合计列
-            headerFlex: 5, // 首列(尺码/指令)与顶部字段名列(flex 5)等宽
-            centerInstruction: true, // 尺码表指令列居中（_createSizeList 开关，修复印尼标实际打印仍左对齐）
-          );
 
-      final dm = data.subList!.first.items!.length > 1
-          ? createSizeList(
-              label: data,
-              sizeTitle: '尺码/Size/ukuran',
-              totalTitle: '总计/total',
-            )
-          : <String, List>{};
-      labelList.add(buildLabel(dm, qty));
+      if(state.isShowPreview.value){
+        labelList.add( dynamicSizeMaterialLabel1095n1096n1002(
+          labelID: data.barCode ?? '',
+          productName: data.productName ?? '',
+          orderType: data.orderType ?? '',
+          typeBody: typeBody,
+          trackNo: data.trackNo ?? '',
+          instructionNo: data.subList!.first.billNo ?? '',
+          generalMaterialNumber: data.subList!.first.materialCode ?? '',
+          materialDescription: data.subList!.first.materialName ?? '',
+          materialList: {},
+          inBoxQty: qty,
+          customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+          customsDeclarationType: data.customsDeclarationType ?? '',
+          pieceID: data.pieceID ?? '',
+          pieceNo: subData.pageNumber ?? '',
+          grossWeight: data.grossWeight.toShowString(),
+          netWeight: data.netWeight.toShowString(),
+          specifications: data.subList!.first.meas ?? '',
+          volume: data.volume ?? '',
+          supplier: data.supplier ?? '',
+          manufactureDate: data.manufactureDate ?? '',
+          consignee: '',
+          hasNotes: false,
+          notes: '',
+          labelHeight: 160,
+        ));
+      }else{
+        labelList2.add(await fixedLabelIndonesia(
+          labelID: data.barCode ?? '',
+          productName: data.productName ?? '',
+          orderType: data.orderType ?? '',
+          typeBody: typeBody,
+          trackNo: data.trackNo ?? '',
+          instructionNo: data.subList!.first.billNo ?? '',
+          materialCode: data.subList!.first.materialCode ?? '',
+          materialName: data.subList!.first.materialName ?? '',
+          inBoxQty: qty,
+          customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+          customsDeclarationType: data.customsDeclarationType ?? '',
+          pieceNo: subData.pageNumber ?? '',
+          grossWeight: data.grossWeight.toShowString(),
+          netWeight: data.netWeight.toShowString(),
+          specifications: data.subList!.first.meas ?? '',
+          volume: data.volume ?? '',
+          supplier: data.supplier ?? '',
+          manufactureDate: data.manufactureDate ?? '',
+        ));
+      }
     }
     if (state.isShowPreview.value) {
       labels.call(labelList, false);
     } else {
-      //不显示预览：离屏渲染成图片后直接下发打印
-      _printLabelWidgetsDirectly(labelList);
+      pu.printLabelList(
+        labelList: labelList2,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
     }
   }
 

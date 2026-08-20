@@ -1831,3 +1831,303 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
 
   return list;
 }
+
+Future<List<Uint8List>> fixedLabelIndonesia({
+      String labelID='',
+      String productName='',
+      String orderType='',
+      String typeBody='',
+      String trackNo='',
+      String instructionNo='',
+      String materialCode='',
+      String materialName='',
+      String inBoxQty='',
+      String customsDeclarationUnit='',
+      String customsDeclarationType='',
+      String pieceNo='',
+      String grossWeight='',
+      String netWeight='',
+      String specifications='',
+      String volume='',
+      String supplier='',
+      String manufactureDate='',
+      String consignee='',
+      double speed = 3.0,
+      double density = 15.0,
+      bool isCutter = false,
+}) async {
+  int labelWidth = 100;
+  int labelHeight = 160;
+  var padding = 2;
+  var list = <Uint8List>[];
+  // 清空缓冲区
+  list.add(_tscClearBuffer());
+  //设置纸张
+  list.add(_tscSetup(labelWidth, labelHeight, density: density.toInt(), speed: speed.toInt(), sensorDistance: isCutter ? 0 : 2));
+  //设置二维码
+  if (labelID.isNotEmpty) {
+    list.add(_tscQrCode((padding + 75) * _dpi, (padding + 68) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '4'));
+    var labelID1='',labelID2='';
+    if(labelID.contains('/')){
+      var list=labelID.split('/');
+      labelID1='${list.first}/';
+      labelID2=list.last;
+    }else{
+      labelID1=labelID.substring(0,(labelID.length/2).ceil());
+      labelID2=labelID.substring((labelID.length/2).ceil());
+    }
+    list.add(await _tscBitmapText((padding + 75) * _dpi, (padding + 88) * _dpi, 20, labelID1,isBold: false));
+    list.add(await _tscBitmapText((padding + 75) * _dpi, (padding + 92) * _dpi, 20, labelID2,isBold: false));
+  }
+  //标签提示文本 从上往下从左往右
+  list.add(await _tscBitmapText((padding+1) * _dpi, padding * _dpi, 26,'品名/Product/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+5) * _dpi, 26,'Produk' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+10) * _dpi, 26,'型体/Style/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+15) * _dpi, 26,'Bentuk' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+20) * _dpi, 26,'批次/Lot No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+25) * _dpi, 26,'Banyak No' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+30) * _dpi, 26,'指令号/Order No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+35) * _dpi, 26,'Pesanan No' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+40) * _dpi, 26,'物编/Mtl No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+45) * _dpi, 26,'Nomor material' ,isBold: false));
+  list.add(await _tscBitmapText((padding+30) * _dpi, (padding+43) * _dpi, 26,'物料描述/Mtl Des./Bahan Des' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+56) * _dpi, 30,'数量/Qty/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+61) * _dpi, 30,'kuantitas' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+69) * _dpi, 26,'件号/Serial/Seri' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+75) * _dpi, 26,'毛重/G.W/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+80) * _dpi, 26,'Berat Kotor' ,isBold: false));
+  list.add(await _tscBitmapText((padding+57) * _dpi, (padding+78) * _dpi, 26,'KGS' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+85) * _dpi, 26,'净重/N.W/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+90) * _dpi, 26,'Berat Bersih' ,isBold: false));
+  list.add(await _tscBitmapText((padding+57) * _dpi, (padding+88) * _dpi, 26,'KGS' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+95) * _dpi, 26,'规格/MEA/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+100) * _dpi, 26,'Spesifikasi' ,isBold: false));
+  list.add(await _tscBitmapText((padding+87) * _dpi, (padding+98) * _dpi, 26,'cbm' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+112) * _dpi, 26,'供应商/Supplier/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+117) * _dpi, 26,'Pemasok' ,isBold: false));
+  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+108) * _dpi, 24,'生产日期/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+113) * _dpi, 24,'Production Date/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+118) * _dpi, 24,'Tanggal produksi' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+125) * _dpi, 26,'收货方/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+130) * _dpi, 26,'Consignee/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+135) * _dpi, 26,'Penerima Barang' ,isBold: false));
+  list.add(await _tscBitmapText((padding+80) * _dpi, (padding+125) * _dpi, 30,'MADE' ,isBold: false));
+  list.add(await _tscBitmapText((padding+83) * _dpi, (padding+130) * _dpi, 30,'IN' ,isBold: false));
+  list.add(await _tscBitmapText((padding+80) * _dpi, (padding+135) * _dpi, 30,'CHINA' ,isBold: false));
+
+  //标签内容文本 从上往下从左往右
+  if(productName.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+3) * _dpi, 26, productName,isBold: false));
+  if(orderType.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+3) * _dpi, 26, orderType,isBold: false));
+
+  if(typeBody.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+13) * _dpi, 26, typeBody,isBold: false));
+
+  if(trackNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+23) * _dpi, 26, trackNo,isBold: false));
+
+  if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+33) * _dpi, 26, instructionNo,isBold: false));
+
+  if(materialCode.isNotEmpty) list.add(await _tscBitmapText((padding+1) * _dpi, (padding+50) * _dpi, 26, materialCode,isBold: true));
+  if(materialName.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+50) * _dpi, 26, materialName,isBold: true));
+
+  if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+58) * _dpi, 26, inBoxQty,isBold: true));
+  if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((padding+52) * _dpi, (padding+58) * _dpi, 26, customsDeclarationUnit,isBold: true));
+  if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((padding+77) * _dpi, (padding+58) * _dpi, 26, customsDeclarationType,isBold: true));
+
+  if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+69) * _dpi, 26, pieceNo,isBold: false));
+
+  if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+78) * _dpi, 26, grossWeight,isBold: false));
+
+  if(netWeight.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+88) * _dpi, 26, netWeight,isBold: false));
+
+  if(specifications.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+98) * _dpi, 26, specifications,isBold: false));
+  if(volume.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+98) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
+
+  if(supplier.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+114) * _dpi, 26, supplier,isBold: false));
+  if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+114) * _dpi, 26, manufactureDate,isBold: false));
+
+  if(consignee.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+130) * _dpi, 26, consignee,isBold: false));
+
+
+  //横线
+  list.add(_tscLine(padding * _dpi, (padding + 10) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 20) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 30) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 40) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 50) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 55) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 67) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 75) * _dpi, 74 * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 85) * _dpi, 74 * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 95) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 105) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 125) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 140) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+
+
+  //竖线 从左往右 从上往下
+  list.add(_tscLine((padding+27) * _dpi, padding * _dpi, 2, 140 * _dpi));
+  list.add(_tscLine((padding+50) * _dpi, (padding+55) * _dpi, 2, 12 * _dpi));
+  list.add(_tscLine((padding+50) * _dpi, (padding+75) * _dpi, 2, 20 * _dpi));
+  list.add(_tscLine((padding+50) * _dpi, (padding+105) * _dpi, 2, 20 * _dpi));
+  list.add(_tscLine((padding+74) * _dpi, padding * _dpi, 2, 10 * _dpi));
+  list.add(_tscLine((padding+74) * _dpi, (padding+55) * _dpi, 2, 85 * _dpi));
+  list.add(_tscLine((padding+86) * _dpi, (padding+95) * _dpi, 2, 10 * _dpi));
+
+  //标签外框
+  list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
+  //是否裁切
+  if (isCutter) list.add(_tscCutter());
+  //打印
+  list.add(_tscPrint());
+
+  return list;
+}
+
+
+/// 缅甸固定标  OUTSOLE 标签（固定版式，13 行表格 + 双二维码 + 底部 MADE IN CHINA）
+/// 标签规格：100mm × 110mm，2mm 边距
+Future<List<Uint8List>> fixedLabelMyanmar({
+  String labelID = '', // 标签ID（二维码内容）
+  String myanmarApprovalDocument = '', // 缅甸批文
+  String typeBody = '', // 工厂型体
+  String trackNo = '', // 跟踪号
+  String instructionNo = '', // 指令号
+  String materialCode = '', // 物料编号
+  String size = '', // 尺码
+  String inBoxQty = '', // 装箱数
+  String customsDeclarationUnit = '', // 报关单位（Quantity 右侧第二格）
+  String customsDeclarationType = '', // 报关形式（Quantity 右侧第三格）
+  String pieceNo = '', // 件数 / 件号（Package No 行显示）
+  String pieceID = '', // 页码（Page:1/35 显示）
+  String grossWeight = '', // 毛重
+  String netWeight = '', // 净重
+  String specifications = '', // 规格
+  String volume = '', // 体积
+  String supplier = '', // 供应商
+  String manufactureDate = '', // 生产日期
+  bool hasNotes = false, // 是否打印备注行
+  String notes = '', // 备注
+  double speed = 3.0,
+  double density = 15.0,
+  bool isCutter = false,
+}) async {
+  int labelWidth = 100;
+  int labelHeight = 110;
+  var padding = 2;
+  var list = <Uint8List>[];
+
+  //清空缓冲区
+  list.add(_tscClearBuffer());
+  //设置纸张
+  list.add(_tscSetup(labelWidth, labelHeight, density: density.toInt(), speed: speed.toInt(), sensorDistance: isCutter ? 0 : 2));
+
+  //设置二维码
+  if (labelID.isNotEmpty) {
+    list.add(_tscQrCode((padding + 68) * _dpi, (padding + 32) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '5'));
+    list.add(await _tscBitmapText((padding + 68) * _dpi, (padding + 55) * _dpi, 22, pieceID,isBold: false));
+  }
+  //标签提示文本 从上往下从左往右
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+1) * _dpi, 26,'Description:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+6) * _dpi, 26,'Style:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+11) * _dpi, 26,'Lot No:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+16) * _dpi, 26,'Order No:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+21) * _dpi, 26,'Mtl No:' ,isBold: true));
+  list.add(await _tscBitmapText((padding+54) * _dpi, (padding+21) * _dpi, 26,'Size:' ,isBold: true));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+26) * _dpi, 26,'Quantity:' ,isBold: true));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+34) * _dpi, 26,'Package No:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+43) * _dpi, 26,'Gross Weight:' ,isBold: false));
+  list.add(await _tscBitmapText((padding+55) * _dpi, (padding+43) * _dpi, 26, 'KGS' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+53) * _dpi, 26,'Net Weight:' ,isBold: false));
+  list.add(await _tscBitmapText((padding+55) * _dpi, (padding+53) * _dpi, 26, 'KGS' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+61) * _dpi, 26,'MEA.:' ,isBold: false));
+  list.add(await _tscBitmapText((padding+83) * _dpi, (padding+61) * _dpi, 26, 'CBM' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+70) * _dpi, 26,'Tracing:' ,isBold: false));
+  list.add(await _tscBitmapText((padding+53) * _dpi, (padding+70) * _dpi, 24,'Production Date:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+76) * _dpi, 26,'Note:' ,isBold: false));
+
+  list.add(await _tscBitmapText((padding+35) * _dpi, (padding+86) * _dpi, 26,'MADE IN CHINA' ,isBold: true));
+
+  //标签内容文本 从上往下从左往右
+  if(myanmarApprovalDocument.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+1) * _dpi, 26, myanmarApprovalDocument,isBold: false));
+
+  if(typeBody.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+6) * _dpi, 26, typeBody ,isBold: false));
+
+  if(trackNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+11) * _dpi, 26, trackNo ,isBold: false));
+
+  if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+16) * _dpi, 26, instructionNo ,isBold: false));
+
+  if(materialCode.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+21) * _dpi, 26, materialCode ,isBold: true));
+  if(size.isNotEmpty) list.add(await _tscBitmapText((padding+77) * _dpi, (padding+21) * _dpi, 26, '$size#' ,isBold: true));
+
+  if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+26) * _dpi, 26, inBoxQty ,isBold: true));
+  if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((padding+54) * _dpi, (padding+26) * _dpi, 26, customsDeclarationUnit,isBold: true));
+  if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((padding+68) * _dpi, (padding+26) * _dpi, 26, customsDeclarationType ,isBold: true));
+
+  if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+34) * _dpi, 26, pieceNo ,isBold: false));
+
+  if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+43) * _dpi, 26, grossWeight ,isBold: false));
+
+  if(netWeight.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+53) * _dpi, 26, netWeight ,isBold: false));
+
+  if(specifications.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+61) * _dpi, 26, specifications,isBold: false));
+  if(volume.isNotEmpty) list.add(await _tscBitmapText((padding+68) * _dpi, (padding+61) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
+
+  if(supplier.isNotEmpty) list.add(await _tscBitmapText((padding+26) * _dpi, (padding+70) * _dpi, 26, supplier ,isBold: false));
+  if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((padding+80) * _dpi, (padding+70) * _dpi, 24, manufactureDate ,isBold: false));
+
+  if(notes.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+76) * _dpi, 26, notes ,isBold: false));
+
+
+  //横线
+  list.add(_tscLine(padding * _dpi, (padding + 5) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 10) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 15) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 20) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 25) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 31) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 40) * _dpi, 67 * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 49) * _dpi, 67 * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 58) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 67) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 76) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 80) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(padding * _dpi, (padding + 85) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+
+  //竖线 从左往右 从上往下
+  list.add(_tscLine((padding+24) * _dpi, padding * _dpi, 2, 80 * _dpi));
+  list.add(_tscLine((padding+53) * _dpi, (padding + 20) * _dpi, 2, 11 * _dpi));
+  list.add(_tscLine((padding+53) * _dpi, (padding + 40) * _dpi, 2, 18 * _dpi));
+  list.add(_tscLine((padding+53) * _dpi, (padding + 67) * _dpi, 2, 9 * _dpi));
+  list.add(_tscLine((padding+67) * _dpi, (padding + 20) * _dpi, 2, 47 * _dpi));
+  list.add(_tscLine((padding+79) * _dpi, (padding + 58) * _dpi, 2, 18 * _dpi));
+
+  //标签外框
+  list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
+  //是否裁切
+  if (isCutter) list.add(_tscCutter());
+  //打印
+  list.add(_tscPrint());
+
+  return list;
+}

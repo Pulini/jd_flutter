@@ -375,9 +375,9 @@ class MaterialDispatchLogic extends GetxController {
             materialList: [
               [
                 data.materialNumber ?? '',
-                specificationSplit,
+                data.specification??'',
                 qty,
-                data.unitName,
+                data.unitName??'',
               ]
             ],
             customsDeclarationType: data.cusdeclaraType ?? '',
@@ -397,7 +397,7 @@ class MaterialDispatchLogic extends GetxController {
         if (state.isSmallLabel.value) {
           doPrint(domesticSmallLabel());
         } else {
-          previewLabel(dynamicSizeMaterialLabel1095n1096(
+          previewLabel(dynamicSizeMaterialLabel1095n1096n1002(
             labelID: guid,
             productName: data.description ?? '',
             orderType: orderType(),
@@ -453,9 +453,9 @@ class MaterialDispatchLogic extends GetxController {
         materialList: [
           [
             data.materialNumber ?? '',
-            specificationSplit,
+            data.specification??'',
             qty,
-            data.unitName,
+            data.unitName??'',
           ]
         ],
         customsDeclarationType: data.cusdeclaraType ?? '',
