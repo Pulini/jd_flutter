@@ -117,7 +117,8 @@ void checkBarCodeProcessDialog({
           child: StatefulBuilder(builder: (context, dialogSetState) {
             return AlertDialog(
               title: Text('process_report_store_submit_process_store'.tr),
-              content: SizedBox(width: 300, child: body),
+              content: SizedBox(width: 400, child: body),
+              contentPadding: const EdgeInsets.all(10),
               actions: [
                 TextButton(
                   onPressed: () {

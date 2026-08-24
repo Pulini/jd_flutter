@@ -80,9 +80,9 @@ IntrinsicHeight _createRowText({
 
 List<Widget> _createSizeList({
   required Map<String, List> list,
-  TextStyle? style,
   int headerFlex = 2,
-  bool repeatHeader = true,
+  int maxRow = 5,
+  TextStyle? style,
 }) {
   frameText({
     int flex = 1,
@@ -92,6 +92,7 @@ List<Widget> _createSizeList({
       Expanded(
         flex: flex,
         child: Container(
+          padding: alignment==Alignment.center?null:_textPadding,
           decoration: _border,
           alignment: alignment,
           child: Text(
@@ -106,54 +107,37 @@ List<Widget> _createSizeList({
 
   var tableList = <Widget>[];
   if (list.isNotEmpty) {
-    // 一行最多放 7 个尺码（印尼标每箱最多混装 7 个尺码，故一行恰好能放下）
-    const int max = 7;
-    // 本行尺码区的固定槽位数：repeatHeader==true 时末段还要画合计列，统一多留 1 格保证各段列宽一致
-    final int slots = repeatHeader ? max + 1 : max;
-    // 首列(尺码/指令列)宽度：
-    // repeatHeader==false(印尼标) 换算到与顶部 _createRowText 相同的份制(字段名 5 : 内容 15，共 20 份)，
-    // 使首列恒定占 headerFlex/20，不随本行实际尺码个数而伸缩；
-    // repeatHeader==true 保持原比例，不影响既有模板。
-    final int needFlex = repeatHeader ? headerFlex : headerFlex * slots;
-    final int cellFlex = repeatHeader ? 1 : (20 - headerFlex);
-    // 去掉末尾合计项后再算段数，避免 5 尺码(6列)被算成 2 段而产生空行
-    final maxColumns = ((list.values.toList()[0].length - 1) / max).ceil();
+    final maxColumns = (list.values.toList()[0].length / maxRow).ceil();
     for (int i = 0; i < maxColumns; i++) {
       //轮次
       list.forEach((ins, data) {
         var line = <Widget>[];
         //添加表格第一列指令列
-        line.add(frameText(flex: needFlex, text: ins));
+        line.add(frameText(flex: headerFlex, text: ins));
 
         var sizeList = data.sublist(0, data.length - 1);
-        var start = i * max;
+        var start = i * maxRow;
         var surplus = sizeList.length - start;
-        var to = surplus > max ? start + max : start + surplus;
+        var to = surplus > maxRow ? start + maxRow : start + surplus;
         for (var j = start; j < to; ++j) {
           //添加尺码列
           line.add(frameText(
-            flex: cellFlex,
             alignment: Alignment.center,
             text: sizeList[j],
           ));
         }
-        //如果尺码不足一整段，则填充空白列，保证首列宽度恒定、各段列宽一致
-        var fill =
-            repeatHeader ? max - ((to + 1) - start) : slots - (to - start);
+        var fill = maxRow - ((to + 1) - start);
         if (fill > 0) {
+          //如果数据不足Max列，则填充空白列
           line.add(Expanded(
-            flex: fill * cellFlex,
+            flex: maxRow - ((to + 1) - start),
             child: Container(decoration: _border),
           ));
         }
 
-        if (repeatHeader && i == maxColumns - 1) {
-          //添加末尾列（合计）：仅最后一段且允许重复表头时绘制
-          line.add(frameText(
-            flex: cellFlex,
-            alignment: Alignment.center,
-            text: data.last,
-          ));
+        if (to - start < maxRow) {
+          //添加末尾列（合计）
+          line.add(frameText(alignment: Alignment.center, text: data.last));
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
       });
@@ -354,6 +338,7 @@ Widget dynamicSizeMaterialLabel1098n1003({
   required Map<String, List> materialList, //物料列表
   required String instructionNo, //指令号
   required String materialCode, //物料编号
+  int maxRow=5,
   required String size, //尺码
   required String inBoxQty, //装箱数
   required String customsDeclarationUnit, //报关单位
@@ -415,7 +400,7 @@ Widget dynamicSizeMaterialLabel1098n1003({
                   _paddingTextCenter(style: _bigStyle, text: '$size#', flex: 6),
                 ],
               ),
-        if (materialList.isNotEmpty) ..._createSizeList(list: materialList),
+        if (materialList.isNotEmpty) ..._createSizeList(list: materialList,maxRow: 8),
         _createRowText(
           title: 'Quantity:',
           style: _bigStyle,
@@ -809,6 +794,7 @@ Widget dynamicSizeMaterialLabel1095n1096n1002({
   required String generalMaterialNumber, //一般可配置物料
   required String materialDescription, //物料长描述
   required Map<String, List> materialList, //物料列表
+  int maxRow=5,
   required String inBoxQty, //装箱数量
   required String customsDeclarationUnit, //报关单位
   required String customsDeclarationType, //报关形式
@@ -826,6 +812,7 @@ Widget dynamicSizeMaterialLabel1095n1096n1002({
   double? labelHeight,
 }) =>
     _labelContainer(
+      labelHeight: labelHeight,
       widgets: [
         _createRowText(
           title: '品名/Product/Produk',
@@ -862,7 +849,7 @@ Widget dynamicSizeMaterialLabel1095n1096n1002({
             )
           ],
         ),
-        if (materialList.isNotEmpty)..._createSizeList(list: materialList),
+        if (materialList.isNotEmpty)..._createSizeList(list: materialList,maxRow: maxRow),
         _createRowText(
           title: '数量/Qty/kuantitas:',
           style: _bigStyle,

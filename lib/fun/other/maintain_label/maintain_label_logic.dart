@@ -726,6 +726,7 @@ class MaintainLabelLogic extends GetxController {
     List<String>? sizes,
   }) {
     var materials = <String, List>{};
+    if(label.subList?.first.items.isNullOrEmpty()==true)return materials;
     if (label.subList!
         .any((v) => v.items!.any((v2) => v2.size?.isNotEmpty == true))) {
       var sizeList = <String>[];
@@ -1273,13 +1274,18 @@ class MaintainLabelLogic extends GetxController {
         }
       });
 
+      var sizeList= createSizeList(
+        label: data,
+        sizeTitle: 'Size',
+        totalTitle: 'Total',
+      );
       if (state.isShowPreview.value) {
         labelList.add( dynamicSizeMaterialLabel1098n1003(
           labelID: data.barCode ?? '',
           myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
           typeBody: data.subList!.first.factoryType ?? '',
           trackNo: data.trackNo ?? '',
-          materialList: {},
+          materialList: sizeList,
           instructionNo: data.subList!.first.billNo ?? '',
           materialCode: data.subList!.first.materialCode ?? '',
           size: size,
@@ -1306,6 +1312,7 @@ class MaintainLabelLogic extends GetxController {
           trackNo: data.trackNo ?? '',
           instructionNo: data.subList!.first.billNo ?? '',
           materialCode: data.subList!.first.materialCode ?? '',
+          sizeList: sizeList,
           size: size,
           inBoxQty: qty,
           customsDeclarationUnit: data.customsDeclarationUnit ?? '',
@@ -1392,8 +1399,11 @@ class MaintainLabelLogic extends GetxController {
           subData = v;
         }
       });
-
-
+      var sizeList= createSizeList(
+        label: data,
+        sizeTitle: 'Size',
+        totalTitle: 'Total',
+      );
       if(state.isShowPreview.value){
         labelList.add( dynamicSizeMaterialLabel1095n1096n1002(
           labelID: data.barCode ?? '',
@@ -1404,7 +1414,8 @@ class MaintainLabelLogic extends GetxController {
           instructionNo: data.subList!.first.billNo ?? '',
           generalMaterialNumber: data.subList!.first.materialCode ?? '',
           materialDescription: data.subList!.first.materialName ?? '',
-          materialList: {},
+          materialList: sizeList,
+          maxRow: 8,
           inBoxQty: qty,
           customsDeclarationUnit: data.customsDeclarationUnit ?? '',
           customsDeclarationType: data.customsDeclarationType ?? '',
@@ -1431,6 +1442,7 @@ class MaintainLabelLogic extends GetxController {
           instructionNo: data.subList!.first.billNo ?? '',
           materialCode: data.subList!.first.materialCode ?? '',
           materialName: data.subList!.first.materialName ?? '',
+          sizeList:sizeList,
           inBoxQty: qty,
           customsDeclarationUnit: data.customsDeclarationUnit ?? '',
           customsDeclarationType: data.customsDeclarationType ?? '',

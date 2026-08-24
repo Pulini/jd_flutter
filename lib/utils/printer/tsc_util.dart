@@ -1841,6 +1841,7 @@ Future<List<Uint8List>> fixedLabelIndonesia({
       String instructionNo='',
       String materialCode='',
       String materialName='',
+      Map<String, List> sizeList = const {},
       String inBoxQty='',
       String customsDeclarationUnit='',
       String customsDeclarationType='',
@@ -1858,15 +1859,73 @@ Future<List<Uint8List>> fixedLabelIndonesia({
 }) async {
   int labelWidth = 100;
   int labelHeight = 160;
-  var padding = 2;
+  int padding = 2;
+  int qrCodeWidth=22;
+  int ulx = padding;//横线x通用坐标
+  int sizeListH=sizeList.isEmpty?0:(6+6);
+  int sizeListRowWidth=sizeList.isNotEmpty?((labelWidth-padding-padding-18)/sizeList.values.first.length).round():0;
+
+  int ul1y= padding + 10;//横线1y坐标
+  int ul2y= padding + 20;//横线2y坐标
+  int ul3y= padding + 30;//横线3y坐标
+  int ul4y= padding + 40;//横线4y坐标
+  int ul5y= padding + 50;//横线5y坐标
+  int ul6y= padding + 55;//横线6y坐标
+  int ul7y= padding + sizeListH + 55;//横线7y坐标
+  int ul8y= padding + sizeListH + 67;//横线8y坐标
+  int ul9y= padding + sizeListH + 75;//横线9y坐标
+  int ul10y= padding + sizeListH + 85;//横线10y坐标
+  int ul11y= padding + sizeListH + 95;//横线11y坐标
+  int ul12y= padding + sizeListH + 105;//横线12y坐标
+  int ul13y= padding + sizeListH + 125;//横线13y坐标
+  int ul14y= padding + sizeListH + 140;//横线14y坐标
+
+  int ulw1 = labelWidth - padding - padding;//横线宽1
+  int ulw2 = labelWidth-padding-padding-qrCodeWidth;//横线宽2
+
+
+  int vl1x= padding + 27;//竖线1x坐标
+  int vl2x= padding + 27;//竖线2x坐标
+  int vl3x= padding + 50;//竖线3x坐标
+  int vl4x= padding + 50;//竖线4x坐标
+  int vl5x= padding + 50;//竖线5x坐标
+  int vl6x= padding + 74;//竖线6x坐标
+  int vl7x= padding + 74;//竖线7x坐标
+  int vl8x= padding + 86;//竖线7x坐标
+
+
+  int vl1y= padding ;//竖线1y坐标
+  int vl2y= padding + sizeListH + 55;//竖线2y坐标
+  int vl3y= padding + sizeListH + 55;//竖线3y坐标
+  int vl4y= padding + sizeListH + 75;//竖线4y坐标
+  int vl5y= padding + sizeListH + 105;//竖线5y坐标
+  int vl6y= padding ;//竖线6y坐标
+  int vl7y= padding + sizeListH + 55;//竖线7y坐标
+  int vl8y= padding + sizeListH + 95;//竖线8y坐标
+
+  int vl1w = 55;//竖线1高度
+  int vl2w = 85;//竖线2高度
+  int vl3w = 12;//竖线3高度
+  int vl4w = 20;//竖线4高度
+  int vl5w = 20;//竖线5高度
+  int vl6w = 10;//竖线6高度
+  int vl7w = 85;//竖线7高度
+  int vl8w = 10;//竖线8高度
+
+  int stw = padding + 18;//尺码列表第一列宽
+  int shl1y = padding + 61;//尺码列表横线1y坐标
+  int svlh = 6;//尺码列表竖线高度
+
+
   var list = <Uint8List>[];
   // 清空缓冲区
   list.add(_tscClearBuffer());
   //设置纸张
   list.add(_tscSetup(labelWidth, labelHeight, density: density.toInt(), speed: speed.toInt(), sensorDistance: isCutter ? 0 : 2));
+
   //设置二维码
   if (labelID.isNotEmpty) {
-    list.add(_tscQrCode((padding + 75) * _dpi, (padding + 68) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '4'));
+    list.add(_tscQrCode((vl7x + 1) * _dpi, (ul8y + 1) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '4'));
     var labelID1='',labelID2='';
     if(labelID.contains('/')){
       var list=labelID.split('/');
@@ -1876,112 +1935,141 @@ Future<List<Uint8List>> fixedLabelIndonesia({
       labelID1=labelID.substring(0,(labelID.length/2).ceil());
       labelID2=labelID.substring((labelID.length/2).ceil());
     }
-    list.add(await _tscBitmapText((padding + 75) * _dpi, (padding + 88) * _dpi, 20, labelID1,isBold: false));
-    list.add(await _tscBitmapText((padding + 75) * _dpi, (padding + 92) * _dpi, 20, labelID2,isBold: false));
+    list.add(await _tscBitmapText((vl7x + 1) * _dpi, (ul8y + 21) * _dpi, 20, labelID1,isBold: false));
+    list.add(await _tscBitmapText((vl7x + 1) * _dpi, (ul8y + 25) * _dpi, 20, labelID2,isBold: false));
   }
   //标签提示文本 从上往下从左往右
-  list.add(await _tscBitmapText((padding+1) * _dpi, padding * _dpi, 26,'品名/Product/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+1) * _dpi, 26,'品名/Product/' ,isBold: false));
   list.add(await _tscBitmapText((padding+1) * _dpi, (padding+5) * _dpi, 26,'Produk' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+10) * _dpi, 26,'型体/Style/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+15) * _dpi, 26,'Bentuk' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul1y+1) * _dpi, 26,'型体/Style/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul1y+5) * _dpi, 26,'Bentuk' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+20) * _dpi, 26,'批次/Lot No/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+25) * _dpi, 26,'Banyak No' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul2y+1) * _dpi, 26,'批次/Lot No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul2y+5) * _dpi, 26,'Banyak No' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+30) * _dpi, 26,'指令号/Order No/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+35) * _dpi, 26,'Pesanan No' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul3y+1) * _dpi, 26,'指令号/Order No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul3y+5) * _dpi, 26,'Pesanan No' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+40) * _dpi, 26,'物编/Mtl No/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+45) * _dpi, 26,'Nomor material' ,isBold: false));
-  list.add(await _tscBitmapText((padding+30) * _dpi, (padding+43) * _dpi, 26,'物料描述/Mtl Des./Bahan Des' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul4y+1) * _dpi, 26,'物编/Mtl No/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul4y+5) * _dpi, 26,'Nomor material' ,isBold: false));
+  list.add(await _tscBitmapText((vl1x+2) * _dpi, (ul4y+4) * _dpi, 26,'物料描述/Mtl Des./Bahan Des' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+56) * _dpi, 30,'数量/Qty/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+61) * _dpi, 30,'kuantitas' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul7y+2) * _dpi, 30,'数量/Qty/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul7y+6) * _dpi, 30,'kuantitas' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+69) * _dpi, 26,'件号/Serial/Seri' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul8y+2) * _dpi, 26,'件号/Serial/Seri' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+75) * _dpi, 26,'毛重/G.W/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+80) * _dpi, 26,'Berat Kotor' ,isBold: false));
-  list.add(await _tscBitmapText((padding+57) * _dpi, (padding+78) * _dpi, 26,'KGS' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul9y+1) * _dpi, 26,'毛重/G.W/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul9y+5) * _dpi, 26,'Berat Kotor' ,isBold: false));
+  list.add(await _tscBitmapText((vl3x+2) * _dpi, (ul9y+3) * _dpi, 26,'KGS' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+85) * _dpi, 26,'净重/N.W/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+90) * _dpi, 26,'Berat Bersih' ,isBold: false));
-  list.add(await _tscBitmapText((padding+57) * _dpi, (padding+88) * _dpi, 26,'KGS' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul10y+1) * _dpi, 26,'净重/N.W/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul10y+5) * _dpi, 26,'Berat Bersih' ,isBold: false));
+  list.add(await _tscBitmapText((vl3x+2) * _dpi, (ul10y+3) * _dpi, 26,'KGS' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+95) * _dpi, 26,'规格/MEA/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+100) * _dpi, 26,'Spesifikasi' ,isBold: false));
-  list.add(await _tscBitmapText((padding+87) * _dpi, (padding+98) * _dpi, 26,'cbm' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul11y+1) * _dpi, 26,'规格/MEA/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul11y+5) * _dpi, 26,'Spesifikasi' ,isBold: false));
+  list.add(await _tscBitmapText((vl8x+1) * _dpi, (ul11y+3) * _dpi, 26,'cbm' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+112) * _dpi, 26,'供应商/Supplier/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+117) * _dpi, 26,'Pemasok' ,isBold: false));
-  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+108) * _dpi, 24,'生产日期/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+113) * _dpi, 24,'Production Date/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+51) * _dpi, (padding+118) * _dpi, 24,'Tanggal produksi' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul12y+7) * _dpi, 26,'供应商/Supplier/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul12y+12) * _dpi, 26,'Pemasok' ,isBold: false));
+  list.add(await _tscBitmapText((vl5x+1) * _dpi, (ul12y+3) * _dpi, 24,'生产日期/' ,isBold: false));
+  list.add(await _tscBitmapText((vl5x+1) * _dpi, (ul12y+8) * _dpi, 24,'Production Date/' ,isBold: false));
+  list.add(await _tscBitmapText((vl5x+1) * _dpi, (ul12y+13) * _dpi, 24,'Tanggal produksi' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+125) * _dpi, 26,'收货方/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+130) * _dpi, 26,'Consignee/' ,isBold: false));
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+135) * _dpi, 26,'Penerima Barang' ,isBold: false));
-  list.add(await _tscBitmapText((padding+80) * _dpi, (padding+125) * _dpi, 30,'MADE' ,isBold: false));
-  list.add(await _tscBitmapText((padding+83) * _dpi, (padding+130) * _dpi, 30,'IN' ,isBold: false));
-  list.add(await _tscBitmapText((padding+80) * _dpi, (padding+135) * _dpi, 30,'CHINA' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul13y+1) * _dpi, 26,'收货方/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul13y+5) * _dpi, 26,'Consignee/' ,isBold: false));
+  list.add(await _tscBitmapText((padding+1) * _dpi, (ul13y+10) * _dpi, 26,'Penerima Barang' ,isBold: false));
+
+  list.add(await _tscBitmapText((vl7x+6) * _dpi, (ul13y+1) * _dpi, 30,'MADE' ,isBold: false));
+  list.add(await _tscBitmapText((vl7x+9) * _dpi, (ul13y+5) * _dpi, 30,'IN' ,isBold: false));
+  list.add(await _tscBitmapText((vl7x+6) * _dpi, (ul13y+10) * _dpi, 30,'CHINA' ,isBold: false));
 
   //标签内容文本 从上往下从左往右
-  if(productName.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+3) * _dpi, 26, productName,isBold: false));
-  if(orderType.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+3) * _dpi, 26, orderType,isBold: false));
+  if(productName.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (padding+3) * _dpi, 26, productName,isBold: false));
+  if(orderType.isNotEmpty) list.add(await _tscBitmapText((vl6x+1) * _dpi, (padding+3) * _dpi, 26, orderType,isBold: false));
 
-  if(typeBody.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+13) * _dpi, 26, typeBody,isBold: false));
+  if(typeBody.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul1y+3) * _dpi, 26, typeBody,isBold: false));
 
-  if(trackNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+23) * _dpi, 26, trackNo,isBold: false));
+  if(trackNo.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul2y+3) * _dpi, 26, trackNo,isBold: false));
 
-  if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+33) * _dpi, 26, instructionNo,isBold: false));
+  if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul3y+3) * _dpi, 26, instructionNo,isBold: false));
 
-  if(materialCode.isNotEmpty) list.add(await _tscBitmapText((padding+1) * _dpi, (padding+50) * _dpi, 26, materialCode,isBold: true));
-  if(materialName.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+50) * _dpi, 26, materialName,isBold: true));
+  if(materialCode.isNotEmpty) list.add(await _tscBitmapText((padding+1) * _dpi, (ul5y+1) * _dpi, 26, materialCode,isBold: true));
+  if(materialName.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul5y+1) * _dpi, 26, materialName,isBold: true));
 
-  if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+58) * _dpi, 26, inBoxQty,isBold: true));
-  if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((padding+52) * _dpi, (padding+58) * _dpi, 26, customsDeclarationUnit,isBold: true));
-  if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((padding+77) * _dpi, (padding+58) * _dpi, 26, customsDeclarationType,isBold: true));
+  if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul7y+4) * _dpi, 26, inBoxQty,isBold: true));
+  if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((vl3x+1) * _dpi, (ul7y+4) * _dpi, 26, customsDeclarationUnit,isBold: true));
+  if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((vl7x+1) * _dpi, (ul7y+4) * _dpi, 26, customsDeclarationType,isBold: true));
 
-  if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+69) * _dpi, 26, pieceNo,isBold: false));
+  if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul8y+2) * _dpi, 26, pieceNo,isBold: false));
 
-  if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+78) * _dpi, 26, grossWeight,isBold: false));
+  if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul9y+3) * _dpi, 26, grossWeight,isBold: false));
 
-  if(netWeight.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+88) * _dpi, 26, netWeight,isBold: false));
+  if(netWeight.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul10y+3) * _dpi, 26, netWeight,isBold: false));
 
-  if(specifications.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+98) * _dpi, 26, specifications,isBold: false));
-  if(volume.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+98) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
+  if(specifications.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul11y+3) * _dpi, 26, specifications,isBold: false));
+  if(volume.isNotEmpty) list.add(await _tscBitmapText((vl7x+1) * _dpi, (ul11y+3) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
 
-  if(supplier.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+114) * _dpi, 26, supplier,isBold: false));
-  if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((padding+75) * _dpi, (padding+114) * _dpi, 26, manufactureDate,isBold: false));
+  if(supplier.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul12y+8) * _dpi, 26, supplier,isBold: false));
+  if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((vl7x+1) * _dpi, (ul12y+8) * _dpi, 26, manufactureDate,isBold: false));
 
-  if(consignee.isNotEmpty) list.add(await _tscBitmapText((padding+28) * _dpi, (padding+130) * _dpi, 26, consignee,isBold: false));
+  if(consignee.isNotEmpty) list.add(await _tscBitmapText((vl1x+1) * _dpi, (ul13y+5) * _dpi, 26, consignee,isBold: false));
+
+  if(sizeList.isNotEmpty){
+    var sizeLine=0;
+    for (final entry in sizeList.entries) {
+      final k = entry.key;
+      final v = entry.value;
+      var y = ul6y + sizeLine * 6;
+      if (k.isNotEmpty) {
+        list.add(await _tscBitmapText((padding + 1) * _dpi, (y + 1) * _dpi, 26, k, isBold: true));
+      }
+      for (var i = 0; i < v.length; i++) {
+        var data = v[i];
+        var x = stw + i * sizeListRowWidth;
+        if (data.isNotEmpty) {
+          list.add(await _tscBitmapText((x + 2) * _dpi, (y + 1) * _dpi, 26, data, isBold: true));
+        }
+      }
+      sizeLine++;
+    }
+
+    list.add(_tscLine(ulx * _dpi,  ul6y * _dpi, ulw1* _dpi, 2));
+    list.add(_tscLine(padding * _dpi, shl1y * _dpi, ulw1 * _dpi, 2));
+    for(var i=0;i<sizeList.values.first.length;i++){
+      list.add(_tscLine((stw + i * sizeListRowWidth) * _dpi, ul6y * _dpi, 2, svlh * 2 * _dpi));
+    }
+  }
 
 
   //横线
-  list.add(_tscLine(padding * _dpi, (padding + 10) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 20) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 30) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 40) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 50) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 55) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 67) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 75) * _dpi, 74 * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 85) * _dpi, 74 * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 95) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 105) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 125) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 140) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul1y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul2y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul3y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul4y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul5y * _dpi, ulw1* _dpi, 2));
+
+  list.add(_tscLine(ulx * _dpi,  ul7y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul8y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul9y * _dpi, ulw2 * _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul10y * _dpi, ulw2 * _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul11y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul12y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul13y * _dpi, ulw1* _dpi, 2));
+  list.add(_tscLine(ulx * _dpi,  ul14y * _dpi, ulw1* _dpi, 2));
 
 
   //竖线 从左往右 从上往下
-  list.add(_tscLine((padding+27) * _dpi, padding * _dpi, 2, 140 * _dpi));
-  list.add(_tscLine((padding+50) * _dpi, (padding+55) * _dpi, 2, 12 * _dpi));
-  list.add(_tscLine((padding+50) * _dpi, (padding+75) * _dpi, 2, 20 * _dpi));
-  list.add(_tscLine((padding+50) * _dpi, (padding+105) * _dpi, 2, 20 * _dpi));
-  list.add(_tscLine((padding+74) * _dpi, padding * _dpi, 2, 10 * _dpi));
-  list.add(_tscLine((padding+74) * _dpi, (padding+55) * _dpi, 2, 85 * _dpi));
-  list.add(_tscLine((padding+86) * _dpi, (padding+95) * _dpi, 2, 10 * _dpi));
+  list.add(_tscLine(vl1x * _dpi, vl1y *_dpi, 2, vl1w * _dpi));
+  list.add(_tscLine(vl2x * _dpi, vl2y * _dpi, 2, vl2w * _dpi));
+  list.add(_tscLine(vl3x * _dpi, vl3y * _dpi, 2, vl3w * _dpi));
+  list.add(_tscLine(vl4x * _dpi, vl4y * _dpi, 2, vl4w * _dpi));
+  list.add(_tscLine(vl5x * _dpi, vl5y * _dpi, 2, vl5w * _dpi));
+  list.add(_tscLine(vl6x * _dpi, vl6y * _dpi, 2, vl6w * _dpi));
+  list.add(_tscLine(vl7x * _dpi, vl7y * _dpi, 2, vl7w * _dpi));
+  list.add(_tscLine(vl8x * _dpi, vl8y * _dpi, 2, vl8w * _dpi));
 
   //标签外框
   list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
@@ -2003,6 +2091,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
   String trackNo = '', // 跟踪号
   String instructionNo = '', // 指令号
   String materialCode = '', // 物料编号
+  Map<String, List> sizeList = const {},//尺码列表
   String size = '', // 尺码
   String inBoxQty = '', // 装箱数
   String customsDeclarationUnit = '', // 报关单位（Quantity 右侧第二格）
@@ -2023,7 +2112,60 @@ Future<List<Uint8List>> fixedLabelMyanmar({
 }) async {
   int labelWidth = 100;
   int labelHeight = 110;
-  var padding = 2;
+  int padding = 2;//标签边距
+  int qrCodeWidth=29;
+  int headerHeight = 15;
+  int sizeListH=sizeList.isEmpty?10:(5+6+6);
+  int sizeListRowWidth=sizeList.isNotEmpty?((labelWidth-padding-padding-18)/sizeList.values.first.length).round():0;
+
+  int ulx = padding;//横线x通用坐标
+
+  int ul1y = padding + 5;//横线1y坐标
+  int ul2y = padding + 10;//横线2y坐标
+  int ul3y = padding + 15;//横线3y坐标
+  int ul4y = padding + sizeListH + 15;//横线4y坐标
+  int ul5y = padding + sizeListH + 21;//横线5y坐标
+  int ul6y = padding + sizeListH + 30;//横线6y坐标
+  int ul7y = padding + sizeListH + 39;//横线7y坐标
+  int ul8y = padding + sizeListH + 48;//横线8y坐标
+  int ul9y = padding + sizeListH + 57;//横线9y坐标
+  int ul10y = padding + sizeListH + 66;//横线10y坐标
+  int ul11y = padding + sizeListH + 70;//横线11坐标
+  int ul12y = padding + sizeListH + 75;//横线12y坐标
+
+  int ulw1 = labelWidth - padding - padding;//横线宽1
+  int ulw2 = labelWidth-padding-padding-qrCodeWidth;//横线宽2
+
+  int vl1x= padding + 24;//竖线1x坐标
+  int vl2x= padding + 24;//竖线2x坐标
+  int vl3x= padding + 53;//竖线3x坐标
+  int vl4x= padding + 53;//竖线4x坐标
+  int vl5x= padding + 53;//竖线5x坐标
+  int vl6x= padding + 67;//竖线6x坐标
+  int vl7x= padding + 79;//竖线7x坐标
+
+  int vl1y= padding ;//竖线1y坐标
+  int vl2y= padding + headerHeight + sizeListH;//竖线2y坐标
+  int vl3y= padding + headerHeight + sizeListH;//竖线3y坐标
+  int vl4y= padding + headerHeight + sizeListH + 15;//竖线4y坐标
+  int vl5y= padding + headerHeight + sizeListH + 42;//竖线5y坐标
+  int vl6y= padding + headerHeight + sizeListH;//竖线6y坐标
+  int vl7y= padding + headerHeight + sizeListH + 33;//竖线7y坐标
+
+  int vl1w = 15;//竖线1高度
+  int vl2w = 55;//竖线2高度
+  int vl3w = 6;//竖线3高度
+  int vl4w = 18;//竖线4高度
+  int vl5w = 9;//竖线5高度
+  int vl6w = 42;//竖线6高度
+  int vl7w = 18;//竖线7高度
+
+  int stw = padding + 18;//尺码列表第一列宽
+  int shl1y = padding + 20;//尺码列表横线1y坐标
+  int shl2y = padding + 26;//尺码列表横线2y坐标
+  int svlh = 6;//尺码列表竖线高度
+
+
   var list = <Uint8List>[];
 
   //清空缓冲区
@@ -2033,101 +2175,140 @@ Future<List<Uint8List>> fixedLabelMyanmar({
 
   //设置二维码
   if (labelID.isNotEmpty) {
-    list.add(_tscQrCode((padding + 68) * _dpi, (padding + 32) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '5'));
-    list.add(await _tscBitmapText((padding + 68) * _dpi, (padding + 55) * _dpi, 22, pieceID,isBold: false));
+    list.add(_tscQrCode((vl6x + 1) * _dpi, (ul5y + 1) * _dpi, labelID.contains('"') ? labelID.replaceAll('"', '\\["]') : labelID, cell: '5'));
+    list.add(await _tscBitmapText((vl6x + 1) * _dpi, (ul5y + 24) * _dpi, 22, pieceID,isBold: false));
   }
+
   //标签提示文本 从上往下从左往右
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+1) * _dpi, 26,'Description:' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (padding + 1) * _dpi, 26,'Description:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+6) * _dpi, 26,'Style:' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul1y + 1) * _dpi, 26,'Style:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+11) * _dpi, 26,'Lot No:' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul2y + 1) * _dpi, 26,'Lot No:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+16) * _dpi, 26,'Order No:' ,isBold: false));
+  if(sizeList.isEmpty) {
+    list.add(await _tscBitmapText((padding + 1) * _dpi, (ul3y + 1) * _dpi, 26,'Order No:',isBold: false));
+    list.add(await _tscBitmapText((padding + 1) * _dpi, (ul3y + 6) * _dpi, 26,'Mtl No:' ,isBold: true));
+    list.add(await _tscBitmapText((vl3x + 1) * _dpi, (ul3y + 6) * _dpi, 26,'Size:' ,isBold: true));
+  }else{
+    list.add(await _tscBitmapText((padding + 1) * _dpi, (ul3y + 1) * _dpi, 26,'Mtl No:' ,isBold: true));
+  }
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+21) * _dpi, 26,'Mtl No:' ,isBold: true));
-  list.add(await _tscBitmapText((padding+54) * _dpi, (padding+21) * _dpi, 26,'Size:' ,isBold: true));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul4y + 1) * _dpi, 26,'Quantity:' ,isBold: true));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+26) * _dpi, 26,'Quantity:' ,isBold: true));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul5y + 3) * _dpi, 26,'Package No:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+34) * _dpi, 26,'Package No:' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul6y + 3) * _dpi, 26,'Gross Weight:' ,isBold: false));
+  list.add(await _tscBitmapText((vl3x + 1) * _dpi, (ul6y + 3) * _dpi, 26, 'KGS' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+43) * _dpi, 26,'Gross Weight:' ,isBold: false));
-  list.add(await _tscBitmapText((padding+55) * _dpi, (padding+43) * _dpi, 26, 'KGS' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul7y + 3) * _dpi, 26,'Net Weight:' ,isBold: false));
+  list.add(await _tscBitmapText((vl3x + 1) * _dpi, (ul7y + 3) * _dpi, 26, 'KGS' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+53) * _dpi, 26,'Net Weight:' ,isBold: false));
-  list.add(await _tscBitmapText((padding+55) * _dpi, (padding+53) * _dpi, 26, 'KGS' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul8y + 3) * _dpi, 26,'MEA.:' ,isBold: false));
+  list.add(await _tscBitmapText((vl7x +1 ) * _dpi, (ul8y + 3) * _dpi, 26, 'CBM' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+61) * _dpi, 26,'MEA.:' ,isBold: false));
-  list.add(await _tscBitmapText((padding+83) * _dpi, (padding+61) * _dpi, 26, 'CBM' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, (ul9y + 3) * _dpi, 26,'Tracing:' ,isBold: false));
+  list.add(await _tscBitmapText((vl3x + 1) * _dpi, (ul9y + 3) * _dpi, 24,'Production Date:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+70) * _dpi, 26,'Tracing:' ,isBold: false));
-  list.add(await _tscBitmapText((padding+53) * _dpi, (padding+70) * _dpi, 24,'Production Date:' ,isBold: false));
+  list.add(await _tscBitmapText((padding + 1) * _dpi, ul10y * _dpi, 26,'Note:' ,isBold: false));
 
-  list.add(await _tscBitmapText((padding+1) * _dpi, (padding+76) * _dpi, 26,'Note:' ,isBold: false));
-
-  list.add(await _tscBitmapText((padding+35) * _dpi, (padding+86) * _dpi, 26,'MADE IN CHINA' ,isBold: true));
-
-  //标签内容文本 从上往下从左往右
-  if(myanmarApprovalDocument.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+1) * _dpi, 26, myanmarApprovalDocument,isBold: false));
-
-  if(typeBody.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+6) * _dpi, 26, typeBody ,isBold: false));
-
-  if(trackNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+11) * _dpi, 26, trackNo ,isBold: false));
-
-  if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+16) * _dpi, 26, instructionNo ,isBold: false));
-
-  if(materialCode.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+21) * _dpi, 26, materialCode ,isBold: true));
-  if(size.isNotEmpty) list.add(await _tscBitmapText((padding+77) * _dpi, (padding+21) * _dpi, 26, '$size#' ,isBold: true));
-
-  if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+26) * _dpi, 26, inBoxQty ,isBold: true));
-  if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((padding+54) * _dpi, (padding+26) * _dpi, 26, customsDeclarationUnit,isBold: true));
-  if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((padding+68) * _dpi, (padding+26) * _dpi, 26, customsDeclarationType ,isBold: true));
-
-  if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+34) * _dpi, 26, pieceNo ,isBold: false));
-
-  if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+43) * _dpi, 26, grossWeight ,isBold: false));
-
-  if(netWeight.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+53) * _dpi, 26, netWeight ,isBold: false));
-
-  if(specifications.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+61) * _dpi, 26, specifications,isBold: false));
-  if(volume.isNotEmpty) list.add(await _tscBitmapText((padding+68) * _dpi, (padding+61) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
-
-  if(supplier.isNotEmpty) list.add(await _tscBitmapText((padding+26) * _dpi, (padding+70) * _dpi, 26, supplier ,isBold: false));
-  if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((padding+80) * _dpi, (padding+70) * _dpi, 24, manufactureDate ,isBold: false));
-
-  if(notes.isNotEmpty) list.add(await _tscBitmapText((padding+25) * _dpi, (padding+76) * _dpi, 26, notes ,isBold: false));
+  list.add(await _tscBitmapText((padding+35) * _dpi, (ul11y + 1) * _dpi, 26,'MADE IN CHINA' ,isBold: true));
 
 
-  //横线
-  list.add(_tscLine(padding * _dpi, (padding + 5) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 10) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 15) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 20) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 25) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 31) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 40) * _dpi, 67 * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 49) * _dpi, 67 * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 58) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 67) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 76) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 80) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
-  list.add(_tscLine(padding * _dpi, (padding + 85) * _dpi, (labelWidth - padding - padding) * _dpi, 2));
+    //标签内容文本 从上往下从左往右
+   if(myanmarApprovalDocument.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (padding+1) * _dpi, 26, myanmarApprovalDocument,isBold: false));
 
-  //竖线 从左往右 从上往下
-  list.add(_tscLine((padding+24) * _dpi, padding * _dpi, 2, 80 * _dpi));
-  list.add(_tscLine((padding+53) * _dpi, (padding + 20) * _dpi, 2, 11 * _dpi));
-  list.add(_tscLine((padding+53) * _dpi, (padding + 40) * _dpi, 2, 18 * _dpi));
-  list.add(_tscLine((padding+53) * _dpi, (padding + 67) * _dpi, 2, 9 * _dpi));
-  list.add(_tscLine((padding+67) * _dpi, (padding + 20) * _dpi, 2, 47 * _dpi));
-  list.add(_tscLine((padding+79) * _dpi, (padding + 58) * _dpi, 2, 18 * _dpi));
+   if(typeBody.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul1y + 1)  * _dpi, 26, typeBody ,isBold: false));
 
-  //标签外框
-  list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
-  //是否裁切
-  if (isCutter) list.add(_tscCutter());
-  //打印
-  list.add(_tscPrint());
+   if(trackNo.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi,(ul2y + 1)  * _dpi, 26, trackNo ,isBold: false));
 
-  return list;
-}
+   if(inBoxQty.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul4y + 1) * _dpi, 26, inBoxQty ,isBold: true));
+   if(customsDeclarationUnit.isNotEmpty) list.add(await _tscBitmapText((vl3x + 1) * _dpi, (ul4y + 1) * _dpi, 26, customsDeclarationUnit,isBold: true));
+   if(customsDeclarationType.isNotEmpty) list.add(await _tscBitmapText((vl6x + 1) * _dpi, (ul4y + 1) * _dpi, 26, customsDeclarationType ,isBold: true));
+
+   if(pieceNo.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul5y + 3) * _dpi, 26, pieceNo ,isBold: false));
+
+   if(grossWeight.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul6y + 3) * _dpi, 26, grossWeight ,isBold: false));
+
+   if(netWeight.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul7y +3) * _dpi, 26, netWeight ,isBold: false));
+
+   if(specifications.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul8y + 3) * _dpi, 26, specifications,isBold: false));
+   if(volume.isNotEmpty) list.add(await _tscBitmapText((vl6x+1) * _dpi, (ul8y + 3) * _dpi, 26, volume.trimTrailingZeros(),isBold: false));
+
+   if(supplier.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul9y + 3) * _dpi, 26, supplier ,isBold: false));
+   if(manufactureDate.isNotEmpty) list.add(await _tscBitmapText((vl7x + 1) * _dpi, (ul9y + 3) * _dpi, 24, manufactureDate ,isBold: false));
+
+   if(notes.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, ul10y * _dpi, 26, notes ,isBold: false));
+
+  if(sizeList.isEmpty){
+    if(instructionNo.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul3y + 1) * _dpi, 26, instructionNo ,isBold: false));
+    if(materialCode.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (shl1y + 1)  * _dpi, 26, materialCode ,isBold: true));
+    if(size.isNotEmpty) list.add(await _tscBitmapText((vl6x + 1) * _dpi, (shl1y + 1) * _dpi, 26, '$size#' ,isBold: true));
+    list.add(_tscLine(vl1x * _dpi, shl1y * _dpi, 2, svlh * 2 * _dpi));
+    list.add(_tscLine(vl3x * _dpi, shl1y * _dpi, 2, svlh * _dpi));
+    list.add(_tscLine(vl6x * _dpi, shl1y * _dpi, 2, svlh * _dpi));
+  }else{
+    if(materialCode.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul3y + 1)  * _dpi, 26, materialCode ,isBold: true));
+
+    var sizeLine=0;
+    for (final entry in sizeList.entries) {
+      final k = entry.key;
+      final v = entry.value;
+      var y = shl1y + sizeLine * 6;
+      if (k.isNotEmpty) {
+        list.add(await _tscBitmapText((padding + 1) * _dpi, (y + 1) * _dpi, 26, k, isBold: true));
+      }
+      for (var i = 0; i < v.length; i++) {
+        var data = v[i];
+        var x = stw + i * sizeListRowWidth;
+        if (data.isNotEmpty) {
+          list.add(await _tscBitmapText((x + 2) * _dpi, (y + 1) * _dpi, 26, data, isBold: true));
+        }
+      }
+      sizeLine++;
+    }
+
+    list.add(_tscLine(padding * _dpi, shl2y * _dpi, ulw1 * _dpi, 2));
+    list.add(_tscLine(stw * _dpi, shl1y * _dpi, 2, svlh * 2 * _dpi));
+    for(var i=0;i<sizeList.values.first.length;i++){
+      list.add(_tscLine((stw + i * sizeListRowWidth) * _dpi, shl1y * _dpi, 2, svlh * 2 * _dpi));
+    }
+  }
+
+   //横线
+   list.add(_tscLine(ulx * _dpi, ul1y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul2y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul3y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul4y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul5y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul6y * _dpi, ulw2 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul7y * _dpi, ulw2 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul8y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul9y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul10y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul11y * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(ulx * _dpi, ul12y * _dpi, ulw1 * _dpi, 2));
+
+   //竖线 从左往右 从上往下
+   list.add(_tscLine(vl1x * _dpi, vl1y * _dpi, 2, vl1w * _dpi));
+   list.add(_tscLine(vl2x * _dpi, vl2y * _dpi, 2, vl2w * _dpi));
+   list.add(_tscLine(vl3x * _dpi, vl3y * _dpi, 2, vl3w * _dpi));
+   list.add(_tscLine(vl4x * _dpi, vl4y * _dpi, 2, vl4w * _dpi));
+   list.add(_tscLine(vl5x * _dpi, vl5y * _dpi, 2, vl5w * _dpi));
+   list.add(_tscLine(vl6x * _dpi, vl6y * _dpi, 2, vl6w * _dpi));
+   list.add(_tscLine(vl7x * _dpi, vl7y * _dpi, 2, vl7w * _dpi));
+
+
+   list.add(_tscLine(padding * _dpi, (shl1y) * _dpi, ulw1 * _dpi, 2));
+   list.add(_tscLine(vl1x * _dpi, ul3y * _dpi, 2, 5 * _dpi));
+
+
+   //标签外框
+   list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
+   //是否裁切
+   if (isCutter) list.add(_tscCutter());
+   //打印
+   list.add(_tscPrint());
+
+   return list;
+  }
