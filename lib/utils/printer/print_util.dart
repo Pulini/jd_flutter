@@ -410,7 +410,8 @@ class PrintUtil {
       } else if (code == 1003 || code == 1007) {
         fail.add(i);
       }
-      await Future.delayed(const Duration(milliseconds: 300));
+      // 不再额外延迟：Kotlin 端 waitPrinterIdle 已串行等打印机就绪，
+      // 这里再加延迟只会累积批量打印的总停顿。
     }
     finished?.call(success, fail);
   }

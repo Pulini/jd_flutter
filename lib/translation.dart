@@ -1204,7 +1204,7 @@ class Translation extends Translations {
           'maintain_label_delete_label_tips': '确定要删除这些标签吗？',
           'maintain_label_print': '打印',
           'maintain_label_unlock': '解锁',
-          'maintain_label_unlock_no_permission': '解锁锁失败，您没有解锁权限！',
+          'maintain_label_unlock_no_permission': '解锁失败，您没有解锁权限！',
           'maintain_label_set': '设置',
           'maintain_label_filter': '筛选',
           'maintain_label_preview': '是否预览',

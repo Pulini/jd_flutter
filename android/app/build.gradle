@@ -113,4 +113,9 @@ dependencies {
     implementation 'com.licheedev:android-serialport:2.1.5'
 //    implementation files('libs/pl2303g_multilib.jar')
     implementation 'androidx.print:print:1.1.0'
+
+    // 中文 OCR 模型：google_mlkit_text_recognition 仅 compileOnly 引入，
+    // 必须由 app 显式 implementation 才会打包进 APK，否则运行期崩溃：
+    // NoClassDefFoundError: com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.1'
 }

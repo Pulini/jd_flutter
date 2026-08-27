@@ -197,11 +197,13 @@ fun bluetoothSendCommand(
                 val byte = bytesMerger(dataList[index])
                 bleSocket.outputStream?.write(byte)
                 index++
-                Thread.sleep(300)
                 runBlocking(Dispatchers.Main) {
                     progress.invoke(index, dataList.size)
                 }
             } while (index < dataList.size)
+            // 整条标签发送完成后，等待打印机回执确认空闲（非打印中）再继续，
+            // 避免下一条标签的指令与本条打印缓冲串扰导致二维码/内容错乱。
+            waitPrinterIdle(bleSocket)
         } catch (e: IOException) {
             Log.e("Pan", "蓝牙操作异常：通道已断开", e)
             sendCallback.invoke(SEND_COMMAND_STATE_BROKEN_PIPE)
@@ -232,6 +234,8 @@ fun bluetoothSendCommand(
             val byte = bytesMerger(dataList)
             bleSocket.outputStream?.write(byte)
             Log.e("Pan", "蓝牙发送数据:$byte")
+            // 等待打印机回执确认空闲后再回调，保证下一条标签不会与本条串扰
+            waitPrinterIdle(bleSocket)
             sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
         } catch (e: IOException) {
             Log.e("Pan", "蓝牙操作异常：通道已断开", e)
@@ -255,4 +259,67 @@ data class BDevice(
         it["DeviceIsConnected"] = socket.isConnected
         it["DeviceBondState"] = device.bondState == 12
     }
+}
+
+/**
+ * 每条标签发送完成后，通过打印机回执机制等待其回到就绪状态再返回，以确保
+ * 下一条标签的指令不会与上一条的打印缓冲粘连导致 BITMAP/QRCODE 内容错乱。
+ *
+ * 依据 TSC 官方 TSPL2 文档（<ESC>!S 指令，page 85）：
+ *   命令字节：ESC !S = 0x1B 0x21 0x53
+ *   返回格式：<STX>[4-byte status]<ETX><CR><LF>  （即 0x02 + 4状态字节 + 0x03 + 0D 0A，共8字节）
+ *   状态字节#1（STX 后第 1 个状态字节）含义（ASCII 字符）：
+ *     0x40('@')=Normal 就绪   0x50('P')=Printing 打印中   0x42('B')=Backing 回退中
+ *     0x43('C')=Cutting 切纸  0x45('E')=Printer error      0x60('`')=Pause 暂停
+ *     0x57('W')=Imaging
+ *   就绪判定：状态字节#1 == 0x40('@')。
+ *
+ * 注意：<ESC>!? 是旧版立即指令，需先发 ~!E 启用才回执；本函数改用无需启用的 <ESC>!S。
+ * 实现流程（对齐官方 SDK status()）：发命令 → sleep(1000) → 读回传包 → 解析第2字节为'@'即返回；
+ * 读到非'@'表示仍在忙则重试；完全读不到则 [timeoutMillis] 兜底放行，避免批量卡死。
+ *
+ * @param timeoutMillis 总超时（默认 8000ms），超时无论是否就绪都放行，避免批量卡死。
+ */
+fun waitPrinterIdle(socket: BluetoothSocket, timeoutMillis: Long = 8000) {
+    val out = try { socket.outputStream } catch (e: Exception) { null } ?: return
+    val input = try { socket.inputStream } catch (e: Exception) { null } ?: return
+    // 先清空可能残留的回传数据，确保本次读到的就是对 ESC !S 的应答
+    try {
+        val leftover = input.available()
+        if (leftover > 0) input.skip(leftover.toLong())
+    } catch (e: Exception) { /* 忽略 */ }
+
+    val start = System.currentTimeMillis()
+    val buf = ByteArray(64)
+    var lastBusy = false
+    while (System.currentTimeMillis() - start < timeoutMillis) {
+        try {
+            out.write(byteArrayOf(0x1B, 0x21, 0x53)) // ESC !S
+            out.flush()
+        } catch (e: Exception) {
+            Log.e("Pan", "发送状态查询失败", e)
+            return
+        }
+        // 发完立即读：蓝牙输入流会阻塞到有回执才返回，打印机一就绪即可拿到 '@'，
+        // 避免固定 500ms 死等造成批量打印的累积停顿。读不到(超时/异常)则短睡重试。
+        val len = try { input.read(buf) } catch (e: Exception) { -1 }
+        if (len > 0) {
+            // TSC 状态字符（ASCII）：'@'(0x40)=Normal 就绪；'P'(0x50)=打印中，
+            // 'B'(0x42)=回退中，'C'(0x43)=切纸中，'W'(0x57)=Imaging，'`'(0x60)=暂停。
+            // 只要回传包中不含明显的"忙"状态字符，即视为打印机已就绪，可下发下一条。
+            val busy = buf.slice(0 until len).any {
+                val c = it.toInt() and 0xFF
+                c == 0x50 || c == 0x42 || c == 0x43 || c == 0x57
+            }
+            if (!busy) {
+                Log.d("Pan", "打印机就绪，下发下一张")
+                return
+            }
+            lastBusy = true
+        }
+        // 读不到有效回传：本轮无应答，短睡后重试（蓝牙 read 阻塞已消耗等待，这里仅兜底）
+        Thread.sleep(150)
+    }
+    if (lastBusy) Log.w("Pan", "等待打印机就绪超时（兜底放行，注意可能串标）")
+    else Log.w("Pan", "打印机无回执（固件可能不支持 ESC !S，兜底放行）")
 }

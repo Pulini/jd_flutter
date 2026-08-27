@@ -314,7 +314,7 @@ class MaterialDispatchLogic extends GetxController {
             ));
           } else {
             doPrint(labelMultipurposeDynamic(
-              isCut: false,
+              isCutter: false,
               qrCode: guid,
               title: data.productName ?? '',
               subTitle: data.materialName ?? '',

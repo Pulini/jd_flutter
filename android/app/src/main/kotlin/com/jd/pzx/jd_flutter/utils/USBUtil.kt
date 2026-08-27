@@ -4,12 +4,12 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.getBroadcast
 import android.content.Context
 import android.content.Intent
+import android.hardware.usb.UsbConstants
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbEndpoint
 import android.hardware.usb.UsbManager
 import android.os.Build
-import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +53,15 @@ fun usbQuickSendCommand(
                 } else {//以获取指定USB串口权限
                     val usbInterface = device.getInterface(0)
                     val usbEndpoint = usbInterface.getEndpoint(0)
+                    // 查找 IN 端点用于读取打印机状态回执
+                    var usbEndpointIn: UsbEndpoint? = null
+                    for (i in 0 until usbInterface.endpointCount) {
+                        val ep = usbInterface.getEndpoint(i)
+                        if (ep.direction == UsbConstants.USB_DIR_IN) {
+                            usbEndpointIn = ep
+                            break
+                        }
+                    }
                     val usbConnection = usbManager.openDevice(device)
 
                     usbConnection?.claimInterface(usbInterface, true)
@@ -67,7 +76,8 @@ fun usbQuickSendCommand(
                                 byte.size,
                                 100
                             )
-                            Thread.sleep(300)
+                            // 等待打印机消化（清残留 + 可控间隔），避免多条标签指令缓冲串扰
+                            waitPrinterIdleUsb(usbConnection, usbEndpoint, usbEndpointIn)
                         } catch (e: Exception) {
                             runBlocking(Dispatchers.Main) {
                                 Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
@@ -182,7 +192,6 @@ fun sendCommand(
         try {
             val byte = bytesMerger(array)
             usbConnection.bulkTransfer(usbEndpoint, byte, byte.size, 100)
-            SystemClock.sleep(500)
             runBlocking(Dispatchers.Main) {
                 callback.invoke(true)
             }
@@ -210,5 +219,71 @@ fun sendCommand(
 } catch (e: Exception) {
     Log.e("Pan", "USB操作异常：发送数据", e)
     false
+}
+
+/**
+ * 每条标签通过 USB 发送完成后，通过打印机回执机制等待其回到就绪状态再返回，
+ * 以确保下一条标签的指令不会与上一条的打印缓冲粘连导致 BITMAP/QRCODE 内容错乱。
+ *
+ * 依据 TSC 官方 TSPL2 文档（<ESC>!S 指令，page 85）：
+ *   命令字节：ESC !S = 0x1B 0x21 0x53
+ *   返回格式：<STX>[4-byte status]<ETX><CR><LF>（共8字节），状态字节为 ASCII 字符。
+ *   状态字符：'@'(0x40)=Normal 就绪；'P'(0x50)=打印中；'B'(0x42)=回退中；
+ *             'C'(0x43)=切纸中；'W'(0x57)=Imaging；'`'(0x60)=暂停。
+ * 注意：<ESC>!? 需先 ~!E 启用才回执，故本函数改用无需启用的 <ESC>!S。
+ *
+ * 流程：用 OUT 端点发 ESC !S → 用 IN 端点读回传包 → 扫描回传包，只要不含明显"忙"
+ * 状态字符（P/B/C/W）即视为就绪放行；含忙状态则继续重试；完全读不到则
+ * [timeoutMillis] 兜底放行，避免批量卡死。
+ *
+ * [outEndpoint] 主机->设备的端点（下发 ESC!S 查询）；[inEndpoint] 设备->主机的端点（读回执）。
+ */
+fun waitPrinterIdleUsb(
+    connection: UsbDeviceConnection?,
+    outEndpoint: UsbEndpoint?,
+    inEndpoint: UsbEndpoint?,
+    timeoutMillis: Long = 8000
+) {
+    if (connection == null || outEndpoint == null || inEndpoint == null) return
+    val start = System.currentTimeMillis()
+    val buf = ByteArray(64)
+    var lastBusy = false
+    while (System.currentTimeMillis() - start < timeoutMillis) {
+        try {
+            // ESC !S —— 查询打印机状态（无需 ~!E 启用）。
+            // 注意：查询指令必须用 OUT 端点下发（主->设备），IN 端点仅用于读回执。
+            connection.bulkTransfer(outEndpoint, byteArrayOf(0x1B, 0x21, 0x53), 3, 200)
+        } catch (e: Exception) {
+            Log.e("Pan", "USB 发送状态查询失败", e)
+            return
+        }
+        // 读状态回执：读超时设较短值（250ms 超时）。打印机一回到就绪(@)会立即回传，
+        // bulkTransfer 随即返回；仍在忙(P)时仅等 250ms 即进入下一轮（配合下方 30ms
+        // 极短重试），相比长超时大幅减少"打印机忙时每轮的无效空等"，缩短批量总停顿。
+        val len = try {
+            connection.bulkTransfer(inEndpoint, buf, buf.size, 250)
+        } catch (e: Exception) { -1 }
+        if (len > 0) {
+            // TSC 状态字符（ASCII）：'@'(0x40)=Normal 就绪；'P'(0x50)=打印中；
+            // 'B'(0x42)=回退中；'C'(0x43)=切纸中；'W'(0x57)=Imaging；'`'(0x60)=暂停。
+            // 只要回传包中不含明显的"忙"状态字符，即视为打印机已就绪，可下发下一条。
+            val busy = buf.slice(0 until len).any {
+                val c = it.toInt() and 0xFF
+                c == 0x50 || c == 0x42 || c == 0x43 || c == 0x57
+            }
+            if (!busy) {
+                Log.d("Pan", "USB 打印机就绪，下发下一张")
+                return
+            }
+            lastBusy = true
+            // 读到忙状态：打印机正在打印，极短休眠后立刻重发查询，尽快捕获回到就绪的瞬间
+            Thread.sleep(30)
+        } else {
+            // 本轮无应答（读超时）：极短休眠后重试，直到总超时兜底放行
+            Thread.sleep(30)
+        }
+    }
+    if (lastBusy) Log.w("Pan", "USB 等待打印机就绪超时（兜底放行，注意可能串标）")
+    else Log.w("Pan", "USB 打印机无回执（固件可能不支持 ESC !S，兜底放行）")
 }
 

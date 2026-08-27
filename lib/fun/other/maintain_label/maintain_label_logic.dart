@@ -734,7 +734,7 @@ class MaintainLabelLogic extends GetxController {
         for (var label in sub.items!) {
           if (!sizeList.contains(label.size) &&
               (sizes == null || sizes.contains(label.size))) {
-            sizeList.add(label.size ?? '');
+            sizeList.add( label.size.isNullOrEmpty()?'':'${label.size}#');
           }
         }
       }
@@ -1098,7 +1098,7 @@ class MaintainLabelLogic extends GetxController {
         });
 
         labelList.add(await labelMultipurposeDynamic(
-          isCut: true,
+          isCutter: true,
           qrCode: data.barCode ?? '',
           title: data.subList!.first.factoryType ?? '',
           subTitle: languageInfo.languageCode == 'zh'
@@ -1274,11 +1274,11 @@ class MaintainLabelLogic extends GetxController {
         }
       });
 
-      var sizeList= createSizeList(
+      var sizeList=data.subList!.first.items!.length > 1 ?createSizeList(
         label: data,
         sizeTitle: 'Size',
         totalTitle: 'Total',
-      );
+      ):<String,List>{};
       if (state.isShowPreview.value) {
         labelList.add( dynamicSizeMaterialLabel1098n1003(
           labelID: data.barCode ?? '',
@@ -1399,11 +1399,11 @@ class MaintainLabelLogic extends GetxController {
           subData = v;
         }
       });
-      var sizeList= createSizeList(
+      var sizeList=data.subList!.first.items!.length > 1 ?createSizeList(
         label: data,
         sizeTitle: 'Size',
         totalTitle: 'Total',
-      );
+      ):<String,List>{};
       if(state.isShowPreview.value){
         labelList.add( dynamicSizeMaterialLabel1095n1096n1002(
           labelID: data.barCode ?? '',
@@ -1532,7 +1532,7 @@ class MaintainLabelLogic extends GetxController {
         ));
       } else {
         labelCommandList.add(await labelMultipurposeDynamic(
-          isCut: true,
+          isCutter: true,
           qrCode: data.barCode ?? '',
           title: data.subList!.first.factoryType ?? '',
           subTitle: data.departName ?? '',

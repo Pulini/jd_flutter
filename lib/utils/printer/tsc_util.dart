@@ -44,6 +44,7 @@ Uint8List _tscSetup(
   } else if (sensor == 1) {
     sensorValue = 'BLINE $sensorDistance mm, $sensorOffset mm';
   }
+  // 撕纸/裁刀的最终模式由 _tscEndMode 统一下发，这里不再重复设置
   message = '$size\r\n$speedValue\r\n$densityValue\r\n$sensorValue\r\n';
   return utf8.encode(message);
 }
@@ -57,11 +58,12 @@ Uint8List _tscClearBuffer() => utf8.encode('CLS\r\n');
 Uint8List _tscPrint({int quantity = 1, int copy = 1}) =>
     utf8.encode('PRINT $quantity, $copy\r\n');
 
-//下发拆切指令
-Uint8List _tscCutter() => utf8.encode('SET CUTTER 1\r\n');
-
-//关闭裁切模式
-Uint8List _tscCutterOff() => utf8.encode('SET CUTTER OFF\r\n');
+// 结束模式指令（放在 PRINT 之前下发）：
+// [isCutter] true  -> 裁刀机型，打印完自动裁断（SET CUTTER 1），无需走纸；
+//             false -> 非裁刀机型，打印完走到撕标位方便手撕（SET TEAR ON）。
+// TSC 中 CUTTER 与 TEAR 互斥，二者只需下发其一即可切换模式。
+Uint8List _tscEndMode(bool isCutter) =>
+    utf8.encode(isCutter ? 'SET CUTTER 1\r\n' : 'SET TEAR ON\r\n');
 
 // 矩形
 // [sx] 左上角x坐标
@@ -475,11 +477,11 @@ Future<List<Uint8List>> labelForProperty(
   String id,
   String name,
   String number,
-  String date,
-) async =>
+  String date, {
+  bool isCutter = false,
+}) async =>
     [
       _tscClearBuffer(),
-      _tscCutterOff(),
       _tscSetup(70, 40),
       _tscLine(10, 350, 820, 4),
       _tscQrCode(500, 30,
@@ -493,6 +495,7 @@ Future<List<Uint8List>> labelForProperty(
       if (name.length <= 6) await _tscBitmapText(50, 60, 40, '名称：$name'),
       await _tscBitmapText(50, 160, 40, '编号：$number'),
       await _tscBitmapText(50, 260, 40, '日期：$date'),
+      _tscEndMode(isCutter),
       _tscPrint()
     ];
 
@@ -514,11 +517,11 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   required String stuBarCode,
   double speed = 3.0,
   double density = 10.0,
+  bool isCutter = false,
 }) async {
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
-  list.add(_tscCutterOff());
   list.add(_tscSetup(75, 45, density: density.toInt(), speed: speed.toInt()));
   list.add(_tscQrCode(
       2 * _dpi, 2 * _dpi + _halfDpi, qrCode.replaceAll('"', '\\["]'),
@@ -537,6 +540,7 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   list.add(_tscLine(39 * _dpi - _halfDpi, 6 * _dpi, 36 * _dpi - _halfDpi, 2));
   list.add(_tscLine(39 * _dpi - _halfDpi, 12 * _dpi, 36 * _dpi - _halfDpi, 2));
   list.add(_tscLine(_dpi, 39 * _dpi - _halfDpi, 73 * _dpi, 2));
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -573,6 +577,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   String bottomRightText2 = '',
   double speed = 3.0,
   double density = 15.0,
+  bool isCutter = false,
 }) async {
   var list = <Uint8List>[];
   list.add(_tscClearBuffer());
@@ -736,7 +741,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   list.add(_tscLine(_dpi, 20 * _dpi - _halfDpi, 73 * _dpi, 2));
   list.add(_tscLine(_dpi, 36 * _dpi + _halfDpi, 73 * _dpi, 2));
 
-  list.add(_tscCutterOff());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -770,11 +775,11 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
   String bottomMiddleText2 = '',
   String bottomRightText1 = '',
   String bottomRightText2 = '',
+  bool isCutter = false,
 }) async {
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
-  list.add(_tscCutterOff());
   list.add(_tscSetup(75, 45));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
@@ -853,6 +858,7 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
   list.add(_tscLine(_dpi, 20 * _dpi - _halfDpi, 73 * _dpi, 2));
   list.add(_tscLine(_dpi, 36 * _dpi + _halfDpi, 73 * _dpi, 2));
 
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -873,7 +879,7 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
 //[bottomRightText1] 右下文本1
 //[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeDynamic({
-  bool isCut = true,
+  bool isCutter = false,
   String qrCode = '',
   String title = '',
   String subTitle = '',
@@ -1000,7 +1006,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
           4) *
       _dpi;
 
-  list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscClearBuffer());
   list.add(_tscSetup(width, height,
       sensorDistance: 0, density: density.toInt(), speed: speed.toInt()));
@@ -1129,7 +1135,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
     list.add(_tscLine(i * _dpi, height * _dpi - 2, _dpi, 2));
   }
 
-  if (isCut) list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
 
   list.add(_tscPrint());
 
@@ -1213,6 +1219,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   String bottomRightText2 = '',
   double speed = 3.0,
   double density = 10.0,
+  bool isCutter = false,
 }) async {
   var list = <Uint8List>[];
 
@@ -1317,7 +1324,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
       4) *
       _dpi;
 
-  list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscClearBuffer());
   list.add(_tscSetup(
     width,
@@ -1479,7 +1486,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   for (int i = 0; i <= width; i += 2) {
     list.add(_tscLine(i * _dpi, height * _dpi - 2, _dpi, 2));
   }
-  list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -1498,7 +1505,7 @@ List<Uint8List> testLabel() => [
       _tscClearBuffer(),
       _tscSetup(110, 50, sensorDistance: 0),
       _tscQrCode(10, 10, '1234567890'),
-      _tscCutter(),
+      _tscEndMode(false),
       _tscPrint(),
     ];
 
@@ -1540,7 +1547,7 @@ Future<List<Uint8List>> _htmlImageToLabel(Map<String, dynamic> data) async {
       sensorDistance: isDynamic ? 0 : 2,
     ),
     await _tscBitmap(1, 1, image),
-    _tscCutter(),
+    _tscEndMode(isDynamic),
     _tscPrint(),
   ];
 }
@@ -1572,7 +1579,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
       sensorDistance: isDynamic ? 0 : 2,
     ),
     await _tscBitmap(1, 1, imageUint8List),
-    isDynamic ? _tscCutter() : _tscCutterOff(),
+    _tscEndMode(isDynamic),
     _tscPrint(),
   ];
 }
@@ -1597,6 +1604,7 @@ Future<List<Uint8List>> labelMultipurposeBigFixed({
   String bottomRightText1 = '',
   double speed = 3.0,
   double density = 15.0,
+  bool isCutter = false,
 }) async {
   var list = <Uint8List>[];
   list.add(_tscClearBuffer());
@@ -1687,7 +1695,7 @@ Future<List<Uint8List>> labelMultipurposeBigFixed({
   list.add(_tscLine(_dpi, 29 * _dpi - _halfDpi, 105 * _dpi, 3));
   list.add(_tscLine(_dpi, 52 * _dpi + _halfDpi, 105 * _dpi, 3));
 
-  list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -1715,6 +1723,7 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
   String bottomRightText1 = '',
   double speed = 3.0,
   double density = 15.0,
+  bool isCutter = false,
 }) async {
   var table = (tableSubTitle2.length) * 6;
   var contentHigh = (4 - contextFormat(content, 35, 100.0 * _dpi).length) * 6;
@@ -1826,7 +1835,7 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
   list.add(_tscLine(_dpi, (52 + table - contentHigh) * _dpi + _halfDpi,
       105 * _dpi, 3)); //底部上面的横线
 
-  list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   list.add(_tscPrint());
 
   return list;
@@ -2074,7 +2083,7 @@ Future<List<Uint8List>> fixedLabelIndonesia({
   //标签外框
   list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
   //是否裁切
-  if (isCutter) list.add(_tscCutter());
+  list.add(_tscEndMode(isCutter));
   //打印
   list.add(_tscPrint());
 
@@ -2306,7 +2315,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
    //标签外框
    list.add(_tscBox(padding * _dpi, padding * _dpi, (labelWidth-padding) * _dpi, (labelHeight-padding) * _dpi, crude: 2));
    //是否裁切
-   if (isCutter) list.add(_tscCutter());
+   list.add(_tscEndMode(isCutter));
    //打印
    list.add(_tscPrint());
 
