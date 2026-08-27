@@ -879,7 +879,7 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
 //[bottomRightText1] 右下文本1
 //[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeDynamic({
-  bool isCutter = false,
+  bool isCutter = true,
   String qrCode = '',
   String title = '',
   String subTitle = '',
@@ -1219,7 +1219,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   String bottomRightText2 = '',
   double speed = 3.0,
   double density = 10.0,
-  bool isCutter = false,
+  bool isCutter = true,
 }) async {
   var list = <Uint8List>[];
 
@@ -1723,7 +1723,7 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
   String bottomRightText1 = '',
   double speed = 3.0,
   double density = 15.0,
-  bool isCutter = false,
+  bool isCutter = true,
 }) async {
   var table = (tableSubTitle2.length) * 6;
   var contentHigh = (4 - contextFormat(content, 35, 100.0 * _dpi).length) * 6;
