@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import com.jd.pzx.jd_flutter.utils.tscUUID
+import com.jd.pzx.jd_flutter.utils.waitPrinterIdle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
@@ -191,7 +192,11 @@ class BleUtil(
         Thread {
             if (bleSocket != null) {
                 bleSocket!!.outputStream?.write(bytesMerger(array))
-                SystemClock.sleep(500)
+                // 每下发完一张标签后：先稳定等待 300ms，再查询打印机状态，
+                // 确认其回到就绪(@)状态后再回调，由上层继续下发下一张，
+                // 避免缓冲粘连导致的内容重叠/报错（与 USB 模式一致）。
+                Thread.sleep(300)
+                waitPrinterIdle(bleSocket!!)
                 runBlocking(Dispatchers.Main) {
                     callback.invoke(true)
                 }
@@ -207,11 +212,13 @@ class BleUtil(
     /**
      * 发送长指令
      */
-    fun sendCommand(array: ArrayList<ByteArray>) = if (bleSocket != null) {
+    fun sendCommand(array: ArrayList<ByteArray>): Boolean {
+        if (bleSocket == null) return false
         bleSocket!!.outputStream?.write(bytesMerger(array))
-        true
-    } else {
-        false
+        // 发完等待 300ms 再读取状态确认，与 USB 模式一致
+        Thread.sleep(300)
+        waitPrinterIdle(bleSocket!!)
+        return true
     }
 
     @SuppressLint("MissingPermission")

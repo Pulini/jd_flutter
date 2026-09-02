@@ -437,9 +437,11 @@ class MaintainLabelLogic extends GetxController {
       state.setLabelState(
         isPrint: false,
         selectLabels: select,
-        success: (msg) => successDialog(content: msg,back: (){
-          refreshDataList();
-        }),
+        success: (msg) => successDialog(
+            content: msg,
+            back: () {
+              refreshDataList();
+            }),
       );
     }
   }
@@ -726,7 +728,7 @@ class MaintainLabelLogic extends GetxController {
     List<String>? sizes,
   }) {
     var materials = <String, List>{};
-    if(label.subList?.first.items.isNullOrEmpty()==true)return materials;
+    if (label.subList?.first.items.isNullOrEmpty() == true) return materials;
     if (label.subList!
         .any((v) => v.items!.any((v2) => v2.size?.isNotEmpty == true))) {
       var sizeList = <String>[];
@@ -734,7 +736,7 @@ class MaintainLabelLogic extends GetxController {
         for (var label in sub.items!) {
           if (!sizeList.contains(label.size) &&
               (sizes == null || sizes.contains(label.size))) {
-            sizeList.add( label.size.isNullOrEmpty()?'':'${label.size}#');
+            sizeList.add(label.size.isNullOrEmpty() ? '' : '${label.size}#');
           }
         }
       }
@@ -752,7 +754,7 @@ class MaintainLabelLogic extends GetxController {
         for (var size in sizeList) {
           try {
             list.add(itemList
-                .firstWhere((label) => label.size == size)
+                .firstWhere((label) => '${label.size}#' == size)
                 .qty
                 .toShowString());
           } on StateError catch (_) {
@@ -1249,7 +1251,7 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     var labelList = <Widget>[];
-    var labelList2 = <List<Uint8List>>[];
+    var labelList2 = <Future<List<Uint8List>>>[];
     for (var data in list) {
       var qty = '';
       var size = '';
@@ -1274,13 +1276,15 @@ class MaintainLabelLogic extends GetxController {
         }
       });
 
-      var sizeList=data.subList!.first.items!.length > 1 ?createSizeList(
-        label: data,
-        sizeTitle: 'Size',
-        totalTitle: 'Total',
-      ):<String,List>{};
+      var sizeList = data.subList!.first.items!.length > 1
+          ? createSizeList(
+              label: data,
+              sizeTitle: 'Size',
+              totalTitle: 'Total',
+            )
+          : <String, List>{};
       if (state.isShowPreview.value) {
-        labelList.add( dynamicSizeMaterialLabel1098n1003(
+        labelList.add(dynamicSizeMaterialLabel1098n1003(
           labelID: data.barCode ?? '',
           myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
           typeBody: data.subList!.first.factoryType ?? '',
@@ -1305,7 +1309,7 @@ class MaintainLabelLogic extends GetxController {
           labelHeight: 110,
         ));
       } else {
-        labelList2.add(await fixedLabelMyanmar(
+        labelList2.add( fixedLabelMyanmar(
           labelID: data.barCode ?? '',
           myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
           typeBody: data.subList!.first.factoryType ?? '',
@@ -1333,8 +1337,14 @@ class MaintainLabelLogic extends GetxController {
     if (state.isShowPreview.value) {
       labels.call(labelList, true);
     } else {
+      var list = <List<Uint8List>>[];
+      for (var i = 0; i < labelList2.length; ++i) {
+        loadingShow('正在生成标签(${i + 1}/${labelList2.length})');
+        list.add(await labelList2[i]);
+      }
+      loadingDismiss();
       pu.printLabelList(
-        labelList: labelList2,
+        labelList: list,
         start: () {
           loadingShow('正在下发标签...');
         },
@@ -1371,9 +1381,9 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     var labelList = <Widget>[];
-    var labelList2 = <List<Uint8List>>[];
-
-    for (var data in list) {
+    var labelList2 = <Future<List<Uint8List>>>[];
+    for (var i = 0; i < list.length; ++i) {
+      var data = list[i];
       var qty = '';
       var typeBody = '';
       if (data.subList!.first.items!.isEmpty) {
@@ -1399,13 +1409,15 @@ class MaintainLabelLogic extends GetxController {
           subData = v;
         }
       });
-      var sizeList=data.subList!.first.items!.length > 1 ?createSizeList(
-        label: data,
-        sizeTitle: 'Size',
-        totalTitle: 'Total',
-      ):<String,List>{};
-      if(state.isShowPreview.value){
-        labelList.add( dynamicSizeMaterialLabel1095n1096n1002(
+      var sizeList = data.subList!.first.items!.length > 1
+          ? createSizeList(
+              label: data,
+              sizeTitle: 'Size',
+              totalTitle: 'Total',
+            )
+          : <String, List>{};
+      if (state.isShowPreview.value) {
+        labelList.add(dynamicSizeMaterialLabel1095n1096n1002(
           labelID: data.barCode ?? '',
           productName: data.productName ?? '',
           orderType: data.orderType ?? '',
@@ -1432,8 +1444,8 @@ class MaintainLabelLogic extends GetxController {
           notes: '',
           labelHeight: 160,
         ));
-      }else{
-        labelList2.add(await fixedLabelIndonesia(
+      } else {
+        labelList2.add(fixedLabelIndonesia(
           labelID: data.barCode ?? '',
           productName: data.productName ?? '',
           orderType: data.orderType ?? '',
@@ -1442,7 +1454,7 @@ class MaintainLabelLogic extends GetxController {
           instructionNo: data.subList!.first.billNo ?? '',
           materialCode: data.subList!.first.materialCode ?? '',
           materialName: data.subList!.first.materialName ?? '',
-          sizeList:sizeList,
+          sizeList: sizeList,
           inBoxQty: qty,
           customsDeclarationUnit: data.customsDeclarationUnit ?? '',
           customsDeclarationType: data.customsDeclarationType ?? '',
@@ -1459,8 +1471,14 @@ class MaintainLabelLogic extends GetxController {
     if (state.isShowPreview.value) {
       labels.call(labelList, false);
     } else {
+      var list = <List<Uint8List>>[];
+      for (var i = 0; i < labelList2.length; ++i) {
+        loadingShow('正在生成标签(${i + 1}/${labelList2.length})');
+        list.add(await labelList2[i]);
+      }
+      loadingDismiss();
       pu.printLabelList(
-        labelList: labelList2,
+        labelList: list,
         start: () {
           loadingShow('正在下发标签...');
         },
@@ -1670,25 +1688,26 @@ class MaintainLabelLogic extends GetxController {
   }
 
   void customLabelsBatchSet(int batchBoxCapacity, int batchCreateGoods) {
-    if(batchBoxCapacity>0 && batchCreateGoods==0){
+    if (batchBoxCapacity > 0 && batchCreateGoods == 0) {
       for (var item
-      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+          in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
         item.capacity.value = batchBoxCapacity.toDouble();
         item.capacityController!.text = batchBoxCapacity.toString();
         // 仅设置箱容时，按“剩余数量向下取整到箱容倍数”重算应建货数
         final cap = batchBoxCapacity.toDouble();
         item.createGoods.value = item.surplusGoods - (item.surplusGoods % cap);
-        item.createGoodsController!.text = item.createGoods.value.toShowString();
+        item.createGoodsController!.text =
+            item.createGoods.value.toShowString();
       }
-    } else if(batchBoxCapacity==0 && batchCreateGoods>0){
+    } else if (batchBoxCapacity == 0 && batchCreateGoods > 0) {
       for (var item
-      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+          in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
         item.createGoods.value = batchCreateGoods.toDouble();
         item.createGoodsController!.text = batchCreateGoods.toString();
       }
-    }else if(batchBoxCapacity>0 && batchCreateGoods>0){
+    } else if (batchBoxCapacity > 0 && batchCreateGoods > 0) {
       for (var item
-      in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+          in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
         item.capacity.value = batchBoxCapacity.toDouble();
         item.capacityController!.text = batchBoxCapacity.toString();
         item.createGoods.value = batchCreateGoods.toDouble();

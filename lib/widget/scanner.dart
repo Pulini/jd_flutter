@@ -134,6 +134,7 @@ void scannerDialog({
   );
 }
 
+// adb shell am broadcast -a nlscan.action.SCANNER_RESULT --es SCAN_BARCODE1 D70472F507761FD1A4A5BAAC3ED5CE4B
 void pdaScanner({required Function(String) scan}) {
   debugPrint('PdaScanner 注册监听');
   const MethodChannel(channelScan).setMethodCallHandler((call) {

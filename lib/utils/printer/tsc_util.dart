@@ -408,7 +408,6 @@ List<List<String>> tableFormat(
     v.clear();
     v.addAll(text);
   });
-  logger.f(tableData);
   //添加表格头行
   var printList = <List<String>>[];
 
@@ -438,7 +437,6 @@ List<List<String>> tableFormat(
     print.add(sum.toShowString());
   }
   printList.add(print);
-  logger.f(printList);
   var max = 6;
   var maxColumns = (titleList.length / max).ceil();
   for (var i = 0; i < maxColumns; ++i) {
@@ -932,7 +930,6 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 
   //表格数据
   var table = tableFormat(tableFirstLineTitle, tableLastLineTitle, tableData);
-  logger.f(table);
   //表格高度
   var tableHeight = table.where((e) => e.isEmpty).length * tableLineWrap +
       table.where((e) => e.isNotEmpty).length * tableLineHeight +
