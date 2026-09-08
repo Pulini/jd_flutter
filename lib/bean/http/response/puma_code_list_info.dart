@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PumaCodeListInfo {
   PumaCodeListInfo({
      this.fID,
@@ -6,8 +7,8 @@ class PumaCodeListInfo {
   });
 
   PumaCodeListInfo.fromJson(dynamic json) {
-    fID = json['FID'];
-    fBarCode = json['FBarCode'];
+    fID = JsonParse.toInt(json['FID']);
+    fBarCode = JsonParse.str(json['FBarCode']);
 
 
   }

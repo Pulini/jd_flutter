@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class IssueCauseInfo {
   IssueCauseInfo({
     this.iD,
@@ -6,8 +7,8 @@ class IssueCauseInfo {
   });
 
   IssueCauseInfo.fromJson(dynamic json) {
-    iD = json['ID'];
-    issueCause = json['IssueCause'];
+    iD = JsonParse.toInt(json['ID']);
+    issueCause = JsonParse.str(json['IssueCause']);
 
   }
 

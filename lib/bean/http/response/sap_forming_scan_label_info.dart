@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class SapProduceStockInLabelInfo {
   int scanQty=0;
 
@@ -22,14 +23,14 @@ class SapProduceStockInLabelInfo {
   });
 
   SapProduceStockInLabelInfo.fromJson(dynamic json) {
-    division = json['ZDIVISION'];
-    customerPO = json['ZZKHPO1'];
-    labelCode = json['ZCTNLABEL'];
-    packingMethod = json['ZZZXFS'];
-    labelTotalQty = json['ZZXS'];
-    labelReceivedQty = json['ZYRKXS'];
-    needCheck = json['ZZXFS_CHECK'];
-    deliveryOrder = json['VBELN_IM'];
+    division = JsonParse.str(json['ZDIVISION']);
+    customerPO = JsonParse.str(json['ZZKHPO1']);
+    labelCode = JsonParse.str(json['ZCTNLABEL']);
+    packingMethod = JsonParse.str(json['ZZZXFS']);
+    labelTotalQty = JsonParse.toInt(json['ZZXS']);
+    labelReceivedQty = JsonParse.toInt(json['ZYRKXS']);
+    needCheck = JsonParse.str(json['ZZXFS_CHECK']);
+    deliveryOrder = JsonParse.str(json['VBELN_IM']);
   }
 
   Map<String, dynamic> toJson() {

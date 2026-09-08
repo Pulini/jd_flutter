@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ScanProcessInfo {
   List<ScanProcessReportSub1Info>? list1;
   List<ScanProcessReportSub2Info>? list2;
@@ -27,8 +28,8 @@ class ScanProcessReportSub1Info {
   ScanProcessReportSub1Info({this.barCode, this.name});
 
   ScanProcessReportSub1Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['BarCode'];
-    name = json['Name'];
+    barCode = JsonParse.str(json['BarCode']);
+    name = JsonParse.str(json['Name']);
   }
 }
 
@@ -38,6 +39,6 @@ class ScanProcessReportSub2Info {
   ScanProcessReportSub2Info(this.barCode);
 
   ScanProcessReportSub2Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['BarCode'];
+    barCode = JsonParse.str(json['BarCode']);
   }
 }

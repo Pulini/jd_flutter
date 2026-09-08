@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // ItemID : "6870"
 // Number : "SJLB509B"
 // Name : "热水表"
@@ -23,16 +24,16 @@ class DeviceListInfo {
       this.roomNumber='',});
 
   DeviceListInfo.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    number = json['Number'];
-    name = json['Name'];
-    organizeName = json['OrganizeName'];
-    dormitoriesName = json['DormitoriesName'];
-    floor = json['Floor'];
-    typeName = json['TypeName'];
-    isUse = json['IsUse'];
-    isWriteMeter = json['IsWriteMeter'];
-    roomNumber = json['RoomNumber'];
+    itemID = JsonParse.str(json['ItemID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    organizeName = JsonParse.str(json['OrganizeName']);
+    dormitoriesName = JsonParse.str(json['DormitoriesName']);
+    floor = JsonParse.str(json['Floor']);
+    typeName = JsonParse.str(json['TypeName']);
+    isUse = JsonParse.str(json['IsUse']);
+    isWriteMeter = JsonParse.str(json['IsWriteMeter']);
+    roomNumber = JsonParse.str(json['RoomNumber']);
   }
   String? itemID;
   String? number;  //设备编号

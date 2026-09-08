@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // InterID : 951915
 // FactoryType : "PNW25402597-04"
 // CommandNumber : "JZ2502238"
@@ -15,12 +16,12 @@ class FormingScanInfo {
       this.lastActivationTime,});
 
   FormingScanInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    factoryType = json['FactoryType'];
-    commandNumber = json['CommandNumber'];
-    isClose = json['IsClose'];
-    billDate = json['BillDate'];
-    lastActivationTime = json['LastActivationTime'];
+    interID = JsonParse.toInt(json['InterID']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    commandNumber = JsonParse.str(json['CommandNumber']);
+    isClose = JsonParse.str(json['IsClose']);
+    billDate = JsonParse.str(json['BillDate']);
+    lastActivationTime = JsonParse.str(json['LastActivationTime']);
   }
   int? interID;
   String? factoryType;

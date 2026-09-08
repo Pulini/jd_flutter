@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // WorkshopLocation : "待维护"
 // Group : "金焕裁断3组"
 // ProcessFlow : "面部裁断"
@@ -27,18 +28,18 @@ class ProductionSummaryInfo {
       this.departmentID,});
 
   ProductionSummaryInfo.fromJson(dynamic json) {
-    workshopLocation = json['WorkshopLocation'];
-    group = json['Group'];
-    processFlow = json['ProcessFlow'];
-    lineLeader = json['LineLeader'];
-    todayTargetProduction = json['TodayTargetProduction'];
-    todayProduction = json['TodayProduction'];
-    completionRate = json['CompletionRate'];
-    monthlyTargetProduction = json['MonthlyCumulativeTargetProduction'];
-    monthlyProduction = json['MonthlyCumulativeProduction'];
-    monthlyCompletionRate = json['MonthlyCompletionRate'];
-    actualPeopleNumber = json['ActualPeopleNumber'];
-    departmentID = json['DepartmentID'];
+    workshopLocation = JsonParse.str(json['WorkshopLocation']);
+    group = JsonParse.str(json['Group']);
+    processFlow = JsonParse.str(json['ProcessFlow']);
+    lineLeader = JsonParse.str(json['LineLeader']);
+    todayTargetProduction = JsonParse.toDouble(json['TodayTargetProduction']);
+    todayProduction = JsonParse.toDouble(json['TodayProduction']);
+    completionRate = JsonParse.str(json['CompletionRate']);
+    monthlyTargetProduction = JsonParse.toDouble(json['MonthlyCumulativeTargetProduction']);
+    monthlyProduction = JsonParse.toDouble(json['MonthlyCumulativeProduction']);
+    monthlyCompletionRate = JsonParse.str(json['MonthlyCompletionRate']);
+    actualPeopleNumber = JsonParse.toInt(json['ActualPeopleNumber']);
+    departmentID = JsonParse.str(json['DepartmentID']);
   }
   String? workshopLocation;
   String? group;

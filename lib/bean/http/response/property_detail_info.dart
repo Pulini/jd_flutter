@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // StatusID : 1
 // StatusName : "使用中"
 // InterID : 102433
@@ -103,61 +104,56 @@ class PropertyDetailInfo {
   });
 
   PropertyDetailInfo.fromJson(dynamic json) {
-    statusID = json['StatusID'];
-    statusName = json['StatusName'];
-    interID = json['InterID'];
-    styleID = json['StyleID'];
-    deptID = json['DeptID'];
-    keepEmpID = json['KeepEmpID'];
-    organizeID = json['OrganizeID'];
-    model = json['Model'];
-    number = json['Number'];
-    sapCgOrderNo = json['SAPCgOrderNo'];
-    name = json['Name'];
-    status = json['Status'];
-    processStatus = json['ProcessStatus'];
-    labelPrintQty = json['LabelPrintQty'];
-    laserPrintQty = json['LaserPrintQty'];
-    manufacturer = json['Manufacturer'];
-    qty = json['Qty'];
-    currencyName = json['CurrencyName'];
-    price = json['Price'];
-    orgVal = json['OrgVal'];
-    buyDate = json['BuyDate'];
-    guaranteePeriod = json['GuaranteePeriod'];
-    writeDate = json['WriteDate'];
-    reviceDate = json['ReviceDate'];
-    produceDate = json['ProduceDate'];
-    vender = json['Vender'];
-    custodianCode = json['CustodianCode'];
-    custodianName = json['CustodianName'];
-    liableEmpID = json['LiableEmpID'];
-    liableEmpName = json['LiableEmpName'];
-    participator = json['Participator'];
-    participatorCode = json['ParticipatorCode'];
-    participatorName = json['ParticipatorName'];
-    sno = json['Sno'];
-    organizeName = json['OrganizeName'];
-    deptName = json['DeptName'];
-    address = json['Address'];
-    notes = json['Notes'];
-    registrantID = json['RegistrationerID'];
-    sapInvoiceNo = json['SAPINVOICENO'];
-    isCardCheck = json['IsCardCheck'];
-    isFinanceCheck = json['IsFinanceCheck'];
-    checkInterID = json['CheckInterID'];
-    expectedLife = json['ExpectedLife'];
-    typeName = json['TypeName'];
-    unit = json['Unit'];
-    liableEmpCode = json['LiableEmpCode'];
-    assetPicture = json['AssetPicture'];
-    ratingPlatePicture = json['RatingPlatePicture'];
-    if (json['CardEntry'] != null) {
-      cardEntry = [];
-      json['CardEntry'].forEach((v) {
-        cardEntry?.add(CardEntry.fromJson(v));
-      });
-    }
+    statusID = JsonParse.toInt(json['StatusID']);
+    statusName = JsonParse.str(json['StatusName']);
+    interID = JsonParse.toInt(json['InterID']);
+    styleID = JsonParse.toInt(json['StyleID']);
+    deptID = JsonParse.toInt(json['DeptID']);
+    keepEmpID = JsonParse.toInt(json['KeepEmpID']);
+    organizeID = JsonParse.toInt(json['OrganizeID']);
+    model = JsonParse.str(json['Model']);
+    number = JsonParse.str(json['Number']);
+    sapCgOrderNo = JsonParse.str(json['SAPCgOrderNo']);
+    name = JsonParse.str(json['Name']);
+    status = JsonParse.str(json['Status']);
+    processStatus = JsonParse.toInt(json['ProcessStatus']);
+    labelPrintQty = JsonParse.toInt(json['LabelPrintQty']);
+    laserPrintQty = JsonParse.toInt(json['LaserPrintQty']);
+    manufacturer = JsonParse.str(json['Manufacturer']);
+    qty = JsonParse.toDouble(json['Qty']);
+    currencyName = JsonParse.str(json['CurrencyName']);
+    price = JsonParse.toDouble(json['Price']);
+    orgVal = JsonParse.toDouble(json['OrgVal']);
+    buyDate = JsonParse.str(json['BuyDate']);
+    guaranteePeriod = JsonParse.str(json['GuaranteePeriod']);
+    writeDate = JsonParse.str(json['WriteDate']);
+    reviceDate = JsonParse.str(json['ReviceDate']);
+    produceDate = JsonParse.str(json['ProduceDate']);
+    vender = JsonParse.str(json['Vender']);
+    custodianCode = JsonParse.str(json['CustodianCode']);
+    custodianName = JsonParse.str(json['CustodianName']);
+    liableEmpID = JsonParse.toInt(json['LiableEmpID']);
+    liableEmpName = JsonParse.str(json['LiableEmpName']);
+    participator = JsonParse.toInt(json['Participator']);
+    participatorCode = JsonParse.str(json['ParticipatorCode']);
+    participatorName = JsonParse.str(json['ParticipatorName']);
+    sno = JsonParse.str(json['Sno']);
+    organizeName = JsonParse.str(json['OrganizeName']);
+    deptName = JsonParse.str(json['DeptName']);
+    address = JsonParse.str(json['Address']);
+    notes = JsonParse.str(json['Notes']);
+    registrantID = JsonParse.toInt(json['RegistrationerID']);
+    sapInvoiceNo = JsonParse.str(json['SAPINVOICENO']);
+    isCardCheck = JsonParse.toInt(json['IsCardCheck']);
+    isFinanceCheck = JsonParse.toInt(json['IsFinanceCheck']);
+    checkInterID = JsonParse.toInt(json['CheckInterID']);
+    expectedLife = JsonParse.toInt(json['ExpectedLife']);
+    typeName = JsonParse.str(json['TypeName']);
+    unit = JsonParse.str(json['Unit']);
+    liableEmpCode = JsonParse.str(json['LiableEmpCode']);
+    assetPicture = JsonParse.str(json['AssetPicture']);
+    ratingPlatePicture = JsonParse.str(json['RatingPlatePicture']);
+    cardEntry = JsonParse.list(json['CardEntry'], CardEntry.fromJson);
   }
 
   int? statusID;
@@ -289,12 +285,12 @@ class CardEntry {
   });
 
   CardEntry.fromJson(dynamic json) {
-    name = json['Name'];
-    qty = json['Qty'];
-    price = json['Price'];
-    amount = json['Amount'];
-    place = json['Place'];
-    notes = json['Notes'];
+    name = JsonParse.str(json['Name']);
+    qty = JsonParse.toDouble(json['Qty']);
+    price = JsonParse.toDouble(json['Price']);
+    amount = JsonParse.toDouble(json['Amount']);
+    place = JsonParse.str(json['Place']);
+    notes = JsonParse.str(json['Notes']);
   }
 
   String? name;

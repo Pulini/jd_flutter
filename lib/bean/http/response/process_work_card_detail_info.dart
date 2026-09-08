@@ -21,29 +21,14 @@ class ProcessWorkCardDetailInfo {
       this.barcodes,});
 
   ProcessWorkCardDetailInfo.fromJson(dynamic json) {
-    productName = json['ProductName'];
-    mtonos = json['Mtonos'];
-    parts = json['Parts'];
-    deptName = json['DeptName'];
-    processName = json['ProcessName'];
-    if (json['Sizes'] != null) {
-      sizes = [];
-      json['Sizes'].forEach((v) {
-        sizes?.add(SizeLists.fromJson(v));
-      });
-    }
-    if (json['MtoNoSizes'] != null) {
-      mtoNoSizes = [];
-      json['MtoNoSizes'].forEach((v) {
-        mtoNoSizes?.add(SizeLists.fromJson(v));
-      });
-    }
-    if (json['Barcodes'] != null) {
-      barcodes = [];
-      json['Barcodes'].forEach((v) {
-        barcodes?.add(Barcodes.fromJson(v));
-      });
-    }
+    productName = JsonParse.str(json['ProductName']);
+    mtonos = JsonParse.str(json['Mtonos']);
+    parts = JsonParse.str(json['Parts']);
+    deptName = JsonParse.str(json['DeptName']);
+    processName = JsonParse.str(json['ProcessName']);
+    sizes = JsonParse.list(json['Sizes'], SizeLists.fromJson);
+    mtoNoSizes = JsonParse.list(json['MtoNoSizes'], SizeLists.fromJson);
+    barcodes = JsonParse.list(json['Barcodes'], Barcodes.fromJson);
   }
   String? productName;
   String? mtonos;
@@ -100,21 +85,16 @@ class Barcodes {
       this.unit,});
 
   Barcodes.fromJson(dynamic json) {
-    barcode = json['Barcode'];
-    index = json['Index'];
-    printTimes = json['PrintTimes'];
-    deptName = json['DeptName'];
-    mtono = json['Mtono'];
-    packageType = json['PackageType'];
-    received = json['Received'];
-    if (json['Sizes'] != null) {
-      sizes = [];
-      json['Sizes'].forEach((v) {
-        sizes?.add(BarCodeSizes.fromJson(v));
-      });
-    }
-    emp = json['Emp'];
-    unit = json['Unit'];
+    barcode = JsonParse.str(json['Barcode']);
+    index = JsonParse.toInt(json['Index']);
+    printTimes = JsonParse.toInt(json['PrintTimes']);
+    deptName = JsonParse.str(json['DeptName']);
+    mtono = JsonParse.str(json['Mtono']);
+    packageType = JsonParse.toInt(json['PackageType']);
+    received = JsonParse.toBool(json['Received']);
+    sizes = JsonParse.list(json['Sizes'], BarCodeSizes.fromJson);
+    emp = JsonParse.str(json['Emp']);
+    unit = JsonParse.str(json['Unit']);
   }
   String? barcode;
   int? index;
@@ -174,12 +154,12 @@ class BarCodeSizes {
       this.sAPColorBatch,});
 
   BarCodeSizes.fromJson(dynamic json) {
-    partID = json['PartID'];
-    partName = json['PartName'];
-    mtono = json['Mtono'];
-    size = json['Size'];
-    qty = json['Qty'];
-    sAPColorBatch = json['SAPColorBatch'];
+    partID = JsonParse.str(json['PartID']);
+    partName = JsonParse.str(json['PartName']);
+    mtono = JsonParse.str(json['Mtono']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    sAPColorBatch = JsonParse.str(json['SAPColorBatch']);
   }
   String? partID;
   String? partName;
@@ -220,13 +200,13 @@ class SizeLists {
       this.sAPColorBatch,});
 
   SizeLists.fromJson(dynamic json) {
-    mtoNo = json['MtoNo'];
-    size = json['Size'];
-    fIDs = json['FIDs'] != null ? json['FIDs'].cast<int>() : [];
-    mtonoQty = json['MtonoQty'];
-    createdQty = json['CreatedQty'];
-    qty = json['Qty'];
-    sAPColorBatch = json['SAPColorBatch'];
+    mtoNo = JsonParse.str(json['MtoNo']);
+    size = JsonParse.str(json['Size']);
+    fIDs = JsonParse.intList(json['FIDs']);
+    mtonoQty = JsonParse.toDouble(json['MtonoQty']);
+    createdQty = JsonParse.toDouble(json['CreatedQty']);
+    qty = JsonParse.toDouble(json['Qty']);
+    sAPColorBatch = JsonParse.str(json['SAPColorBatch']);
   }
   String? mtoNo;
   String? size;

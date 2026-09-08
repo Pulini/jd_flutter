@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PeopleMessageInfo {
   PeopleMessageInfo({
     this.deptName,
@@ -14,17 +15,17 @@ class PeopleMessageInfo {
   });
 
   PeopleMessageInfo.fromJson(dynamic json) {
-    deptName = json['DeptName'];
-    departmentID = json['DepartmentID'];
-    empCode = json['EmpCode'];
-    empID = json['EmpID'];
-    empName = json['EmpName'];
-    liableEmpCode = json['LiableEmpCode'];
-    liableEmpID = json['LiableEmpID'];
-    liableEmpName = json['LiableEmpName'];
-    liablePicturePath = json['LiablePicturePath'];
-    orgName = json['OrgName'];
-    picturePath = json['PicturePath'];
+    deptName = JsonParse.str(json['DeptName']);
+    departmentID = JsonParse.toInt(json['DepartmentID']);
+    empCode = JsonParse.str(json['EmpCode']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empName = JsonParse.str(json['EmpName']);
+    liableEmpCode = JsonParse.str(json['LiableEmpCode']);
+    liableEmpID = JsonParse.toInt(json['LiableEmpID']);
+    liableEmpName = JsonParse.str(json['LiableEmpName']);
+    liablePicturePath = JsonParse.str(json['LiablePicturePath']);
+    orgName = JsonParse.str(json['OrgName']);
+    picturePath = JsonParse.str(json['PicturePath']);
   }
 
   String? deptName;  //部门名称

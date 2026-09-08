@@ -9,24 +9,9 @@ class ScanBarcodeReportedReportInfo {
   });
 
   ScanBarcodeReportedReportInfo.fromJson(dynamic json) {
-    if (json['EmpList'] != null) {
-      empList = [];
-      json['EmpList'].forEach((v) {
-        empList?.add(EmpInfo.fromJson(v));
-      });
-    }
-    if (json['ReportList'] != null) {
-      reportList = [];
-      json['ReportList'].forEach((v) {
-        reportList?.add(ReportInfo.fromJson(v));
-      });
-    }
-    if (json['BarCodeList'] != null) {
-      barCodeList = [];
-      json['BarCodeList'].forEach((v) {
-        barCodeList?.add(BarCodeInfo.fromJson(v));
-      });
-    }
+    empList = JsonParse.list(json['EmpList'], EmpInfo.fromJson);
+    reportList = JsonParse.list(json['ReportList'], ReportInfo.fromJson);
+    barCodeList = JsonParse.list(json['BarCodeList'], BarCodeInfo.fromJson);
   }
 
   List<EmpInfo>? empList;
@@ -66,12 +51,12 @@ class EmpInfo {
   double? qty; //报工数量
 
   EmpInfo.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    partName = json['PartName'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    qty = json['Qty'];
+    processName = JsonParse.str(json['ProcessName']);
+    partName = JsonParse.str(json['PartName']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
 
   Map<String, dynamic> toJson() {
@@ -104,12 +89,12 @@ class ReportInfo {
   double? qty; //贴标数
 
   ReportInfo.fromJson(dynamic json) {
-    type = json['Type'];
-    name = json['Name'];
-    size = json['Size'];
-    instruction = json['Mtono'];
-    instructionQty = json['MtonoQty'];
-    qty = json['Qty'];
+    type = JsonParse.toInt(json['Type']);
+    name = JsonParse.str(json['Name']);
+    size = JsonParse.str(json['Size']);
+    instruction = JsonParse.str(json['Mtono']);
+    instructionQty = JsonParse.toDouble(json['MtonoQty']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
 
   Map<String, dynamic> toJson() {
@@ -138,9 +123,9 @@ class BarCodeInfo {
   RxBool isSelect=false.obs;
 
   BarCodeInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    qty = json['Qty'];
-    processName = json['ProcessName'];
+    barCode = JsonParse.str(json['BarCode']);
+    qty = JsonParse.toDouble(json['Qty']);
+    processName = JsonParse.str(json['ProcessName']);
   }
 
   Map<String, dynamic> toJson() {
@@ -232,8 +217,8 @@ class Distribution {
   });
 
   Distribution.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['Number'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['Number']);
     empId = json['EmpId'];
     distributionQty = json['DistributionQty'];
   }

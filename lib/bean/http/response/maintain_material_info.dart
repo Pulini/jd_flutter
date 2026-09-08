@@ -15,11 +15,11 @@ class MaintainMaterialPropertiesInfo {
       this.unitName,});
 
   MaintainMaterialPropertiesInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    netWeight = json['NetWeight'];
-    grossWeight = json['GrossWeight'];
-    meas = json['Meas'];
-    unitName = json['UnitName'];
+    size = JsonParse.str(json['Size']);
+    netWeight = JsonParse.str(json['NetWeight']);
+    grossWeight = JsonParse.str(json['GrossWeight']);
+    meas = JsonParse.str(json['Meas']);
+    unitName = JsonParse.str(json['UnitName']);
   }
   String? size;
   String? netWeight;
@@ -57,11 +57,11 @@ class MaintainMaterialCapacityInfo {
     this.capacity,});
 
   MaintainMaterialCapacityInfo.fromJson(dynamic json) {
-    processFlowID = json['ProcessFlowID'];
-    itemID = json['ItemID'];
-    factoryType = json['FactoryType'];
-    size = json['Size'];
-    capacity = json['Capacity'];
+    processFlowID = JsonParse.toInt(json['ProcessFlowID']);
+    itemID = JsonParse.toInt(json['ItemID']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    size = JsonParse.str(json['Size']);
+    capacity = JsonParse.toDouble(json['Capacity']);
   }
   int? processFlowID;
   int? itemID;
@@ -91,9 +91,9 @@ class MaintainMaterialLanguagesInfo {
     this.materialName,});
 
   MaintainMaterialLanguagesInfo.fromJson(dynamic json) {
-    languageID = json['LanguageID'];
-    languageName = json['LanguageName'];
-    materialName = json['MaterialName'];
+    languageID = JsonParse.toInt(json['LanguageID']);
+    languageName = JsonParse.str(json['LanguageName']);
+    materialName = JsonParse.str(json['MaterialName']);
   }
   int? languageID;
   String? languageName;

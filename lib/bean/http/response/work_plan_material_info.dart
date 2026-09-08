@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Code : "10030100232"
 // Name : "深蓝色-12尼龙拉头"
 // Model : ""
@@ -15,12 +16,12 @@ class WorkPlanMaterialInfo {
       this.needQty,});
 
   WorkPlanMaterialInfo.fromJson(dynamic json) {
-    code = json['Code'];
-    name = json['Name'];
-    model = json['Model'];
-    color = json['Color'];
-    unit = json['Unit'];
-    needQty = json['NeedQty'];
+    code = JsonParse.str(json['Code']);
+    name = JsonParse.str(json['Name']);
+    model = JsonParse.str(json['Model']);
+    color = JsonParse.str(json['Color']);
+    unit = JsonParse.str(json['Unit']);
+    needQty = JsonParse.toDouble(json['NeedQty']);
   }
   String? code;
   String? name;

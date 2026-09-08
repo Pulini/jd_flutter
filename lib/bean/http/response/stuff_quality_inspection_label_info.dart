@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class StuffQualityInspectionLabelInfo {
   bool select = false;
@@ -37,18 +38,18 @@ class StuffQualityInspectionLabelInfo {
   });
 
   StuffQualityInspectionLabelInfo.fromJson(dynamic json) {
-    barCode = json['BQID'];
-    number = json['BQITEM'];
-    deliveryNum = json['ZDELINO'];
-    label = json['ZPIECE_NO'];
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTX'];
-    boxQty = json['ZXNUM'];
-    unit = json['MEINS'];
-    volume = json['LADEVOL'];
-    grossWeight = json['BRGEW'];
-    netWeight = json['NTGEW'];
-    size = json['SIZE1'];
+    barCode = JsonParse.str(json['BQID']);
+    number = JsonParse.str(json['BQITEM']);
+    deliveryNum = JsonParse.str(json['ZDELINO']);
+    label = JsonParse.str(json['ZPIECE_NO']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTX']);
+    boxQty = JsonParse.toDouble(json['ZXNUM']);
+    unit = JsonParse.str(json['MEINS']);
+    volume = JsonParse.toDouble(json['LADEVOL']);
+    grossWeight = JsonParse.toDouble(json['BRGEW']);
+    netWeight = JsonParse.toDouble(json['NTGEW']);
+    size = JsonParse.str(json['SIZE1']);
 
   }
 

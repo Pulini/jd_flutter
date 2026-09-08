@@ -1,5 +1,6 @@
 import 'package:jd_flutter/message_center/message_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 enum JPushDoType {
   upGrade('UpGrade'),
@@ -51,7 +52,7 @@ class UpDataInfo {
   UpDataInfo({this.message, this.upDataList});
 
   UpDataInfo.fromJson(dynamic json) {
-    message = json['message'];
+    message = JsonParse.str(json['message']);
     upDataList = [
       if (json['UpDataList'] != null)
         for (var item in json['UpDataList']) FunctionVersionInfo.fromJson(item)
@@ -66,7 +67,7 @@ class FunctionVersionInfo {
   FunctionVersionInfo({this.id, this.version});
 
   FunctionVersionInfo.fromJson(dynamic json) {
-    id = json['ID'];
-    version = json['Version'];
+    id = JsonParse.toInt(json['ID']);
+    version = JsonParse.str(json['Version']);
   }
 }

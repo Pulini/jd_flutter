@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class EntryList {
   EntryList({
       this.entryID,
@@ -5,9 +6,9 @@ class EntryList {
       this.exceptionLevel,});
 
   EntryList.fromJson(dynamic json) {
-    entryID = json['EntryID'];
-    exceptionID = json['ExceptionID'];
-    exceptionLevel = json['ExceptionLevel'];
+    entryID = JsonParse.str(json['EntryID']);
+    exceptionID = JsonParse.str(json['ExceptionID']);
+    exceptionLevel = JsonParse.str(json['ExceptionLevel']);
 
   }
   String? entryID;

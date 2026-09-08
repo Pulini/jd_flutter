@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // DepName : "裁断1组"
 // Manager : "尹杰文"
 // ToDayMustQty : 600.0
@@ -33,21 +34,21 @@ class ProductionDayReportInfo {
       this.number,});
 
   ProductionDayReportInfo.fromJson(dynamic json) {
-    depName = json['DepName'];
-    manager = json['Manager'];
-    toDayMustQty = json['ToDayMustQty'];
-    toDayQty = json['ToDayQty'];
-    toDayFinishRate = json['ToDayFinishRate'];
-    noToDayQty = json['NoToDayQty'];
-    monthMustQty = json['MonthMustQty'];
-    monthQty = json['MonthQty'];
-    monthFinishRate = json['MonthFinishRate'];
-    noMonthQty = json['NoMonthQty'];
-    mustPeopleCount = json['MustPeopleCount'];
-    peopleCount = json['PeopleCount'];
-    noDoingReason = json['NoDoingReason'];
-    deptID = json['DeptID'];
-    number = json['Number'];
+    depName = JsonParse.str(json['DepName']);
+    manager = JsonParse.str(json['Manager']);
+    toDayMustQty = JsonParse.toDouble(json['ToDayMustQty']);
+    toDayQty = JsonParse.toDouble(json['ToDayQty']);
+    toDayFinishRate = JsonParse.str(json['ToDayFinishRate']);
+    noToDayQty = JsonParse.toDouble(json['NoToDayQty']);
+    monthMustQty = JsonParse.toDouble(json['MonthMustQty']);
+    monthQty = JsonParse.toDouble(json['MonthQty']);
+    monthFinishRate = JsonParse.str(json['MonthFinishRate']);
+    noMonthQty = JsonParse.toDouble(json['NoMonthQty']);
+    mustPeopleCount = JsonParse.toDouble(json['MustPeopleCount']);
+    peopleCount = JsonParse.toDouble(json['PeopleCount']);
+    noDoingReason = JsonParse.str(json['NoDoingReason']);
+    deptID = JsonParse.str(json['DeptID']);
+    number = JsonParse.str(json['Number']);
   }
   String? depName;
   String? manager;

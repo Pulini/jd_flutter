@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // DeptID : "554744"
 // WorkCardInterID : "213249"
@@ -33,17 +34,17 @@ class MoldingScanBulletinReportInfo {
   });
 
   MoldingScanBulletinReportInfo.fromJson(dynamic json) {
-    deptID = json['DeptID'];
-    workCardInterID = json['WorkCardInterID'];
-    workCardNo = json['WorkCardNo'];
-    mapNumber = json['MapNumber'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    moID = json['MoID'];
-    mtoNo = json['MtoNo'];
-    productName = json['ProductName'];
-    color = json['Color'];
-    priorityLevel = json['PriorityLevel'];
-    entryFID = json['EntryFID'];
+    deptID = JsonParse.str(json['DeptID']);
+    workCardInterID = JsonParse.str(json['WorkCardInterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    mapNumber = JsonParse.str(json['MapNumber']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    moID = JsonParse.str(json['MoID']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    productName = JsonParse.str(json['ProductName']);
+    color = JsonParse.str(json['Color']);
+    priorityLevel = JsonParse.str(json['PriorityLevel']);
+    entryFID = JsonParse.str(json['EntryFID']);
     if (json['ScWorkCardSizeInfos'] != null) {
       sizeInfo = [];
       json['ScWorkCardSizeInfos'].forEach((v) {
@@ -66,12 +67,7 @@ class MoldingScanBulletinReportInfo {
         ));
       }
     }
-    if (json['SizeRelations'] != null) {
-      sizeRelations = [];
-      json['SizeRelations'].forEach((v) {
-        sizeRelations?.add(SizeRelations.fromJson(v));
-      });
-    }
+    sizeRelations = JsonParse.list(json['SizeRelations'], SizeRelations.fromJson);
   }
 
   String? deptID; //部门ID
@@ -121,8 +117,8 @@ class SizeRelations {
   });
 
   SizeRelations.fromJson(dynamic json) {
-    size = json['Size'];
-    barCode = json['BarCode'];
+    size = JsonParse.str(json['Size']);
+    barCode = JsonParse.str(json['BarCode']);
   }
 
   String? size; //尺码
@@ -149,11 +145,11 @@ class ScWorkCardSizeInfos {
   });
 
   ScWorkCardSizeInfos.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    // todayReportQty = json['TodayReportQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    // todayReportQty = JsonParse.toDouble(json['TodayReportQty']);
     todayReportQty = 0;
-    scannedQty = json['ScannedQty'];
+    scannedQty = JsonParse.toDouble(json['ScannedQty']);
   }
 
   String? size; //尺码

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // WorkCardInterID : 854379
 // GroupName : "DUA_Line 5"
 // Priority : 1
@@ -28,17 +29,17 @@ class WorkCardPriorityInfo {
   });
 
   WorkCardPriorityInfo.fromJson(dynamic json) {
-    workCardInterID = json['WorkCardInterID'];
-    groupName = json['GroupName'];
-    priority = json['Priority'];
-    workCardNo = json['WorkCardNo'];
-    workCardDate = json['WorkCardDate'];
-    productName = json['ProductName'];
-    sONo = json['SONo'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    mapNumber = json['MapNumber'];
-    requireQty = json['RequireQty'];
-    undoneQty = json['UndoneQty'];
+    workCardInterID = JsonParse.toInt(json['WorkCardInterID']);
+    groupName = JsonParse.str(json['GroupName']);
+    priority = JsonParse.toInt(json['Priority']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    workCardDate = JsonParse.str(json['WorkCardDate']);
+    productName = JsonParse.str(json['ProductName']);
+    sONo = JsonParse.str(json['SONo']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    mapNumber = JsonParse.str(json['MapNumber']);
+    requireQty = JsonParse.toDouble(json['RequireQty']);
+    undoneQty = JsonParse.toDouble(json['UndoneQty']);
   }
 
   int? workCardInterID;

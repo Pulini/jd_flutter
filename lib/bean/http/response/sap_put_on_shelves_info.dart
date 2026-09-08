@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class RecommendLocationInfo {
   String? factory; //工厂  WERKS
   String? warehouseNumber; //仓库  LGORT
@@ -13,11 +14,11 @@ class RecommendLocationInfo {
     this.distance,
   });
   RecommendLocationInfo.fromJson(dynamic json){
-    factory = json['WERKS'];
-    warehouseNumber = json['LGORT'];
-    location = json['ZLOCAL'];
-    palletNumber = json['ZFTRAYNO'];
-    distance = json['DISTZ'];
+    factory = JsonParse.str(json['WERKS']);
+    warehouseNumber = JsonParse.str(json['LGORT']);
+    location = JsonParse.str(json['ZLOCAL']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    distance = JsonParse.toInt(json['DISTZ']);
   }
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -53,17 +53,12 @@ class ProductionTasksInfo {
   });
 
   ProductionTasksInfo.fromJson(dynamic json) {
-    deptID = json['DeptID'];
-    toDayPlanQty = json['ToDayPlanQty'];
-    toDayFinishQty = json['ToDayFinishQty'];
-    toMonthPlanQty = json['ToMonthPlanQty'];
-    toMonthFinishQty = json['ToMonthFinishQty'];
-    if (json['ScWorkCardInfos'] != null) {
-      subInfo = [];
-      json['ScWorkCardInfos'].forEach((v) {
-        subInfo!.add(ProductionTasksSubInfo.fromJson(v));
-      });
-    }
+    deptID = JsonParse.str(json['DeptID']);
+    toDayPlanQty = JsonParse.toDouble(json['ToDayPlanQty']);
+    toDayFinishQty = JsonParse.toDouble(json['ToDayFinishQty']);
+    toMonthPlanQty = JsonParse.toDouble(json['ToMonthPlanQty']);
+    toMonthFinishQty = JsonParse.toDouble(json['ToMonthFinishQty']);
+    subInfo = JsonParse.list(json['ScWorkCardInfos'], ProductionTasksSubInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -126,22 +121,22 @@ class ProductionTasksSubInfo {
   });
 
   ProductionTasksSubInfo.fromJson(dynamic json) {
-    workCardInterID = json['WorkCardInterID'];
-    workCardNo = json['WorkCardNo'];
-    mapNumber = json['MapNumber'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    moID = json['MoID'];
-    mtoNo = json['MtoNo'];
-    productName = json['ProductName'];
-    color = json['Color'];
-    shoeStyle = json['ShoeStyle'];
-    priorityLevel = json['PriorityLevel'];
-    isClose = json['IsClose'];
-    itemImage = json['ItemImage'];
-    finishQtyTotal = json['FinishQtyTotal'];
-    shouldPackQty = json['NPTotal'];
-    existOutBoxBarCode = json['ExistOutBoxBarCode'];
-    packagedQty = json['HasInstall'];
+    workCardInterID = JsonParse.str(json['WorkCardInterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    mapNumber = JsonParse.str(json['MapNumber']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    moID = JsonParse.str(json['MoID']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    productName = JsonParse.str(json['ProductName']);
+    color = JsonParse.str(json['Color']);
+    shoeStyle = JsonParse.str(json['ShoeStyle']);
+    priorityLevel = JsonParse.str(json['PriorityLevel']);
+    isClose = JsonParse.toBool(json['IsClose']);
+    itemImage = JsonParse.str(json['ItemImage']);
+    finishQtyTotal = JsonParse.toDouble(json['FinishQtyTotal']);
+    shouldPackQty = JsonParse.toDouble(json['NPTotal']);
+    existOutBoxBarCode = JsonParse.toBool(json['ExistOutBoxBarCode']);
+    packagedQty = JsonParse.toDouble(json['HasInstall']);
     if (json['PacketWay'] != null) {
       packetWay = [];
       json['PacketWay'].forEach((v) {
@@ -154,13 +149,8 @@ class ProductionTasksSubInfo {
         specificRequirements!.add(v);
       });
     }
-    entryFID = json['EntryFID'];
-    if (json['ScWorkCardSizeInfos'] != null) {
-      workCardSizeInfo = [];
-      json['ScWorkCardSizeInfos'].forEach((v) {
-        workCardSizeInfo!.add(WorkCardSizeInfos.fromJson(v));
-      });
-    }
+    entryFID = JsonParse.str(json['EntryFID']);
+    workCardSizeInfo = JsonParse.list(json['ScWorkCardSizeInfos'], WorkCardSizeInfos.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -208,13 +198,13 @@ class WorkCardSizeInfos {
   });
 
   WorkCardSizeInfos.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    productScannedQty = json['ProductScannedQty'];
-    manualScannedQty = json['ManualScannedQty'];
-    totalQty = json['ScannedQty'];
-    scanTotalQty = json['InstalledQty'];
-    noFullInstalledQty = json['NoFullInstalledQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    productScannedQty = JsonParse.toDouble(json['ProductScannedQty']);
+    manualScannedQty = JsonParse.toDouble(json['ManualScannedQty']);
+    totalQty = JsonParse.toDouble(json['ScannedQty']);
+    scanTotalQty = JsonParse.toDouble(json['InstalledQty']);
+    noFullInstalledQty = JsonParse.toDouble(json['NoFullInstalledQty']);
   }
 
   String? size; //尺码
@@ -295,10 +285,10 @@ class ProductionTasksDetailInfo {
   });
 
   ProductionTasksDetailInfo.fromJson(dynamic json) {
-    billNo = json['BillNo'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    total = json['Total'];
-    hasInstall = json['HasInstall'];
+    billNo = JsonParse.str(json['BillNo']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    total = JsonParse.toDouble(json['Total']);
+    hasInstall = JsonParse.toDouble(json['HasInstall']);
     if (json['PacketWay'] != null) {
       packetWay = [];
       json['PacketWay'].forEach((v) {
@@ -311,12 +301,7 @@ class ProductionTasksDetailInfo {
         specificRequirements!.add(v);
       });
     }
-    if (json['ScheduleInfos'] != null) {
-      scheduleInfos = [];
-      json['ScheduleInfos'].forEach((v) {
-        scheduleInfos!.add(ProductionTasksDetailItemInfo.fromJson(v));
-      });
-    }
+    scheduleInfos = JsonParse.list(json['ScheduleInfos'], ProductionTasksDetailItemInfo.fromJson);
   }
 }
 
@@ -338,12 +323,12 @@ class ProductionTasksDetailItemInfo {
   });
 
   ProductionTasksDetailItemInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    productScannedQty = json['ProductScannedQty'];
-    manualScannedQty = json['ManualScannedQty'];
-    scannedQty = json['ScannedQty'];
-    installedQty = json['InstalledQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    productScannedQty = JsonParse.toDouble(json['ProductScannedQty']);
+    manualScannedQty = JsonParse.toDouble(json['ManualScannedQty']);
+    scannedQty = JsonParse.toDouble(json['ScannedQty']);
+    installedQty = JsonParse.toDouble(json['InstalledQty']);
   }
 
   Map<String, dynamic> toJson() {
@@ -388,15 +373,15 @@ class ProductionTasksPackMaterialInfo {
     this.receivedQty,
   });
   ProductionTasksPackMaterialInfo.fromJson(dynamic json) {
-    customerPo = json['ZZKHPO1'];
-    purchaseType = json['ZZCGFL'];
-    customerGoodsNo = json['ZZKHHH'];
-    materialCode = json['MATNR'];
-    materialName = json['MAKTX'];
-    unit = json['MEINS'];
-    demandQty = json['ZZXQSL'];
-    inventoryQty = json['WEMNG'];
-    receivedQty = json['ZZSJLL'];
+    customerPo = JsonParse.str(json['ZZKHPO1']);
+    purchaseType = JsonParse.str(json['ZZCGFL']);
+    customerGoodsNo = JsonParse.str(json['ZZKHHH']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['MAKTX']);
+    unit = JsonParse.str(json['MEINS']);
+    demandQty = JsonParse.toDouble(json['ZZXQSL']);
+    inventoryQty = JsonParse.toDouble(json['WEMNG']);
+    receivedQty = JsonParse.toDouble(json['ZZSJLL']);
   }
 }
 
@@ -434,13 +419,13 @@ class MqttMsgInfo {
   });
 
   MqttMsgInfo.fromJson(dynamic json) {
-    number = json['Number'];
-    moID = json['MoID'];
-    workCardID = json['WorkCardID'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    size = json['Size'];
-    qty = json['Qty'];
-    scanTypeID = json['ScanTypeID'];
+    number = JsonParse.str(json['Number']);
+    moID = JsonParse.str(json['MoID']);
+    workCardID = JsonParse.str(json['WorkCardID']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    scanTypeID = JsonParse.str(json['ScanTypeID']);
   }
 
   Map<String, dynamic> toJson() {

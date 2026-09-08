@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PumaBoxCodeInfo {
   PumaBoxCodeInfo({
     this.fID,
@@ -12,14 +13,14 @@ class PumaBoxCodeInfo {
   });
 
   PumaBoxCodeInfo.fromJson(dynamic json) {
-    fID = json['FID'];
-    boxNumber = json['BoxNumber'];
-    boxName = json['BoxName'];
-   fCommandNumber = json['FCommandNumber'];
-    fPO = json['FPO'];
-    fBarCode = json['FBarCode'];
-    fCreatedBy = json['FCreatedBy'];
-    fCreatedOn = json['FCreatedOn'];
+    fID = JsonParse.str(json['FID']);
+    boxNumber = JsonParse.str(json['BoxNumber']);
+    boxName = JsonParse.str(json['BoxName']);
+   fCommandNumber = JsonParse.str(json['FCommandNumber']);
+    fPO = JsonParse.str(json['FPO']);
+    fBarCode = JsonParse.str(json['FBarCode']);
+    fCreatedBy = JsonParse.str(json['FCreatedBy']);
+    fCreatedOn = JsonParse.str(json['FCreatedOn']);
 
   }
   String? fID;

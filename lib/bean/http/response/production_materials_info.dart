@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Company : "PAA"
 // ProductionOrderNumber : "002002398159"
 // DemandQuantity : "0.080"
@@ -59,34 +60,34 @@ class ProductionMaterialsInfo {
       this.outsourcingProcess,});
 
   ProductionMaterialsInfo.fromJson(dynamic json) {
-    company = json['Company'];
-    productionOrderNumber = json['ProductionOrderNumber'];
-    demandQuantity = json['DemandQuantity'];
-    materialRequirementDate = json['MaterialRequirementDate'];
-    latestBOMDemandQuantity = json['LatestBOMDemandQuantity'];
-    batch = json['Batch'];
-    plannedCompletionTime = json['PlannedCompletionTime'];
-    orderDeliveryDate = json['OrderDeliveryDate'];
-    deliveryQuantity = json['DeliveryQuantity'];
-    salesOrderNumber = json['SalesOrderNumber'];
-    materialCode = json['MaterialCode'];
-    noPickQuantity = json['NoPickQuantity'];
-    position = json['Position'];
-    productionNum = json['ProductionNum'];
-    specificationAndModel = json['SpecificationAndModel'];
-    subItemMaterialCode = json['SubItemMaterialCode'];
-    subUnits = json['SubUnits'];
-    subItemSize = json['SubItemSize'];
-    subItemMaterialName = json['SubItemMaterialName'];
-    bomVersion = json['BomVersion'];
-    bomNo = json['BomNo'];
-    plannedStartTime = json['PlannedStartTime'];
-    orderType = json['OrderType'];
-    size = json['Size'];
-    supplementaryOrdersQuantity = json['SupplementaryOrdersQuantity'];
-    dispatchedWorkersNumber = json['DispatchedWorkersNumber'];
-    materialDescription = json['MaterialDescription'];
-    outsourcingProcess = json['OutsourcingProcess'];
+    company = JsonParse.str(json['Company']);
+    productionOrderNumber = JsonParse.str(json['ProductionOrderNumber']);
+    demandQuantity = JsonParse.str(json['DemandQuantity']);
+    materialRequirementDate = JsonParse.str(json['MaterialRequirementDate']);
+    latestBOMDemandQuantity = JsonParse.str(json['LatestBOMDemandQuantity']);
+    batch = JsonParse.str(json['Batch']);
+    plannedCompletionTime = JsonParse.str(json['PlannedCompletionTime']);
+    orderDeliveryDate = JsonParse.str(json['OrderDeliveryDate']);
+    deliveryQuantity = JsonParse.str(json['DeliveryQuantity']);
+    salesOrderNumber = JsonParse.str(json['SalesOrderNumber']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    noPickQuantity = JsonParse.str(json['NoPickQuantity']);
+    position = JsonParse.str(json['Position']);
+    productionNum = JsonParse.str(json['ProductionNum']);
+    specificationAndModel = JsonParse.str(json['SpecificationAndModel']);
+    subItemMaterialCode = JsonParse.str(json['SubItemMaterialCode']);
+    subUnits = JsonParse.str(json['SubUnits']);
+    subItemSize = JsonParse.str(json['SubItemSize']);
+    subItemMaterialName = JsonParse.str(json['SubItemMaterialName']);
+    bomVersion = JsonParse.str(json['BomVersion']);
+    bomNo = JsonParse.str(json['BomNo']);
+    plannedStartTime = JsonParse.str(json['PlannedStartTime']);
+    orderType = JsonParse.str(json['OrderType']);
+    size = JsonParse.str(json['Size']);
+    supplementaryOrdersQuantity = JsonParse.str(json['SupplementaryOrdersQuantity']);
+    dispatchedWorkersNumber = JsonParse.str(json['DispatchedWorkersNumber']);
+    materialDescription = JsonParse.str(json['MaterialDescription']);
+    outsourcingProcess = JsonParse.str(json['OutsourcingProcess']);
   }
   String? company;
   String? productionOrderNumber;

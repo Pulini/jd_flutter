@@ -25,18 +25,18 @@ class SmartDeliveryOrderInfo {
   });
 
   SmartDeliveryOrderInfo.fromJson(dynamic json) {
-    rowNo = json['rowNo'];
-    workCardInterID = json['workCardInterID'];
-    workCardNo = json['workCardNo'];
-    customerPo = json['customerPo'];
-    salesOrderNo = json['salesOrderNo'];
-    typeBody = json['typeBody'];
-    dispatchDate = json['dispatchDate'];
-    dispatchQty = json['dispatchQty'];
-    materialIssuanceStatus = json['materialIssuanceStatus'];
-    depName = json['depName'];
-    departmentId = json['depID'];
-    instructions = json['mtoNo'];
+    rowNo = JsonParse.toInt(json['rowNo']);
+    workCardInterID = JsonParse.toInt(json['workCardInterID']);
+    workCardNo = JsonParse.str(json['workCardNo']);
+    customerPo = JsonParse.str(json['customerPo']);
+    salesOrderNo = JsonParse.str(json['salesOrderNo']);
+    typeBody = JsonParse.str(json['typeBody']);
+    dispatchDate = JsonParse.str(json['dispatchDate']);
+    dispatchQty = JsonParse.toDouble(json['dispatchQty']);
+    materialIssuanceStatus = JsonParse.toInt(json['materialIssuanceStatus']);
+    depName = JsonParse.str(json['depName']);
+    departmentId = JsonParse.toInt(json['depID']);
+    instructions = JsonParse.str(json['mtoNo']);
   }
 
   int? rowNo; //行号
@@ -92,14 +92,14 @@ class SmartDeliveryMaterialInfo {
   });
 
   SmartDeliveryMaterialInfo.fromJson(dynamic json) {
-    scWorkCardInterID = json['ScWorkCardInterID'];
-    partsID = json['PartsID'];
-    materialID = json['MaterialID'];
-    partName = json['PartName'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    requireQty = json['RequireQty'];
-    sendQty = json['SendQty'];
+    scWorkCardInterID = JsonParse.toInt(json['ScWorkCardInterID']);
+    partsID = JsonParse.toInt(json['PartsID']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    partName = JsonParse.str(json['PartName']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    requireQty = JsonParse.toDouble(json['RequireQty']);
+    sendQty = JsonParse.toDouble(json['SendQty']);
   }
 
   int? scWorkCardInterID;
@@ -134,14 +134,9 @@ class SmartDeliveryShorTreeInfo {
   });
 
   SmartDeliveryShorTreeInfo.fromJson(dynamic json) {
-    shoeTreeNo = json['ShoeTreeNo'];
-    stockID = json['StockID'];
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(SizeInfo.fromJson(v));
-      });
-    }
+    shoeTreeNo = JsonParse.str(json['ShoeTreeNo']);
+    stockID = JsonParse.str(json['StockID']);
+    sizeList = JsonParse.list(json['SizeList'], SizeInfo.fromJson);
   }
 
   String? shoeTreeNo;
@@ -166,8 +161,8 @@ class SizeInfo {
   });
 
   SizeInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toInt(json['Qty']);
   }
 
   String? size;
@@ -210,29 +205,19 @@ class DeliveryDetailInfo {
   });
 
   DeliveryDetailInfo.fromJson(dynamic json) {
-    newWorkCardInterID = json['NewWorkCardInterID'];
-    partsID = json['PartsID'];
-    typeBody = json['TypeBody'];
-    seOrders = json['SeOrders'];
-    mapNumber = json['MapNumber'];
-    srcICMOInterID = json['SrcICMOInterID'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    partName = json['PartName'];
-    materialName = json['MaterialName'];
-    materialID = json['MaterialID'];
-    materialNumber = json['MaterialNumber'];
-    if (json['PartsSizeList'] != null) {
-      partsSizeList = [];
-      json['PartsSizeList'].forEach((v) {
-        partsSizeList?.add(PartsSizeList.fromJson(v));
-      });
-    }
-    if (json['WorkData'] != null) {
-      workData = [];
-      json['WorkData'].forEach((v) {
-        workData?.add(WorkData.fromJson(v));
-      });
-    }
+    newWorkCardInterID = JsonParse.str(json['NewWorkCardInterID']);
+    partsID = JsonParse.str(json['PartsID']);
+    typeBody = JsonParse.str(json['TypeBody']);
+    seOrders = JsonParse.str(json['SeOrders']);
+    mapNumber = JsonParse.str(json['MapNumber']);
+    srcICMOInterID = JsonParse.str(json['SrcICMOInterID']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    partName = JsonParse.str(json['PartName']);
+    materialName = JsonParse.str(json['MaterialName']);
+    materialID = JsonParse.str(json['MaterialID']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    partsSizeList = JsonParse.list(json['PartsSizeList'], PartsSizeList.fromJson);
+    workData = JsonParse.list(json['WorkData'], WorkData.fromJson);
   }
 
   String? newWorkCardInterID;
@@ -331,16 +316,11 @@ class WorkData {
   });
 
   WorkData.fromJson(dynamic json) {
-    round = json['Round'];
-    sendType = json['SendType'];
-    taskID = json['TaskID'];
-    agvNumber = json['RobNumber'];
-    if (json['SendSizeList'] != null) {
-      sendSizeList = [];
-      json['SendSizeList'].forEach((v) {
-        sendSizeList?.add(SizeInfo.fromJson(v));
-      });
-    }
+    round = JsonParse.str(json['Round']);
+    sendType = JsonParse.toInt(json['SendType']);
+    taskID = JsonParse.str(json['TaskID']);
+    agvNumber = JsonParse.str(json['RobNumber']);
+    sendSizeList = JsonParse.list(json['SendSizeList'], SizeInfo.fromJson);
   }
 
   bool isSelected = false;
@@ -381,9 +361,9 @@ class PartsSizeList {
   });
 
   PartsSizeList.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    shoeTreeQty = json['ShoeTreeQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toInt(json['Qty']);
+    shoeTreeQty = JsonParse.toInt(json['ShoeTreeQty']);
   }
 
   String? size;
@@ -429,18 +409,8 @@ class AgvInfo {
   });
 
   AgvInfo.fromJson(dynamic json) {
-    if (json['RobInfo'] != null) {
-      robInfo = [];
-      json['RobInfo'].forEach((v) {
-        robInfo?.add(RobotDeviceInfo.fromJson(v));
-      });
-    }
-    if (json['RobotPosition'] != null) {
-      robotPosition = [];
-      json['RobotPosition'].forEach((v) {
-        robotPosition?.add(RobotPositionInfo.fromJson(v));
-      });
-    }
+    robInfo = JsonParse.list(json['RobInfo'], RobotDeviceInfo.fromJson);
+    robotPosition = JsonParse.list(json['RobotPosition'], RobotPositionInfo.fromJson);
   }
 
   List<RobotDeviceInfo>? robInfo;
@@ -457,8 +427,8 @@ class RobotDeviceInfo {
   });
 
   RobotDeviceInfo.fromJson(dynamic json) {
-    agvNumber = json['RobNumber'];
-    agvName = json['RobName'];
+    agvNumber = JsonParse.str(json['RobNumber']);
+    agvName = JsonParse.str(json['RobName']);
   }
 
   String? agvNumber;
@@ -489,20 +459,10 @@ class RobotPositionInfo {
   });
 
   RobotPositionInfo.fromJson(dynamic json) {
-    taskType = json['TaskType'];
-    taskTypeName = json['TaskTypeName'];
-    if (json['StartPoint'] != null) {
-      startPoint = [];
-      json['StartPoint'].forEach((v) {
-        startPoint?.add(TaskPoint.fromJson(v));
-      });
-    }
-    if (json['EndPoint'] != null) {
-      endPoint = [];
-      json['EndPoint'].forEach((v) {
-        endPoint?.add(TaskPoint.fromJson(v));
-      });
-    }
+    taskType = JsonParse.str(json['TaskType']);
+    taskTypeName = JsonParse.str(json['TaskTypeName']);
+    startPoint = JsonParse.list(json['StartPoint'], TaskPoint.fromJson);
+    endPoint = JsonParse.list(json['EndPoint'], TaskPoint.fromJson);
   }
 
   String? taskType;
@@ -538,8 +498,8 @@ class TaskPoint {
   });
 
   TaskPoint.fromJson(dynamic json) {
-    positionCode = json['PositionCode'];
-    positionName = json['PositionName'];
+    positionCode = JsonParse.str(json['PositionCode']);
+    positionName = JsonParse.str(json['PositionName']);
   }
 
   String? positionCode;
@@ -572,10 +532,10 @@ class AgvTaskInfo {
   });
 
   AgvTaskInfo.fromJson(dynamic json) {
-    taskID = json['TaskID'];
-    taskType = json['TaskType'];
-    startingPoint = json['StartingPoint'];
-    endPoint = json['EndPoint'];
+    taskID = JsonParse.str(json['TaskID']);
+    taskType = JsonParse.toInt(json['TaskType']);
+    startingPoint = JsonParse.str(json['StartingPoint']);
+    endPoint = JsonParse.str(json['EndPoint']);
   }
 
   String? taskID;

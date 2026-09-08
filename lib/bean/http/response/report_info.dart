@@ -13,12 +13,7 @@ class ReportInfo {
   ReportInfo.fromJson(dynamic json) {
     rowIndex = json['RowIndex'];
     backgroundColor = json['BackgroundColor'];
-    if (json['DataList'] != null) {
-      dataList = [];
-      json['DataList'].forEach((v) {
-        dataList?.add(DataList.fromJson(v));
-      });
-    }
+    dataList = JsonParse.list(json['DataList'], DataList.fromJson);
   }
 
   int? rowIndex = 0;
@@ -51,13 +46,13 @@ class DataList {
   });
 
   DataList.fromJson(dynamic json) {
-    content = json['Content'];
-    fieldName = json['FieldName'];
+    content = JsonParse.str(json['Content']);
+    fieldName = JsonParse.str(json['FieldName']);
     width = json['Width'].toDouble();
-    visible = json['Visible'];
-    colIndex = json['ColIndex'];
-    caption = json['Caption'];
-    foreColor = json['ForeColor'];
+    visible = JsonParse.toBool(json['Visible']);
+    colIndex = JsonParse.toInt(json['ColIndex']);
+    caption = JsonParse.str(json['Caption']);
+    foreColor = JsonParse.str(json['ForeColor']);
     if (content?.isNum == true) {
       content = content.toDoubleTry().toShowString();
     }

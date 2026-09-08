@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class VisitLastRecord {
   VisitLastRecord({
     this.name,
@@ -7,10 +8,10 @@ class VisitLastRecord {
   });
 
   VisitLastRecord.fromJson(dynamic json) {
-    name = json['Name'];
-    phone = json['Phone'];
-    idCard = json['IDCard'];
-    carNo = json['CarNo'];
+    name = JsonParse.str(json['Name']);
+    phone = JsonParse.str(json['Phone']);
+    idCard = JsonParse.str(json['IDCard']);
+    carNo = JsonParse.str(json['CarNo']);
   }
 
   String? name;

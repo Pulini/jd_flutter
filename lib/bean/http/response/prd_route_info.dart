@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // ProcessNumber : "ZC01"
 // ProcessName : "测试"
 
@@ -7,8 +8,8 @@ class PrdRouteInfo {
       this.processName,});
 
   PrdRouteInfo.fromJson(dynamic json) {
-    processNumber = json['ProcessNumber'];
-    processName = json['ProcessName'];
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    processName = JsonParse.str(json['ProcessName']);
   }
   String? processNumber;
   String? processName;

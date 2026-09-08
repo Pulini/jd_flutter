@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // PalletNumber : "F101-33"
 // CreationDate : "0000-00-00"
 // UsedNum : 0.0
@@ -9,9 +10,9 @@ class SapPalletInfo {
       this.usedNum,});
 
   SapPalletInfo.fromJson(dynamic json) {
-    palletNumber = json['PalletNumber'];
-    creationDate = json['CreationDate'];
-    usedNum = json['UsedNum'];
+    palletNumber = JsonParse.str(json['PalletNumber']);
+    creationDate = JsonParse.str(json['CreationDate']);
+    usedNum = JsonParse.toDouble(json['UsedNum']);
   }
   String? palletNumber;
   String? creationDate;

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // {"GuidList":["93080A91-D759-4FFA-89CA-A125F4A4AEF1"],"PickUpCodeList":["2903-20250721-0016"]}
 
 class MaterialDispatchReportSuccessInfo {
@@ -7,10 +8,8 @@ class MaterialDispatchReportSuccessInfo {
   });
 
   MaterialDispatchReportSuccessInfo.fromJson(dynamic json) {
-    guidList = json['GuidList'] != null ? json['GuidList'].cast<String>() : [];
-    pickUpCodeList = json['PickUpCodeList'] != null
-        ? json['PickUpCodeList'].cast<String>()
-        : [];
+    guidList = JsonParse.strList(json['GuidList']);
+    pickUpCodeList = JsonParse.strList(json['PickUpCodeList']);
   }
 
   List<String>? guidList;

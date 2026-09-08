@@ -76,31 +76,26 @@ class TemporaryOrderInfo {
       this.temporarySize});
 
   TemporaryOrderInfo.fromJson(dynamic json) {
-    companyCode = json['CompanyCode'];
-    factoryName = json['FactoryName'];
-    temporaryNo = json['TemporaryNo'];
-    supplierName = json['SupplierName'];
-    billDate = json['BillDate'];
-    biller = json['Biller'];
-    remark = json['Remark'];
-    storageLocationName = json['StorageLocationName'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
-    colorSeparation = json['ColorSeparation'];
-    baseUnit = json['BaseUnit'];
-    commUnit = json['CommUnit'];
-    coefficient = json['Coefficient'];
-    deleteReason = json['DeleteReason'];
-    detailRemark = json['DetailRemark'];
-    model = json['Model'];
-    distributionType = json['DistributionType'];
-    finalCustomer = json['KunnrLast'];
-    if (json['TemporarySize'] != null) {
-      temporarySize = [];
-      json['TemporarySize'].forEach((v) {
-        temporarySize?.add(TemporarySize.fromJson(v));
-      });
-    }
+    companyCode = JsonParse.str(json['CompanyCode']);
+    factoryName = JsonParse.str(json['FactoryName']);
+    temporaryNo = JsonParse.str(json['TemporaryNo']);
+    supplierName = JsonParse.str(json['SupplierName']);
+    billDate = JsonParse.str(json['BillDate']);
+    biller = JsonParse.str(json['Biller']);
+    remark = JsonParse.str(json['Remark']);
+    storageLocationName = JsonParse.str(json['StorageLocationName']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
+    colorSeparation = JsonParse.str(json['ColorSeparation']);
+    baseUnit = JsonParse.str(json['BaseUnit']);
+    commUnit = JsonParse.str(json['CommUnit']);
+    coefficient = JsonParse.str(json['Coefficient']);
+    deleteReason = JsonParse.str(json['DeleteReason']);
+    detailRemark = JsonParse.str(json['DetailRemark']);
+    model = JsonParse.str(json['Model']);
+    distributionType = JsonParse.str(json['DistributionType']);
+    finalCustomer = JsonParse.str(json['KunnrLast']);
+    temporarySize = JsonParse.list(json['TemporarySize'], TemporarySize.fromJson);
   }
 
   String temporaryQty() {
@@ -133,9 +128,9 @@ class TemporarySize {
   });
 
   TemporarySize.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    baseQty = json['BaseQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.str(json['Qty']);
+    baseQty = JsonParse.str(json['BaseQty']);
   }
 }
 
@@ -207,25 +202,25 @@ class TemporaryOrderDetailInfo {
   });
 
   TemporaryOrderDetailInfo.fromJson(dynamic json) {
-    companyName = json['CompanyName'];
-    temporaryNumber = json['TemporaryNumber'];
-    temporaryDate = json['TemporaryDate'];
-    sourceType = json['SourceType'];
-    supplierName = json['SupplierName'];
-    deliveryNumber = json['DeliveryNumber'];
-    producerNumber = json['ProducerNumber'];
-    producerName = json['ProducerName'];
-    producerDate = json['ProducerDate'];
-    reviewer = json['Reviewer'];
-    auditDate = json['AuditDate'];
-    reviser = json['Reviser'];
-    modificationDate = json['ModificationDate'];
-    companyNumber = json['CompanyNumber'];
-    supplierNumber = json['SupplierNumber'];
-    factoryNumber = json['FactoryNumber'];
-    storageLocationNumber = json['StorageLocationNumber'];
-    storageLocationName = json['StorageLocationName'];
-    remarks = json['Remarks'];
+    companyName = JsonParse.str(json['CompanyName']);
+    temporaryNumber = JsonParse.str(json['TemporaryNumber']);
+    temporaryDate = JsonParse.str(json['TemporaryDate']);
+    sourceType = JsonParse.str(json['SourceType']);
+    supplierName = JsonParse.str(json['SupplierName']);
+    deliveryNumber = JsonParse.str(json['DeliveryNumber']);
+    producerNumber = JsonParse.str(json['ProducerNumber']);
+    producerName = JsonParse.str(json['ProducerName']);
+    producerDate = JsonParse.str(json['ProducerDate']);
+    reviewer = JsonParse.str(json['Reviewer']);
+    auditDate = JsonParse.str(json['AuditDate']);
+    reviser = JsonParse.str(json['Reviser']);
+    modificationDate = JsonParse.str(json['ModificationDate']);
+    companyNumber = JsonParse.str(json['CompanyNumber']);
+    supplierNumber = JsonParse.str(json['SupplierNumber']);
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    storageLocationNumber = JsonParse.str(json['StorageLocationNumber']);
+    storageLocationName = JsonParse.str(json['StorageLocationName']);
+    remarks = JsonParse.str(json['Remarks']);
     receipt = [];
     if (json['Receipt'] != null) {
       json['Receipt'].forEach((v) {
@@ -383,40 +378,40 @@ class TemporaryOrderDetailReceiptInfo {
   });
 
   TemporaryOrderDetailReceiptInfo.fromJson(dynamic json) {
-    purchaseType = json['PurchaseType'];
-    contractNo = json['ContractNo'];
-    purchaseOrderLineNumber = json['PurchaseOrderLineNumber'];
-    planningLineNumber = json['PlanningLineNumber'];
-    temporaryLineNumber = json['TemporaryLineNumber'];
-    productionNumber = json['ProductionNumber'];
-    factoryModel = json['FactoryModel'];
-    distributiveModel = json['DistributiveModel'];
-    deliveryDate = json['DeliveryDate'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
-    mainMaterialCode = json['MainMaterialCode'];
-    mainMaterialName = json['MainMaterialName'];
-    specification = json['Specification'];
-    quantityTemporarilyReceived = json['QuantityTemporarilyReceived'];
-    size = json['Size'];
-    inspectionQuantity = json['InspectionQuantity'];
-    qualifiedQuantity = json['QualifiedQuantity'];
-    unqualifiedQuantity = json['UnqualifiedQuantity'];
-    enterWarehouseQuantity = json['EnterWarehouseQuantity'];
-    remarks = json['Remarks'];
-    deliveryOrderLineNumber = json['DeliveryOrderLineNumber'];
-    basicQuantity = json['BasicQuantity'];
-    coefficient = json['Coefficient'];
-    commonUnits = json['CommonUnits'];
-    basicUnits = json['BasicUnits'];
-    fullInspection = json['FullInspection'];
-    canColorSeparation = json['CanColorSeparation'];
-    missingQuantity = json['MissingQuantity'];
-    hasLengthCheckData = json['HasLengthCheckData'];
-    colorSeparation = json['ColorSeparation'];
-    result1 = json['Result1'];
-    barCode = json['BQID_Org'];
-    samplingQuantity = json['SamplingQuantity'];
+    purchaseType = JsonParse.str(json['PurchaseType']);
+    contractNo = JsonParse.str(json['ContractNo']);
+    purchaseOrderLineNumber = JsonParse.str(json['PurchaseOrderLineNumber']);
+    planningLineNumber = JsonParse.str(json['PlanningLineNumber']);
+    temporaryLineNumber = JsonParse.str(json['TemporaryLineNumber']);
+    productionNumber = JsonParse.str(json['ProductionNumber']);
+    factoryModel = JsonParse.str(json['FactoryModel']);
+    distributiveModel = JsonParse.str(json['DistributiveModel']);
+    deliveryDate = JsonParse.str(json['DeliveryDate']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
+    mainMaterialCode = JsonParse.str(json['MainMaterialCode']);
+    mainMaterialName = JsonParse.str(json['MainMaterialName']);
+    specification = JsonParse.str(json['Specification']);
+    quantityTemporarilyReceived = JsonParse.toDouble(json['QuantityTemporarilyReceived']);
+    size = JsonParse.str(json['Size']);
+    inspectionQuantity = JsonParse.toDouble(json['InspectionQuantity']);
+    qualifiedQuantity = JsonParse.toDouble(json['QualifiedQuantity']);
+    unqualifiedQuantity = JsonParse.toDouble(json['UnqualifiedQuantity']);
+    enterWarehouseQuantity = JsonParse.toDouble(json['EnterWarehouseQuantity']);
+    remarks = JsonParse.str(json['Remarks']);
+    deliveryOrderLineNumber = JsonParse.str(json['DeliveryOrderLineNumber']);
+    basicQuantity = JsonParse.toDouble(json['BasicQuantity']);
+    coefficient = JsonParse.toDouble(json['Coefficient']);
+    commonUnits = JsonParse.str(json['CommonUnits']);
+    basicUnits = JsonParse.str(json['BasicUnits']);
+    fullInspection = JsonParse.str(json['FullInspection']);
+    canColorSeparation = JsonParse.str(json['CanColorSeparation']);
+    missingQuantity = JsonParse.toDouble(json['MissingQuantity']);
+    hasLengthCheckData = JsonParse.str(json['HasLengthCheckData']);
+    colorSeparation = JsonParse.str(json['ColorSeparation']);
+    result1 = JsonParse.str(json['Result1']);
+    barCode = JsonParse.str(json['BQID_Org']);
+    samplingQuantity = JsonParse.toDouble(json['SamplingQuantity']);
     isSelected.value = json['isSelected']??false;
   }
 
@@ -502,8 +497,8 @@ class TestStandardsInfo{
  TestStandardsInfo({this.testStandardsNumber, this.testStandardsName});
 
  TestStandardsInfo.fromJson(dynamic json) {
-    testStandardsNumber = json['NONUMBER'];
-    testStandardsName = json['NONAME'];
+    testStandardsNumber = JsonParse.str(json['NONUMBER']);
+    testStandardsName = JsonParse.str(json['NONAME']);
   }
   @override
   String toString() {

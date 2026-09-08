@@ -22,11 +22,11 @@ class PickingMaterialOrderInfo {
   });
 
   PickingMaterialOrderInfo.fromJson(dynamic json) {
-    orderNumber = json['WOFNR'];
-    created = json['UNAME'];
-    date = json['ERDAT'];
-    supplierNumber = json['LIFNR'];
-    supplierName = json['NAME1'];
+    orderNumber = JsonParse.str(json['WOFNR']);
+    created = JsonParse.str(json['UNAME']);
+    date = JsonParse.str(json['ERDAT']);
+    supplierNumber = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
 
     materialList = [];
     if (json['ZTDLL_GDMVT_MATNR_ITEM'] != null) {
@@ -182,17 +182,17 @@ class PickingMaterialOrderMaterialInfo {
   });
 
   PickingMaterialOrderMaterialInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTX'];
-    instructionNo = json['KDAUF'];
-    demandQty = json['BDMNG'];
-    pickedQty = json['ZZAEMNG'];
-    basicUnit = json['MEINS'];
-    realTimeInventory = json['LABST'];
-    commonUnit = json['MEINH'];
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTX']);
+    instructionNo = JsonParse.str(json['KDAUF']);
+    demandQty = JsonParse.toDouble(json['BDMNG']);
+    pickedQty = JsonParse.toDouble(json['ZZAEMNG']);
+    basicUnit = JsonParse.str(json['MEINS']);
+    realTimeInventory = JsonParse.toDouble(json['LABST']);
+    commonUnit = JsonParse.str(json['MEINH']);
     basicMeasurementUnitNumerator = json['UMREZ'].toString().toDoubleTry();
     basicMeasurementUnitDenominator = json['UMREN'].toString().toDoubleTry();
-    colorFlg = json['ZZFSFLG'];
+    colorFlg = JsonParse.str(json['ZZFSFLG']);
     lineList = [];
     if (json['ZTDLL_GDMVT_WOLNR_ITEM'] != null) {
       json['ZTDLL_GDMVT_WOLNR_ITEM'].forEach((v) {
@@ -437,11 +437,11 @@ class PickingMaterialOrderMaterialDetailLineInfo {
   });
 
   PickingMaterialOrderMaterialDetailLineInfo.fromJson(dynamic json) {
-    lineNo = json['WOLNR'];
-    demandQty = json['BDMNG'];
-    pickedQty = json['ZZAEMNG'];
-    preparedMaterialsQty = json['BDMNG_BH'];
-    hasOutTicket = json['ISOAOUTDOOR'];
+    lineNo = JsonParse.str(json['WOLNR']);
+    demandQty = JsonParse.toDouble(json['BDMNG']);
+    pickedQty = JsonParse.toDouble(json['ZZAEMNG']);
+    preparedMaterialsQty = JsonParse.toDouble(json['BDMNG_BH']);
+    hasOutTicket = JsonParse.str(json['ISOAOUTDOOR']);
     pickingQty = canPickingQty();
     preparingMaterialsQty = preparedMaterialsQty ?? 0;
   }
@@ -502,13 +502,13 @@ class PickingMaterialOrderPrintInfo {
   });
 
   PickingMaterialOrderPrintInfo.fromJson(dynamic json) {
-    orderNumber = json['WOFNR'];
-    date = json['ERDAT'];
-    supplierNumber = json['LIFNR'];
-    supplierName = json['LIF_NAME1'];
-    factoryNo = json['WERKS'];
-    factoryName = json['WER_NAME1'];
-    contractNo = json['EBELNS'];
+    orderNumber = JsonParse.str(json['WOFNR']);
+    date = JsonParse.str(json['ERDAT']);
+    supplierNumber = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['LIF_NAME1']);
+    factoryNo = JsonParse.str(json['WERKS']);
+    factoryName = JsonParse.str(json['WER_NAME1']);
+    contractNo = JsonParse.str(json['EBELNS']);
     materialList = [];
     if (json['ZTDLL_PRINT_MATNR_ITEM'] != null) {
       json['ZTDLL_PRINT_MATNR_ITEM'].forEach((v) {
@@ -539,11 +539,11 @@ class PickingMaterialOrderPrintMaterialInfo {
   });
 
   PickingMaterialOrderPrintMaterialInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTX'];
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTX']);
     contractOweQty = json['BDMNG_QS'].toString().toDoubleTry();
-    basicUnit = json['MEINS'];
-    warehouseKeeper = json['USNAM'];
+    basicUnit = JsonParse.str(json['MEINS']);
+    warehouseKeeper = JsonParse.str(json['USNAM']);
     materialSubList = [];
     if (json['ZTDLL_PRINT_MATNR_ITEM2'] != null) {
       json['ZTDLL_PRINT_MATNR_ITEM2'].forEach((v) {
@@ -589,20 +589,20 @@ class PickingMaterialOrderPrintMaterialSubInfo {
   });
 
   PickingMaterialOrderPrintMaterialSubInfo.fromJson(dynamic json) {
-    typeBody = json['ZZGCXT'];
-    instruction = json['VBELN'];
-    colorInfo = json['ZCOLOR'];
-    size = json['ZSIZE1'];
-    batchNo = json['CHARG'];
-    warehouseNumber = json['LGORT'];
-    warehouseName = json['LGOBE'];
+    typeBody = JsonParse.str(json['ZZGCXT']);
+    instruction = JsonParse.str(json['VBELN']);
+    colorInfo = JsonParse.str(json['ZCOLOR']);
+    size = JsonParse.str(json['ZSIZE1']);
+    batchNo = JsonParse.str(json['CHARG']);
+    warehouseNumber = JsonParse.str(json['LGORT']);
+    warehouseName = JsonParse.str(json['LGOBE']);
     realTimeInventory = json['LABST'].toString().toDoubleTry();
-    location = json['ZLOCAL'];
+    location = JsonParse.str(json['ZLOCAL']);
     contractQty = json['BDMNG_HT'].toString().toDoubleTry();
     shouldInventoryQty = json['BDMNG'].toString().toDoubleTry();
     totalInventoryQty = json['BDMNG_LJ'].toString().toDoubleTry();
     contractOweQty = json['BDMNG_QS'].toString().toDoubleTry();
-    subBasicUnit = json['MEINS'];
+    subBasicUnit = JsonParse.str(json['MEINS']);
 
   }
 }

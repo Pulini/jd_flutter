@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // FileInterID : 5709
 // Name : "DD201937-11"
 // TypeName : "SOP"
@@ -15,12 +16,12 @@ class ProcessSpecificationInfo {
       this.itemID,});
 
   ProcessSpecificationInfo.fromJson(dynamic json) {
-    fileInterID = json['FileInterID'];
-    name = json['Name'];
-    typeName = json['TypeName'];
-    fileName = json['FileName'];
-    fullName = json['FullName'];
-    itemID = json['ItemID'];
+    fileInterID = JsonParse.toInt(json['FileInterID']);
+    name = JsonParse.str(json['Name']);
+    typeName = JsonParse.str(json['TypeName']);
+    fileName = JsonParse.str(json['FileName']);
+    fullName = JsonParse.str(json['FullName']);
+    itemID = JsonParse.toDouble(json['ItemID']);
   }
   int? fileInterID;
   String? name;

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ScanPickingMaterialReportInfo {
   List<ScanPickingMaterialReportSub1Info>? list1;
   List<ScanPickingMaterialReportSub2Info>? list2;
@@ -27,8 +28,8 @@ class ScanPickingMaterialReportSub1Info {
   ScanPickingMaterialReportSub1Info({this.barCode, this.name});
 
   ScanPickingMaterialReportSub1Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['barCode'];
-    name = json['name'];
+    barCode = JsonParse.str(json['barCode']);
+    name = JsonParse.str(json['name']);
   }
 }
 
@@ -38,6 +39,6 @@ class ScanPickingMaterialReportSub2Info {
   ScanPickingMaterialReportSub2Info(this.barCode);
 
   ScanPickingMaterialReportSub2Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['barCode'];
+    barCode = JsonParse.str(json['barCode']);
   }
 }

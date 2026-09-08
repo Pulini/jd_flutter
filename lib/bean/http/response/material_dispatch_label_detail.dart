@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class MaterialDispatchLabelDetail {
   MaterialDispatchLabelDetail({
     this.billNo,
@@ -5,8 +6,8 @@ class MaterialDispatchLabelDetail {
   });
 
   MaterialDispatchLabelDetail.fromJson(dynamic json) {
-    billNo = json['BillNo'];
-    qty = json['Qty'];
+    billNo = JsonParse.str(json['BillNo']);
+    qty = JsonParse.toDouble(json['Qty']);
 
   }
 

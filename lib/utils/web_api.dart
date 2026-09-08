@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 
 import 'dio_manager.dart';
 import 'utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 //接口返回异常
 const resultError = 0;
@@ -152,7 +153,11 @@ Future<BaseData> _doHttp({
       var json = response.data.runtimeType == String
           ? jsonDecode(response.data)
           : response.data;
-      base.resultCode = json['ResultCode'];
+      base.resultCode = JsonParse.toInt(json['ResultCode']);
+      // 注意：data 必须保持原始类型（对象/数组/字符串都有可能），
+      // 不能用 JsonParse.str 转换，否则会把整个 Data 节点 toString 成字符串，
+      // 导致各 bean 的 fromJson 收到 String 后 json['Key'] 报
+      // "type 'String' is not a subtype of type 'int' of 'index'"。
       base.data = json['Data'];
       base.message = '${'http_api_tip_prefix'.tr}${json['Message']}';
     } else {

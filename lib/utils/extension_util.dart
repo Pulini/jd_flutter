@@ -326,3 +326,174 @@ extension ThrottleExt on void Function() {
   void Function() get throttled => ThrottleUtil.throttle(this);
   void Function() throttleWith({int ms = 1000}) => ThrottleUtil.throttle(this, ms: ms);
 }
+
+/// ==================== JSON 解析扩展 ====================
+///
+/// 把后端返回字段安全地转成强类型，避免 null / 类型不符导致崩溃。
+///
+/// ⚠️ Dart 限制：扩展方法**无法**作用于静态类型为 `dynamic` 的接收者。
+/// 而 `json['key']` 的静态类型恰好是 dynamic，所以下面这种写法会编译失败：
+/// ```dart
+/// json['Items'].parseList(Item.fromJson); // ❌ dynamic 上解析不到扩展
+/// ```
+/// 这类场景请改用同能力的静态工具类 [JsonParse]：
+/// ```dart
+/// JsonParse.list(json['Items'], Item.fromJson); // ✅
+/// JsonParse.str(json['Name']);                  // ✅
+/// ```
+/// 若接收者静态类型已知（非 dynamic），则可直接用扩展：
+/// ```dart
+/// Object? v = someValue;
+/// v.parseList(Item.fromJson);
+/// v.toInt();
+/// ```
+extension JsonExt on Object? {
+  /// 解析对象数组：非 List 返回空数组，只保留 Map 元素并用 [fromJson] 转换。
+  List<T> parseList<T>(T Function(Map<String, dynamic>) fromJson) {
+    final v = this;
+    if (v is! List) return <T>[];
+    return v
+        .whereType<Map<String, dynamic>>()
+        .map(fromJson)
+        .toList(growable: false);
+  }
+
+  /// 解析字符串数组：非 List 返回空数组，只保留 String 元素。
+  List<String> parseStrList() {
+    final v = this;
+    if (v is! List) return <String>[];
+    return v.whereType<String>().toList(growable: false);
+  }
+
+  /// 解析 int 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
+  List<int> parseIntList() {
+    final v = this;
+    if (v is! List) return <int>[];
+    return v.map(_asIntOrNull).whereType<int>().toList(growable: false);
+  }
+
+  /// 解析 double 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
+  List<double> parseDoubleList() {
+    final v = this;
+    if (v is! List) return <double>[];
+    return v.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
+  }
+
+  /// 转 Map：非 Map 返回空 Map；兼容 JSON 字符串与数组（同 [JsonParse.map]）。
+  Map<String, dynamic> parseMap() => JsonParse.map(this);
+
+  /// 转字符串：null -> ''，其余调用 toString()。
+  String toStr() => this?.toString() ?? '';
+
+  /// 转 int：num 直接转，数字字符串尝试 parse，null 或其它返回 0（绝不 null）。
+  int toInt() => _asIntOrNull(this) ?? 0;
+
+  /// 转 double：num 直接转，数字字符串尝试 parse，null 或其它返回 0（绝不 null）。
+  double toDouble() => _asDoubleOrNull(this) ?? 0;
+
+  /// 转 bool：bool 直接返回；'true'/'1' 为 true；null 或其它返回 false（绝不 null）。
+  bool toBool() => JsonParse.toBool(this);
+}
+
+/// JSON 解析静态工具类（能力同 [JsonExt]）。
+///
+/// 专供接收者静态类型为 `dynamic` 的场景（如 `json['key']`）使用——
+/// 扩展方法无法作用于 dynamic，此时请用本类。
+class JsonParse {
+  JsonParse._();
+
+  /// 解析对象数组：非 List 返回空数组，只保留 Map 元素并用 [fromJson] 转换。
+  static List<T> list<T>(
+    dynamic value,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
+    if (value is! List) return <T>[];
+    return value
+        .whereType<Map<String, dynamic>>()
+        .map(fromJson)
+        .toList(growable: false);
+  }
+
+  /// 解析字符串数组：非 List 返回空数组，只保留 String 元素。
+  static List<String> strList(dynamic value) {
+    if (value is! List) return <String>[];
+    return value.whereType<String>().toList(growable: false);
+  }
+
+  /// 解析 int 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
+  static List<int> intList(dynamic value) {
+    if (value is! List) return <int>[];
+    return value.map(_asIntOrNull).whereType<int>().toList(growable: false);
+  }
+
+  /// 解析 double 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
+  static List<double> doubleList(dynamic value) {
+    if (value is! List) return <double>[];
+    return value.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
+  }
+
+  /// 转 Map：非 Map 返回空 Map（绝不返回 null）。
+  ///
+  /// 兼容后端返回结构不稳定的情况：
+  ///   - Map：直接转换；
+  ///   - String：按 JSON 字符串先解码（decode 失败返回空 Map）；
+  ///   - List：取首元素后按上述规则再处理。
+  /// 说明：直接对 String/List 用 `json['Key']` 取索引会抛
+  /// "type 'String' is not a subtype of type 'int' of 'index'"。
+  static Map<String, dynamic> map(dynamic value) {
+    var v = value;
+    // 后端偶发把节点以 JSON 字符串形式返回，需先解码
+    if (v is String) v = _tryDecode(v);
+    // 后端偶发返回数组，取首元素
+    if (v is List) {
+      v = v.isNotEmpty ? v.first : null;
+      if (v is String) v = _tryDecode(v);
+    }
+    return v is Map ? Map<String, dynamic>.from(v) : <String, dynamic>{};
+  }
+
+  /// 转字符串：null -> ''，其余调用 toString()。
+  static String str(dynamic v) => v == null ? '' : v.toString();
+
+  /// 转 int：num 直接转，数字字符串尝试 parse，null 或其它返回 0（绝不 null）。
+  static int toInt(dynamic v) => _asIntOrNull(v) ?? 0;
+
+  /// 转 double：num 直接转，数字字符串尝试 parse，null 或其它返回 0（绝不 null）。
+  static double toDouble(dynamic v) => _asDoubleOrNull(v) ?? 0;
+
+  /// 转 bool：bool 直接返回；'true'/'1' 为 true；null 或其它返回 false（绝不 null）。
+  static bool toBool(dynamic v) {
+    if (v is bool) return v;
+    if (v is num) return v != 0;
+    if (v is String) {
+      final s = v.toLowerCase().trim();
+      return s == 'true' || s == '1' || s == 'x' || s == 'yes';
+    }
+    return false;
+  }
+}
+
+/// JSON 字符串解码辅助：解码失败返回 null（供 [JsonParse.map] 使用）。
+dynamic _tryDecode(String s) {
+  try {
+    return jsonDecode(s);
+  } catch (_) {
+    return null;
+  }
+}
+
+/// int 解析辅助：num 直接转，字符串尝试 parse，其余返回 null（供 whereType 过滤）。
+int? _asIntOrNull(dynamic e) {
+  if (e is int) return e;
+  if (e is num) return e.toInt();
+  if (e is String) return int.tryParse(e);
+  return null;
+}
+
+/// double 解析辅助：num 直接转，字符串尝试 parse，其余返回 null（供 whereType 过滤）。
+double? _asDoubleOrNull(dynamic e) {
+  if (e is double) return e;
+  if (e is num) return e.toDouble();
+  if (e is String) return double.tryParse(e);
+  return null;
+}

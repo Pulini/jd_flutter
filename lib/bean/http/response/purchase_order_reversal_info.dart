@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class PurchaseOrderReversalInfo{
   RxBool isSelect=false.obs;
@@ -43,23 +44,23 @@ class PurchaseOrderReversalInfo{
     this.reversalVoucher
   });
   PurchaseOrderReversalInfo.fromJson(dynamic json) {
-    materialCode = json['SATNR'];
-    materialName = json['MAKTX_YB'];
-    supplier = json['LIFNR'];
-    supplierName = json['NAME1'];
-    salesOrder = json['VBELN'];
-    materialDocumentNo = json['MBLNR'];
-    materialVoucherYear = json['MJAHR'];
-    materialVoucherItem = json['ZEILE'];
-    receiptQty = json['MENGE'];
-    unit = json['MEINS'];
-    purchaseOrder = json['EBELN'];
-    purchaseOrderLineItem = json['EBELP'];
-    postingDate = json['BUDAT'];
-    user = json['ZUSNAM'];
-    userNameCN = json['ZNAME_CN'];
-    userNameEN = json['ZNAME_EN'];
-    moveType = json['BWART'];
-    reversalVoucher = json['LFBNR'];
+    materialCode = JsonParse.str(json['SATNR']);
+    materialName = JsonParse.str(json['MAKTX_YB']);
+    supplier = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
+    salesOrder = JsonParse.str(json['VBELN']);
+    materialDocumentNo = JsonParse.str(json['MBLNR']);
+    materialVoucherYear = JsonParse.str(json['MJAHR']);
+    materialVoucherItem = JsonParse.str(json['ZEILE']);
+    receiptQty = JsonParse.toDouble(json['MENGE']);
+    unit = JsonParse.str(json['MEINS']);
+    purchaseOrder = JsonParse.str(json['EBELN']);
+    purchaseOrderLineItem = JsonParse.str(json['EBELP']);
+    postingDate = JsonParse.str(json['BUDAT']);
+    user = JsonParse.str(json['ZUSNAM']);
+    userNameCN = JsonParse.str(json['ZNAME_CN']);
+    userNameEN = JsonParse.str(json['ZNAME_EN']);
+    moveType = JsonParse.str(json['BWART']);
+    reversalVoucher = JsonParse.str(json['LFBNR']);
   }
 }

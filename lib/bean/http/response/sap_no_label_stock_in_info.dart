@@ -43,23 +43,23 @@ class SapNoLabelStockInInfo {
   });
 
   SapNoLabelStockInInfo.fromJson(dynamic json) {
-    dispatchNumber = json['DISPATCH_NO'];
-    dispatchLineNumber = json['DISPATCH_ITEM'];
-    dispatchDate = json['ERDAT'];
-    reportDate = json['ZZBGRQ'];
-    process = json['KTSCH'];
-    productionOrderNo = json['AUFNR'];
-    factoryNo = json['WERKS'];
-    typeBody = json['ZZXTNO'];
-    materialCode = json['MATNR'];
-    materialName = json['MAKTX'];
-    size = json['ZCM'];
-    dispatchQty = json['ENMNG'];
-    receivedQty = json['ENMNG_Y'];
-    reportQty = json['ENMNG_C'];
-    basicUnit = json['MEINS'];
-    palletNumber = json['ZFTRAYNO'];
-    labelNumber = json['BQID'];
+    dispatchNumber = JsonParse.str(json['DISPATCH_NO']);
+    dispatchLineNumber = JsonParse.str(json['DISPATCH_ITEM']);
+    dispatchDate = JsonParse.str(json['ERDAT']);
+    reportDate = JsonParse.str(json['ZZBGRQ']);
+    process = JsonParse.str(json['KTSCH']);
+    productionOrderNo = JsonParse.str(json['AUFNR']);
+    factoryNo = JsonParse.str(json['WERKS']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['MAKTX']);
+    size = JsonParse.str(json['ZCM']);
+    dispatchQty = JsonParse.toDouble(json['ENMNG']);
+    receivedQty = JsonParse.toDouble(json['ENMNG_Y']);
+    reportQty = JsonParse.toDouble(json['ENMNG_C']);
+    basicUnit = JsonParse.str(json['MEINS']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    labelNumber = JsonParse.str(json['BQID']);
     notReceivedQty= (reportQty ?? 0).sub(receivedQty ?? 0);
   }
 

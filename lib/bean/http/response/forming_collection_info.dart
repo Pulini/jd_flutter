@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 /// DeptID : "1036956"
 /// WorkCardInterID : "935122"
@@ -42,33 +43,23 @@ class FormingCollectionInfo {
   });
 
   FormingCollectionInfo.fromJson(dynamic json) {
-    deptID = json['DeptID'];
-    workCardInterID = json['WorkCardInterID'];
-    workCardNo = json['WorkCardNo'];
-    mapNumber = json['MapNumber'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    moID = json['MoID'];
-    mtoNo = json['MtoNo'];
-    productName = json['ProductName'];
-    color = json['Color'];
-    priorityLevel = json['PriorityLevel'];
-    isClose = json['IsClose'];
-    toDayPlanQty = json['ToDayPlanQty'];
-    toDayFinishQty = json['ToDayFinishQty'];
-    finishQtyTotal = json['FinishQtyTotal'];
-    entryFID = json['EntryFID'];
-    if (json['ScWorkCardSizeInfos'] != null) {
-      scWorkCardSizeInfos = [];
-      json['ScWorkCardSizeInfos'].forEach((v) {
-        scWorkCardSizeInfos?.add(ScWorkCardSizeInfos.fromJson(v));
-      });
-    }
-    if (json['SizeRelations'] != null) {
-      sizeRelations = [];
-      json['SizeRelations'].forEach((v) {
-        sizeRelations?.add(SizeRelations.fromJson(v));
-      });
-    }
+    deptID = JsonParse.str(json['DeptID']);
+    workCardInterID = JsonParse.str(json['WorkCardInterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    mapNumber = JsonParse.str(json['MapNumber']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    moID = JsonParse.str(json['MoID']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    productName = JsonParse.str(json['ProductName']);
+    color = JsonParse.str(json['Color']);
+    priorityLevel = JsonParse.str(json['PriorityLevel']);
+    isClose = JsonParse.toBool(json['IsClose']);
+    toDayPlanQty = JsonParse.toDouble(json['ToDayPlanQty']);
+    toDayFinishQty = JsonParse.toDouble(json['ToDayFinishQty']);
+    finishQtyTotal = JsonParse.toDouble(json['FinishQtyTotal']);
+    entryFID = JsonParse.str(json['EntryFID']);
+    scWorkCardSizeInfos = JsonParse.list(json['ScWorkCardSizeInfos'], ScWorkCardSizeInfos.fromJson);
+    sizeRelations = JsonParse.list(json['SizeRelations'], SizeRelations.fromJson);
   }
   String? deptID;
   String? workCardInterID;
@@ -128,8 +119,8 @@ class SizeRelations {
       this.barCode,});
 
   SizeRelations.fromJson(dynamic json) {
-    size = json['Size'];
-    barCode = json['BarCode'];
+    size = JsonParse.str(json['Size']);
+    barCode = JsonParse.str(json['BarCode']);
   }
   String? size;
   String? barCode;
@@ -156,10 +147,10 @@ class ScWorkCardSizeInfos {
       this.todayScannedQty,});
 
   ScWorkCardSizeInfos.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    scannedQty = json['ScannedQty'];
-    todayScannedQty = json['TodayScannedQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    scannedQty = JsonParse.toDouble(json['ScannedQty']);
+    todayScannedQty = JsonParse.toDouble(json['TodayScannedQty']);
   }
   String? size;
   double? qty;

@@ -33,19 +33,19 @@ class SapSalesShipmentInfo {
   });
 
   SapSalesShipmentInfo.fromJson(dynamic json) {
-    factory = json['WERKS'];
-    instructionNo = json['ZVBELN_ORI'];
-    typeBody = json['ZZXTNO'];
-    saleOrder = json['VBELN'];
-    deliveryDate = json['EDATU'];
-    size = json['SIZE1'];
-    materialCode = json['MATNR'];
-    materialName = json['MAKTX'];
-    orderQty = json['KWMENG'];
+    factory = JsonParse.str(json['WERKS']);
+    instructionNo = JsonParse.str(json['ZVBELN_ORI']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    saleOrder = JsonParse.str(json['VBELN']);
+    deliveryDate = JsonParse.str(json['EDATU']);
+    size = JsonParse.str(json['SIZE1']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['MAKTX']);
+    orderQty = JsonParse.toDouble(json['KWMENG']);
     deliveredQty = json['LFIMG'].toDouble();
     recordedQty = json['LFIMG_POSTED'].toDouble();
     undeliveredQty = json['LFIMG_REMAIN'].toDouble();
-    unit = json['MEINS'];
+    unit = JsonParse.str(json['MEINS']);
   }
 
   Map<String, dynamic> toJson() {

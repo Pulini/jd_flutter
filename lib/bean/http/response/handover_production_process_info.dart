@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class HandoverProductionProcessInfo {
   HandoverProductionProcessInfo({
     this.processFlowID,
@@ -5,8 +6,8 @@ class HandoverProductionProcessInfo {
   });
 
   HandoverProductionProcessInfo.fromJson(dynamic json) {
-    processFlowID = json['ProcessFlowID'];
-    processFlowName = json['ProcessFlowName'];
+    processFlowID = JsonParse.toInt(json['ProcessFlowID']);
+    processFlowName = JsonParse.str(json['ProcessFlowName']);
   }
 
   int? processFlowID; //制程ID

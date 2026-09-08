@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Photo : 2300
 // TypeAdd : true
 
@@ -8,8 +9,8 @@ class VisitPhotoBean {
       });
 
   VisitPhotoBean.fromJson(dynamic json) {
-    photo = json['Photo'];
-    typeAdd = json['TypeAdd'];
+    photo = JsonParse.str(json['Photo']);
+    typeAdd = JsonParse.str(json['TypeAdd']);
 
   }
   String? photo;

@@ -66,15 +66,15 @@ class QualityInspectionOrderInfo {
   });
 
   QualityInspectionOrderInfo.fromJson(dynamic json) {
-    workOrderNo = json['WORKORDERNO'];
-    instructionNo = json['INSTRUCTIONNO'];
-    customerPo = json['CUSTOMERPO'];
-    typeBody = json['TYPEBODY'];
-    inspectionDate = json['INSPECTIONDATE'];
-    inspector = json['INSPECTOR'];
-    abnormalQty = json['ABNORMALQTY'];
-    reInspectionQty = json['REINSPECTIONQTY'];
-    status = json['STATUS'];
+    workOrderNo = JsonParse.str(json['WORKORDERNO']);
+    instructionNo = JsonParse.str(json['INSTRUCTIONNO']);
+    customerPo = JsonParse.str(json['CUSTOMERPO']);
+    typeBody = JsonParse.str(json['TYPEBODY']);
+    inspectionDate = JsonParse.str(json['INSPECTIONDATE']);
+    inspector = JsonParse.str(json['INSPECTOR']);
+    abnormalQty = JsonParse.toInt(json['ABNORMALQTY']);
+    reInspectionQty = JsonParse.toInt(json['REINSPECTIONQTY']);
+    status = JsonParse.str(json['STATUS']);
   }
 
   Color getFlagColor() {
@@ -141,12 +141,12 @@ class QualityInspectionDetailInfo {
   });
 
   QualityInspectionDetailInfo.fromJson(dynamic json) {
-    workOrderNo = json['WORKORDERNO'];
-    instructionNo = json['INSTRUCTIONNO'];
-    typeBody = json['TYPEBODY'];
-    customerPo = json['CUSTOMERPO'];
-    inspectionUnit = json['INSPECTIONUNIT'];
-    totalQuantity = json['TOTALQUANTITY'];
+    workOrderNo = JsonParse.str(json['WORKORDERNO']);
+    instructionNo = JsonParse.str(json['INSTRUCTIONNO']);
+    typeBody = JsonParse.str(json['TYPEBODY']);
+    customerPo = JsonParse.str(json['CUSTOMERPO']);
+    inspectionUnit = JsonParse.str(json['INSPECTIONUNIT']);
+    totalQuantity = JsonParse.toDouble(json['TOTALQUANTITY']);
     abnormalRecords = [
       if (json['ABNORMALRECORDS'] != null)
         for (var v in json['ABNORMALRECORDS'])
@@ -296,7 +296,7 @@ class QualityInspectionReportInfo {
   });
 
   QualityInspectionReportInfo.fromJson(dynamic json) {
-    inspectionUnit = json['INSPECTIONUNIT'];
+    inspectionUnit = JsonParse.str(json['INSPECTIONUNIT']);
     abnormalRecords = [
       if (json['ABNORMALRECORDS'] != null)
         for (var j in json['ABNORMALRECORDS']) ReportOrderInfo.fromJson(j)
@@ -325,8 +325,8 @@ class ReportOrderInfo {
   });
 
   ReportOrderInfo.fromJson(dynamic json) {
-    workOrderNo = json['WORKORDERNO'];
-    lastModifyDate = json['LASTMODIFYDATE'];
+    workOrderNo = JsonParse.str(json['WORKORDERNO']);
+    lastModifyDate = JsonParse.str(json['LASTMODIFYDATE']);
     abnormalRecordsDetail = [
       if (json['ABNORMALRECORDSDETAIL'] != null)
         for (var j in json['ABNORMALRECORDSDETAIL'])

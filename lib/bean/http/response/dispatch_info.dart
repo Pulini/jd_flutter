@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // CardNo : "GXPG25196000/1"
 // // EmpID : 213708
 // // EmpNumber : "035783"
@@ -13,11 +14,11 @@ class DispatchInfo {
       this.qty,});
 
   DispatchInfo.fromJson(dynamic json) {
-    cardNo = json['CardNo'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    qty = json['Qty'];
+    cardNo = JsonParse.str(json['CardNo']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
   String? cardNo;
   int? empID;

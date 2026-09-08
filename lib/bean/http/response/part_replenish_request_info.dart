@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class PartInfo {
   PartInfo({this.partNumber, this.partName, this.sizeList});
 
   PartInfo.fromJson(dynamic json) {
-    partNumber = json['partNumber'];
-    partName = json['partName'];
-    partPicture = json['partPicture'];
+    partNumber = JsonParse.str(json['partNumber']);
+    partName = JsonParse.str(json['partName']);
+    partPicture = JsonParse.str(json['partPicture']);
     sizeList = [
       if (json['sizeList'] != null)
         for (final item in json['sizeList']) PartSizeInfo.fromJson(item)
@@ -36,7 +37,7 @@ class PartSizeInfo {
   PartSizeInfo({this.size, this.qty});
 
   PartSizeInfo.fromJson(dynamic json) {
-    size = json['size'];
+    size = JsonParse.str(json['size']);
     qty = json['qty']?.toDouble();
   }
 

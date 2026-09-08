@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 abstract class WorkerProductionDetail {
   int? level;
   int? empID;
@@ -35,25 +36,25 @@ class WorkerProductionDetailShow {
 
 class WorkerProductionDetailType1 extends WorkerProductionDetail {
   WorkerProductionDetailType1.fromJson(dynamic json) {
-    level = json['Flevel'];
-    empID = json['FEmpID'];
-    empNumber = json['FEmpNumber'];
-    interID = json['FInterID'];
-    billNO = json['FBillNO'];
-    billDate = json['FBillDate'];
-    organizeName = json['FOrganizeName'];
-    deptName = json['FDeptName'];
-    dispatchNO = json['FScmoNO'];
-    processFlowName = json['FProcessFlowName'];
-    itemNo = json['FItemNo'];
-    processNumber = json['FProcessNumber'];
-    processName = json['FProcessName'];
-    qty = json['FQty'];
-    price = json['FPrice'];
-    amount = json['FAmount'];
-    smallBillSubsidyPCT = json['FSmallBillSubsidyPCT'];
-    smallBillSubsidy = json['FSmallBillSubsidy'];
-    amountSum = json['FamountSum'];
+    level = JsonParse.toInt(json['Flevel']);
+    empID = JsonParse.toInt(json['FEmpID']);
+    empNumber = JsonParse.str(json['FEmpNumber']);
+    interID = JsonParse.toInt(json['FInterID']);
+    billNO = JsonParse.str(json['FBillNO']);
+    billDate = JsonParse.str(json['FBillDate']);
+    organizeName = JsonParse.str(json['FOrganizeName']);
+    deptName = JsonParse.str(json['FDeptName']);
+    dispatchNO = JsonParse.str(json['FScmoNO']);
+    processFlowName = JsonParse.str(json['FProcessFlowName']);
+    itemNo = JsonParse.str(json['FItemNo']);
+    processNumber = JsonParse.str(json['FProcessNumber']);
+    processName = JsonParse.str(json['FProcessName']);
+    qty = JsonParse.toDouble(json['FQty']);
+    price = JsonParse.toDouble(json['FPrice']);
+    amount = JsonParse.toDouble(json['FAmount']);
+    smallBillSubsidyPCT = JsonParse.toDouble(json['FSmallBillSubsidyPCT']);
+    smallBillSubsidy = JsonParse.toDouble(json['FSmallBillSubsidy']);
+    amountSum = JsonParse.toDouble(json['FamountSum']);
   }
 
   int? interID;
@@ -87,18 +88,18 @@ class WorkerProductionDetailType1 extends WorkerProductionDetail {
 
 class WorkerProductionDetailType2 extends WorkerProductionDetail {
   WorkerProductionDetailType2.fromJson(dynamic json) {
-    level = json['Flevel'];
-    empID = json['FEmpID'];
-    empNumber = json['FEmpNumber'];
-    itemNo = json['FItemNo'];
-    processNumber = json['FProcessNumber'];
-    processName = json['FProcessName'];
-    qty = json['FQty'];
-    price = json['FPrice'];
-    amount = json['FAmount'];
-    smallBillSubsidyPCT = json['FSmallBillSubsidyPCT'];
-    smallBillSubsidy = json['FSmallBillSubsidy'];
-    amountSum = json['FAmountSum'];
+    level = JsonParse.toInt(json['Flevel']);
+    empID = JsonParse.toInt(json['FEmpID']);
+    empNumber = JsonParse.str(json['FEmpNumber']);
+    itemNo = JsonParse.str(json['FItemNo']);
+    processNumber = JsonParse.str(json['FProcessNumber']);
+    processName = JsonParse.str(json['FProcessName']);
+    qty = JsonParse.toDouble(json['FQty']);
+    price = JsonParse.toDouble(json['FPrice']);
+    amount = JsonParse.toDouble(json['FAmount']);
+    smallBillSubsidyPCT = JsonParse.toDouble(json['FSmallBillSubsidyPCT']);
+    smallBillSubsidy = JsonParse.toDouble(json['FSmallBillSubsidy']);
+    amountSum = JsonParse.toDouble(json['FAmountSum']);
   }
 
   String? itemNo;
@@ -120,13 +121,13 @@ class WorkerProductionDetailType2 extends WorkerProductionDetail {
 
 class WorkerProductionDetailType3 extends WorkerProductionDetail {
   WorkerProductionDetailType3.fromJson(dynamic json) {
-    level = json['Flevel'];
-    empID = json['FEmpID'];
-    date = json['FDate'];
-    empNumber = json['FEmpNumber'];
-    empName = json['FEmpName'];
-    qty = json['FQty'];
-    amount = json['FAmount'];
+    level = JsonParse.toInt(json['Flevel']);
+    empID = JsonParse.toInt(json['FEmpID']);
+    date = JsonParse.str(json['FDate']);
+    empNumber = JsonParse.str(json['FEmpNumber']);
+    empName = JsonParse.str(json['FEmpName']);
+    qty = JsonParse.toDouble(json['FQty']);
+    amount = JsonParse.toDouble(json['FAmount']);
   }
 
   String? date;

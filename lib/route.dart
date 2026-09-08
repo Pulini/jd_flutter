@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/routes.dart';
+import 'package:jd_flutter/fun/dispatching/group_dispatch/group_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
@@ -8,6 +9,7 @@ import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_v
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_state.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/attendance_dashboard/attendance_dashboard_view.dart';
@@ -692,14 +694,14 @@ class RouteConfig {
   //部件派工标签管理
   static Routes partDispatchLabelManage = Routes(
     '/part_dispatch_label_manage',
-    200,
+    201,
     const PartDispatchLabelManagePage(),
   );
 
   //包装清单列表
   static Routes packOrderList = Routes(
     '/pack_order_list',
-    201,
+    202,
     const PackOrderListPage(),
   );
 
@@ -727,7 +729,7 @@ class RouteConfig {
   //部件标签打印
   static Routes partLabelPrintPage = Routes(
     '/part_label_print',
-    201,
+    202,
     const PartLabelPrintPage(),
   );
 
@@ -750,6 +752,7 @@ class RouteConfig {
     '/team_leader_assigns_tasks',
     202,
     const TeamLeaderAssignsTaskPage(),
+    // const GroupDispatchPage(),
   );
 
   //本地功能入口列表

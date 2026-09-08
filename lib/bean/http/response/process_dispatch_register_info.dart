@@ -11,18 +11,8 @@ class ProcessDispatchRegisterOrderInfo {
   });
 
   ProcessDispatchRegisterOrderInfo.fromJson(dynamic json) {
-    if (json['Barcode'] != null) {
-      barcode = [];
-      json['Barcode'].forEach((v) {
-        barcode?.add(Barcode.fromJson(v));
-      });
-    }
-    if (json['Info'] != null) {
-      info = [];
-      json['Info'].forEach((v) {
-        info?.add(Orders.fromJson(v));
-      });
-    }
+    barcode = JsonParse.list(json['Barcode'], Barcode.fromJson);
+    info = JsonParse.list(json['Info'], Orders.fromJson);
   }
 
   List<Barcode>? barcode;
@@ -81,23 +71,23 @@ class Orders {
   });
 
   Orders.fromJson(dynamic json) {
-    deptName = json['DeptName'];
-    unit = json['Unit'];
-    factoryType = json['FactoryType'];
-    partName = json['PartName'];
-    processName = json['ProcessName'];
-    instructions = json['Mtono'];
-    fid = json['FID'];
-    size = json['Size'];
-    qty = json['Qty'];
-    boxCapacity = json['BoxCapacity'];
-    mustQty = json['MustQty'];
-    dayMustQty = json['DayMustQty'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    checked = json['Checked'];
-    created = json['Created'];
+    deptName = JsonParse.str(json['DeptName']);
+    unit = JsonParse.str(json['Unit']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    partName = JsonParse.str(json['PartName']);
+    processName = JsonParse.str(json['ProcessName']);
+    instructions = JsonParse.str(json['Mtono']);
+    fid = JsonParse.toInt(json['FID']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    boxCapacity = JsonParse.toDouble(json['BoxCapacity']);
+    mustQty = JsonParse.toDouble(json['MustQty']);
+    dayMustQty = JsonParse.toDouble(json['DayMustQty']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    checked = JsonParse.toBool(json['Checked']);
+    created = JsonParse.toBool(json['Created']);
   }
 
   String? deptName;
@@ -186,31 +176,26 @@ class Barcode {
   });
 
   Barcode.fromJson(dynamic json) {
-    rowID = json['RowID'];
-    col = json['Col'];
-    barCode = json['BarCode'];
-    partName = json['PartName'];
-    fBillInterID = json['FBillInterID'];
-    fProcessOutputEntryFID = json['FProcessOutputEntryFID'];
+    rowID = JsonParse.toInt(json['RowID']);
+    col = JsonParse.toInt(json['Col']);
+    barCode = JsonParse.str(json['BarCode']);
+    partName = JsonParse.str(json['PartName']);
+    fBillInterID = JsonParse.toInt(json['FBillInterID']);
+    fProcessOutputEntryFID = JsonParse.toInt(json['FProcessOutputEntryFID']);
 
-    size = json['Size'];
-    mustQty = json['MustQty'];
-    qty = json['Qty'];
-    printTimes = json['PrintTimes'];
-    processName = json['ProcessName'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(Items.fromJson(v));
-      });
-    }
-    unit = json['Unit'];
-    reportTime = json['ReportTime'];
-    deptName = json['DeptName'];
-    instructions = json['Mtono'];
+    size = JsonParse.str(json['Size']);
+    mustQty = JsonParse.toDouble(json['MustQty']);
+    qty = JsonParse.toDouble(json['Qty']);
+    printTimes = JsonParse.toInt(json['PrintTimes']);
+    processName = JsonParse.str(json['ProcessName']);
+    empID = JsonParse.str(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    items = JsonParse.list(json['Items'], Items.fromJson);
+    unit = JsonParse.str(json['Unit']);
+    reportTime = JsonParse.str(json['ReportTime']);
+    deptName = JsonParse.str(json['DeptName']);
+    instructions = JsonParse.str(json['Mtono']);
   }
 
   bool isSelected = false;
@@ -284,10 +269,10 @@ class Items {
   });
 
   Items.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    instructions = json['Mtono'];
-    instructionMustQty = json['MtonoMustQty'];
-    qty = json['Qty'];
+    processName = JsonParse.str(json['ProcessName']);
+    instructions = JsonParse.str(json['Mtono']);
+    instructionMustQty = JsonParse.toDouble(json['MtonoMustQty']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
 
   String? processName;
@@ -341,21 +326,21 @@ class ProcessDispatchLabelInfo {
   });
 
   ProcessDispatchLabelInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    factoryType = json['FactoryType'];
-    processNumber = json['ProcessNumber'];
-    processName = json['ProcessName'];
-    instructions = json['Mtono'];
-    id = json['FID'];
-    size = json['Size'];
-    boxCapacity = json['BoxCapacity'];
-    finishQty = json['FinishQty'];
-    qty = json['Qty'];
-    billInterID = json['BillInterID'];
-    billEntryID = json['BillEntryID'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
+    barCode = JsonParse.str(json['BarCode']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    processName = JsonParse.str(json['ProcessName']);
+    instructions = JsonParse.str(json['Mtono']);
+    id = JsonParse.toInt(json['FID']);
+    size = JsonParse.str(json['Size']);
+    boxCapacity = JsonParse.toDouble(json['BoxCapacity']);
+    finishQty = JsonParse.toDouble(json['FinishQty']);
+    qty = JsonParse.toDouble(json['Qty']);
+    billInterID = JsonParse.toInt(json['BillInterID']);
+    billEntryID = JsonParse.toInt(json['BillEntryID']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
   }
   RxBool isReported = false.obs;
   RxBool isSelected = false.obs;

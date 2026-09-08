@@ -308,14 +308,14 @@ class WorkshopPlanningReportInfo {
   });
 
   WorkshopPlanningReportInfo.fromJson(dynamic json) {
-    date = json['Date'];
+    date = JsonParse.str(json['Date']);
     finishQty = json['FinishQty'].toString().toDoubleTry();
-    groupPayInterID = json['GroupPayInterID'];
-    materialName = json['MaterialName'];
-    number = json['Number'];
-    outputInterID = json['OutputInterID'];
-    planTrackingNumber = json['PlanTrackingNumber'];
-    processName = json['ProcessName'];
+    groupPayInterID = JsonParse.toInt(json['GroupPayInterID']);
+    materialName = JsonParse.str(json['MaterialName']);
+    number = JsonParse.str(json['Number']);
+    outputInterID = JsonParse.toInt(json['OutputInterID']);
+    planTrackingNumber = JsonParse.str(json['PlanTrackingNumber']);
+    processName = JsonParse.str(json['ProcessName']);
   }
 }
 //    val CreatorID: Int,
@@ -352,23 +352,23 @@ class WorkshopPlanningReportDetailInfo {
   });
 
   WorkshopPlanningReportDetailInfo.fromJson(dynamic json) {
-    creatorID = json['CreatorID'];
-    date = json['Date'];
-    departmentID = json['DepartmentID'];
+    creatorID = JsonParse.toInt(json['CreatorID']);
+    date = JsonParse.str(json['Date']);
+    departmentID = JsonParse.toInt(json['DepartmentID']);
     empInfoReqList = [
       if (json['EmpInfoReqList'] != null)
         for (var item in json['EmpInfoReqList'])
           WorkshopPlanningWorkerInfo.fromJson(item)
     ];
-    groupPayInterID = json['GroupPayInterID'];
-    id = json['ID'];
-    isGroupWork = json['IsGroupWork'];
+    groupPayInterID = JsonParse.toInt(json['GroupPayInterID']);
+    id = JsonParse.toInt(json['ID']);
+    isGroupWork = JsonParse.toBool(json['IsGroupWork']);
     sizeLists = [
       if (json['SizeLists'] != null)
         for (var item in json['SizeLists'])
           WorkshopPlanningSizeInfo.fromJson(item)
     ];
-    workShift = json['WorkShift'];
+    workShift = JsonParse.toInt(json['WorkShift']);
   }
 }
 
@@ -386,10 +386,10 @@ class WorkshopPlanningWorkersCache {
   });
 
   WorkshopPlanningWorkersCache.fromJson(dynamic json) {
-    id = json['id'];
-    departmentID = json['departmentID'];
-    day = json['day'];
-    data = json['data'];
+    id = JsonParse.toInt(json['id']);
+    departmentID = JsonParse.str(json['departmentID']);
+    day = JsonParse.str(json['day']);
+    data = JsonParse.str(json['data']);
   }
 
   Map<String, dynamic> toJson() {
@@ -480,9 +480,9 @@ class WorkshopPlanningMaterialInfo{
     this.name,
   });
   WorkshopPlanningMaterialInfo.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    number = json['Number'];
-    name = json['Name'];
+    itemID = JsonParse.toInt(json['ItemID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -520,9 +520,9 @@ class WorkshopPlanningLastProcessInfo{
     this.price,
   });
   WorkshopPlanningLastProcessInfo.fromJson(dynamic json) {
-    planTrackingNumber = json['PlanTrackingNumber'];
-    id = json['ID'];
-    size = json['Size'];
+    planTrackingNumber = JsonParse.str(json['PlanTrackingNumber']);
+    id = JsonParse.str(json['ID']);
+    size = JsonParse.str(json['Size']);
     processQty = json['ProcessQty'].toString().toDoubleTry();
     finishQty = json['FinishQty'].toString().toDoubleTry();
     unFinishQty = json['UnFinishQty'].toString().toDoubleTry();
@@ -556,9 +556,9 @@ class LastProcessGroupPayInfo{
     this.finishQty,
   });
   LastProcessGroupPayInfo.fromJson(dynamic json) {
-    groupPayInterID = json['GroupPayInterID'];
-    number = json['Number'];
-    date = json['Date'];
+    groupPayInterID = JsonParse.toInt(json['GroupPayInterID']);
+    number = JsonParse.str(json['Number']);
+    date = JsonParse.str(json['Date']);
     finishQty = json['FinishQty'].toString().toDoubleTry();
   }
   Map<String, dynamic> toJson() {
@@ -607,14 +607,14 @@ class LastProcessReportInfo{
     this.materialInfoReqList,
   });
   LastProcessReportInfo.fromJson(dynamic json) {
-    creatorID = json['CreatorID'];
-    date = json['Date'];
-    departmentID = json['DepartmentID'];
-    groupPayInterID = json['GroupPayInterID'];
-    id = json['ID'];
-    isGroupWork = json['IsGroupWork'];
-    allowEdit = json['AllowEdit'];
-    workShift = json['WorkShift'];
+    creatorID = JsonParse.toInt(json['CreatorID']);
+    date = JsonParse.str(json['Date']);
+    departmentID = JsonParse.toInt(json['DepartmentID']);
+    groupPayInterID = JsonParse.toInt(json['GroupPayInterID']);
+    id = JsonParse.toInt(json['ID']);
+    isGroupWork = JsonParse.toBool(json['IsGroupWork']);
+    allowEdit = JsonParse.toBool(json['AllowEdit']);
+    workShift = JsonParse.toInt(json['WorkShift']);
     sizeList=[
       if(json['SizeList']!=null)
         for (var v in json['SizeList']) WorkshopPlanningLastProcessInfo.fromJson(v)
@@ -646,9 +646,9 @@ class LastProcessReportMaterialInfo{
     this.used,
   });
   LastProcessReportMaterialInfo.fromJson(dynamic json) {
-    materialID = json['MaterialID'];
-    number = json['Number'];
-    name = json['Name'];
-    used = json['Used'];
+    materialID = JsonParse.toInt(json['MaterialID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    used = JsonParse.toBool(json['Used']);
   }
 }

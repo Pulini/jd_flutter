@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Items : [{"BarCode":"L24000000000004","NormalBarCodeList":["20488670007940/007","20488670007941/008"]}]
 
 class CheckCodeInfo {
@@ -6,12 +7,7 @@ class CheckCodeInfo {
   });
 
   CheckCodeInfo.fromJson(dynamic json) {
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(Items.fromJson(v));
-      });
-    }
+    items = JsonParse.list(json['Items'], Items.fromJson);
   }
 
   List<Items>? items;
@@ -39,10 +35,8 @@ class Items {
   });
 
   Items.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    normalBarCodeList = json['NormalBarCodeList'] != null
-        ? json['NormalBarCodeList'].cast<String>()
-        : [];
+    barCode = JsonParse.str(json['BarCode']);
+    normalBarCodeList = JsonParse.strList(json['NormalBarCodeList']);
   }
 
   String? barCode;

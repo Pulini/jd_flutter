@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class LarkUserTokenInfo {
   int? code;
   String? tokenType;
@@ -8,21 +9,21 @@ class LarkUserTokenInfo {
   int time = 0;
 
   LarkUserTokenInfo.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    tokenType = json['token_type'];
-    accessToken = json['access_token'];
-    expiresIn = json['expires_in'];
-    scope = json['scope'];
+    code = JsonParse.toInt(json['code']);
+    tokenType = JsonParse.str(json['token_type']);
+    accessToken = JsonParse.str(json['access_token']);
+    expiresIn = JsonParse.toInt(json['expires_in']);
+    scope = JsonParse.str(json['scope']);
     time = DateTime.now().millisecondsSinceEpoch;
   }
 
   LarkUserTokenInfo.fromSaveJson(Map<String, dynamic> json) {
-    code = json['code'];
-    tokenType = json['token_type'];
-    accessToken = json['access_token'];
-    expiresIn = json['expires_in'];
-    scope = json['scope'];
-    time = json['time'];
+    code = JsonParse.toInt(json['code']);
+    tokenType = JsonParse.str(json['token_type']);
+    accessToken = JsonParse.str(json['access_token']);
+    expiresIn = JsonParse.toInt(json['expires_in']);
+    scope = JsonParse.str(json['scope']);
+    time = JsonParse.toInt(json['time']);
   }
 
   bool isTimeout() {
@@ -54,9 +55,10 @@ class LarkSearchResultInfo {
   String? msg;
 
   LarkSearchResultInfo.fromJson(dynamic json) {
-    code = json['code'];
+    code = JsonParse.toInt(json['code']);
+    // data 是 dynamic（可能是对象/数组/字符串），不能转 String，否则会破坏结构
     data = json['data'];
-    msg = json['msg'];
+    msg = JsonParse.str(json['msg']);
   }
 }
 
@@ -69,13 +71,8 @@ class LarkWikiSearchDataInfo {
   List<LarkWikiSearchItemInfo>? items;
 
   LarkWikiSearchDataInfo.fromJson(dynamic json) {
-    hasMore = json['has_more'];
-    if (json['items'] != null) {
-      items = [];
-      json['items'].forEach((v) {
-        items?.add(LarkWikiSearchItemInfo.fromJson(v));
-      });
-    }
+    hasMore = JsonParse.toBool(json['has_more']);
+    items = JsonParse.list(json['items'], LarkWikiSearchItemInfo.fromJson);
   }
 }
 
@@ -100,14 +97,14 @@ class LarkWikiSearchItemInfo {
   String? url;
 
   LarkWikiSearchItemInfo.fromJson(dynamic json) {
-    nodeId = json['node_id'];
-    objToken = json['obj_token'];
-    objType = json['obj_type'];
-    parentId = json['parent_id'];
-    sortId = json['sort_id'];
-    spaceId = json['space_id'];
-    title = json['title'];
-    url = json['url'];
+    nodeId = JsonParse.str(json['node_id']);
+    objToken = JsonParse.str(json['obj_token']);
+    objType = JsonParse.toInt(json['obj_type']);
+    parentId = JsonParse.str(json['parent_id']);
+    sortId = JsonParse.toInt(json['sort_id']);
+    spaceId = JsonParse.str(json['space_id']);
+    title = JsonParse.str(json['title']);
+    url = JsonParse.str(json['url']);
   }
 }
 
@@ -120,14 +117,9 @@ class LarkCloudDocSearchInfo {
   int? total;
 
   LarkCloudDocSearchInfo.fromJson(dynamic json) {
-    if (json['docs_entities'] != null) {
-      docs = [];
-      json['docs_entities'].forEach((v) {
-        docs?.add(LarkCloudDocSearchItemInfo.fromJson(v));
-      });
-    }
-    hasMore = json['has_more'];
-    total = json['total'];
+    docs = JsonParse.list(json['docs_entities'], LarkCloudDocSearchItemInfo.fromJson);
+    hasMore = JsonParse.toBool(json['has_more']);
+    total = JsonParse.toInt(json['total']);
   }
 }
 
@@ -144,10 +136,10 @@ class LarkCloudDocSearchItemInfo {
   String? title;
 
   LarkCloudDocSearchItemInfo.fromJson(dynamic json) {
-    docsToken = json['docs_token'];
-    docsType = json['docs_type'];
-    ownerId = json['owner_id'];
-    title = json['title'];
+    docsToken = JsonParse.str(json['docs_token']);
+    docsType = JsonParse.str(json['docs_type']);
+    ownerId = JsonParse.str(json['owner_id']);
+    title = JsonParse.str(json['title']);
   }
 }
 
@@ -160,18 +152,8 @@ class LarkCloudDocFileInfo {
   List<LarkCloudDocFileFailedInfo>? failedList;
 
   LarkCloudDocFileInfo.fromJson(dynamic json) {
-    if (json['metas'] != null) {
-      metas = [];
-      json['metas'].forEach((v) {
-        metas?.add(LarkCloudDocFileMetasInfo.fromJson(v));
-      });
-    }
-    if (json['failed_list'] != null) {
-      failedList = [];
-      json['failed_list'].forEach((v) {
-        failedList?.add(LarkCloudDocFileFailedInfo.fromJson(v));
-      });
-    }
+    metas = JsonParse.list(json['metas'], LarkCloudDocFileMetasInfo.fromJson);
+    failedList = JsonParse.list(json['failed_list'], LarkCloudDocFileFailedInfo.fromJson);
   }
 }
 
@@ -198,15 +180,15 @@ class LarkCloudDocFileMetasInfo {
   String? secLabelName;
 
   LarkCloudDocFileMetasInfo.fromJson(dynamic json) {
-    docToken = json['doc_token'];
-    docType = json['doc_type'];
-    title = json['title'];
-    ownerId = json['owner_id'];
-    createTime = json['create_time'];
-    latestModifyUser = json['latest_modify_user'];
-    latestModifyTime = json['latest_modify_time'];
-    url = json['url'];
-    secLabelName = json['sec_label_name'];
+    docToken = JsonParse.str(json['doc_token']);
+    docType = JsonParse.str(json['doc_type']);
+    title = JsonParse.str(json['title']);
+    ownerId = JsonParse.str(json['owner_id']);
+    createTime = JsonParse.str(json['create_time']);
+    latestModifyUser = JsonParse.str(json['latest_modify_user']);
+    latestModifyTime = JsonParse.str(json['latest_modify_time']);
+    url = JsonParse.str(json['url']);
+    secLabelName = JsonParse.str(json['sec_label_name']);
   }
 }
 
@@ -219,8 +201,8 @@ class LarkCloudDocFileFailedInfo {
   int? code;
 
   LarkCloudDocFileFailedInfo.fromJson(dynamic json) {
-    token = json['token'];
-    code = json['code'];
+    token = JsonParse.str(json['token']);
+    code = JsonParse.toInt(json['code']);
   }
 }
 
@@ -255,20 +237,20 @@ class LarkUserInfo {
   String? employeeNo;
 
   LarkUserInfo.fromJson(dynamic json) {
-    name = json['name'];
-    enName = json['en_name'];
-    avatarUrl = json['avatar_url'];
-    avatarThumb = json['avatar_thumb'];
-    avatarMiddle = json['avatar_middle'];
-    avatarBig = json['avatar_big'];
-    openId = json['open_id'];
-    unionId = json['union_id'];
-    email = json['email'];
-    enterpriseEmail = json['enterprise_email'];
-    userId = json['user_id'];
-    mobile = json['mobile'];
-    tenantKey = json['tenant_key'];
-    employeeNo = json['employee_no'];
+    name = JsonParse.str(json['name']);
+    enName = JsonParse.str(json['en_name']);
+    avatarUrl = JsonParse.str(json['avatar_url']);
+    avatarThumb = JsonParse.str(json['avatar_thumb']);
+    avatarMiddle = JsonParse.str(json['avatar_middle']);
+    avatarBig = JsonParse.str(json['avatar_big']);
+    openId = JsonParse.str(json['open_id']);
+    unionId = JsonParse.str(json['union_id']);
+    email = JsonParse.str(json['email']);
+    enterpriseEmail = JsonParse.str(json['enterprise_email']);
+    userId = JsonParse.str(json['user_id']);
+    mobile = JsonParse.str(json['mobile']);
+    tenantKey = JsonParse.str(json['tenant_key']);
+    employeeNo = JsonParse.str(json['employee_no']);
   }
 
  Map toJson() => {

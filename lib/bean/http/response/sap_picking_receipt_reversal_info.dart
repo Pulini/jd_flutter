@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PickingReceiptReversalInfo {
   PickingReceiptReversalHeadInfo? head; //工单头  HEAD
   List<PickingReceiptReversalItemInfo>? item; //工单明细  ITEM
@@ -11,12 +12,7 @@ class PickingReceiptReversalInfo {
     head = json['HEAD'] != null
         ? PickingReceiptReversalHeadInfo.fromJson(json['HEAD'])
         : null;
-    if (json['ITEM'] != null) {
-      item = [];
-      json['ITEM'].forEach((v) {
-        item?.add(PickingReceiptReversalItemInfo.fromJson(v));
-      });
-    }
+    item = JsonParse.list(json['ITEM'], PickingReceiptReversalItemInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -45,10 +41,10 @@ class PickingReceiptReversalHeadInfo {
   });
 
   PickingReceiptReversalHeadInfo.fromJson(dynamic json) {
-    type = json['ZTYPE'];
-    yearWriteOff = json['MJAHR'];
-    date = json['DATE'];
-    materialVoucherNo = json['MBLNR'];
+    type = JsonParse.str(json['ZTYPE']);
+    yearWriteOff = JsonParse.str(json['MJAHR']);
+    date = JsonParse.str(json['DATE']);
+    materialVoucherNo = JsonParse.str(json['MBLNR']);
   }
 
   Map<String, dynamic> toJson() {
@@ -71,13 +67,8 @@ class PickingReceiptReversalItemInfo {
   });
 
   PickingReceiptReversalItemInfo.fromJson(dynamic json) {
-    order = json['DISPATCH_NO'];
-    if (json['ITEM'] != null) {
-      subItem = [];
-      json['ITEM'].forEach((v) {
-        subItem?.add(PickingReceiptReversalSubItemInfo.fromJson(v));
-      });
-    }
+    order = JsonParse.str(json['DISPATCH_NO']);
+    subItem = JsonParse.list(json['ITEM'], PickingReceiptReversalSubItemInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -116,16 +107,16 @@ class PickingReceiptReversalSubItemInfo {
   });
 
   PickingReceiptReversalSubItemInfo.fromJson(dynamic json) {
-    name = json['MAKTX'];
-    unit = json['MEINS'];
-    factory = json['WERKS'];
-    location = json['LGORT'];
-    locationName = json['LGOBE'];
-    quantity = json['MENGE'];
-    warehouseLocation = json['ZLOCAL'];
-    quantity2 = json['MENGE_L'];
-    materialName = json['MATNR'];
-    palletNo = json['ZFTRAYNO'];
+    name = JsonParse.str(json['MAKTX']);
+    unit = JsonParse.str(json['MEINS']);
+    factory = JsonParse.str(json['WERKS']);
+    location = JsonParse.str(json['LGORT']);
+    locationName = JsonParse.str(json['LGOBE']);
+    quantity = JsonParse.toDouble(json['MENGE']);
+    warehouseLocation = JsonParse.str(json['ZLOCAL']);
+    quantity2 = JsonParse.toDouble(json['MENGE_L']);
+    materialName = JsonParse.str(json['MATNR']);
+    palletNo = JsonParse.str(json['ZFTRAYNO']);
   }
 
   Map<String, dynamic> toJson() {

@@ -3,6 +3,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../utils/web_api.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class MessageInfo {
   int? id;
@@ -28,8 +29,8 @@ class MessageInfo {
   }
 
   MessageInfo.fromJson(dynamic json) {
-    id = json['id'];
-    message = json['message'];
+    id = JsonParse.toInt(json['id']);
+    message = JsonParse.str(json['message']);
     doType = JPushDoType.fromString(json['doType'].toString());
     pushDate = DateTime.now().millisecondsSinceEpoch;
   }

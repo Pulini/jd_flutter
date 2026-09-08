@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Number : "F002240051"
 // InterID : 102526
 // Name : "海尔冰柜"
@@ -26,18 +27,18 @@ class PropertyInfo {
       this.visitedNum,});
 
   PropertyInfo.fromJson(dynamic json) {
-    number = json['Number'];
-    interID = json['InterID'];
-    name = json['Name'];
-    custodianName = json['CustodianName'];
-    buyDate = json['BuyDate'];
-    writeDate = json['WriteDate'];
-    address = json['Address'];
-    processStatus = json['ProcessStatus'];
-    labelPrintQty = json['LabelPrintQty'];
-    sapCgOrderNo = json['SAPCgOrderNo'];
-    sapInvoiceNo = json['SAPINVOICENO'];
-    visitedNum = json['VisitedNum'];
+    number = JsonParse.str(json['Number']);
+    interID = JsonParse.toInt(json['InterID']);
+    name = JsonParse.str(json['Name']);
+    custodianName = JsonParse.str(json['CustodianName']);
+    buyDate = JsonParse.str(json['BuyDate']);
+    writeDate = JsonParse.str(json['WriteDate']);
+    address = JsonParse.str(json['Address']);
+    processStatus = JsonParse.str(json['ProcessStatus']);
+    labelPrintQty = JsonParse.toInt(json['LabelPrintQty']);
+    sapCgOrderNo = JsonParse.str(json['SAPCgOrderNo']);
+    sapInvoiceNo = JsonParse.str(json['SAPINVOICENO']);
+    visitedNum = JsonParse.toInt(json['VisitedNum']);
   }
   bool isChecked=false;
   String? number;

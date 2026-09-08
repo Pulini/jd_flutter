@@ -60,22 +60,22 @@ class SapPickingInfo {
   String? supplierName; //NAME1 供应商名称
 
   SapPickingInfo.fromJson(dynamic json) {
-    orderType = json['ZTYPE'];
-    noticeNo = json['NOTICE_NO'];
-    dispatchNumber = json['DISPATCH_NO'];
-    instructionNo = json['ZVBELN_ORI'];
-    typeBody = json['ZZGCXT'];
-    pickingOrderNo = json['ZWOFNR'];
-    machineNumber = json['ZZPGJT'];
-    orderDate = json['ERDAT'];
-    process = json['KTSCH'];
-    factoryNO = json['WERKS'];
-    location = json['LGORT'];
-    warehouse = json['LGOBE'];
-    picker = json['USNAM'];
-    purchaseOrder = json['EBELN'];
-    supplierID = json['LIFNR'];
-    supplierName = json['NAME1'];
+    orderType = JsonParse.str(json['ZTYPE']);
+    noticeNo = JsonParse.str(json['NOTICE_NO']);
+    dispatchNumber = JsonParse.str(json['DISPATCH_NO']);
+    instructionNo = JsonParse.str(json['ZVBELN_ORI']);
+    typeBody = JsonParse.str(json['ZZGCXT']);
+    pickingOrderNo = JsonParse.str(json['ZWOFNR']);
+    machineNumber = JsonParse.str(json['ZZPGJT']);
+    orderDate = JsonParse.str(json['ERDAT']);
+    process = JsonParse.str(json['KTSCH']);
+    factoryNO = JsonParse.str(json['WERKS']);
+    location = JsonParse.str(json['LGORT']);
+    warehouse = JsonParse.str(json['LGOBE']);
+    picker = JsonParse.str(json['USNAM']);
+    purchaseOrder = JsonParse.str(json['EBELN']);
+    supplierID = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
   }
 
   Map<String, dynamic> toJson() {
@@ -125,11 +125,11 @@ class SapPickingBarCodeInfo {
   String? unitName;
 
   SapPickingBarCodeInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    qty = json['Qty'];
-    unitName = json['UnitName'];
+    barCode = JsonParse.str(json['BarCode']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    qty = JsonParse.toDouble(json['Qty']);
+    unitName = JsonParse.str(json['UnitName']);
   }
 
   Map<String, dynamic> toJson() {
@@ -155,24 +155,9 @@ class SapPickingDetailInfo {
   List<SapProductionPickingDetailDispatchInfo>? dispatch;
 
   SapPickingDetailInfo.fromJson(dynamic json) {
-    if (json['ORDER'] != null) {
-      order = [];
-      json['ORDER'].forEach((v) {
-        order?.add(SapProductionPickingDetailOrderInfo.fromJson(v));
-      });
-    }
-    if (json['PICK'] != null) {
-      labels = [];
-      json['PICK'].forEach((v) {
-        labels?.add(SapPickingDetailLabelInfo.fromJson(v));
-      });
-    }
-    if (json['DISPATCH'] != null) {
-      dispatch = [];
-      json['DISPATCH'].forEach((v) {
-        dispatch?.add(SapProductionPickingDetailDispatchInfo.fromJson(v));
-      });
-    }
+    order = JsonParse.list(json['ORDER'], SapProductionPickingDetailOrderInfo.fromJson);
+    labels = JsonParse.list(json['PICK'], SapPickingDetailLabelInfo.fromJson);
+    dispatch = JsonParse.list(json['DISPATCH'], SapProductionPickingDetailDispatchInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -285,41 +270,36 @@ class SapProductionPickingDetailOrderInfo {
   String? purchaseOrderLine; //代购订单行号  EBELP
 
   SapProductionPickingDetailOrderInfo.fromJson(dynamic json) {
-    orderType = json['ZTYPE'];
-    noticeNo = json['NOTICE_NO'];
-    noticeLineNo = json['NOTICE_ITEM'];
-    dispatchNumber = json['DISPATCH_NO'];
-    dispatchLineNumber = json['DISPATCH_ITEM'];
-    dispatchDate = json['DISPATCH_DATE'];
-    productionOrderNumber = json['AUFNR'];
-    machineNumber = json['ZZPGJT'];
-    factoryNumber = json['WERKS'];
-    location = json['LGORT'];
-    warehouse = json['LGOBE'];
-    process = json['KTSCH'];
-    typeBody = json['ZZXTNO'];
-    materialNumber = json['SATNR'];
-    materialName = json['MAKTX_S'];
-    size = json['ZCM'];
-    sizeMaterialNumber = json['MATNR'];
-    sizeMaterialName = json['MAKTX'];
-    beyondFlag = json['ZSFDL'];
-    demandQty = json['BDMNG'];
-    deliveryQty = json['ENMNG'];
-    lineStock = json['LABST'];
-    basicUnit = json['MEINS'];
-    commonUnit = json['AUSME'];
-    coefficient = json['ZCOEFFICIENT'];
-    instructionsNo = json['ZVBELN_ORI'];
-    productionOrderItemNumber = json['ZPOSNR_ORI'];
-    if (json['ITEM'] != null) {
-      recommend = [];
-      json['ITEM'].forEach((v) {
-        recommend?.add(RecommendedPositionInfo.fromJson(v));
-      });
-    }
-    purchaseOrder = json['EBELN'];
-    purchaseOrderLine = json['EBELP'];
+    orderType = JsonParse.str(json['ZTYPE']);
+    noticeNo = JsonParse.str(json['NOTICE_NO']);
+    noticeLineNo = JsonParse.str(json['NOTICE_ITEM']);
+    dispatchNumber = JsonParse.str(json['DISPATCH_NO']);
+    dispatchLineNumber = JsonParse.str(json['DISPATCH_ITEM']);
+    dispatchDate = JsonParse.str(json['DISPATCH_DATE']);
+    productionOrderNumber = JsonParse.str(json['AUFNR']);
+    machineNumber = JsonParse.str(json['ZZPGJT']);
+    factoryNumber = JsonParse.str(json['WERKS']);
+    location = JsonParse.str(json['LGORT']);
+    warehouse = JsonParse.str(json['LGOBE']);
+    process = JsonParse.str(json['KTSCH']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    materialNumber = JsonParse.str(json['SATNR']);
+    materialName = JsonParse.str(json['MAKTX_S']);
+    size = JsonParse.str(json['ZCM']);
+    sizeMaterialNumber = JsonParse.str(json['MATNR']);
+    sizeMaterialName = JsonParse.str(json['MAKTX']);
+    beyondFlag = JsonParse.str(json['ZSFDL']);
+    demandQty = JsonParse.toDouble(json['BDMNG']);
+    deliveryQty = JsonParse.toDouble(json['ENMNG']);
+    lineStock = JsonParse.toDouble(json['LABST']);
+    basicUnit = JsonParse.str(json['MEINS']);
+    commonUnit = JsonParse.str(json['AUSME']);
+    coefficient = JsonParse.toDouble(json['ZCOEFFICIENT']);
+    instructionsNo = JsonParse.str(json['ZVBELN_ORI']);
+    productionOrderItemNumber = JsonParse.str(json['ZPOSNR_ORI']);
+    recommend = JsonParse.list(json['ITEM'], RecommendedPositionInfo.fromJson);
+    purchaseOrder = JsonParse.str(json['EBELN']);
+    purchaseOrderLine = JsonParse.str(json['EBELP']);
   }
 
   Map<String, dynamic> toJson() {
@@ -371,10 +351,10 @@ class RecommendedPositionInfo {
   });
 
   RecommendedPositionInfo.fromJson(dynamic json) {
-    warehouse = json['ZWH'];
-    warehouseLocation = json['ZLOCAL'];
-    palletNo = json['ZFTRAYNO'];
-    qty = json['ZBASEQTY'];
+    warehouse = JsonParse.str(json['ZWH']);
+    warehouseLocation = JsonParse.str(json['ZLOCAL']);
+    palletNo = JsonParse.str(json['ZFTRAYNO']);
+    qty = JsonParse.str(json['ZBASEQTY']);
   }
 
   Map<String, dynamic> toJson() {
@@ -414,14 +394,14 @@ class SapProductionPickingDetailDispatchInfo {
   String? purchaseOrderLineNumber; //合同行号  EBELP
 
   SapProductionPickingDetailDispatchInfo.fromJson(dynamic json) {
-    instructionNo = json['ZVBELN_ORI'];
-    orderNumber = json['DISPATCH_NO'];
-    dispatchLineNumber = json['DISPATCH_ITEM'];
-    dispatchDate = json['DISPATCH_DATE'];
-    productionOrderNo = json['AUFNR'];
-    machineNumber = json['ZZPGJT'];
-    purchaseOrderNumber = json['EBELN'];
-    purchaseOrderLineNumber = json['EBELP'];
+    instructionNo = JsonParse.str(json['ZVBELN_ORI']);
+    orderNumber = JsonParse.str(json['DISPATCH_NO']);
+    dispatchLineNumber = JsonParse.str(json['DISPATCH_ITEM']);
+    dispatchDate = JsonParse.str(json['DISPATCH_DATE']);
+    productionOrderNo = JsonParse.str(json['AUFNR']);
+    machineNumber = JsonParse.str(json['ZZPGJT']);
+    purchaseOrderNumber = JsonParse.str(json['EBELN']);
+    purchaseOrderLineNumber = JsonParse.str(json['EBELP']);
   }
 
   Map<String, dynamic> toJson() {
@@ -479,23 +459,23 @@ class SapPickingDetailLabelInfo {
   String? pickingType; //ZBQLY  领料类型 B0、整箱领料 B1、拆箱领料 B2、不领料
 
   SapPickingDetailLabelInfo.fromJson(dynamic json) {
-    factory = json['WERKS'];
-    palletNumber = json['ZFTRAYNO'];
-    labelCode = json['BQID'];
-    location = json['LGORT'];
-    warehouseLocation = json['ZLOCAL'];
-    sizeMaterialCode = json['MATNR'];
-    materialName = json['MAKTX_S'];
-    materialCode = json['SATNR'];
-    batchNumber = json['CHARG'];
-    salesOrderNo = json['KDAUF'];
-    salesOrderLineItem = json['KDPOS'];
-    instructionsNo = json['ZZVBELN'];
-    typeBody = json['ZZXTNO'];
-    size = json['SIZE1'];
-    quantity = json['MENGE'];
-    unit = json['MEINS'];
-    pickingType = json['ZBQLY'];
+    factory = JsonParse.str(json['WERKS']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    labelCode = JsonParse.str(json['BQID']);
+    location = JsonParse.str(json['LGORT']);
+    warehouseLocation = JsonParse.str(json['ZLOCAL']);
+    sizeMaterialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['MAKTX_S']);
+    materialCode = JsonParse.str(json['SATNR']);
+    batchNumber = JsonParse.str(json['CHARG']);
+    salesOrderNo = JsonParse.str(json['KDAUF']);
+    salesOrderLineItem = JsonParse.str(json['KDPOS']);
+    instructionsNo = JsonParse.str(json['ZZVBELN']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    size = JsonParse.str(json['SIZE1']);
+    quantity = JsonParse.toDouble(json['MENGE']);
+    unit = JsonParse.str(json['MEINS']);
+    pickingType = JsonParse.str(json['ZBQLY']);
   }
 
   Map<String, dynamic> toJson() {
@@ -600,24 +580,24 @@ class PalletDetailItem1Info {
   });
 
   PalletDetailItem1Info.fromJson(dynamic json) {
-    factoryNumber = json['WERKS'];
-    warehouseNumber = json['LGORT'];
-    warehouseName = json['LGOBE'];
-    location = json['ZLOCAL'];
-    palletNumber = json['ZFTRAYNO'];
-    labelNumber = json['BQID'];
-    materialNumber = json['SATNR'];
-    materialName = json['MAKTX1'];
-    sizeMaterialNumber = json['MATNR'];
-    sizeMaterialName = json['MAKTX'];
-    typeBody = json['ZZXTNO'];
-    size = json['SIZE1'];
-    instructionNo = json['ZVBELN_ORI'];
-    salesOrderNo = json['KDAUF'];
-    salesOrderLineItem = json['KDPOS'];
-    batch = json['CHARG'];
-    quantity = json['MENGE'];
-    unit = json['MEINS'];
+    factoryNumber = JsonParse.str(json['WERKS']);
+    warehouseNumber = JsonParse.str(json['LGORT']);
+    warehouseName = JsonParse.str(json['LGOBE']);
+    location = JsonParse.str(json['ZLOCAL']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    labelNumber = JsonParse.str(json['BQID']);
+    materialNumber = JsonParse.str(json['SATNR']);
+    materialName = JsonParse.str(json['MAKTX1']);
+    sizeMaterialNumber = JsonParse.str(json['MATNR']);
+    sizeMaterialName = JsonParse.str(json['MAKTX']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    size = JsonParse.str(json['SIZE1']);
+    instructionNo = JsonParse.str(json['ZVBELN_ORI']);
+    salesOrderNo = JsonParse.str(json['KDAUF']);
+    salesOrderLineItem = JsonParse.toInt(json['KDPOS']);
+    batch = JsonParse.str(json['CHARG']);
+    quantity = JsonParse.toDouble(json['MENGE']);
+    unit = JsonParse.str(json['MEINS']);
   }
 
   Map<String, dynamic> toJson() {
@@ -668,15 +648,15 @@ class PalletDetailItem2Info {
   });
 
   PalletDetailItem2Info.fromJson(dynamic json) {
-    factoryNumber = json['WERKS'];
-    warehouseNumber = json['LGORT'];
-    location = json['ZLOCAL'];
-    palletNumber = json['ZFTRAYNO'];
-    factoryName = json['NAME1_WRK'];
-    orderType = json['ZISBD'];
-    customsDeclarationType = json['ZCUSDECLARATYPE'];
-    palletExistence = json['ZTRAY_CFMRT1'];
-    palletState = json['ZTRAY_CFMRT2'];
+    factoryNumber = JsonParse.str(json['WERKS']);
+    warehouseNumber = JsonParse.str(json['LGORT']);
+    location = JsonParse.str(json['ZLOCAL']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    factoryName = JsonParse.str(json['NAME1_WRK']);
+    orderType = JsonParse.str(json['ZISBD']);
+    customsDeclarationType = JsonParse.str(json['ZCUSDECLARATYPE']);
+    palletExistence = JsonParse.str(json['ZTRAY_CFMRT1']);
+    palletState = JsonParse.str(json['ZTRAY_CFMRT2']);
   }
 
   Map<String, dynamic> toJson() {
@@ -737,26 +717,26 @@ class SapPalletDetailInfo {
   String? supplierName; //NAME1_LIF 供应商
 
   SapPalletDetailInfo.fromJson(dynamic json) {
-    factory = json['WERKS'];
-    factoryName = json['NAME1_WRK'];
-    orderType = json['ZISBD'];
-    customsDeclarationType = json['ZCUSDECLARATYPE'];
-    palletNumber = json['ZFTRAYNO'];
-    labelCode = json['BQID'];
-    location = json['LGORT'];
-    warehouseLocation = json['ZLOCAL'];
-    materialCode = json['MATNR'];
-    materialName = json['MAKTX'];
-    batchNumber = json['CHARG'];
-    salesOrderNo = json['KDAUF'];
-    salesOrderLineItem = json['KDPOS'];
-    instructionsNo = json['ZZVBELN'];
-    typeBody = json['ZZXTNO'];
-    size = json['SIZE1'];
-    quantity = json['MENGE'];
-    unit = json['MEINS'];
-    pieceNo = json['ZPIECE_NO'];
-    supplierName = json['NAME1_LIF'];
+    factory = JsonParse.str(json['WERKS']);
+    factoryName = JsonParse.str(json['NAME1_WRK']);
+    orderType = JsonParse.str(json['ZISBD']);
+    customsDeclarationType = JsonParse.str(json['ZCUSDECLARATYPE']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    labelCode = JsonParse.str(json['BQID']);
+    location = JsonParse.str(json['LGORT']);
+    warehouseLocation = JsonParse.str(json['ZLOCAL']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['MAKTX']);
+    batchNumber = JsonParse.str(json['CHARG']);
+    salesOrderNo = JsonParse.str(json['KDAUF']);
+    salesOrderLineItem = JsonParse.toInt(json['KDPOS']);
+    instructionsNo = JsonParse.str(json['ZZVBELN']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    size = JsonParse.str(json['SIZE1']);
+    quantity = JsonParse.toDouble(json['MENGE']);
+    unit = JsonParse.str(json['MEINS']);
+    pieceNo = JsonParse.str(json['ZPIECE_NO']);
+    supplierName = JsonParse.str(json['NAME1_LIF']);
     pickQty=quantity??0;
   }
 

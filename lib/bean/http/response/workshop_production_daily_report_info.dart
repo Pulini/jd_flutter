@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // WorkShopName : "裁断车间"
 // OrganizeName : "金帝"
 // ParentDeptID : "金帝裁断课"
@@ -23,16 +24,16 @@ class WorkshopProductionDailyReportDetailInfo{
       this.noDoingReason,});
 
   WorkshopProductionDailyReportDetailInfo.fromJson(dynamic json) {
-    workShopName = json['WorkShopName'];
-    organizeName = json['OrganizeName'];
-    parentDeptID = json['ParentDeptID'];
-    deptID = json['DeptID'];
-    toDayMustQty = json['ToDayMustQty'];
-    timeMustQty = json['TimeMustQty'];
-    timeQty = json['TimeQty'];
-    noTimeQty = json['NoTimeQty'];
-    timeFinishRate = json['TimeFinishRate'];
-    noDoingReason = json['NoDoingReason'];
+    workShopName = JsonParse.str(json['WorkShopName']);
+    organizeName = JsonParse.str(json['OrganizeName']);
+    parentDeptID = JsonParse.str(json['ParentDeptID']);
+    deptID = JsonParse.str(json['DeptID']);
+    toDayMustQty = JsonParse.toDouble(json['ToDayMustQty']);
+    timeMustQty = JsonParse.toDouble(json['TimeMustQty']);
+    timeQty = JsonParse.toDouble(json['TimeQty']);
+    noTimeQty = JsonParse.toDouble(json['NoTimeQty']);
+    timeFinishRate = JsonParse.str(json['TimeFinishRate']);
+    noDoingReason = JsonParse.str(json['NoDoingReason']);
   }
   String? workShopName;
   String? organizeName;
@@ -82,14 +83,14 @@ class WorkshopProductionDailyReportSummaryInfo  {
     this.noDoingReason,});
 
   WorkshopProductionDailyReportSummaryInfo.fromJson(dynamic json) {
-    workShopName = json['WorkShopName'];
-    organizeName = json['OrganizeName'];
-    toDayMustQty = json['ToDayMustQty'];
-    toDayQty = json['ToDayQty'];
-    noToDayQty = json['NoToDayQty'];
-    toDayFinishRate = json['ToDayFinishRate'];
-    lJQty = json['LJQty'];
-    noDoingReason = json['NoDoingReason'];
+    workShopName = JsonParse.str(json['WorkShopName']);
+    organizeName = JsonParse.str(json['OrganizeName']);
+    toDayMustQty = JsonParse.toDouble(json['ToDayMustQty']);
+    toDayQty = JsonParse.toDouble(json['ToDayQty']);
+    noToDayQty = JsonParse.toDouble(json['NoToDayQty']);
+    toDayFinishRate = JsonParse.str(json['ToDayFinishRate']);
+    lJQty = JsonParse.toDouble(json['LJQty']);
+    noDoingReason = JsonParse.str(json['NoDoingReason']);
   }
   String? workShopName;
   String? organizeName;

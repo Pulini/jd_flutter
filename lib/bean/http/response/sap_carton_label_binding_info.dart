@@ -42,22 +42,22 @@ class SapLabelBindingInfo {
   });
 
   SapLabelBindingInfo.fromJson(dynamic json) {
-    labelID = json['BQID'];
-    supplierNumber = json['LIFNR'];
-    factoryNo = json['WERKS'];
-    customsDeclarationType = json['ZCUSDECLARATYPE'];
-    isTradeFactory = json['ZTRADE'];
+    labelID = JsonParse.str(json['BQID']);
+    supplierNumber = JsonParse.str(json['LIFNR']);
+    factoryNo = JsonParse.str(json['WERKS']);
+    customsDeclarationType = JsonParse.str(json['ZCUSDECLARATYPE']);
+    isTradeFactory = JsonParse.str(json['ZTRADE']);
     isBoxLabel = json['ZBQLX'] == '05';
-    pieceNo = json['ZPIECE_NO'];
-    materialsType = json['ZMATNRCAT'];
+    pieceNo = JsonParse.str(json['ZPIECE_NO']);
+    materialsType = JsonParse.str(json['ZMATNRCAT']);
     long = json['ZZCJC'].toString().toDoubleTry();
     width = json['ZZCJK'].toString().toDoubleTry();
     height = json['ZZCJG'].toString().toDoubleTry();
-    boxLabelID = json['ZDBBQID'];
+    boxLabelID = JsonParse.str(json['ZDBBQID']);
     myanmarApprovalDocuments = json['ZMATCOM'];
-    myanmarApprovalDocumentsEnglish = json['ZMATCOM_E'];
-    supplementType = json['ZISBD'];
-    outWeight = json['ZNTGEW_PZ'];
+    myanmarApprovalDocumentsEnglish = JsonParse.str(json['ZMATCOM_E']);
+    supplementType = JsonParse.str(json['ZISBD']);
+    outWeight = JsonParse.toDouble(json['ZNTGEW_PZ']);
   }
 
   String getBoxLabelID() => isBoxLabel ? labelID ?? '' : boxLabelID ?? '';
@@ -192,37 +192,37 @@ class SapLabelBindingInfo {
 //   });
 //
 //   SapLabelBindingPrintInfo.fromJson(dynamic json) {
-//     labelID = json['BQID'];
-//     supplierNumber = json['LIFNR'];
-//     factoryNo = json['WERKS'];
-//     customsDeclarationType = json['ZCUSDECLARATYPE'];
-//     isTradeFactory = json['ZTRADE'];
+//     labelID = JsonParse.str(json['BQID']);
+//     supplierNumber = JsonParse.str(json['LIFNR']);
+//     factoryNo = JsonParse.str(json['WERKS']);
+//     customsDeclarationType = JsonParse.str(json['ZCUSDECLARATYPE']);
+//     isTradeFactory = JsonParse.str(json['ZTRADE']);
 //     isBoxLabel = json['ZBQLX'] == '05';
-//     pieceNo = json['ZPIECE_NO'];
-//     materialsType = json['ZMATNRCAT'];
+//     pieceNo = JsonParse.str(json['ZPIECE_NO']);
+//     materialsType = JsonParse.str(json['ZMATNRCAT']);
 //     long = json['ZZCJC'].toString().toDoubleTry();
 //     width = json['ZZCJK'].toString().toDoubleTry();
 //     height = json['ZZCJG'].toString().toDoubleTry();
-//     boxLabelID = json['ZDBBQID'];
+//     boxLabelID = JsonParse.str(json['ZDBBQID']);
 //     myanmarApprovalDocuments = json['ZMATCOM'];
-//     myanmarApprovalDocumentsEnglish = json['ZMATCOM_E'];
-//     supplementType = json['ZISBD'];
-//     outWeight = json['ZNTGEW_PZ'];
-//     materialNumber = json['MATNR'];
-//     materialName = json['ZMAKTX'];
-//     materialEnglishName = json['ZMAKTX_E'];
-//     salesOrder = json['VBELN'];
-//     size = json['SIZE1'];
+//     myanmarApprovalDocumentsEnglish = JsonParse.str(json['ZMATCOM_E']);
+//     supplementType = JsonParse.str(json['ZISBD']);
+//     outWeight = JsonParse.toDouble(json['ZNTGEW_PZ']);
+//     materialNumber = JsonParse.str(json['MATNR']);
+//     materialName = JsonParse.str(json['ZMAKTX']);
+//     materialEnglishName = JsonParse.str(json['ZMAKTX_E']);
+//     salesOrder = JsonParse.str(json['VBELN']);
+//     size = JsonParse.str(json['SIZE1']);
 //     materialCategory = json['ATTYP'];
 //     inBoxQty = json['ZXNUM'].toString().toDoubleTry();
-//     unit = json['MEINS'];
-//     unitEnglish = json['MEINS_E'];
+//     unit = JsonParse.str(json['MEINS']);
+//     unitEnglish = JsonParse.str(json['MEINS_E']);
 //     companyNumber = json['BUKRS'];
 //     volume = json['LADEVOL'].toString().toDoubleTry();
 //     netWeight = json['NTGEW'].toString().toDoubleTry();
-//     trackNo = json['ZTRACKNO'];
-//     customer = json['NAME1'];
-//     shipToParty = json['SHIPTO'];
+//     trackNo = JsonParse.str(json['ZTRACKNO']);
+//     customer = JsonParse.str(json['NAME1']);
+//     shipToParty = JsonParse.str(json['SHIPTO']);
 //     requirementDate = json['ZEINDT'];
 //     materialGroup = json['MATKL'];
 //     salesAndDistributionVoucher = json['ZZVBELN'];
@@ -232,24 +232,24 @@ class SapLabelBindingInfo {
 //     purchaseOrder = json['EBELN'];
 //     purchaseOrderLine = json['EBELP'];
 //     capacity = json['ZZXR'].toString().toDoubleTry();
-//     generalMaterialNumber = json['SATNR'];
-//     materialDescription = json['ZMAKTX_YB'];
-//     materialEnglishDescription = json['ZMAKTX_YB_E'];
-//     factoryType = json['ZZXTNO'];
+//     generalMaterialNumber = JsonParse.str(json['SATNR']);
+//     materialDescription = JsonParse.str(json['ZMAKTX_YB']);
+//     materialEnglishDescription = JsonParse.str(json['ZMAKTX_YB_E']);
+//     factoryType = JsonParse.str(json['ZZXTNO']);
 //     factoryDescription = json['NAME1_WER'];
 //     companyNumberDescription = json['BUTXT'];
 //     referenceSalesOrderNo = json['POSNR'];
 //     grossWeight = json['BRGEW'].toString().toDoubleTry();
-//     creator = json['ERNAM'];
+//     creator = JsonParse.str(json['ERNAM']);
 //     creationDate = json['ERDAT'];
 //     printingFrequency = json['ZDYCS'];
-//     manufactureDate = json['ZMADAT'];
-//     totalPieceQty = json['ZTTLCTN'];
+//     manufactureDate = JsonParse.str(json['ZMADAT']);
+//     totalPieceQty = JsonParse.toInt(json['ZTTLCTN']);
 //     pieceQty = json['ZCURCTN'];
-//     remarks = json['ZMSGTT'];
+//     remarks = JsonParse.str(json['ZMSGTT']);
 //     labelStatus = json['ZBQZT'];
 //     deleteFlag = json['DELFLG'];
-//     isMixMaterial = json['ZMIX'];
+//     isMixMaterial = JsonParse.toBool(json['ZMIX']);
 //   }
 // }
 
@@ -334,39 +334,39 @@ class SapPrintLabelInfo {
 
   SapPrintLabelInfo.fromJson(dynamic json) {
     isNewLabel = json['ISNEW'] == 'X';
-    labelType = json['ZBQLX'];
+    labelType = JsonParse.str(json['ZBQLX']);
     isBoxLabel =labelType== '05';
     isMixMaterial = json['ZMIX'] == 'X';
     isTradeFactory = json['ZTRADE'] == 'X';
-    labelID = json['BQID'];
-    factoryNo = json['WERKS'];
-    supplierNumber = json['LIFNR'];
-    supplierName = json['NAME1'];
-    pieceID = json['ZPIECE_NO'];
+    labelID = JsonParse.str(json['BQID']);
+    factoryNo = JsonParse.str(json['WERKS']);
+    supplierNumber = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
+    pieceID = JsonParse.str(json['ZPIECE_NO']);
     volume = json['LADEVOL'].toString().toDoubleTry();
     grossWeight = json['BRGEW'].toString().toDoubleTry();
     netWeight = json['NTGEW'].toString().toDoubleTry();
-    manufactureDate = json['ZMADAT'];
+    manufactureDate = JsonParse.str(json['ZMADAT']);
     totalPieceQty = json['ZTTLCTN'].toString().toIntTry();
-    materialsType = json['ZMATNRCAT'];
-    remarks = json['ZMSGTT'];
-    supplementType = json['ZISBD'];
+    materialsType = JsonParse.str(json['ZMATNRCAT']);
+    remarks = JsonParse.str(json['ZMSGTT']);
+    supplementType = JsonParse.str(json['ZISBD']);
     long = json['ZZCJC'].toString().toDoubleTry();
     width = json['ZZCJK'].toString().toDoubleTry();
     height = json['ZZCJG'].toString().toDoubleTry();
-    trackNo = json['ZTRACKNO'];
-    customsDeclarationType = json['ZCUSDECLARATYPE'];
-    boxLabelID = json['ZDBBQID'];
-    packageMethodNo = json['ZNUMBER'];
+    trackNo = JsonParse.str(json['ZTRACKNO']);
+    customsDeclarationType = JsonParse.str(json['ZCUSDECLARATYPE']);
+    boxLabelID = JsonParse.str(json['ZDBBQID']);
+    packageMethodNo = JsonParse.str(json['ZNUMBER']);
     outWeight = json['ZNTGEW_PZ'].toString().toDoubleTry();
-    customer = json['NAME1'];
-    shipToParty = json['SHIPTO'];
-    materialDeclarationName = json['ZDECLARATION'];
-    typeBody = json['ZZXTNOS'];
-    instructionNo = json['KDAUFS'];
-    pieceNo = json['ZPACKAGES'];
-    factory = json['ZQY'];
-    warehouse = json['ZLGOBS'];
+    customer = JsonParse.str(json['NAME1']);
+    shipToParty = JsonParse.str(json['SHIPTO']);
+    materialDeclarationName = JsonParse.str(json['ZDECLARATION']);
+    typeBody = JsonParse.str(json['ZZXTNOS']);
+    instructionNo = JsonParse.str(json['KDAUFS']);
+    pieceNo = JsonParse.str(json['ZPACKAGES']);
+    factory = JsonParse.str(json['ZQY']);
+    warehouse = JsonParse.str(json['ZLGOBS']);
     subLabel = [
       if (json['GT_OUT_ITEMS'] != null)
         for (var sub in json['GT_OUT_ITEMS']) SapPrintLabelSubInfo.fromJson(sub)
@@ -435,21 +435,21 @@ class SapPrintLabelSubInfo {
   });
 
   SapPrintLabelSubInfo.fromJson(dynamic json) {
-    labelID = json['BQID'];
-    instructionNo = json['KDAUF'];
-    size = json['SIZE1'];
+    labelID = JsonParse.str(json['BQID']);
+    instructionNo = JsonParse.str(json['KDAUF']);
+    size = JsonParse.str(json['SIZE1']);
     inBoxQty = json['ZXNUM'].toString().toDoubleTry();
-    unit = json['MEINS'];
-    unitEnglish = json['MEINS_E'];
-    customsDeclarationUnit = json['ZMEINS_CUS'];
-    specifications = json['GROES'];
-    myanmarApprovalDocument = json['ZMYR'];
-    generalMaterialNumber = json['SATNR'];
-    materialDescription = json['ZMAKTX_YB'];
-    materialEnglishDescription = json['ZMAKTX_YB_E'];
-    materialNumber = json['MATNR'];
-    materialName = json['ZMAKTX'];
-    materialEnglishName = json['ZMAKTX_E'];
+    unit = JsonParse.str(json['MEINS']);
+    unitEnglish = JsonParse.str(json['MEINS_E']);
+    customsDeclarationUnit = JsonParse.str(json['ZMEINS_CUS']);
+    specifications = JsonParse.str(json['GROES']);
+    myanmarApprovalDocument = JsonParse.str(json['ZMYR']);
+    generalMaterialNumber = JsonParse.str(json['SATNR']);
+    materialDescription = JsonParse.str(json['ZMAKTX_YB']);
+    materialEnglishDescription = JsonParse.str(json['ZMAKTX_YB_E']);
+    materialNumber = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTX']);
+    materialEnglishName = JsonParse.str(json['ZMAKTX_E']);
     canSplitQty.value = inBoxQty ?? 0;
   }
 }

@@ -58,24 +58,19 @@ class SapInkColorMatchOrderInfo {
   });
 
   SapInkColorMatchOrderInfo.fromJson(dynamic json) {
-    orderNumber = json['WOFNR'];
-    factoryNumber = json['WERKS'];
-    factoryName = json['WERKS_NAME'];
-    typeBody = json['ZZXTNO'];
-    inkMaster = json['ZCOLORNAM'];
-    mixDate = json['ZCOLORDAT'];
-    mixtureWeight = json['ZMIXNTGEW'];
+    orderNumber = JsonParse.str(json['WOFNR']);
+    factoryNumber = JsonParse.str(json['WERKS']);
+    factoryName = JsonParse.str(json['WERKS_NAME']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    inkMaster = JsonParse.str(json['ZCOLORNAM']);
+    mixDate = JsonParse.str(json['ZCOLORDAT']);
+    mixtureWeight = JsonParse.toDouble(json['ZMIXNTGEW']);
     unitUsage = json['ZMENG2'].toString().toDoubleTry();
     trialQty = json['MENGE'].toString().toDoubleTry();
     mixtureTheoreticalWeight = json['ZMIXNTGEW_AFT'].toString().toDoubleTry();
     loss = json['AUSCH'].toString().toDoubleTry();
-    remarks = json['ZZPART1'];
-    if (json['MATERIAL'] != null) {
-      materialList = [];
-      json['MATERIAL'].forEach((v) {
-        materialList?.add(SapInkColorMatchMaterialInfo.fromJson(v));
-      });
-    }
+    remarks = JsonParse.str(json['ZZPART1']);
+    materialList = JsonParse.list(json['MATERIAL'], SapInkColorMatchMaterialInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -121,13 +116,13 @@ class SapInkColorMatchMaterialInfo {
   });
 
   SapInkColorMatchMaterialInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTG'];
-    materialColor = json['ZCOLOR'];
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTG']);
+    materialColor = JsonParse.str(json['ZCOLOR']);
     weightBeforeColorMix = json['ZNTGEW_BEF'].toString().toDoubleTry();
     weightAfterColorMix = json['ZNTGEW_AFT'].toString().toDoubleTry();
     consumption = json['ZMENG3'].toString().toDoubleTry();
-    unit = json['MEINS'];
+    unit = JsonParse.str(json['MEINS']);
     ratio = json['ZPROPORTION'].toString().toDoubleTry();
   }
 
@@ -157,19 +152,9 @@ class SapInkColorMatchTypeBodyInfo {
   });
 
   SapInkColorMatchTypeBodyInfo.fromJson(dynamic json) {
-    serverIp = json['SERVERIP'];
-    if (json['SCALEPORTS'] != null) {
-      scalePorts = [];
-      json['SCALEPORTS'].forEach((v) {
-        scalePorts?.add(SapInkColorMatchTypeBodyScalePortInfo.fromJson(v));
-      });
-    }
-    if (json['MATERIALS'] != null) {
-      materials = [];
-      json['MATERIALS'].forEach((v) {
-        materials?.add(SapInkColorMatchTypeBodyMaterialInfo.fromJson(v));
-      });
-    }
+    serverIp = JsonParse.str(json['SERVERIP']);
+    scalePorts = JsonParse.list(json['SCALEPORTS'], SapInkColorMatchTypeBodyScalePortInfo.fromJson);
+    materials = JsonParse.list(json['MATERIALS'], SapInkColorMatchTypeBodyMaterialInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -197,9 +182,9 @@ class SapInkColorMatchTypeBodyMaterialInfo {
   });
 
   SapInkColorMatchTypeBodyMaterialInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTG'];
-    materialColor = json['ZCOLOR'];
+    materialCode = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTG']);
+    materialColor = JsonParse.str(json['ZCOLOR']);
   }
 
   Map<String, dynamic> toJson() {
@@ -225,9 +210,9 @@ class SapInkColorMatchTypeBodyScalePortInfo {
   });
 
   SapInkColorMatchTypeBodyScalePortInfo.fromJson(dynamic json) {
-    scalePort = json['ZPORT'];
-    deviceName = json['DEVICENAME'];
-    isMix = json['ZMIX'];
+    scalePort = JsonParse.toInt(json['ZPORT']);
+    deviceName = JsonParse.str(json['DEVICENAME']);
+    isMix = JsonParse.str(json['ZMIX']);
   }
 
   Map<String, dynamic> toJson() {

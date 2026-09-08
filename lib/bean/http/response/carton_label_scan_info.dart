@@ -6,6 +6,7 @@
 // LinkDataSizeList : [{"PriceBarCode":"4099686238735","Size":"3","LabelCount":"1.00000000000000000000"},{"PriceBarCode":"4099686238742","Size":"3.5","LabelCount":"3.00000000000000000000"},{"PriceBarCode":"4099686238759","Size":"4","LabelCount":"2.00000000000000000000"}]
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class CartonLabelScanInfo {
   CartonLabelScanInfo({
@@ -18,18 +19,13 @@ class CartonLabelScanInfo {
   });
 
   CartonLabelScanInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    custOrderNumber = json['CustOrderNumber'];
-    outBoxBarCode = json['OutBoxBarCode'];
-    mix = json['Mix'];
-    dispatchNumber = json['DispatchNumber'];
-    isSoleBarCode = json['IsSoleBarCode'];
-    if (json['LinkDataSizeList'] != null) {
-      linkDataSizeList = [];
-      json['LinkDataSizeList'].forEach((v) {
-        linkDataSizeList?.add(LinkDataSizeList.fromJson(v));
-      });
-    }
+    interID = JsonParse.str(json['InterID']);
+    custOrderNumber = JsonParse.str(json['CustOrderNumber']);
+    outBoxBarCode = JsonParse.str(json['OutBoxBarCode']);
+    mix = JsonParse.toInt(json['Mix']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    isSoleBarCode = JsonParse.toInt(json['IsSoleBarCode']);
+    linkDataSizeList = JsonParse.list(json['LinkDataSizeList'], LinkDataSizeList.fromJson);
   }
 
   String? interID;
@@ -69,21 +65,16 @@ class CartonLabelScanNewInfo {
   });
 
   CartonLabelScanNewInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    custOrderNumber = json['CustOrderNumber'];
-    outBoxBarCode = json['OutBoxBarCode'];
-    mix = json['Mix'];
-    dispatchNumber = json['DispatchNumber'];
-    isSoleBarCode = json['IsSoleBarCode'];
-    piece = json['Piece'];
-    scannedCount = json['ScannedCount'];
-    isNeedInnerBoxLabel = json['IsNeedInnerBoxLabel'];
-    if (json['LinkDataSizeList'] != null) {
-      linkDataSizeList = [];
-      json['LinkDataSizeList'].forEach((v) {
-        linkDataSizeList?.add(LinkDataSizeNewList.fromJson(v));
-      });
-    }
+    interID = JsonParse.str(json['InterID']);
+    custOrderNumber = JsonParse.str(json['CustOrderNumber']);
+    outBoxBarCode = JsonParse.str(json['OutBoxBarCode']);
+    mix = JsonParse.toInt(json['Mix']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    isSoleBarCode = JsonParse.toInt(json['IsSoleBarCode']);
+    piece = JsonParse.toInt(json['Piece']);
+    scannedCount = JsonParse.toInt(json['ScannedCount']);
+    isNeedInnerBoxLabel = JsonParse.toBool(json['IsNeedInnerBoxLabel']);
+    linkDataSizeList = JsonParse.list(json['LinkDataSizeList'], LinkDataSizeNewList.fromJson);
   }
 
   String? interID;
@@ -133,9 +124,9 @@ class LinkDataSizeList {
   });
 
   LinkDataSizeList.fromJson(dynamic json) {
-    priceBarCode = json['PriceBarCode'];
-    size = json['Size'];
-    labelCount = json['LabelCount'];
+    priceBarCode = JsonParse.str(json['PriceBarCode']);
+    size = JsonParse.str(json['Size']);
+    labelCount = JsonParse.toInt(json['LabelCount']);
   }
 
   String? priceBarCode;
@@ -160,9 +151,9 @@ class LinkDataSizeNewList {
   });
 
   LinkDataSizeNewList.fromJson(dynamic json) {
-    priceBarCode = json['PriceBarCode'];
-    size = json['Size'];
-    labelCount = json['LabelCount'];
+    priceBarCode = JsonParse.str(json['PriceBarCode']);
+    size = JsonParse.str(json['Size']);
+    labelCount = JsonParse.toInt(json['LabelCount']);
   }
 
   String? priceBarCode;  //标签

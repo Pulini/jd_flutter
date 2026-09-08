@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class LabelForWorkCardInfo {
   LabelForWorkCardInfo({
@@ -10,18 +11,8 @@ class LabelForWorkCardInfo {
 
   LabelForWorkCardInfo.fromJson(dynamic json) {
     processWorkCardInfo = json['ProcessWorkCardInfo'] != null ? ProcessWorkCardInfo.fromJson(json['ProcessWorkCardInfo']) : null;
-    if (json['ComponentList'] != null) {
-      componentList = [];
-      json['ComponentList'].forEach((v) {
-        componentList?.add(ComponentList.fromJson(v));
-      });
-    }
-    if (json['EmployeeList'] != null) {
-      employeeList = [];
-      json['EmployeeList'].forEach((v) {
-        employeeList?.add(EmployeeList.fromJson(v));
-      });
-    }
+    componentList = JsonParse.list(json['ComponentList'], ComponentList.fromJson);
+    employeeList = JsonParse.list(json['EmployeeList'], EmployeeList.fromJson);
   }
   ProcessWorkCardInfo? processWorkCardInfo;
   List<ComponentList>? componentList;
@@ -72,19 +63,19 @@ class SizeList {
   }
 
   SizeList.fromJson(dynamic json) {
-    empName = json['EmpName'];
-    empNumber = json['empNumber'];
-    fProcessName = json['FProcessName'];
-    fItemID = json['FItemID'];
-    fMtono = json['FMtono'];
-    size = json['Size'];
-    totalQty = json['TotalQty'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    allocatedQty = json['AllocatedQty'];
-    fPrdMoID = json['FPrdMoID'];
-    fRouteEntryFID = json['FRouteEntryFID'];
+    empName = JsonParse.str(json['EmpName']);
+    empNumber = JsonParse.str(json['empNumber']);
+    fProcessName = JsonParse.str(json['FProcessName']);
+    fItemID = JsonParse.toInt(json['FItemID']);
+    fMtono = JsonParse.str(json['FMtono']);
+    size = JsonParse.str(json['Size']);
+    totalQty = JsonParse.toDouble(json['TotalQty']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    allocatedQty = JsonParse.toInt(json['AllocatedQty']);
+    fPrdMoID = JsonParse.toInt(json['FPrdMoID']);
+    fRouteEntryFID = JsonParse.toInt(json['FRouteEntryFID']);
     _initUiState();
   }
   String? empName;
@@ -197,10 +188,10 @@ class EmployeeList {
       this.avatarPath,});
 
   EmployeeList.fromJson(dynamic json) {
-    fItemID = json['FItemID'];
-    fNumber = json['FNumber'];
-    fName = json['FName'];
-    avatarPath = json['AvatarPath'];
+    fItemID = JsonParse.toInt(json['FItemID']);
+    fNumber = JsonParse.str(json['FNumber']);
+    fName = JsonParse.str(json['FName']);
+    avatarPath = JsonParse.str(json['AvatarPath']);
   }
   int? fItemID;
   String? fNumber;
@@ -243,26 +234,16 @@ class ComponentList {
   });
 
   ComponentList.fromJson(dynamic json) {
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(SizeList.fromJson(v));
-      });
-    }
-    fInterID = json['FInterID'];
-    fItemID = json['FItemID'];
-    fPictureUrl = json['FPictureUrl'];
-    fSourceinterID = json['FSourceinterID'];
-    includesProcess = json['IncludesProcess'] != null ? json['IncludesProcess'].cast<String>() : [];
-    componentName = json['ComponentName'];
-    componentno = json['Componentno'];
-    processList = json['ProcessList'] != null ? json['ProcessList'].cast<String>() : [];
-    if (json['MaterialList'] != null) {
-      materialList = [];
-      json['MaterialList'].forEach((v) {
-        materialList?.add(MaterialList.fromJson(v));
-      });
-    }
+    sizeList = JsonParse.list(json['SizeList'], SizeList.fromJson);
+    fInterID = JsonParse.toInt(json['FInterID']);
+    fItemID = JsonParse.toInt(json['FItemID']);
+    fPictureUrl = JsonParse.str(json['FPictureUrl']);
+    fSourceinterID = JsonParse.toInt(json['FSourceinterID']);
+    includesProcess = JsonParse.strList(json['IncludesProcess']);
+    componentName = JsonParse.str(json['ComponentName']);
+    componentno = JsonParse.str(json['Componentno']);
+    processList = JsonParse.strList(json['ProcessList']);
+    materialList = JsonParse.list(json['MaterialList'], MaterialList.fromJson);
   }
   int? fInterID;
   int? fItemID;
@@ -336,15 +317,15 @@ class MaterialList {
       this.fDenominator,});
 
   MaterialList.fromJson(dynamic json) {
-    fInterID = json['FInterID'];
-    materialID = json['MaterialID'];
-    materialNo = json['MaterialNo'];
-    materialName = json['MaterialName'];
-    fModel = json['FModel'];
-    chineseUnit = json['ChineseUnit'];
-    englishUnit = json['EnglishUnit'];
-    ingredients = json['Ingredients'];
-    fDenominator = json['FDenominator'];
+    fInterID = JsonParse.toInt(json['FInterID']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    materialNo = JsonParse.str(json['MaterialNo']);
+    materialName = JsonParse.str(json['MaterialName']);
+    fModel = JsonParse.str(json['FModel']);
+    chineseUnit = JsonParse.str(json['ChineseUnit']);
+    englishUnit = JsonParse.str(json['EnglishUnit']);
+    ingredients = JsonParse.toDouble(json['Ingredients']);
+    fDenominator = JsonParse.toDouble(json['FDenominator']);
   }
   int? fInterID;
   int? materialID;
@@ -403,20 +384,20 @@ class ProcessWorkCardInfo {
   });
 
   ProcessWorkCardInfo.fromJson(dynamic json) {
-    reportStatus = json['ReportStatus'];
-    allocationStatus = json['AllocationStatus'];
-    processNumber = json['ProcessNumber'];
-    factoryName = json['FactoryName'];
-    fDate = json['FDate'];
-    workshopName = json['WorkshopName'];
-    departName = json['DepartName'];
-    productNumber = json['ProductNumber'];
-    productName = json['ProductName'];
-    totalQty = json['TotalQty'];
-    packag = json['Packag'];
-    fCardNo = json['FCardNo'];
-    fBatchNo = json['FBatchNo'];
-    interID = json['InterID'];
+    reportStatus = JsonParse.toInt(json['ReportStatus']);
+    allocationStatus = JsonParse.toInt(json['AllocationStatus']);
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    factoryName = JsonParse.str(json['FactoryName']);
+    fDate = JsonParse.str(json['FDate']);
+    workshopName = JsonParse.str(json['WorkshopName']);
+    departName = JsonParse.str(json['DepartName']);
+    productNumber = JsonParse.str(json['ProductNumber']);
+    productName = JsonParse.str(json['ProductName']);
+    totalQty = JsonParse.toInt(json['TotalQty']);
+    packag = JsonParse.str(json['Packag']);
+    fCardNo = JsonParse.str(json['FCardNo']);
+    fBatchNo = JsonParse.str(json['FBatchNo']);
+    interID = JsonParse.toInt(json['InterID']);
   }
   int? reportStatus; //0未汇报  1已汇报
   int? allocationStatus; //0未分配  1已分配

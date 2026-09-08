@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Barcode : "BBEF3634-9F2F-4115-BE57-F6A290F331A4"
 // Index : "3"
 
@@ -7,8 +8,8 @@ class ScanHandoverInfo {
       this.index,});
 
   ScanHandoverInfo.fromJson(dynamic json) {
-    barcode = json['Barcode'];
-    index = json['Index'];
+    barcode = JsonParse.str(json['Barcode']);
+    index = JsonParse.str(json['Index']);
   }
   String? barcode;
   String? index;

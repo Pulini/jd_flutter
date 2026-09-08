@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // FactoryBody : "D13677-22B M"
 // GroupName : "金帝PUMA成型5线后段"
 // SalesOrder : "JZ2400002"
@@ -18,17 +19,12 @@ class CartonLabelScanClearTailInfo {
   });
 
   CartonLabelScanClearTailInfo.fromJson(dynamic json) {
-    factoryBody = json['FactoryBody'];
-    groupName = json['GroupName'];
-    salesOrder = json['SalesOrder'];
-    customerOrderNumber = json['CustomerOrderNumber'];
-    dispatchNumber = json['DispatchNumber'];
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(ClearTailListInfo.fromJson(v));
-      });
-    }
+    factoryBody = JsonParse.str(json['FactoryBody']);
+    groupName = JsonParse.str(json['GroupName']);
+    salesOrder = JsonParse.str(json['SalesOrder']);
+    customerOrderNumber = JsonParse.str(json['CustomerOrderNumber']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    sizeList = JsonParse.list(json['SizeList'], ClearTailListInfo.fromJson);
   }
   String? factoryBody;
   String? groupName;
@@ -69,12 +65,12 @@ class ClearTailListInfo {
       this.barCode,});
 
   ClearTailListInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    orderQty = json['OrderQty'];
-    fullBoxQty = json['FullBoxQty'];
-    unFullBoxQty = json['UnFullBoxQty'];
-    arrears = json['Arrears'];
-    barCode = json['BarCode'];
+    size = JsonParse.str(json['Size']);
+    orderQty = JsonParse.toInt(json['OrderQty']);
+    fullBoxQty = JsonParse.toInt(json['FullBoxQty']);
+    unFullBoxQty = JsonParse.toInt(json['UnFullBoxQty']);
+    arrears = JsonParse.toInt(json['Arrears']);
+    barCode = JsonParse.str(json['BarCode']);
   }
   String? size;
   int? orderQty;

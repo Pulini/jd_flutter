@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // BQID : "005056B46EAE1EDD95D266C728B0DC5B"
 // OPTYPE : ""
 // DISPATCH_NO : "000000000449"
@@ -23,17 +24,12 @@ class StockInBarcodeInfo {
   });
 
   StockInBarcodeInfo.fromJson(dynamic json) {
-    barCode = json['BQID'];
-    dispatchNo = json['DISPATCH_NO'];
-    num = json['ZPQYM'];
-    factory = json['WERKS'];
-    date = json['AEDAT'];
-    if (json['ITEM'] != null) {
-      item = [];
-      json['ITEM'].forEach((v) {
-        item?.add(Item.fromJson(v));
-      });
-    }
+    barCode = JsonParse.str(json['BQID']);
+    dispatchNo = JsonParse.str(json['DISPATCH_NO']);
+    num = JsonParse.str(json['ZPQYM']);
+    factory = JsonParse.str(json['WERKS']);
+    date = JsonParse.str(json['AEDAT']);
+    item = JsonParse.list(json['ITEM'], Item.fromJson);
   }
 
   String? barCode; //打标用的bqid
@@ -75,11 +71,11 @@ class Item {
   });
 
   Item.fromJson(dynamic json) {
-    subBarcode = json['BQID'];
-    qty = json['MENGE'];
-    size = json['SIZE1_ATINN'];
-    typeBody = json['ZZXTNO'];
-    unit = json['MEINS'];
+    subBarcode = JsonParse.str(json['BQID']);
+    qty = JsonParse.toDouble(json['MENGE']);
+    size = JsonParse.str(json['SIZE1_ATINN']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    unit = JsonParse.str(json['MEINS']);
   }
 
   String? subBarcode;  //条码

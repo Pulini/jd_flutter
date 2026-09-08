@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PartReportErrorInfo {
   PartReportErrorInfo({
     this.info,
@@ -5,7 +6,7 @@ class PartReportErrorInfo {
   });
 
   PartReportErrorInfo.fromJson(dynamic json) {
-    info = json['Info'];
+    info = JsonParse.str(json['Info']);
     barcodes = json['Barcodes'].cast<String>();
   }
 

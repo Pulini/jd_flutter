@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class HandoverDetailInfo {
   HandoverDetailInfo({
     this.factoryType,
@@ -12,25 +13,15 @@ class HandoverDetailInfo {
   });
 
   HandoverDetailInfo.fromJson(dynamic json) {
-    factoryType = json['FactoryType'];
-    upPartName = json['UpPartName'];
-    downPartName = json['DownPartName'];
-    upProcessName = json['UpProcessName'];
-    downProcessName = json['DownProcessName'];
-    upDeptName = json['UpDeptName'];
-    downDeptName = json['DownDeptName'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(Item.fromJson(v));
-      });
-    }
-    if (json['Summary'] != null) {
-      summary = [];
-      json['Summary'].forEach((v) {
-        summary?.add(SummaryList.fromJson(v));
-      });
-    }
+    factoryType = JsonParse.str(json['FactoryType']);
+    upPartName = JsonParse.str(json['UpPartName']);
+    downPartName = JsonParse.str(json['DownPartName']);
+    upProcessName = JsonParse.str(json['UpProcessName']);
+    downProcessName = JsonParse.str(json['DownProcessName']);
+    upDeptName = JsonParse.str(json['UpDeptName']);
+    downDeptName = JsonParse.str(json['DownDeptName']);
+    items = JsonParse.list(json['Items'], Item.fromJson);
+    summary = JsonParse.list(json['Summary'], SummaryList.fromJson);
   }
 
 
@@ -73,10 +64,10 @@ class Item {
   });
 
   Item.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    size = json['Size'];
-    qty = json['Qty'];
-    mtono = json['Mtono'];
+    barCode = JsonParse.str(json['BarCode']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    mtono = JsonParse.str(json['Mtono']);
 
   }
 
@@ -109,13 +100,13 @@ class SummaryList {
   });
 
   SummaryList.fromJson(dynamic json) {
-    type = json['Type'];
-    partName = json['PartName'];
-    factoryType = json['FactoryType'];
-    size = json['Size'];
-    qty = json['Qty'];
-    mtonoQty = json['MtonoQty'];
-    mtono = json['Mtono'];
+    type = JsonParse.toInt(json['Type']);
+    partName = JsonParse.str(json['PartName']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    mtonoQty = JsonParse.toDouble(json['MtonoQty']);
+    mtono = JsonParse.str(json['Mtono']);
 
   }
 

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 /// WorkCardInterID : 1231836
 /// WorkCardNo : "P26124283"
 /// WorkCardDate : "2026-06-24"
@@ -32,27 +33,27 @@ class OrderProductionExecutionInfo {
   });
 
   OrderProductionExecutionInfo.fromJson(dynamic json) {
-    workCardInterID = json['WorkCardInterID'];
-    isTailConfirm = json['IsTailConfirm'];
-    unFinishQty = json['UnFinishQty'];
-    workCardNo = json['WorkCardNo'];
-    workCardDate = json['WorkCardDate'];
-    fetchDate = json['FetchDate'];
-    departmentName = json['DepartmentName'];
-    productName = json['ProductName'];
-    seOrderNo = json['SeOrderNo'];
-    seOrderQty = json['SeOrderQty'];
-    scanQty = json['ScanQty'];
-    color = json['Color'];
-    status = json['Status'];
-    sizeRange = json['SizeRange'];
-    band = json['Band'];
-    planEndDate = json['PlanEndDate'];
-    daysDifference = json['DaysDifference'];
-    lastDate = json['LastDate'];
-    moID = json['MoID'];
-    isNeedInnerBoxLabel = json['IsNeedInnerBoxLabel'];
-    unit = json['Unit'] ;
+    workCardInterID = JsonParse.toInt(json['WorkCardInterID']);
+    isTailConfirm = JsonParse.toInt(json['IsTailConfirm']);
+    unFinishQty = JsonParse.toDouble(json['UnFinishQty']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    workCardDate = JsonParse.str(json['WorkCardDate']);
+    fetchDate = JsonParse.str(json['FetchDate']);
+    departmentName = JsonParse.str(json['DepartmentName']);
+    productName = JsonParse.str(json['ProductName']);
+    seOrderNo = JsonParse.str(json['SeOrderNo']);
+    seOrderQty = JsonParse.toDouble(json['SeOrderQty']);
+    scanQty = JsonParse.toInt(json['ScanQty']);
+    color = JsonParse.str(json['Color']);
+    status = JsonParse.toInt(json['Status']);
+    sizeRange = JsonParse.str(json['SizeRange']);
+    band = JsonParse.str(json['Band']);
+    planEndDate = JsonParse.str(json['PlanEndDate']);
+    daysDifference = JsonParse.toInt(json['DaysDifference']);
+    lastDate = JsonParse.str(json['LastDate']);
+    moID = JsonParse.toInt(json['MoID']);
+    isNeedInnerBoxLabel = JsonParse.toBool(json['IsNeedInnerBoxLabel']);
+    unit = JsonParse.str(json['Unit']);
   }
   int? workCardInterID;
   double? seOrderQty; //订单数量

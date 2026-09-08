@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ProcessModifyInfo {
   ProcessModifyInfo({
       this.barCode,
@@ -6,10 +7,10 @@ class ProcessModifyInfo {
       this.size,});
 
   ProcessModifyInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    size = json['Size'];
-    mustQty = json['MustQty'];
-    qty = json['Qty'];
+    barCode = JsonParse.str(json['BarCode']);
+    size = JsonParse.str(json['Size']);
+    mustQty = JsonParse.str(json['MustQty']);
+    qty = JsonParse.str(json['Qty']);
 
   }
   String? barCode;

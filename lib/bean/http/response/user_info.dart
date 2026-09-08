@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Token : '57alHQqkbdwgh29foLOqq5EQSto9mKjm'
 // DepartmentID : 274797
 // DutyID : 487
@@ -57,44 +58,39 @@ class UserInfo {
   });
 
   UserInfo.fromJson(dynamic json) {
-    token = json['Token'];
-    departmentID = json['DepartmentID'];
-    dutyID = json['DutyID'];
-    empID = json['EmpID'];
-    number = json['Number'];
-    organizeID = json['OrganizeID'];
-    name = json['Name'];
-    mustChangePassword = json['MustChangePassword'];
-    sex = json['Sex'];
-    userID = json['UserID'];
-    departmentName = json['DepartmentName'];
-    position = json['Position'];
-    factory = json['Factory'];
-    defaultStockID = json['DefaultStockID'];
-    defaultStockName = json['DefaultStockName'];
-    defaultStockNumber = json['DefaultStockNumber'];
-    diningRoomID = json['DiningRoomID'];
-    picUrl = json['PicUrl'];
-    passWord = json['PassWord'];
-    empPassWord = json['EmpPassWord'];
-    quickLoginType = json['QuickLoginType'];
-    isAppAutoLock = json['IsAppAutoLock'];
-    sapRole = json['SAPRole'];
-    sapLineNumber = json['SAPLineNumber'];
-    sapFactory = json['SAPFactory'];
-    useStorageLocation = json['UseStorageLocation'];
-    if (json['JurisdictionList'] != null) {
-      jurisdictionList = [];
-      json['JurisdictionList'].forEach((v) {
-        jurisdictionList?.add(JurisdictionList.fromJson(v));
-      });
-    }
+    token = JsonParse.str(json['Token']);
+    departmentID = JsonParse.toInt(json['DepartmentID']);
+    dutyID = JsonParse.toInt(json['DutyID']);
+    empID = JsonParse.toInt(json['EmpID']);
+    number = JsonParse.str(json['Number']);
+    organizeID = JsonParse.toInt(json['OrganizeID']);
+    name = JsonParse.str(json['Name']);
+    mustChangePassword = JsonParse.toInt(json['MustChangePassword']);
+    sex = JsonParse.str(json['Sex']);
+    userID = JsonParse.toInt(json['UserID']);
+    departmentName = JsonParse.str(json['DepartmentName']);
+    position = JsonParse.str(json['Position']);
+    factory = JsonParse.str(json['Factory']);
+    defaultStockID = JsonParse.toInt(json['DefaultStockID']);
+    defaultStockName = JsonParse.str(json['DefaultStockName']);
+    defaultStockNumber = JsonParse.str(json['DefaultStockNumber']);
+    diningRoomID = JsonParse.toInt(json['DiningRoomID']);
+    picUrl = JsonParse.str(json['PicUrl']);
+    passWord = JsonParse.str(json['PassWord']);
+    empPassWord = JsonParse.str(json['EmpPassWord']);
+    quickLoginType = JsonParse.toInt(json['QuickLoginType']);
+    isAppAutoLock = JsonParse.toInt(json['IsAppAutoLock']);
+    sapRole = JsonParse.str(json['SAPRole']);
+    sapLineNumber = JsonParse.str(json['SAPLineNumber']);
+    sapFactory = JsonParse.str(json['SAPFactory']);
+    useStorageLocation = JsonParse.toInt(json['UseStorageLocation']);
+    jurisdictionList = JsonParse.list(json['JurisdictionList'], JurisdictionList.fromJson);
     roleList = [
       if (json['RoleList'] != null)
         for (var v in json['RoleList']) RoleList.fromJson(v)
     ];
-    roleLevel = json['RoleLevel'];
-    reportDeptmentID = json['ReportDeptmentID'];
+    roleLevel = JsonParse.toInt(json['RoleLevel']);
+    reportDeptmentID = JsonParse.toInt(json['ReportDeptmentID']);
   }
 
   String? token;
@@ -175,7 +171,7 @@ class JurisdictionList {
   });
 
   JurisdictionList.fromJson(dynamic json) {
-    jid = json['JID'];
+    jid = JsonParse.str(json['JID']);
   }
 
   String? jid;
@@ -204,9 +200,9 @@ class RoleList {
   });
 
   RoleList.fromJson(dynamic json) {
-    roleID = json['RoleID'];
-    roleName = json['RoleName'];
-    level = json['Level'];
+    roleID = JsonParse.toInt(json['RoleID']);
+    roleName = JsonParse.str(json['RoleName']);
+    level = JsonParse.toInt(json['Level']);
   }
 
   Map<String, dynamic> toJson() {

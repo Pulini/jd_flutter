@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // FInterID : 1
 // FPlaceName : "一楼会客厅"
 // FIfEnterOfficeBuilding : 0
@@ -9,9 +10,9 @@ class VisitPlaceBean {
       this.fIfEnterOfficeBuilding,});
 
   VisitPlaceBean.fromJson(dynamic json) {
-    fInterID = json['FInterID'];
-    fPlaceName = json['FPlaceName'];
-    fIfEnterOfficeBuilding = json['FIfEnterOfficeBuilding'];
+    fInterID = JsonParse.toInt(json['FInterID']);
+    fPlaceName = JsonParse.str(json['FPlaceName']);
+    fIfEnterOfficeBuilding = JsonParse.toInt(json['FIfEnterOfficeBuilding']);
   }
   int? fInterID;
   String? fPlaceName;

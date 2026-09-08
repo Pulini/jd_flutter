@@ -6,6 +6,7 @@
 // EntryType : 1
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class FormingBarcodeByMonoInfo {
   FormingBarcodeByMonoInfo({
@@ -17,12 +18,12 @@ class FormingBarcodeByMonoInfo {
       this.entryType,});
 
   FormingBarcodeByMonoInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    size = json['Size'];
-    colNo = json['ColNo'];
-    interID = json['InterID'];
-    entryID = json['EntryID'];
-    entryType = json['EntryType'];
+    barCode = JsonParse.str(json['BarCode']);
+    size = JsonParse.str(json['Size']);
+    colNo = JsonParse.toInt(json['ColNo']);
+    interID = JsonParse.toInt(json['InterID']);
+    entryID = JsonParse.toInt(json['EntryID']);
+    entryType = JsonParse.toInt(json['EntryType']);
   }
   String? barCode;
   String? size;

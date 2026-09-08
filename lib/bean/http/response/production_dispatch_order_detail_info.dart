@@ -56,13 +56,13 @@ class WorkCardTitle {
   });
 
   WorkCardTitle.fromJson(dynamic json) {
-    qtyPass = json['FQtyPass'];
-    qtyProcessPass = json['FQtyProcessPass'];
-    dayWorkCardPlanQty = json['DayWorkCardPlanQty'];
-    cardNoReportStatus = json['FCardNoReportStatus'];
-    plantBody = json['PlantBody'];
-    processBillNumber = json['ProcessBillNumber'];
-    dispatchingNumber = json['DispatchingNumber'];
+    qtyPass = JsonParse.toDouble(json['FQtyPass']);
+    qtyProcessPass = JsonParse.toDouble(json['FQtyProcessPass']);
+    dayWorkCardPlanQty = JsonParse.toDouble(json['DayWorkCardPlanQty']);
+    cardNoReportStatus = JsonParse.toInt(json['FCardNoReportStatus']);
+    plantBody = JsonParse.str(json['PlantBody']);
+    processBillNumber = JsonParse.str(json['ProcessBillNumber']);
+    dispatchingNumber = JsonParse.toDouble(json['DispatchingNumber']);
   }
 
   double? qtyPass; //已汇报数
@@ -165,25 +165,25 @@ class WorkCardList {
       );
 
   WorkCardList.fromJson(dynamic json) {
-    id = json['ID'];
-    interID = json['InterID'];
-    entryID = json['EntryID'];
-    operPlanningEntryFID = json['OperPlanningEntryFID'];
-    empID = json['EmpID'];
-    workerCode = json['WorkerCode'];
-    workerName = json['WorkerName'];
-    sourceQty = json['SourceQty'];
-    mustQty = json['MustQty'];
-    preSchedulingQty = json['PreSchedulingQty'];
-    qty = json['Qty'];
-    finishQty = json['FinishQty'];
-    sourceEntryID = json['SourceEntryID'];
-    sourceInterID = json['SourceInterID'];
-    sourceEntryFID = json['SourceEntryFID'];
-    processNumber = json['ProcessNumber'];
-    processName = json['ProcessName'];
-    isOpen = json['IsOpen'];
-    routingID = json['RoutingID'];
+    id = JsonParse.toInt(json['ID']);
+    interID = JsonParse.toInt(json['InterID']);
+    entryID = JsonParse.toInt(json['EntryID']);
+    operPlanningEntryFID = JsonParse.toInt(json['OperPlanningEntryFID']);
+    empID = JsonParse.toInt(json['EmpID']);
+    workerCode = JsonParse.str(json['WorkerCode']);
+    workerName = JsonParse.str(json['WorkerName']);
+    sourceQty = JsonParse.toDouble(json['SourceQty']);
+    mustQty = JsonParse.toDouble(json['MustQty']);
+    preSchedulingQty = JsonParse.toDouble(json['PreSchedulingQty']);
+    qty = JsonParse.toDouble(json['Qty']);
+    finishQty = JsonParse.toDouble(json['FinishQty']);
+    sourceEntryID = JsonParse.toInt(json['SourceEntryID']);
+    sourceInterID = JsonParse.toInt(json['SourceInterID']);
+    sourceEntryFID = JsonParse.toInt(json['SourceEntryFID']);
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    processName = JsonParse.str(json['ProcessName']);
+    isOpen = JsonParse.toInt(json['IsOpen']);
+    routingID = JsonParse.toInt(json['RoutingID']);
   }
 
   int? id; //单据FID
@@ -280,15 +280,15 @@ class DispatchInfo {
   });
 
   DispatchInfo.fromJson(dynamic json) {
-    select = json['select'];
-    resigned = json['resigned'];
-    processName = json['processName'];
-    processNumber = json['processNumber'];
-    number = json['number'];
-    name = json['name'];
-    empID = json['empID'];
-    qty = json['qty'];
-    finishQty = json['finishQty'];
+    select = JsonParse.toBool(json['select']);
+    resigned = JsonParse.toBool(json['resigned']);
+    processName = JsonParse.str(json['processName']);
+    processNumber = JsonParse.str(json['processNumber']);
+    number = JsonParse.str(json['number']);
+    name = JsonParse.str(json['name']);
+    empID = JsonParse.toInt(json['empID']);
+    qty = JsonParse.toDouble(json['qty']);
+    finishQty = JsonParse.toDouble(json['finishQty']);
   }
 
   Map<String, dynamic> toJson() {
@@ -353,10 +353,10 @@ class SaveWorkProcedure {
   });
 
   SaveWorkProcedure.fromJson(dynamic json) {
-    id = json['id'];
-    plantBody = json['plantBody'];
-    saveTime = json['saveTime'];
-    dispatchJson = json['dispatchJson'];
+    id = JsonParse.toInt(json['id']);
+    plantBody = JsonParse.str(json['plantBody']);
+    saveTime = JsonParse.str(json['saveTime']);
+    dispatchJson = JsonParse.str(json['dispatchJson']);
   }
 
   Map<String, dynamic> toJson() {
@@ -440,9 +440,9 @@ class SaveDispatch {
   });
 
   SaveDispatch.fromJson(dynamic json) {
-    id = json['id'];
-    processBillNumber = json['processBillNumber'];
-    cacheJson = json['cacheJson'];
+    id = JsonParse.toInt(json['id']);
+    processBillNumber = JsonParse.str(json['processBillNumber']);
+    cacheJson = JsonParse.str(json['cacheJson']);
   }
 
   Map<String, dynamic> toJson() {
@@ -521,14 +521,9 @@ class CacheJson {
   });
 
   CacheJson.fromJson(dynamic json) {
-    processName = json['processName'];
-    processNumber = json['processNumber'];
-    if (json['dispatch'] != null) {
-      dispatch = [];
-      json['dispatch'].forEach((v) {
-        dispatch?.add(DispatchInfo.fromJson(v));
-      });
-    }
+    processName = JsonParse.str(json['processName']);
+    processNumber = JsonParse.str(json['processNumber']);
+    dispatch = JsonParse.list(json['dispatch'], DispatchInfo.fromJson);
   }
 
   Map<String, dynamic> toJson() {

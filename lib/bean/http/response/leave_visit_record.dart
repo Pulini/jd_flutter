@@ -1,6 +1,7 @@
 
 
 import 'photo_bean.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class LeaveVisitRecord {
   LeaveVisitRecord({
@@ -10,14 +11,9 @@ class LeaveVisitRecord {
   });
 
   LeaveVisitRecord.fromJson(dynamic json) {
-    interID = json['InterID'];
+    interID = JsonParse.str(json['InterID']);
     leavePics = json['LeaveTime'];
-    if (json['LeavePics'] != null) {
-      leavePics = [];
-      json['LeavePics'].forEach((v) {
-        leavePics?.add(PhotoBean.fromJson(v));
-      });
-    }
+    leavePics = JsonParse.list(json['LeavePics'], PhotoBean.fromJson);
   }
 
   String? interID;

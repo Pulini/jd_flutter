@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class HandoverProcessInfo {
   HandoverProcessInfo({
     this.processFlowID,
@@ -6,14 +7,9 @@ class HandoverProcessInfo {
   });
 
   HandoverProcessInfo.fromJson(dynamic json) {
-    processFlowID = json['ProcessFlowID'];
-    name = json['Name'];
-    if (json['ProcessNames'] != null) {
-      processNames = [];
-      json['ProcessNames'].forEach((v) {
-        processNames?.add(ProcessNameList.fromJson(v));
-      });
-    }
+    processFlowID = JsonParse.str(json['ProcessFlowID']);
+    name = JsonParse.str(json['Name']);
+    processNames = JsonParse.list(json['ProcessNames'], ProcessNameList.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -39,8 +35,8 @@ class ProcessNameList {
   });
 
   ProcessNameList.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    flag = json['Flag'];
+    processName = JsonParse.str(json['ProcessName']);
+    flag = JsonParse.toBool(json['Flag']);
 
   }
 

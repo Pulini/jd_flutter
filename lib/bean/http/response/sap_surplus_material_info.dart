@@ -12,9 +12,9 @@ class MaterialDetailInfo {
   MaterialDetailInfo({this.itemID, this.name, this.number});
 
   MaterialDetailInfo.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    name = json['Name'];
-    number = json['Number'];
+    itemID = JsonParse.toInt(json['ItemID']);
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['Number']);
   }
 
   Map<String, dynamic> toJson() {
@@ -81,11 +81,11 @@ class SurplusMaterialHistoryInfo {
   });
 
   SurplusMaterialHistoryInfo.fromJson(dynamic json) {
-    dispatchNo = json['DISPATCH_NO'];
-    factory = json['WERKS'];
-    warehouseNumber = json['LGORT'];
-    writeOff = json['STOKZ'];
-    submitDate = json['ERDAT'];
+    dispatchNo = JsonParse.str(json['DISPATCH_NO']);
+    factory = JsonParse.str(json['WERKS']);
+    warehouseNumber = JsonParse.str(json['LGORT']);
+    writeOff = JsonParse.str(json['STOKZ']);
+    submitDate = JsonParse.str(json['ERDAT']);
 
     surplusMaterialName =
         json['LT1_NAME'] ?? json['LT2_NAME'] ?? json['LT3_NAME'];
@@ -105,15 +105,15 @@ class SurplusMaterialHistoryInfo {
     // surplusMaterialExceedQty1 = json['MENGE_CC1'];
     // surplusMaterialExceedQty2 = json['MENGE_CC2'];
     // surplusMaterialExceedQty3 = json['MENGE_CC3'];
-    materialDocumentNo = json['MBLNR'];
-    materialVoucherYear = json['MJAHR'];
-    detailID = json['ZEILE'];
-    message = json['BAPI_MSG'];
-    messageType = json['BAPI_MTYPE'];
-    surplusMaterialType = json['LTTYPE'];
-    surplusMaterialTypeName = json['LTTYPE_STR'];
-    typeBody = json['ZZGCXT'];
-    machine = json['ZZPGJT'];
+    materialDocumentNo = JsonParse.str(json['MBLNR']);
+    materialVoucherYear = JsonParse.str(json['MJAHR']);
+    detailID = JsonParse.str(json['ZEILE']);
+    message = JsonParse.str(json['BAPI_MSG']);
+    messageType = JsonParse.str(json['BAPI_MTYPE']);
+    surplusMaterialType = JsonParse.str(json['LTTYPE']);
+    surplusMaterialTypeName = JsonParse.str(json['LTTYPE_STR']);
+    typeBody = JsonParse.str(json['ZZGCXT']);
+    machine = JsonParse.str(json['ZZPGJT']);
   }
 
   String stateText() {
@@ -177,10 +177,10 @@ class SurplusMaterialLabelInfo {
   }
 
   SurplusMaterialLabelInfo.fromJson(dynamic json) {
-    dispatchNumber = json['DispatchNumber'];
-    stubBar = json['StubBar'];
-    factory = json['Factory'];
-    date = json['Date'];
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    stubBar = JsonParse.str(json['StubBar']);
+    factory = JsonParse.str(json['Factory']);
+    date = JsonParse.str(json['Date']);
     nowTime = json['NowTime'].toString().toIntTry();
   }
 

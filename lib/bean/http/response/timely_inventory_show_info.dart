@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class TimelyInventoryShowInfo {
   TimelyInventoryShowInfo({
     this.materialNumber="",
@@ -19,23 +20,23 @@ class TimelyInventoryShowInfo {
   });
 
   TimelyInventoryShowInfo.fromJson(dynamic json) {
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    stockID = json['StockID'];
-    factoryNumber = json['FactoryNumber'];
-    batch = json['Batch'];
-    factoryDescribe = json['FactoryDescribe'];
-    lgobe = json['Lgobe'];
-    materialCode = json['MaterialCode'];
-    mtono = json['Mtono'];
-    productName = json['ProductName'];
-    size = json['Size'];
-    stockQty = json['StockQty'];
-    stockQty1 = json['StockQty1'];
-    unit = json['Unit'];
-    unit1 = json['Unit1'];
-    zcoefficient = json['Zcoefficient'];
-    zlocal = json['Zlocal'];
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    stockID = JsonParse.str(json['StockID']);
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    batch = JsonParse.str(json['Batch']);
+    factoryDescribe = JsonParse.str(json['FactoryDescribe']);
+    lgobe = JsonParse.str(json['Lgobe']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    mtono = JsonParse.str(json['Mtono']);
+    productName = JsonParse.str(json['ProductName']);
+    size = JsonParse.str(json['Size']);
+    stockQty = JsonParse.str(json['StockQty']);
+    stockQty1 = JsonParse.str(json['StockQty1']);
+    unit = JsonParse.str(json['Unit']);
+    unit1 = JsonParse.str(json['Unit1']);
+    zcoefficient = JsonParse.str(json['Zcoefficient']);
+    zlocal = JsonParse.str(json['Zlocal']);
 
   }
 

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class AttendanceDashboardInfo {
   AttendanceDashboardInfo({
     this.factory,
@@ -21,24 +22,24 @@ class AttendanceDashboardInfo {
   });
 
   AttendanceDashboardInfo.fromJson(dynamic json) {
-    factory = json['factory'];
-    departmentCode = json['departmentCode'];
-    departmentName = json['departmentName'];
-    totalEmployees = json['totalEmployees'];
-    attendanceCount = json['attendanceCount'];
-    absenceCount = json['absenceCount'];
-    lateOrEarlyCount = json['lateOrEarlyCount'];
-    publicHoliday = json['publicHoliday'];
-    legalHolidays = json['legalHolidays'];
-    yearRest = json['yearRest'];
-    absenceRate = json['absenceRate'];
-    leaveTotal = json['leaveTotal'];
-    casualLeave = json['casualLeave'];
-    sickLeave = json['sickLeave'];
-    workInjury = json['workInjury'];
-    maternityLeave = json['maternityLeave'];
-    marriageLeave = json['marriageLeave'];
-    funeralLeave = json['funeralLeave'];
+    factory = JsonParse.str(json['factory']);
+    departmentCode = JsonParse.str(json['departmentCode']);
+    departmentName = JsonParse.str(json['departmentName']);
+    totalEmployees = JsonParse.toInt(json['totalEmployees']);
+    attendanceCount = JsonParse.toInt(json['attendanceCount']);
+    absenceCount = JsonParse.toInt(json['absenceCount']);
+    lateOrEarlyCount = JsonParse.toInt(json['lateOrEarlyCount']);
+    publicHoliday = JsonParse.toDouble(json['publicHoliday']);
+    legalHolidays = JsonParse.toDouble(json['legalHolidays']);
+    yearRest = JsonParse.toDouble(json['yearRest']);
+    absenceRate = JsonParse.str(json['absenceRate']);
+    leaveTotal = JsonParse.toDouble(json['leaveTotal']);
+    casualLeave = JsonParse.toDouble(json['casualLeave']);
+    sickLeave = JsonParse.toDouble(json['sickLeave']);
+    workInjury = JsonParse.toDouble(json['workInjury']);
+    maternityLeave = JsonParse.toDouble(json['maternityLeave']);
+    marriageLeave = JsonParse.toDouble(json['marriageLeave']);
+    funeralLeave = JsonParse.toDouble(json['funeralLeave']);
   }
 
   /// 工厂名称
@@ -143,16 +144,16 @@ class TeamMemberInfo {
   String? phone;
 
   TeamMemberInfo.fromJson(dynamic json) {
-    empNumber = json['empNumber'];
-    empID = json['empID'];
-    empName = json['empName'];
-    beginHireDate = json['beginHireDate'];
-    departmentID = json['departmentID'];
-    deptNumber = json['deptNumber'];
-    deptName = json['deptName'];
-    dutyName = json['dutyName'];
-    photo = json['photo'];
-    phone = json['phone'];
+    empNumber = JsonParse.str(json['empNumber']);
+    empID = JsonParse.toInt(json['empID']);
+    empName = JsonParse.str(json['empName']);
+    beginHireDate = JsonParse.str(json['beginHireDate']);
+    departmentID = JsonParse.toInt(json['departmentID']);
+    deptNumber = JsonParse.str(json['deptNumber']);
+    deptName = JsonParse.str(json['deptName']);
+    dutyName = JsonParse.str(json['dutyName']);
+    photo = JsonParse.str(json['photo']);
+    phone = JsonParse.str(json['phone']);
   }
 
   TeamMemberInfo({

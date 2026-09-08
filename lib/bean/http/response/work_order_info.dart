@@ -27,26 +27,16 @@ class WorkOrderInfo {
   });
 
   WorkOrderInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    orderBill = json['OrderBill'];
-    orderDate = json['OrderDate'];
-    plantBody = json['PlantBody'];
-    group = json['Group'];
-    processFlowName = json['ProcessFlowName'];
-    materialCode = json['MaterialCode'];
-    workNumberTotal = json['WorkNumberTotal'];
-    if (json['CodeInfos'] != null) {
-      codeInfos = [];
-      json['CodeInfos'].forEach((v) {
-        codeInfos?.add(CodeInfo.fromJson(v));
-      });
-    }
-    if (json['MtonoInfos'] != null) {
-      mtonoInfos = [];
-      json['MtonoInfos'].forEach((v) {
-        mtonoInfos?.add(MtonoInfos.fromJson(v));
-      });
-    }
+    interID = JsonParse.toInt(json['InterID']);
+    orderBill = JsonParse.str(json['OrderBill']);
+    orderDate = JsonParse.str(json['OrderDate']);
+    plantBody = JsonParse.str(json['PlantBody']);
+    group = JsonParse.str(json['Group']);
+    processFlowName = JsonParse.str(json['ProcessFlowName']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    workNumberTotal = JsonParse.str(json['WorkNumberTotal']);
+    codeInfos = JsonParse.list(json['CodeInfos'], CodeInfo.fromJson);
+    mtonoInfos = JsonParse.list(json['MtonoInfos'], MtonoInfos.fromJson);
   }
 
   int? interID;
@@ -140,8 +130,8 @@ class MtonoInfos {
   });
 
   MtonoInfos.fromJson(dynamic json) {
-    planBill = json['PlanBill'];
-    workNumberTotal = json['WorkNumberTotal'];
+    planBill = JsonParse.str(json['PlanBill']);
+    workNumberTotal = JsonParse.str(json['WorkNumberTotal']);
   }
 
   String? planBill;
@@ -166,7 +156,7 @@ class CodeInfo {
 
   CodeInfo.fromJson(dynamic json) {
     codeQty = json['CodeQty'].toString().toDoubleTry();
-    partNames = json['PartNames'];
+    partNames = JsonParse.str(json['PartNames']);
   }
 
   double? codeQty;

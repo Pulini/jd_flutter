@@ -1,11 +1,12 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ScanCode {
   ScanCode({
     this.palletNumber,
     this.code,});
 
   ScanCode.fromJson(dynamic json) {
-    palletNumber = json['PalletNumber'];
-    code = json['Code'];
+    palletNumber = JsonParse.str(json['PalletNumber']);
+    code = JsonParse.str(json['Code']);
 
   }
   String? palletNumber;

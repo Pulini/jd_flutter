@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ContainerScanner {
   ContainerScanner({
     this.cabinetNumber, //柜号
@@ -6,9 +7,9 @@ class ContainerScanner {
   });
 
   ContainerScanner.fromJson(dynamic json) {
-    cabinetNumber = json['ZZKHXH1'];
-    shouldRelease = json['ZZYCXS'];
-    isSued = json['YFXS'];
+    cabinetNumber = JsonParse.str(json['ZZKHXH1']);
+    shouldRelease = JsonParse.toInt(json['ZZYCXS']);
+    isSued = JsonParse.toInt(json['YFXS']);
   }
 
   String? cabinetNumber; //柜号

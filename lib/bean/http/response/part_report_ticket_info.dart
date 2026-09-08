@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PartReportTicketInfo {
   PartReportTicketInfo({
     this.factoryType,
@@ -11,19 +12,14 @@ class PartReportTicketInfo {
   });
 
   PartReportTicketInfo.fromJson(dynamic json) {
-    factoryType = json['FactoryType'];
-    partName = json['PartName'];
-    processName = json['ProcessName'];
-    qty = json['Qty'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    if (json['Items'] != null) {
-      ticketItem = [];
-      json['Items'].forEach((v) {
-        ticketItem?.add(TicketItem.fromJson(v));
-      });
-    }
+    factoryType = JsonParse.str(json['FactoryType']);
+    partName = JsonParse.str(json['PartName']);
+    processName = JsonParse.str(json['ProcessName']);
+    qty = JsonParse.toDouble(json['Qty']);
+    empID = JsonParse.str(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    ticketItem = JsonParse.list(json['Items'], TicketItem.fromJson);
   }
 
   String? factoryType; //工厂型体
@@ -62,10 +58,10 @@ class TicketItem {
   });
 
   TicketItem.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    mtono = json['Mtono'];
-    size = json['Size'];
-    qty = json['Qty'];
+    processName = JsonParse.str(json['ProcessName']);
+    mtono = JsonParse.str(json['Mtono']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
 
   }
 

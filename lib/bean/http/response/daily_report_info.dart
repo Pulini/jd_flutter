@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class DailyReport {
   DailyReport({
@@ -11,11 +12,11 @@ class DailyReport {
   });
 
   DailyReport.fromJson(dynamic json) {
-    type = json['Type'];
-    materialName = json['MaterialName'];
-    size = json['Size'];
-    processName = json['ProcessName'];
-    seOrderNo = json['SeOrderNo'];
+    type = JsonParse.toInt(json['Type']);
+    materialName = JsonParse.str(json['MaterialName']);
+    size = JsonParse.str(json['Size']);
+    processName = JsonParse.str(json['ProcessName']);
+    seOrderNo = JsonParse.str(json['SeOrderNo']);
     qty = json['Qty'].toString();
   }
 

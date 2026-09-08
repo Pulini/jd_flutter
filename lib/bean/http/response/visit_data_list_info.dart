@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // InterID : 2300
 // Number : "LFRY2002300"
 // Name : "11"
@@ -39,26 +40,26 @@ class VisitDataListInfo {
       this.submitType,});
 
   VisitDataListInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    number = json['Number'];
-    name = json['Name'];
-    iDCard = json['IDCard'];
-    unit = json['Unit'];
-    phone = json['Phone'];
-    visitedFactory = json['VisitedFactory'];
-    visitedDept = json['VisitedDept'];
-    intervieweeName = json['IntervieweeName'];
+    interID = JsonParse.str(json['InterID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    iDCard = JsonParse.str(json['IDCard']);
+    unit = JsonParse.str(json['Unit']);
+    phone = JsonParse.str(json['Phone']);
+    visitedFactory = JsonParse.str(json['VisitedFactory']);
+    visitedDept = JsonParse.str(json['VisitedDept']);
+    intervieweeName = JsonParse.str(json['IntervieweeName']);
     visitorNum = json['VisitorNum'] is String
         ? int.tryParse(json['VisitorNum'])
         : json['VisitorNum'];
-    securityStaff = json['SecurityStaff'];
-    dateTime = json['DateTime'];
-    leaveTime = json['LeaveTime'];
-    carNo = json['CarNo'];
-    carType = json['CarType'];
-    dataSourceType = json['DataSourceType'];
-    sourceID = json['SourceID'];
-    submitType = json['SubmitType'];
+    securityStaff = JsonParse.str(json['SecurityStaff']);
+    dateTime = JsonParse.str(json['DateTime']);
+    leaveTime = JsonParse.str(json['LeaveTime']);
+    carNo = JsonParse.str(json['CarNo']);
+    carType = JsonParse.str(json['CarType']);
+    dataSourceType = JsonParse.toInt(json['DataSourceType']);
+    sourceID = JsonParse.str(json['SourceID']);
+    submitType = JsonParse.toInt(json['SubmitType']);
   }
   String? interID;
   String? number;

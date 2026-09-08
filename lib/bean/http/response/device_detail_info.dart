@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // ID : "35666"
 // ItemID : "10"
 // Number : "DDSA202A"
@@ -29,19 +30,19 @@ class DeviceDetailInfo {
       this.nowDegree='',});
 
   DeviceDetailInfo.fromJson(dynamic json) {
-    id = json['ID'];
-    itemID = json['ItemID'];
-    number = json['Number'];
-    name = json['Name'];
-    organizeName = json['OrganizeName'];
-    dormitoriesName = json['DormitoriesName'];
-    floor = json['Floor'];
-    roomNumber = json['RoomNumber'];
-    typeName = json['TypeName'];
-    isUse = json['IsUse'];
-    lastDateTime = json['LastDateTime'];
-    lastDegree = json['LastDegree'];
-    nowDegree = json['NowDegree'];
+    id = JsonParse.str(json['ID']);
+    itemID = JsonParse.str(json['ItemID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    organizeName = JsonParse.str(json['OrganizeName']);
+    dormitoriesName = JsonParse.str(json['DormitoriesName']);
+    floor = JsonParse.str(json['Floor']);
+    roomNumber = JsonParse.str(json['RoomNumber']);
+    typeName = JsonParse.str(json['TypeName']);
+    isUse = JsonParse.str(json['IsUse']);
+    lastDateTime = JsonParse.str(json['LastDateTime']);
+    lastDegree = JsonParse.str(json['LastDegree']);
+    nowDegree = JsonParse.str(json['NowDegree']);
   }
   String? id;
   String? itemID;

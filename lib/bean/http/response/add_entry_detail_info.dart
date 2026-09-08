@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // exNumber : "SCPZYCD240000009"
 // empName : "叶明杰"
 // empNumber : "019766"
@@ -21,16 +22,16 @@ class AddEntryDetailInfo {
       this.reCheck,});
 
   AddEntryDetailInfo.fromJson(dynamic json) {
-    exNumber = json['exNumber'];
-    billDate = json['billDate'];
-    empID = json['empID'];
-    empName = json['empName'];
-    empNumber = json['empNumber'];
-    qty = json['qty'];
-    exceptionID = json['exceptionID'];
-    exceptionName = json['exceptionName'];
-    exceptionLevel = json['exceptionLevel'];
-    reCheck = json['reCheck'];
+    exNumber = JsonParse.str(json['exNumber']);
+    billDate = JsonParse.str(json['billDate']);
+    empID = JsonParse.toInt(json['empID']);
+    empName = JsonParse.str(json['empName']);
+    empNumber = JsonParse.str(json['empNumber']);
+    qty = JsonParse.toDouble(json['qty']);
+    exceptionID = JsonParse.toInt(json['exceptionID']);
+    exceptionName = JsonParse.str(json['exceptionName']);
+    exceptionLevel = JsonParse.str(json['exceptionLevel']);
+    reCheck = JsonParse.str(json['reCheck']);
   }
   String? exNumber;
   String? billDate;

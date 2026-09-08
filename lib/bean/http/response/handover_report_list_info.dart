@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // InterID : 44485
 // DispatchNumber : "000000116158"
 // Shift : "白班"
@@ -20,24 +21,14 @@ class HandoverReportListInfo {
   });
 
   HandoverReportListInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    dispatchNumber = json['DispatchNumber'];
-    shift = json['Shift'];
-    machine = json['Machine'];
-    factoryType = json['FactoryType'];
-    if (json['EmpList'] != null) {
-      empList = [];
-      json['EmpList'].forEach((v) {
-        empList?.add(EmpList.fromJson(v));
-      });
-    }
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(SizeList.fromJson(v));
-      });
-    }
-    status = json['Status'];
+    interID = JsonParse.toInt(json['InterID']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    shift = JsonParse.str(json['Shift']);
+    machine = JsonParse.str(json['Machine']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    empList = JsonParse.list(json['EmpList'], EmpList.fromJson);
+    sizeList = JsonParse.list(json['SizeList'], SizeList.fromJson);
+    status = JsonParse.toBool(json['Status']);
   }
 
   int? interID;
@@ -87,13 +78,13 @@ class SizeList {
   });
 
   SizeList.fromJson(dynamic json) {
-    size = json['Size'];
-    boxesQty = json['BoxesQty'];
-    dispatchQty = json['DispatchQty'];
-    lastMantissa = json['LastMantissa'];
-    mantissa = json['Mantissa'];
-    qty = json['Qty'];
-    capacity = json['Capacity'];
+    size = JsonParse.str(json['Size']);
+    boxesQty = JsonParse.toDouble(json['BoxesQty']);
+    dispatchQty = JsonParse.toDouble(json['DispatchQty']);
+    lastMantissa = JsonParse.toDouble(json['LastMantissa']);
+    mantissa = JsonParse.toDouble(json['Mantissa']);
+    qty = JsonParse.toDouble(json['Qty']);
+    capacity = JsonParse.toDouble(json['Capacity']);
   }
 
   String? size;
@@ -131,10 +122,10 @@ class EmpList {
   });
 
   EmpList.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    empName = json['EmpName'];
-    qty = json['Qty'];
-    unit = json['Unit'];
+    processName = JsonParse.str(json['ProcessName']);
+    empName = JsonParse.str(json['EmpName']);
+    qty = JsonParse.toDouble(json['Qty']);
+    unit = JsonParse.str(json['Unit']);
   }
 
   String? processName;

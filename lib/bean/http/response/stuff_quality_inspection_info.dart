@@ -127,67 +127,67 @@ class StuffQualityInspectionInfo {
   });
 
   StuffQualityInspectionInfo.fromJson(dynamic json) {
-    orderType = json['OrderType'];
-    companyCode = json['CompanyCode'];
-    purchaseVoucherNo = json['PurchaseVoucherNo'];
-    purchaseDocumentItemNumber = json['PurchaseDocumentItemNumber'];
-    planningLineNumber = json['PlanningLineNumber'];
-    isColorSeparation = json['IsColorSeparation'];
-    isReturns = json['IsReturns'];
-    supplierNumber = json['SupplierNumber'];
-    materialDescription = json['MaterialDescription'];
-    materialCode = json['MaterialCode'];
-    materialDocumentNo = json['MaterialDocumentNo'];
-    materialDocumentNumberReversal = json['MaterialDocumentNumberReversal'];
-    materialVoucherYear = json['MaterialVoucherYear'];
-    materialVoucherAnnualReversal = json['MaterialVoucherAnnualReversal'];
-    taxCode = json['TaxCode'];
-    name1 = json['Name1'];
-    characteristicValue = json['CharacteristicValue'];
+    orderType = JsonParse.str(json['OrderType']);
+    companyCode = JsonParse.str(json['CompanyCode']);
+    purchaseVoucherNo = JsonParse.str(json['PurchaseVoucherNo']);
+    purchaseDocumentItemNumber = JsonParse.str(json['PurchaseDocumentItemNumber']);
+    planningLineNumber = JsonParse.str(json['PlanningLineNumber']);
+    isColorSeparation = JsonParse.str(json['IsColorSeparation']);
+    isReturns = JsonParse.str(json['IsReturns']);
+    supplierNumber = JsonParse.str(json['SupplierNumber']);
+    materialDescription = JsonParse.str(json['MaterialDescription']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialDocumentNo = JsonParse.str(json['MaterialDocumentNo']);
+    materialDocumentNumberReversal = JsonParse.str(json['MaterialDocumentNumberReversal']);
+    materialVoucherYear = JsonParse.str(json['MaterialVoucherYear']);
+    materialVoucherAnnualReversal = JsonParse.str(json['MaterialVoucherAnnualReversal']);
+    taxCode = JsonParse.str(json['TaxCode']);
+    name1 = JsonParse.str(json['Name1']);
+    characteristicValue = JsonParse.str(json['CharacteristicValue']);
     salesAndDistributionVoucherNumber =
         json['SalesAndDistributionVoucherNumber'];
-    factoryNumber = json['FactoryNumber'];
-    baseQuantity = json['BaseQuantity'];
-    basicUnit = json['BasicUnit'];
-    billDate = json['BillDate'];
-    tempreBillDate = json['TempreBillDate'];
-    biller = json['Biller'];
-    billTime = json['BillTime'];
-    inspectionOrderNo = json['InspectionOrderNo'];
-    inspectionLineNumber = json['InspectionLineNumber'];
-    inspectionMethod = json['InspectionMethod'];
-    inspectionQuantity = json['InspectionQuantity'];
-    samplingRatio = json['SamplingRatio'];
-    coefficient = json['Coefficient'];
-    commonUnits = json['CommonUnits'];
-    deleteReason = json['DeleteReason'];
-    deliAddress = json['DeliAddress'];
-    itemLineItem = json['ItemLineItem'];
-    materialVoucherItem = json['MaterialVoucherItem'];
-    detailIDReversal = json['DetailIDReversal'];
-    storageQuantity = json['StorageQuantity'];
-    location = json['Location'];
-    location1 = json['Location1'];
-    qualifiedQuantity = json['QualifiedQuantity'];
-    remarks = json['Remarks'];
-    remarks1 = json['Remarks1'];
-    samplingQuantity = json['SamplingQuantity'];
-    shortCodesNumber = json['ShortCodesNumber'];
-    sourceOrderType = json['SourceOrderType'];
-    temporaryNo = json['TemporaryNo'];
-    temporaryCollectionBankNo = json['TemporaryCollectionBankNo'];
-    unqualifiedQuantity = json['UnqualifiedQuantity'];
-    unqualifiedReason = json['UnqualifiedReason'];
-    distributiveForm = json['DistributiveForm'];
-    fullCheckFlag = json['FullCheckFlag'];
-    batchIdentification = json['BatchIdentification'];
-    factoryType = json['FactoryType'];
-    isCodeRunningMaterial = json['IsCodeRunningMaterial'];
-    colorSeparation = json['ColorSeparation'];
-    isPiece = json['IsPiece'];
-    trackNo = json['TrackNo'];
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    baseQuantity = JsonParse.str(json['BaseQuantity']);
+    basicUnit = JsonParse.str(json['BasicUnit']);
+    billDate = JsonParse.str(json['BillDate']);
+    tempreBillDate = JsonParse.str(json['TempreBillDate']);
+    biller = JsonParse.str(json['Biller']);
+    billTime = JsonParse.str(json['BillTime']);
+    inspectionOrderNo = JsonParse.str(json['InspectionOrderNo']);
+    inspectionLineNumber = JsonParse.str(json['InspectionLineNumber']);
+    inspectionMethod = JsonParse.str(json['InspectionMethod']);
+    inspectionQuantity = JsonParse.str(json['InspectionQuantity']);
+    samplingRatio = JsonParse.str(json['SamplingRatio']);
+    coefficient = JsonParse.str(json['Coefficient']);
+    commonUnits = JsonParse.str(json['CommonUnits']);
+    deleteReason = JsonParse.str(json['DeleteReason']);
+    deliAddress = JsonParse.str(json['DeliAddress']);
+    itemLineItem = JsonParse.str(json['ItemLineItem']);
+    materialVoucherItem = JsonParse.str(json['MaterialVoucherItem']);
+    detailIDReversal = JsonParse.str(json['DetailIDReversal']);
+    storageQuantity = JsonParse.str(json['StorageQuantity']);
+    location = JsonParse.str(json['Location']);
+    location1 = JsonParse.str(json['Location1']);
+    qualifiedQuantity = JsonParse.str(json['QualifiedQuantity']);
+    remarks = JsonParse.str(json['Remarks']);
+    remarks1 = JsonParse.str(json['Remarks1']);
+    samplingQuantity = JsonParse.str(json['SamplingQuantity']);
+    shortCodesNumber = JsonParse.str(json['ShortCodesNumber']);
+    sourceOrderType = JsonParse.str(json['SourceOrderType']);
+    temporaryNo = JsonParse.str(json['TemporaryNo']);
+    temporaryCollectionBankNo = JsonParse.str(json['TemporaryCollectionBankNo']);
+    unqualifiedQuantity = JsonParse.str(json['UnqualifiedQuantity']);
+    unqualifiedReason = JsonParse.str(json['UnqualifiedReason']);
+    distributiveForm = JsonParse.str(json['DistributiveForm']);
+    fullCheckFlag = JsonParse.str(json['FullCheckFlag']);
+    batchIdentification = JsonParse.str(json['BatchIdentification']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    isCodeRunningMaterial = JsonParse.str(json['IsCodeRunningMaterial']);
+    colorSeparation = JsonParse.str(json['ColorSeparation']);
+    isPiece = JsonParse.str(json['IsPiece']);
+    trackNo = JsonParse.str(json['TrackNo']);
     colorDistinguishEnable = json['ColorDistinguishEnable'] == 'X';
-    barCode = json['BQID_Org'];
+    barCode = JsonParse.str(json['BQID_Org']);
   }
 
   String? orderType;
@@ -351,42 +351,32 @@ class StuffQualityInspectionDetailInfo {
   });
 
   StuffQualityInspectionDetailInfo.fromJson(dynamic json) {
-    inspectionOrderNo = json['InspectionOrderNo'];
-    inspectionLineNumber = json['InspectionLineNumber'];
-    temporaryNo = json['TemporaryNo'];
-    temporaryCollectionBankNo = json['TemporaryCollectionBankNo'];
-    purchaseOrderNumber = json['PurchaseOrderNumber'];
-    purchaseOrderLineItem = json['PurchaseOrderLineItem'];
+    inspectionOrderNo = JsonParse.str(json['InspectionOrderNo']);
+    inspectionLineNumber = JsonParse.str(json['InspectionLineNumber']);
+    temporaryNo = JsonParse.str(json['TemporaryNo']);
+    temporaryCollectionBankNo = JsonParse.str(json['TemporaryCollectionBankNo']);
+    purchaseOrderNumber = JsonParse.str(json['PurchaseOrderNumber']);
+    purchaseOrderLineItem = JsonParse.str(json['PurchaseOrderLineItem']);
     salesAndDistributionVoucherNumber =
         json['SalesAndDistributionVoucherNumber'];
-    factoryType = json['FactoryType'];
-    materialCode = json['MaterialCode'];
-    materialDescription = json['MaterialDescription'];
-    basicUnit = json['BasicUnit'];
-    basicQuantity = json['BasicQuantity'];
-    coefficient = json['Coefficient'];
-    commonUnits = json['CommonUnits'];
-    inspectionMethod = json['InspectionMethod'];
-    samplingRatio = json['SamplingRatio'];
-    inspectionQuantity = json['InspectionQuantity'];
-    qualifiedQuantity = json['QualifiedQuantity'];
-    unqualifiedQuantity = json['UnqualifiedQuantity'];
-    shortCodesNumber = json['ShortCodesNumber'];
-    storageQuantity = json['StorageQuantity'];
-    remarks = json['Remarks'];
-    location = json['Location'];
-    if (json['UnqualifiedList'] != null) {
-      unqualifiedList = [];
-      json['UnqualifiedList'].forEach((v) {
-        unqualifiedList?.add(UnqualifiedList.fromJson(v));
-      });
-    }
-    if (json['ColorSeparationList'] != null) {
-      stuffColorSeparationList = [];
-      json['ColorSeparationList'].forEach((v) {
-        stuffColorSeparationList?.add(StuffColorSeparationList.fromJson(v));
-      });
-    }
+    factoryType = JsonParse.str(json['FactoryType']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialDescription = JsonParse.str(json['MaterialDescription']);
+    basicUnit = JsonParse.str(json['BasicUnit']);
+    basicQuantity = JsonParse.str(json['BasicQuantity']);
+    coefficient = JsonParse.str(json['Coefficient']);
+    commonUnits = JsonParse.str(json['CommonUnits']);
+    inspectionMethod = JsonParse.str(json['InspectionMethod']);
+    samplingRatio = JsonParse.str(json['SamplingRatio']);
+    inspectionQuantity = JsonParse.str(json['InspectionQuantity']);
+    qualifiedQuantity = JsonParse.str(json['QualifiedQuantity']);
+    unqualifiedQuantity = JsonParse.str(json['UnqualifiedQuantity']);
+    shortCodesNumber = JsonParse.str(json['ShortCodesNumber']);
+    storageQuantity = JsonParse.str(json['StorageQuantity']);
+    remarks = JsonParse.str(json['Remarks']);
+    location = JsonParse.str(json['Location']);
+    unqualifiedList = JsonParse.list(json['UnqualifiedList'], UnqualifiedList.fromJson);
+    stuffColorSeparationList = JsonParse.list(json['ColorSeparationList'], StuffColorSeparationList.fromJson);
   }
 
   String? inspectionOrderNo;
@@ -478,16 +468,16 @@ class StuffColorSeparationList {
   });
 
   StuffColorSeparationList.fromJson(dynamic json) {
-    factory = json['Factory'];
-    inspectionOrderNo = json['InspectionOrderNo'];
-    inspectionLineNumber = json['InspectionLineNumber'];
-    colorSeparationSheetNumber = json['ColorSeparationSheetNumber'];
-    colorSeparationSingleLineNumber = json['ColorSeparationSingleLineNumber'];
-    batch = json['Batch'];
-    colorSeparationQuantity = json['ColorSeparationQuantity'];
-    location = json['Location'];
-    materialCode = json['MaterialCode'];
-    materialDescription = json['MaterialDescription'];
+    factory = JsonParse.str(json['Factory']);
+    inspectionOrderNo = JsonParse.str(json['InspectionOrderNo']);
+    inspectionLineNumber = JsonParse.str(json['InspectionLineNumber']);
+    colorSeparationSheetNumber = JsonParse.str(json['ColorSeparationSheetNumber']);
+    colorSeparationSingleLineNumber = JsonParse.str(json['ColorSeparationSingleLineNumber']);
+    batch = JsonParse.str(json['Batch']);
+    colorSeparationQuantity = JsonParse.str(json['ColorSeparationQuantity']);
+    location = JsonParse.str(json['Location']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialDescription = JsonParse.str(json['MaterialDescription']);
   }
 
   String? factory;
@@ -526,10 +516,10 @@ class UnqualifiedList {
   });
 
   UnqualifiedList.fromJson(dynamic json) {
-    inspectionLineNumber = json['InspectionLineNumber'];
-    unqualifiedNumber = json['UnqualifiedNumber'];
-    unqualifiedLineNumber = json['UnqualifiedLineNumber'];
-    unqualifiedReason = json['UnqualifiedReason'];
+    inspectionLineNumber = JsonParse.str(json['InspectionLineNumber']);
+    unqualifiedNumber = JsonParse.str(json['UnqualifiedNumber']);
+    unqualifiedLineNumber = JsonParse.str(json['UnqualifiedLineNumber']);
+    unqualifiedReason = JsonParse.str(json['UnqualifiedReason']);
   }
 
   String? inspectionLineNumber; // 检验单行号ZCHECKBSEQ
@@ -584,11 +574,11 @@ class QualityInspectionColorInfo {
   });
 
   QualityInspectionColorInfo.fromJson(dynamic json) {
-    inspectionOrderNo = json['ZCHECKBNO'];
-    materialCode = json['MATNR'];
-    batchNo = json['CHARG'];
+    inspectionOrderNo = JsonParse.str(json['ZCHECKBNO']);
+    materialCode = JsonParse.str(json['MATNR']);
+    batchNo = JsonParse.str(json['CHARG']);
     qty = json['ZCOSEPQTY'].toString().toDoubleTry();
-    unit = json['ZCOMMUNIT'];
+    unit = JsonParse.str(json['ZCOMMUNIT']);
   }
 
   double getMaterialTotalQty() =>bindingLabels.isEmpty?0:bindingLabels.map((v)=>v.commonQty).reduce((a,b)=>a.add(b));
@@ -608,9 +598,9 @@ class QualityInspectionLabelInfo {
   });
 
   QualityInspectionLabelInfo.fromJson(dynamic json) {
-    labelID = json['BQID'];
-    pieceNo = json['ZPIECE_NO'];
-    orderNo = json['ZDELINO'];
+    labelID = JsonParse.str(json['BQID']);
+    pieceNo = JsonParse.str(json['ZPIECE_NO']);
+    orderNo = JsonParse.str(json['ZDELINO']);
     materialList = [
       if (json['GT_ITEM2'] != null)
         for (var item in json['GT_ITEM2'])
@@ -639,13 +629,13 @@ class QualityInspectionLabelMaterialInfo {
   });
 
   QualityInspectionLabelMaterialInfo.fromJson(dynamic json) {
-    labelID = json['BQID'];
-    materialNumber = json['MATNR'];
-    materialName = json['ZMAKTX'];
+    labelID = JsonParse.str(json['BQID']);
+    materialNumber = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTX']);
     baseQty = json['MENGE'].toString().toDoubleTry();
-    baseUnit = json['MEINS'];
+    baseUnit = JsonParse.str(json['MEINS']);
     commonQty = json['ERFMG'].toString().toDoubleTry();
-    commonUnit = json['ERFME'];
+    commonUnit = JsonParse.str(json['ERFME']);
   }
   String dataId()=>'$labelID$materialNumber';
 }

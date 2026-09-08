@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ReprintLabelInfo {
   bool select = false;
 
@@ -52,29 +53,29 @@ class ReprintLabelInfo {
   });
 
   ReprintLabelInfo.fromJson(dynamic json) {
-    factory = json['WERKS'];
-    warehouse = json['LGORT'];
-    palletNumber = json['ZFTRAYNO'];
-    labelNumber = json['BQID'];
-    boxCapacity = json['ZXR'];
-    materialCode = json['SATNR'];
-    materialName = json['MAKTX'];
-    typeBody = json['ZZXTNO'];
-    size = json['SIZE1'];
-    instructionNo = json['ZVBELN_ORI'];
-    salesOrderNumber = json['KDAUF'];
-    salesOrderLineItem = json['KDPOS'];
+    factory = JsonParse.str(json['WERKS']);
+    warehouse = JsonParse.str(json['LGORT']);
+    palletNumber = JsonParse.str(json['ZFTRAYNO']);
+    labelNumber = JsonParse.str(json['BQID']);
+    boxCapacity = JsonParse.toDouble(json['ZXR']);
+    materialCode = JsonParse.str(json['SATNR']);
+    materialName = JsonParse.str(json['MAKTX']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    size = JsonParse.str(json['SIZE1']);
+    instructionNo = JsonParse.str(json['ZVBELN_ORI']);
+    salesOrderNumber = JsonParse.str(json['KDAUF']);
+    salesOrderLineItem = JsonParse.toInt(json['KDPOS']);
     quantity = json['MENGE'].toDouble();
-    unit = json['MEINS'];
-    deliveryDate = json['EINDT'];
-    numPage = json['ZPQYM'];
-    dispatchNumber = json['DISPATCH_NO'];
-    decrementTableNumber = json['ZZDJBH'];
-    dispatchDate = json['DISPATCH_DATE'];
-    dayOrNightShift = json['ZZBC'];
-    machineNumber = json['ZZPGJT'];
-    process = json['KTSCH'];
-    isNewLabel = json['ISNEW'];
+    unit = JsonParse.str(json['MEINS']);
+    deliveryDate = JsonParse.str(json['EINDT']);
+    numPage = JsonParse.str(json['ZPQYM']);
+    dispatchNumber = JsonParse.str(json['DISPATCH_NO']);
+    decrementTableNumber = JsonParse.str(json['ZZDJBH']);
+    dispatchDate = JsonParse.str(json['DISPATCH_DATE']);
+    dayOrNightShift = JsonParse.str(json['ZZBC']);
+    machineNumber = JsonParse.str(json['ZZPGJT']);
+    process = JsonParse.str(json['KTSCH']);
+    isNewLabel = JsonParse.str(json['ISNEW']);
   }
 
   Map<String, dynamic> toJson() {

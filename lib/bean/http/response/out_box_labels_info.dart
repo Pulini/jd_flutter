@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // {
 // "InterID": "178329",
 // "CustOrderNumber": "12345649",
@@ -28,19 +29,14 @@ class OutBoxLabelsInfo {
   });
 
   OutBoxLabelsInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    custOrderNumber = json['CustOrderNumber'];
-    outBoxBarCode = json['OutBoxBarCode'];
-    tailCartonCode = json['TailCartonCode'];
-    mix = json['Mix'];
-    dispatchNumber = json['DispatchNumber'];
-    guid = json['GUID'];
-    if (json['MantissaDataSizeList'] != null) {
-      mantissaDataSizeList = [];
-      json['MantissaDataSizeList'].forEach((v) {
-        mantissaDataSizeList?.add(MantissaDataSizeList.fromJson(v));
-      });
-    }
+    interID = JsonParse.str(json['InterID']);
+    custOrderNumber = JsonParse.str(json['CustOrderNumber']);
+    outBoxBarCode = JsonParse.str(json['OutBoxBarCode']);
+    tailCartonCode = JsonParse.str(json['TailCartonCode']);
+    mix = JsonParse.toInt(json['Mix']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    guid = JsonParse.str(json['GUID']);
+    mantissaDataSizeList = JsonParse.list(json['MantissaDataSizeList'], MantissaDataSizeList.fromJson);
   }
 
   String? interID;
@@ -85,10 +81,10 @@ class MantissaDataSizeList {
   }): thisShortQty = thisShortQty ?? shortQty;
 
   MantissaDataSizeList.fromJson(dynamic json) {
-    priceBarCode = json['PriceBarCode'];
-    size = json['Size'];
-    labelCount = json['LabelCount'];
-    shortQty = json['ShortQty'];
+    priceBarCode = JsonParse.str(json['PriceBarCode']);
+    size = JsonParse.str(json['Size']);
+    labelCount = JsonParse.toInt(json['LabelCount']);
+    shortQty = JsonParse.toInt(json['ShortQty']);
     thisShortQty = shortQty;
   }
 

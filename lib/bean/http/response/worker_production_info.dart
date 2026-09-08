@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // EmpID : 141661
 // EmpNumber : "016483"
 // EmpName : "刘文勇"
@@ -17,18 +18,13 @@ class WorkerProductionInfo {
       this.itemList,});
 
   WorkerProductionInfo.fromJson(dynamic json) {
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
-    processCode = json['ProcessCode'];
-    processName = json['ProcessName'];
-    empFinishQty = json['EmpFinishQty'];
-    if (json['ItemList'] != null) {
-      itemList = [];
-      json['ItemList'].forEach((v) {
-        itemList?.add(ItemList.fromJson(v));
-      });
-    }
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
+    processCode = JsonParse.str(json['ProcessCode']);
+    processName = JsonParse.str(json['ProcessName']);
+    empFinishQty = JsonParse.toDouble(json['EmpFinishQty']);
+    itemList = JsonParse.list(json['ItemList'], ItemList.fromJson);
   }
   int? empID;
   String? empNumber;
@@ -63,8 +59,8 @@ class ItemList {
       this.empFinishQty,});
 
   ItemList.fromJson(dynamic json) {
-    materialName = json['MaterialName'];
-    empFinishQty = json['EmpFinishQty'];
+    materialName = JsonParse.str(json['MaterialName']);
+    empFinishQty = JsonParse.toDouble(json['EmpFinishQty']);
   }
   String? materialName;
   double? empFinishQty;

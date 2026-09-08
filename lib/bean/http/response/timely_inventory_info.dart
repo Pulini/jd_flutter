@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // MaterialNumber : "1201190"
 // MaterialName : "聚氨酯水溶液（水性胶）"
 // StockID : "1001"
@@ -13,16 +14,11 @@ class TimelyInventoryInfo {
       this.items,});
 
   TimelyInventoryInfo.fromJson(dynamic json) {
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    stockID = json['StockID'];
-    factoryNumber = json['FactoryNumber'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(TimeItems.fromJson(v));
-      });
-    }
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    stockID = JsonParse.str(json['StockID']);
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    items = JsonParse.list(json['Items'], TimeItems.fromJson);
   }
   String? materialNumber;
   String? materialName;
@@ -75,19 +71,19 @@ class TimeItems {
       this.zcoefficient,});
 
   TimeItems.fromJson(dynamic json) {
-    factoryDescribe = json['FactoryDescribe'];
-    zlocal = json['Zlocal'];
-    lgobe = json['Lgobe'];
-    mtono = json['Mtono'];
-    productName = json['ProductName'];
-    materialCode = json['MaterialCode'];
-    size = json['Size'];
-    batch = json['Batch'];
-    unit = json['Unit'];
-    stockQty = json['StockQty'];
-    unit1 = json['Unit1'];
-    stockQty1 = json['StockQty1'];
-    zcoefficient = json['Zcoefficient'];
+    factoryDescribe = JsonParse.str(json['FactoryDescribe']);
+    zlocal = JsonParse.str(json['Zlocal']);
+    lgobe = JsonParse.str(json['Lgobe']);
+    mtono = JsonParse.str(json['Mtono']);
+    productName = JsonParse.str(json['ProductName']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    size = JsonParse.str(json['Size']);
+    batch = JsonParse.str(json['Batch']);
+    unit = JsonParse.str(json['Unit']);
+    stockQty = JsonParse.str(json['StockQty']);
+    unit1 = JsonParse.str(json['Unit1']);
+    stockQty1 = JsonParse.str(json['StockQty1']);
+    zcoefficient = JsonParse.str(json['Zcoefficient']);
   }
   String? factoryDescribe;
   String? zlocal;

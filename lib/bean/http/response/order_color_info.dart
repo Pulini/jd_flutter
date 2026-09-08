@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // SalesAndDistributionVoucherNumber : "J2403600"
 // MaterialCode : "01202844"
 // MaterialName : "1.0mm*1.35m黑色弹力压花擦焦PU"
@@ -9,9 +10,9 @@ class OrderColorList {
       this.materialName,});
 
   OrderColorList.fromJson(dynamic json) {
-    vNumber = json['SalesAndDistributionVoucherNumber'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
+    vNumber = JsonParse.str(json['SalesAndDistributionVoucherNumber']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
   }
   String? vNumber;
   String? materialCode;

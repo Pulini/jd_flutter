@@ -121,7 +121,7 @@ class _CombinationButtonState extends State<CombinationButton> {
                       child: widget.icon!,
                       alignment: PlaceholderAlignment.middle,
                     ),
-                    TextSpan(text: widget.text),
+                    TextSpan(text: ' ${widget.text}'),
                   ],
                 ),
               )

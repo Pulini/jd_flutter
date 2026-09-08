@@ -93,55 +93,50 @@ class ProductionDispatchOrderInfo {
   });
 
   ProductionDispatchOrderInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    state = json['State'];
-    billType = json['BillType'];
-    planBill = json['PlanBill'];
-    orderBill = json['OrderBill'];
-    sapOrderBill = json['SAPOrderBill'];
-    orderDate = json['OrderDate'];
-    group = json['Group'];
-    planStartTime = json['PlanStartTime'];
-    planEndTime = json['PlanEndTime'];
-    plantBody = json['PlantBody'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
-    unit = json['Unit'];
-    billerID = json['BillerID'];
-    biller = json['Biller'];
-    checker = json['Checker'];
-    billDate = json['BillDate'];
-    checkDate = json['CheckDate'];
-    entryID = json['EntryID'];
-    processFlowID = json['ProcessFlowID'];
-    sapProcessName = json['SAPProcessName'];
-    canReportByNoStockIn = json['CanReportByNoStockIn'];
-    workNumberTotal = json['WorkNumberTotal'];
-    routeBillNumber = json['RouteBillNumber'];
-    reportedNumber = json['ReportedNumber'];
-    reportedUnscheduled = json['ReportedUnscheduled'];
-    reportedUnentered = json['ReportedUnentered'];
-    stockInQty = json['StockInQty'];
-    routingID = json['RoutingID'];
-    if (json['Size'] != null) {
-      size = [];
-      json['Size'].forEach((v) {
-        size?.add(SizeBean.fromJson(v));
-      });
-    }
-    isClosed = json['IsClosed'];
-    printStatus = json['PrintStatus'];
-    stubBar1 = json['StubBar1'];
-    stubBar2 = json['StubBar2'];
-    stubBar3 = json['StubBar3'];
-    stubBarName1 = json['StubBarName1'];
-    stubBarName2 = json['StubBarName2'];
-    stubBarName3 = json['StubBarName3'];
-    factory = json['Factory'];
-    machine = json['Machine'];
-    shift = json['Shift'];
-    pastDay = json['PastDay'];
-    exitLabelType = json['ExitLabelType'];
+    interID = JsonParse.toInt(json['InterID']);
+    state = JsonParse.str(json['State']);
+    billType = JsonParse.str(json['BillType']);
+    planBill = JsonParse.str(json['PlanBill']);
+    orderBill = JsonParse.str(json['OrderBill']);
+    sapOrderBill = JsonParse.str(json['SAPOrderBill']);
+    orderDate = JsonParse.str(json['OrderDate']);
+    group = JsonParse.str(json['Group']);
+    planStartTime = JsonParse.str(json['PlanStartTime']);
+    planEndTime = JsonParse.str(json['PlanEndTime']);
+    plantBody = JsonParse.str(json['PlantBody']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
+    unit = JsonParse.str(json['Unit']);
+    billerID = JsonParse.toInt(json['BillerID']);
+    biller = JsonParse.str(json['Biller']);
+    checker = JsonParse.str(json['Checker']);
+    billDate = JsonParse.str(json['BillDate']);
+    checkDate = JsonParse.str(json['CheckDate']);
+    entryID = JsonParse.toInt(json['EntryID']);
+    processFlowID = JsonParse.toInt(json['ProcessFlowID']);
+    sapProcessName = JsonParse.str(json['SAPProcessName']);
+    canReportByNoStockIn = JsonParse.toInt(json['CanReportByNoStockIn']);
+    workNumberTotal = JsonParse.toDouble(json['WorkNumberTotal']);
+    routeBillNumber = JsonParse.str(json['RouteBillNumber']);
+    reportedNumber = JsonParse.toDouble(json['ReportedNumber']);
+    reportedUnscheduled = JsonParse.toDouble(json['ReportedUnscheduled']);
+    reportedUnentered = JsonParse.toDouble(json['ReportedUnentered']);
+    stockInQty = JsonParse.toDouble(json['StockInQty']);
+    routingID = JsonParse.str(json['RoutingID']);
+    size = JsonParse.list(json['Size'], SizeBean.fromJson);
+    isClosed = JsonParse.toBool(json['IsClosed']);
+    printStatus = JsonParse.str(json['PrintStatus']);
+    stubBar1 = JsonParse.str(json['StubBar1']);
+    stubBar2 = JsonParse.str(json['StubBar2']);
+    stubBar3 = JsonParse.str(json['StubBar3']);
+    stubBarName1 = JsonParse.str(json['StubBarName1']);
+    stubBarName2 = JsonParse.str(json['StubBarName2']);
+    stubBarName3 = JsonParse.str(json['StubBarName3']);
+    factory = JsonParse.str(json['Factory']);
+    machine = JsonParse.str(json['Machine']);
+    shift = JsonParse.str(json['Shift']);
+    pastDay = JsonParse.toBool(json['PastDay']);
+    exitLabelType = JsonParse.toInt(json['ExitLabelType']);
   }
 
   RxBool select = false.obs;
@@ -258,8 +253,8 @@ class SizeBean {
   });
 
   SizeBean.fromJson(dynamic json) {
-    num = json['Num'];
-    size = json['Size'];
+    num = JsonParse.toDouble(json['Num']);
+    size = JsonParse.str(json['Size']);
   }
 
   double? num;
@@ -291,17 +286,12 @@ class OrderProgressInfo {
   });
 
   OrderProgressInfo.fromJson(dynamic json) {
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
-    factoryType = json['FactoryType'];
-    factory = json['Factory'];
-    preCompensation = json['PreCompensation'];
-    if (json['MtoNoItems'] != null) {
-      mtoNoItems = [];
-      json['MtoNoItems'].forEach((v) {
-        mtoNoItems?.add(OrderProgressItemInfo.fromJson(v));
-      });
-    }
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    factory = JsonParse.str(json['Factory']);
+    preCompensation = JsonParse.toInt(json['PreCompensation']);
+    mtoNoItems = JsonParse.list(json['MtoNoItems'], OrderProgressItemInfo.fromJson);
   }
 
   List<String> getMaxSizeList() {
@@ -336,18 +326,13 @@ class OrderProgressItemInfo {
   });
 
   OrderProgressItemInfo.fromJson(dynamic json) {
-    mtoNo = json['MtoNo'];
-    unit = json['Unit'];
-    qty = json['Qty'];
-    inStockQty = json['InStockQty'];
-    reportedQty = json['ReportedQty'];
-    priority = json['Priority'];
-    if (json['SizeItems'] != null) {
-      sizeItems = [];
-      json['SizeItems'].forEach((v) {
-        sizeItems?.add(OrderProgressItemSizeInfo.fromJson(v));
-      });
-    }
+    mtoNo = JsonParse.str(json['MtoNo']);
+    unit = JsonParse.str(json['Unit']);
+    qty = JsonParse.toDouble(json['Qty']);
+    inStockQty = JsonParse.toDouble(json['InStockQty']);
+    reportedQty = JsonParse.toDouble(json['ReportedQty']);
+    priority = JsonParse.toInt(json['Priority']);
+    sizeItems = JsonParse.list(json['SizeItems'], OrderProgressItemSizeInfo.fromJson);
   }
 }
 
@@ -361,8 +346,8 @@ class OrderProgressItemSizeInfo {
   });
 
   OrderProgressItemSizeInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
 }
 

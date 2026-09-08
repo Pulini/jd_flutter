@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // ProductName : "鞋面-DX192116-B2B"
 // List : [{"Type":0,"Name":"烫钻TPU商标字体（2片/双）","Mtono":"J2502376","Size":"37","MtonoQty":75.0000000000,"Qty":75.00000,"EmpName":"安艳芝"}]
 
@@ -7,13 +8,8 @@ class ReportDetailsInfo {
     this.list,});
 
   ReportDetailsInfo.fromJson(dynamic json) {
-    productName = json['ProductName'];
-    if (json['List'] != null) {
-      list = [];
-      json['List'].forEach((v) {
-        list?.add(SummaryLists.fromJson(v));
-      });
-    }
+    productName = JsonParse.str(json['ProductName']);
+    list = JsonParse.list(json['List'], SummaryLists.fromJson);
   }
   String? productName;
   List<SummaryLists>? list;
@@ -48,13 +44,13 @@ class SummaryLists {
     this.empName,});
 
   SummaryLists.fromJson(dynamic json) {
-    type = json['Type'];
-    name = json['Name'];
-    mtono = json['Mtono'];
-    size = json['Size'];
-    mtonoQty = json['MtonoQty'];
-    qty = json['Qty'];
-    empName = json['EmpName'];
+    type = JsonParse.toInt(json['Type']);
+    name = JsonParse.str(json['Name']);
+    mtono = JsonParse.str(json['Mtono']);
+    size = JsonParse.str(json['Size']);
+    mtonoQty = JsonParse.toDouble(json['MtonoQty']);
+    qty = JsonParse.toDouble(json['Qty']);
+    empName = JsonParse.str(json['EmpName']);
   }
   int? type;
   String? name;

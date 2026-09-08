@@ -32,30 +32,19 @@ class ProcessWorkCardListInfo {
   });
 
   ProcessWorkCardListInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    entryIDs = json['EntryIDs'] != null ? json['EntryIDs'].cast<int>() : [];
-    fIDs = json['FIDs'] != null ? json['FIDs'].cast<int>() : [];
-    number = json['Number'];
-    productID = json['ProductID'];
-    productNumber = json['ProductNumber'];
-    partIDs = json['PartIDs'] != null ? json['PartIDs'].cast<int>() : [];
-    partNames =
-        json['PartNames'] != null ? json['PartNames'].cast<String>() : [];
-    mtonos = json['Mtonos'] != null ? json['Mtonos'].cast<String>() : [];
-    if (json['Emps'] != null) {
-      emps = [];
-      json['Emps'].forEach((v) {
-        emps?.add(Emps.fromJson(v));
-      });
-    }
-    if (json['Processes'] != null) {
-      processes = [];
-      json['Processes'].forEach((v) {
-        processes?.add(Processes.fromJson(v));
-      });
-    }
-    hasBarcode = json['HasBarcode'];
-    cardNos = json['CardNos'] != null ? json['CardNos'].cast<String>() : [];
+    interID = JsonParse.toInt(json['InterID']);
+    entryIDs = JsonParse.intList(json['EntryIDs']);
+    fIDs = JsonParse.intList(json['FIDs']);
+    number = JsonParse.str(json['Number']);
+    productID = JsonParse.toInt(json['ProductID']);
+    productNumber = JsonParse.str(json['ProductNumber']);
+    partIDs = JsonParse.intList(json['PartIDs']);
+    partNames = JsonParse.strList(json['PartNames']);
+    mtonos = JsonParse.strList(json['Mtonos']);
+    emps = JsonParse.list(json['Emps'], Emps.fromJson);
+    processes = JsonParse.list(json['Processes'], Processes.fromJson);
+    hasBarcode = JsonParse.toBool(json['HasBarcode']);
+    cardNos = JsonParse.strList(json['CardNos']);
   }
 
   int? interID;
@@ -152,9 +141,9 @@ class Processes {
   });
 
   Processes.fromJson(dynamic json) {
-    processName = json['ProcessName'];
-    qty = json['Qty'];
-    unit = json['Unit'];
+    processName = JsonParse.str(json['ProcessName']);
+    qty = JsonParse.toDouble(json['Qty']);
+    unit = JsonParse.str(json['Unit']);
   }
 
   String? processName;
@@ -182,9 +171,9 @@ class Emps {
   });
 
   Emps.fromJson(dynamic json) {
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
   }
 
   int? empID;

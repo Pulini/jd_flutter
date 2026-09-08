@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class PackingShipmentScanInfo {
   PackingShipmentScanInfo({
@@ -7,18 +8,8 @@ class PackingShipmentScanInfo {
 
   PackingShipmentScanInfo.fromJson(dynamic json) {
 
-    if (json['GT_ITEMS'] != null) {
-      item1 = [];
-      json['GT_ITEMS'].forEach((v) {
-        item1?.add(GtItem.fromJson(v));
-      });
-    }
-    if (json['GT_ITEMS2'] != null) {
-      item2 = [];
-      json['GT_ITEMS2'].forEach((v) {
-        item2?.add(GtItem2.fromJson(v));
-      });
-    }
+    item1 = JsonParse.list(json['GT_ITEMS'], GtItem.fromJson);
+    item2 = JsonParse.list(json['GT_ITEMS2'], GtItem2.fromJson);
   }
 
   List<GtItem>? item1;
@@ -54,11 +45,11 @@ class GtItem {
 
 
   GtItem.fromJson(dynamic json) {
-    customerPO = json['ZZKHPO2'];
-    boxNumber = json['ZZYCXS'];
-    sendBox = json['YFXS'];
-    originalOrderNumber = json['ZYSDDHS'];
-    salesDocument = json['VBELNS'];
+    customerPO = JsonParse.str(json['ZZKHPO2']);
+    boxNumber = JsonParse.toInt(json['ZZYCXS']);
+    sendBox = JsonParse.toInt(json['YFXS']);
+    originalOrderNumber = JsonParse.str(json['ZYSDDHS']);
+    salesDocument = JsonParse.str(json['VBELNS']);
   }
 
   Map<String, dynamic> toJson() {
@@ -84,9 +75,9 @@ class GtItem2 {
   String? deliveryNumber; //交货号
 
   GtItem2.fromJson(dynamic json) {
-    barCodes = json['ZCTNLABEL'];
-    orderNumber = json['ZZKHPO2'];
-    deliveryNumber = json['VBELN_VL'];
+    barCodes = JsonParse.str(json['ZCTNLABEL']);
+    orderNumber = JsonParse.str(json['ZZKHPO2']);
+    deliveryNumber = JsonParse.str(json['VBELN_VL']);
   }
 
   Map<String, dynamic> toJson() {

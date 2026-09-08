@@ -26,26 +26,16 @@ class PartDetailInfo {
   });
 
   PartDetailInfo.fromJson(dynamic json) {
-    deptName = json['DeptName'];
-    unit = json['Unit'];
-    factoryType = json['FactoryType'];
-    partName = json['PartName'];
-    fIDs = json['FIDs'] != null ? json['FIDs'].cast<int>() : [];
-    processName = json['ProcessName'];
-    qty = json['Qty'];
-    createQty = json['CreateQty'];
-    if (json['SizeList'] != null) {
-      sizeList = [];
-      json['SizeList'].forEach((v) {
-        sizeList?.add(SizeInfo.fromJson(v));
-      });
-    }
-    if (json['BarCodeList'] != null) {
-      barCodeList = [];
-      json['BarCodeList'].forEach((v) {
-        barCodeList?.add(BarCodeInfo.fromJson(v));
-      });
-    }
+    deptName = JsonParse.str(json['DeptName']);
+    unit = JsonParse.str(json['Unit']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    partName = JsonParse.str(json['PartName']);
+    fIDs = JsonParse.intList(json['FIDs']);
+    processName = JsonParse.str(json['ProcessName']);
+    qty = JsonParse.toDouble(json['Qty']);
+    createQty = JsonParse.toDouble(json['CreateQty']);
+    sizeList = JsonParse.list(json['SizeList'], SizeInfo.fromJson);
+    barCodeList = JsonParse.list(json['BarCodeList'], BarCodeInfo.fromJson);
   }
 
   String? deptName;
@@ -103,15 +93,10 @@ class SizeInfo {
   });
 
   SizeInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    createQty = json['CreateQty'];
-    if (json['MtonoList'] != null) {
-      mtonoList = [];
-      json['MtonoList'].forEach((v) {
-        mtonoList?.add(MtonoInfo.fromJson(v));
-      });
-    }
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    createQty = JsonParse.toDouble(json['CreateQty']);
+    mtonoList = JsonParse.list(json['MtonoList'], MtonoInfo.fromJson);
   }
 
   String? size;
@@ -169,12 +154,12 @@ class MtonoInfo {
   });
 
   MtonoInfo.fromJson(dynamic json) {
-    mtono = json['Mtono'];
-    qty = json['Qty'];
-    createQty = json['CreateQty'];
-    empID = json['EmpID'];
-    empNumber = json['EmpNumber'];
-    empName = json['EmpName'];
+    mtono = JsonParse.str(json['Mtono']);
+    qty = JsonParse.toDouble(json['Qty']);
+    createQty = JsonParse.toDouble(json['CreateQty']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empNumber = JsonParse.str(json['EmpNumber']);
+    empName = JsonParse.str(json['EmpName']);
   }
 
   String? mtono;
@@ -208,18 +193,13 @@ class BarCodeInfo {
   });
 
   BarCodeInfo.fromJson(dynamic json) {
-    partName = json['PartName'];
-    barCode = json['BarCode'];
-    printTimes = json['PrintTimes'];
-    size = json['Size'];
-    createQty = json['CreateQty'];
-    reported = json['Reported'];
-    if (json['MtonoList'] != null) {
-      mtonoList = [];
-      json['MtonoList'].forEach((v) {
-        mtonoList?.add(MtonoInfo.fromJson(v));
-      });
-    }
+    partName = JsonParse.str(json['PartName']);
+    barCode = JsonParse.str(json['BarCode']);
+    printTimes = JsonParse.toInt(json['PrintTimes']);
+    size = JsonParse.str(json['Size']);
+    createQty = JsonParse.toDouble(json['CreateQty']);
+    reported = JsonParse.toBool(json['Reported']);
+    mtonoList = JsonParse.list(json['MtonoList'], MtonoInfo.fromJson);
   }
 
   String? partName;
@@ -266,7 +246,7 @@ class PartInfo {
   });
 
   PartInfo.fromJson(dynamic json) {
-    partName = json['PartName'];
+    partName = JsonParse.str(json['PartName']);
     linkPartName = [
       if (json['LinkPartName'] != null)
         for (var item in json['LinkPartName']) item

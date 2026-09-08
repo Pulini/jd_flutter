@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class ProcessPlanInfo {
   ProcessPlanInfo({
     this.interID,
@@ -9,12 +10,12 @@ class ProcessPlanInfo {
   });
 
   ProcessPlanInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    decrementNumber = json['DecrementNumber'];
-    dispatchNumber = json['DispatchNumber'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    shift = json['Shift'];
+    interID = JsonParse.toInt(json['InterID']);
+    decrementNumber = JsonParse.str(json['DecrementNumber']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    shift = JsonParse.str(json['Shift']);
   }
 
   int? interID;

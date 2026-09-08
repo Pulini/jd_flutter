@@ -13,17 +13,12 @@ class MachineLabelInfo {
   });
 
   MachineLabelInfo.fromJson(dynamic json) {
-    labelID = json['BQID'];
-    dispatchNo = json['DISPATCH_NO'];
-    date = json['AEDAT'];
-    factory = json['WERKS'];
-    number = json['ZPQYM'];
-    if (json['ITEM'] != null) {
-      item = [];
-      json['ITEM'].forEach((v) {
-        item?.add(Item.fromJson(v));
-      });
-    }
+    labelID = JsonParse.str(json['BQID']);
+    dispatchNo = JsonParse.str(json['DISPATCH_NO']);
+    date = JsonParse.str(json['AEDAT']);
+    factory = JsonParse.str(json['WERKS']);
+    number = JsonParse.str(json['ZPQYM']);
+    item = JsonParse.list(json['ITEM'], Item.fromJson);
   }
 
   MachineLabelInfo.fromJsonWithState(
@@ -31,15 +26,15 @@ class MachineLabelInfo {
     List<Items> sizeList,
     List<String> barCodeList,
   ) {
-    labelID = json['BQID'];
-    dispatchNo = json['DISPATCH_NO'];
-    date = json['AEDAT'];
-    factory = json['WERKS'];
-    number = json['ZPQYM'];
-    type = json['ZBARCODE_TYPE'];
-    specifications = json['ZZCJGG'];
-    netWeight = json['NTGEW'];
-    grossWeight = json['BRGEW'];
+    labelID = JsonParse.str(json['BQID']);
+    dispatchNo = JsonParse.str(json['DISPATCH_NO']);
+    date = JsonParse.str(json['AEDAT']);
+    factory = JsonParse.str(json['WERKS']);
+    number = JsonParse.str(json['ZPQYM']);
+    type = JsonParse.str(json['ZBARCODE_TYPE']);
+    specifications = JsonParse.str(json['ZZCJGG']);
+    netWeight = JsonParse.toInt(json['NTGEW']);
+    grossWeight = JsonParse.toInt(json['BRGEW']);
     if (json['ITEM'] != null) {
       item = [];
       json['ITEM'].forEach((v) {
@@ -105,23 +100,23 @@ class Item {
     List<Items> sizeList,
     List<String> barCodeList,
   ) {
-    subLabelID = json['BQID'];
-    qty = json['MENGE'];
-    size = json['SIZE1_ATINN'];
-    typeBody = json['ZZXTNO'];
-    unit = json['MEINS'];
+    subLabelID = JsonParse.str(json['BQID']);
+    qty = JsonParse.toDouble(json['MENGE']);
+    size = JsonParse.str(json['SIZE1_ATINN']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    unit = JsonParse.str(json['MEINS']);
     isScanned = barCodeList.contains(subLabelID);
     isLastLabel = sizeList.any((v) => v.size == size && v.capacity != qty);
   }
 
   Item.fromJson(dynamic json) {
-    subLabelID = json['BQID'];
-    qty = json['MENGE'];
-    size = json['SIZE1_ATINN'];
-    typeBody = json['ZZXTNO'];
-    unit = json['MEINS'];
-    englishName = json['ZDECLARATION'];
-    englishUnit = json['MSEH3'];
+    subLabelID = JsonParse.str(json['BQID']);
+    qty = JsonParse.toDouble(json['MENGE']);
+    size = JsonParse.str(json['SIZE1_ATINN']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    unit = JsonParse.str(json['MEINS']);
+    englishName = JsonParse.str(json['ZDECLARATION']);
+    englishUnit = JsonParse.str(json['MSEH3']);
   }
 
   String? subLabelID;
@@ -179,8 +174,8 @@ class EnglishLabelItemInfo {
   });
 
   EnglishLabelItemInfo.fromJson(dynamic json) {
-    specifications = json['ZZCJGG'];
-    weight = json['ZOUTBOXWGT'];
+    specifications = JsonParse.str(json['ZZCJGG']);
+    weight = JsonParse.toDouble(json['ZOUTBOXWGT']);
   }
 }
 

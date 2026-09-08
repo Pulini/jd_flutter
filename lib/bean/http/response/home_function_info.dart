@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // ClassName : "生产"
 // BackGroundColor : "＃00FF00"
@@ -16,16 +17,11 @@ class HomeFunctions {
   });
 
   HomeFunctions.fromJson(dynamic json) {
-    className = json['ClassName'];
-    backGroundColor = json['BackGroundColor'];
-    fontColor = json['FontColor'];
-    icon = json['Icon'];
-    if (json['Subfunctions'] != null) {
-      subFunctions = [];
-      json['Subfunctions'].forEach((v) {
-        subFunctions?.add(SubFunctions.fromJson(v));
-      });
-    }
+    className = JsonParse.str(json['ClassName']);
+    backGroundColor = JsonParse.toInt(json['BackGroundColor']);
+    fontColor = JsonParse.toInt(json['FontColor']);
+    icon = JsonParse.str(json['Icon']);
+    subFunctions = JsonParse.list(json['Subfunctions'], SubFunctions.fromJson);
   }
 
   String? className;
@@ -65,15 +61,10 @@ class SubFunctions {
   });
 
   SubFunctions.fromJson(dynamic json) {
-    name = json['Name'];
-    description = json['Description'];
-    icon = json['Icon'];
-    if (json['FunctionGroup'] != null) {
-      functionGroup = [];
-      json['FunctionGroup'].forEach((v) {
-        functionGroup?.add(FunctionGroup.fromJson(v));
-      });
-    }
+    name = JsonParse.str(json['Name']);
+    description = JsonParse.str(json['Description']);
+    icon = JsonParse.str(json['Icon']);
+    functionGroup = JsonParse.list(json['FunctionGroup'], FunctionGroup.fromJson);
   }
 
   String? name;
@@ -113,13 +104,13 @@ class FunctionGroup {
   });
 
   FunctionGroup.fromJson(dynamic json) {
-    id = json['Id'];
-    version = json['Version'];
-    name = json['Name'];
-    description = json['Description'];
-    icon = json['Icon'];
-    routeSrc = json['RouteSrc'];
-    hasPermission = json['HasPermission'];
+    id = JsonParse.toInt(json['Id']);
+    version = JsonParse.toInt(json['Version']);
+    name = JsonParse.str(json['Name']);
+    description = JsonParse.str(json['Description']);
+    icon = JsonParse.str(json['Icon']);
+    routeSrc = JsonParse.str(json['RouteSrc']);
+    hasPermission = JsonParse.toBool(json['HasPermission']);
   }
 
   int? id;

@@ -57,41 +57,36 @@ class MaterialDispatchInfo {
   });
 
   MaterialDispatchInfo.fromJson(dynamic json) {
-    sapDecideArea = json['SapDecideArea'];
-    productName = json['ProductName'];
-    date = json['Date'];
-    partName = json['PartName'];
-    depName = json['DepName'];
-    drillingCrewName = json['DrillingCrewName'];
-    drillingCrewID = json['DrillingCrewID'];
-    materialID = json['MaterialID'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    processNumber = json['ProcessNumber'];
-    processName = json['ProcessName'];
+    sapDecideArea = JsonParse.str(json['SapDecideArea']);
+    productName = JsonParse.str(json['ProductName']);
+    date = JsonParse.str(json['Date']);
+    partName = JsonParse.str(json['PartName']);
+    depName = JsonParse.str(json['DepName']);
+    drillingCrewName = JsonParse.str(json['DrillingCrewName']);
+    drillingCrewID = JsonParse.str(json['DrillingCrewID']);
+    materialID = JsonParse.str(json['MaterialID']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    processName = JsonParse.str(json['ProcessName']);
     qty = (json['Qty'] as String).toDoubleTry().toShowString();
     codeQty = (json['CodeQty'] as String).toDoubleTry().toShowString();
     noCodeQty = (json['NoCodeQty'] as String).toDoubleTry().toShowString();
     finishQty = (json['FinishQty'] as String).toDoubleTry().toShowString();
-    unitName = json['UnitName'];
-    specification = json['Specification'];
-    printLabel = json['PrintLabel'];
-    routeEntryFIDs = json['RouteEntryFIDs'];
-    billStyle = json['BillStyle'];
-    stuffNumber = json['StuffNumber'];
-    mustEnter = json['MustEnter'];
-    factoryID = json['FactoryID'];
-    cusdeclaraType = json['CusdeclaraType'];
-    exitLabelType = json['ExitLabelType'];
-    sapSupplierNumber = json['SAPSupplierNumber'];
-    description = json['Description'];
-    sourceFactoryName = json['SourceFactoryName'];
-    if (json['Children'] != null) {
-      children = [];
-      json['Children'].forEach((v) {
-        children?.add(Children.fromJson(v));
-      });
-    }
+    unitName = JsonParse.str(json['UnitName']);
+    specification = JsonParse.str(json['Specification']);
+    printLabel = JsonParse.str(json['PrintLabel']);
+    routeEntryFIDs = JsonParse.str(json['RouteEntryFIDs']);
+    billStyle = JsonParse.str(json['BillStyle']);
+    stuffNumber = JsonParse.str(json['StuffNumber']);
+    mustEnter = JsonParse.str(json['MustEnter']);
+    factoryID = JsonParse.str(json['FactoryID']);
+    cusdeclaraType = JsonParse.str(json['CusdeclaraType']);
+    exitLabelType = JsonParse.str(json['ExitLabelType']);
+    sapSupplierNumber = JsonParse.str(json['SAPSupplierNumber']);
+    description = JsonParse.str(json['Description']);
+    sourceFactoryName = JsonParse.str(json['SourceFactoryName']);
+    children = JsonParse.list(json['Children'], Children.fromJson);
   }
 
   String? sapDecideArea; //厂区
@@ -209,22 +204,22 @@ class Children {
   });
 
   Children.fromJson(dynamic json) {
-    billNo = json['BillNo'];
-    gluingTimes = json['GluingTimes'];
-    size = json['Size'];
+    billNo = JsonParse.str(json['BillNo']);
+    gluingTimes = JsonParse.str(json['GluingTimes']);
+    size = JsonParse.str(json['Size']);
     qty = (json['Qty'] as String).toDoubleTry().toShowString();
     codeQty = (json['CodeQty'] as String).toDoubleTry().toShowString();
     noCodeQty = (json['NoCodeQty'] as String).toDoubleTry().toShowString();
     finishQty = (json['FinishQty'] as String).toDoubleTry().toShowString();
-    sapColorBatch = json['SAPColorBatch'];
-    workProcessNumber = json['WorkProcessNumber'];
-    interID = json['InterID'];
-    routeEntryFID = json['RouteEntryFID'];
-    routeEntryFIDs = json['RouteEntryFIDs'];
-    lastProcessNode = json['LastProcessNode'];
-    processFlowID = json['ProcessFlowID'];
-    partialWarehousing = json['PartialWarehousing'];
-    billStyle = json['BillStyle'];
+    sapColorBatch = JsonParse.str(json['SAPColorBatch']);
+    workProcessNumber = JsonParse.str(json['WorkProcessNumber']);
+    interID = JsonParse.str(json['InterID']);
+    routeEntryFID = JsonParse.str(json['RouteEntryFID']);
+    routeEntryFIDs = JsonParse.str(json['RouteEntryFIDs']);
+    lastProcessNode = JsonParse.str(json['LastProcessNode']);
+    processFlowID = JsonParse.str(json['ProcessFlowID']);
+    partialWarehousing = JsonParse.str(json['PartialWarehousing']);
+    billStyle = JsonParse.str(json['BillStyle']);
   }
 
   String? billNo; //指令号
@@ -282,11 +277,11 @@ class MaterialInfo {
   });
 
   MaterialInfo.fromJson(dynamic json) {
-    number = json['Number'];
-    name = json['Name'];
-    unitName = json['UnitName'];
-    batch = json['Batch'];
-    needQty = json['NeedQty'];
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    unitName = JsonParse.str(json['UnitName']);
+    batch = JsonParse.str(json['Batch']);
+    needQty = JsonParse.toDouble(json['NeedQty']);
   }
 
   String? number;
@@ -341,23 +336,23 @@ class LabelInfo {
   });
 
   LabelInfo.fromJson(dynamic json) {
-    drillingCrewName = json['DrillingCrewName'];
-    guid = json['GUID'];
-    pickUpCode = json['PickUpCode'];
-    billInterID = json['BillInterID'];
-    outPutNumber = json['OutPutNumber'];
-    insertDateTime = json['InsertDateTime'];
-    sapColorBatch = json['SAPColorBatch'];
-    qty = json['Qty'];
-    status = json['Status'];
-    reportStatus = json['ReportStatus'];
-    palletNumber = json['PalletNumber'];
-    location = json['Location'];
-    length = json['Length'];
-    width = json['Width'];
-    height = json['Height'];
-    gw = json['GW'];
-    nw = json['NW'];
+    drillingCrewName = JsonParse.str(json['DrillingCrewName']);
+    guid = JsonParse.str(json['GUID']);
+    pickUpCode = JsonParse.str(json['PickUpCode']);
+    billInterID = JsonParse.toInt(json['BillInterID']);
+    outPutNumber = JsonParse.str(json['OutPutNumber']);
+    insertDateTime = JsonParse.str(json['InsertDateTime']);
+    sapColorBatch = JsonParse.str(json['SAPColorBatch']);
+    qty = JsonParse.toDouble(json['Qty']);
+    status = JsonParse.str(json['Status']);
+    reportStatus = JsonParse.str(json['ReportStatus']);
+    palletNumber = JsonParse.str(json['PalletNumber']);
+    location = JsonParse.str(json['Location']);
+    length = JsonParse.toDouble(json['Length']);
+    width = JsonParse.toDouble(json['Width']);
+    height = JsonParse.toDouble(json['Height']);
+    gw = JsonParse.toDouble(json['GW']);
+    nw = JsonParse.toDouble(json['NW']);
   }
 
   String? drillingCrewName;

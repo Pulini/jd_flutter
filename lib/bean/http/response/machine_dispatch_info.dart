@@ -21,12 +21,12 @@ class MachineDispatchInfo {
   });
 
   MachineDispatchInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    decrementNumber = json['DecrementNumber'];
-    dispatchNumber = json['DispatchNumber'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    shift = json['Shift'];
+    interID = JsonParse.toInt(json['InterID']);
+    decrementNumber = JsonParse.str(json['DecrementNumber']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    shift = JsonParse.str(json['Shift']);
   }
 
   int? interID;
@@ -112,44 +112,34 @@ class MachineDispatchDetailsInfo {
   });
 
   MachineDispatchDetailsInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    decrementNumber = json['DecrementNumber'];
-    startDate = json['StartDate'];
-    dispatchNumber = json['DispatchNumber'];
-    stubBar1 = json['StubBar1'];
-    stubBar2 = json['StubBar2'];
-    stubBar3 = json['StubBar3'];
-    stubBarName1 = json['StubBarName1'];
-    stubBarName2 = json['StubBarName2'];
-    stubBarName3 = json['StubBarName3'];
-    stubBar1PrintFlag = json['StubBar1PrintFlag'];
-    stubBar2PrintFlag = json['StubBar2PrintFlag'];
-    stubBar3PrintFlag = json['StubBar3PrintFlag'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    factoryType = json['FactoryType'];
-    machine = json['Machine'];
-    decreasingMachine = json['DecreasingMachine'];
-    factory = json['Factory'];
-    shift = json['Shift'];
-    processflow = json['Processflow'];
-    remarks = json['Remarks'];
-    withdrawal = json['Withdrawal'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(Items.fromJson(v));
-      });
-    }
-    if (json['ProcessList'] != null) {
-      processList = [];
-      json['ProcessList'].forEach((v) {
-        processList?.add(ProcessList.fromJson(v));
-      });
-    }
-    status = json['Status'];
-    moldNo = json['MoldNo'];
-    weight = json['Weight'];
+    interID = JsonParse.toInt(json['InterID']);
+    decrementNumber = JsonParse.str(json['DecrementNumber']);
+    startDate = JsonParse.str(json['StartDate']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    stubBar1 = JsonParse.str(json['StubBar1']);
+    stubBar2 = JsonParse.str(json['StubBar2']);
+    stubBar3 = JsonParse.str(json['StubBar3']);
+    stubBarName1 = JsonParse.str(json['StubBarName1']);
+    stubBarName2 = JsonParse.str(json['StubBarName2']);
+    stubBarName3 = JsonParse.str(json['StubBarName3']);
+    stubBar1PrintFlag = JsonParse.toInt(json['StubBar1PrintFlag']);
+    stubBar2PrintFlag = JsonParse.toInt(json['StubBar2PrintFlag']);
+    stubBar3PrintFlag = JsonParse.toInt(json['StubBar3PrintFlag']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    machine = JsonParse.str(json['Machine']);
+    decreasingMachine = JsonParse.str(json['DecreasingMachine']);
+    factory = JsonParse.str(json['Factory']);
+    shift = JsonParse.str(json['Shift']);
+    processflow = JsonParse.str(json['Processflow']);
+    remarks = JsonParse.str(json['Remarks']);
+    withdrawal = JsonParse.str(json['Withdrawal']);
+    items = JsonParse.list(json['Items'], Items.fromJson);
+    processList = JsonParse.list(json['ProcessList'], ProcessList.fromJson);
+    status = JsonParse.toInt(json['Status']);
+    moldNo = JsonParse.str(json['MoldNo']);
+    weight = JsonParse.toDouble(json['Weight']);
     if (json['BarCodeList'] != null) {
       barCodeList = [];
       json['BarCodeList'].forEach((v) {
@@ -258,10 +248,10 @@ class ProcessList {
   });
 
   ProcessList.fromJson(dynamic json) {
-    workingHoursUnit = json['FWorkingHoursUnit'];
-    workingHours = json['FWorkingHours'];
-    processNumber = json['ProcessNumber'];
-    processName = json['ProcessName'];
+    workingHoursUnit = JsonParse.str(json['FWorkingHoursUnit']);
+    workingHours = JsonParse.toDouble(json['FWorkingHours']);
+    processNumber = JsonParse.str(json['ProcessNumber']);
+    processName = JsonParse.str(json['ProcessName']);
   }
 
   String? workingHoursUnit;
@@ -328,27 +318,27 @@ class Items {
   });
 
   Items.fromJson(dynamic json) {
-    entryID = json['EntryID'];
-    size = json['Size'];
-    sizeMaterialNumber = json['SizeMaterialNumber'];
-    sumQty = json['SumQty'];
-    sumUnderQty = json['SumUnderQty'];
-    sumReportQty = json['SumReportQty'];
-    mould = json['Mould'];
-    todayDispatchQty = json['TodayDispatchQty'];
-    lastNotFullQty = json['LastNotFullQty'];
-    capacity = json['Capacity'];
-    reportQty = json['ReportQty'];
-    notFullQty = json['NotFullQty'];
-    boxesQty = json['BoxesQty'];
-    confirmCurrentWorkingHours = json['ConfirmCurrentWorkingHours'];
-    workingHoursUnit = json['WorkingHoursUnit'];
-    bUoM = json['BUoM'];
-    mantissaMark = json['MantissaMark'];
-    mantissaFlag = json['MantissaFlag'];
-    lastMantissaFlag = json['LastMantissaFlag'];
-    availableMouldsQty = json['AvailableMouldsQty'];
-    capacityPerMold = json['CapacityPerMold'];
+    entryID = JsonParse.toInt(json['EntryID']);
+    size = JsonParse.str(json['Size']);
+    sizeMaterialNumber = JsonParse.str(json['SizeMaterialNumber']);
+    sumQty = JsonParse.toDouble(json['SumQty']);
+    sumUnderQty = JsonParse.toDouble(json['SumUnderQty']);
+    sumReportQty = JsonParse.toDouble(json['SumReportQty']);
+    mould = JsonParse.toDouble(json['Mould']);
+    todayDispatchQty = JsonParse.toDouble(json['TodayDispatchQty']);
+    lastNotFullQty = JsonParse.toDouble(json['LastNotFullQty']);
+    capacity = JsonParse.toDouble(json['Capacity']);
+    reportQty = JsonParse.toDouble(json['ReportQty']);
+    notFullQty = JsonParse.toDouble(json['NotFullQty']);
+    boxesQty = JsonParse.toDouble(json['BoxesQty']);
+    confirmCurrentWorkingHours = JsonParse.str(json['ConfirmCurrentWorkingHours']);
+    workingHoursUnit = JsonParse.str(json['WorkingHoursUnit']);
+    bUoM = JsonParse.str(json['BUoM']);
+    mantissaMark = JsonParse.str(json['MantissaMark']);
+    mantissaFlag = JsonParse.toInt(json['MantissaFlag']);
+    lastMantissaFlag = JsonParse.toInt(json['LastMantissaFlag']);
+    availableMouldsQty = JsonParse.toDouble(json['AvailableMouldsQty']);
+    capacityPerMold = JsonParse.toDouble(json['CapacityPerMold']);
   }
 
   int? entryID;
@@ -468,26 +458,21 @@ class MachineDispatchHistoryInfo {
     this.items,
   });
   MachineDispatchHistoryInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    decrementNumber = json['DecrementNumber'];
-    startDate = json['StartDate'];
-    dispatchNumber = json['DispatchNumber'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    factoryType = json['FactoryType'];
-    machine = json['Machine'];
-    decreasingMachine = json['DecreasingMachine'];
-    factory = json['Factory'];
-    shift = json['Shift'];
-    processFlow = json['ProcessFlow'];
-    remarks = json['Remarks'];
-    withdrawal = json['Withdrawal'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(MachineDispatchHistoryItemInfo.fromJson(v));
-      });
-    }
+    interID = JsonParse.toInt(json['InterID']);
+    decrementNumber = JsonParse.str(json['DecrementNumber']);
+    startDate = JsonParse.str(json['StartDate']);
+    dispatchNumber = JsonParse.str(json['DispatchNumber']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    machine = JsonParse.str(json['Machine']);
+    decreasingMachine = JsonParse.str(json['DecreasingMachine']);
+    factory = JsonParse.str(json['Factory']);
+    shift = JsonParse.str(json['Shift']);
+    processFlow = JsonParse.str(json['ProcessFlow']);
+    remarks = JsonParse.str(json['Remarks']);
+    withdrawal = JsonParse.str(json['Withdrawal']);
+    items = JsonParse.list(json['Items'], MachineDispatchHistoryItemInfo.fromJson);
   }
 }
 
@@ -501,8 +486,8 @@ class MachineDispatchHistoryItemInfo {
   });
 
   MachineDispatchHistoryItemInfo.fromJson(dynamic json) {
-    moldNo = json['MoldNo'];
-    weight = json['Weight'];
+    moldNo = JsonParse.str(json['MoldNo']);
+    weight = JsonParse.str(json['Weight']);
   }
 
   Map<String, dynamic> toJson() {
@@ -584,12 +569,12 @@ class LabelMaintainInfo{
   });
   LabelMaintainInfo.fromJson(dynamic json) {
     labelID = json['BQID'].toString();
-    number = json['ZPQYM'];
-    type = json['ZBARCODE_TYPE'];
-    specifications = json['ZZCJGG'];
+    number = JsonParse.str(json['ZPQYM']);
+    type = JsonParse.str(json['ZBARCODE_TYPE']);
+    specifications = JsonParse.str(json['ZZCJGG']);
     netWeight = json['NTGEW'].toString().toDoubleTry();
     grossWeight = json['BRGEW'].toString().toDoubleTry();
-    name = json['ZDECLARATION'];
-    unit = json['MSEH3'];
+    name = JsonParse.str(json['ZDECLARATION']);
+    unit = JsonParse.str(json['MSEH3']);
   }
 }

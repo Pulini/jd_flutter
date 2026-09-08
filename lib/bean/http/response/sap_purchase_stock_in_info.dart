@@ -22,6 +22,7 @@
 // ZINSPECTTIME : "00:00:00"
 
 import 'package:jd_flutter/widget/picker/picker_item.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class SapPurchaseStockInInfo {
   SapPurchaseStockInInfo({
@@ -50,28 +51,28 @@ class SapPurchaseStockInInfo {
   });
 
   SapPurchaseStockInInfo.fromJson(dynamic json) {
-    deliveryNumber = json['ZDELINO'];
-    deliveryOrderLineNumber = json['ZDELIISEQ'];
-    supplierNumber = json['LIFNR'];
-    supplierName = json['NAME1'];
-    qty = json['ZDELIQTY'];
-    materialCode = json['MATNR'];
-    materialDescription = json['ZMAKTX'];
-    remarks = json['ZREMARK'];
-    purchaseOrder = json['EBELN'];
-    purchaseOrderLineItem = json['EBELP'];
-    factory = json['WERKS'];
-    basicUnit = json['ZBASEUNIT'];
-    commonUnits = json['ZCOMMUNIT'];
-    coefficient = json['ZCOEFFICIENT'];
-    numPage = json['ZNUMPAGE'];
-    isGenerate = json['ISGENERATE'];
-    isExempt = json['ZISNOCHECK'];
-    location = json['ZLGORT'];
-    checkQty = json['ZVERIFYQTY'];
-    inspector = json['ZINSPECTOR'];
-    inspectionDate = json['ZINSPECTDATE'];
-    inspectionTime = json['ZINSPECTTIME'];
+    deliveryNumber = JsonParse.str(json['ZDELINO']);
+    deliveryOrderLineNumber = JsonParse.str(json['ZDELIISEQ']);
+    supplierNumber = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
+    qty = JsonParse.toDouble(json['ZDELIQTY']);
+    materialCode = JsonParse.str(json['MATNR']);
+    materialDescription = JsonParse.str(json['ZMAKTX']);
+    remarks = JsonParse.str(json['ZREMARK']);
+    purchaseOrder = JsonParse.str(json['EBELN']);
+    purchaseOrderLineItem = JsonParse.str(json['EBELP']);
+    factory = JsonParse.str(json['WERKS']);
+    basicUnit = JsonParse.str(json['ZBASEUNIT']);
+    commonUnits = JsonParse.str(json['ZCOMMUNIT']);
+    coefficient = JsonParse.toDouble(json['ZCOEFFICIENT']);
+    numPage = JsonParse.toInt(json['ZNUMPAGE']);
+    isGenerate = JsonParse.str(json['ISGENERATE']);
+    isExempt = JsonParse.str(json['ZISNOCHECK']);
+    location = JsonParse.str(json['ZLGORT']);
+    checkQty = JsonParse.toDouble(json['ZVERIFYQTY']);
+    inspector = JsonParse.str(json['ZINSPECTOR']);
+    inspectionDate = JsonParse.str(json['ZINSPECTDATE']);
+    inspectionTime = JsonParse.str(json['ZINSPECTTIME']);
     editQty=qty??0;
   }
 
@@ -175,26 +176,26 @@ class SapPurchaseStockInDetailInfo {
   });
 
   SapPurchaseStockInDetailInfo.fromJson(dynamic json) {
-    deliveryNumber = json['ZDELINO'];
-    supplierName = json['NAME1'];
-    deliveryOrderLineNumber = json['ZDELIISEQ'];
-    purchaseOrderNumber = json['ZEBELN'];
-    purchaseOrderLineNumber = json['ZEBELP'];
-    deliveryAddress = json['ZDELIADDRESS'];
-    materialCode = json['ZMATNR'];
-    materialDescription = json['ZMAKTX'];
-    basicUnit = json['ZBASEUNIT'];
-    baseQuantity = json['ZBASEQTY'];
-    coefficient = json['ZCOEFFICIENT'];
-    commonUnits = json['ZCOMMUNIT'];
-    deliveryQty = json['ZDELIQTY'];
-    temporaryReceiveQuantity = json['ZTEMPREQTY'];
-    storageQuantity = json['ZINSTOCKQTY'];
-    numPage = json['ZNUMPAGE'];
-    deliveryDate = json['EEIND'];
-    checkQty = json['ZVERIFYQTY'];
-    inspector = json['ZINSPECTOR'];
-    checkDate = json['ZINSPECTDATE'];
+    deliveryNumber = JsonParse.str(json['ZDELINO']);
+    supplierName = JsonParse.str(json['NAME1']);
+    deliveryOrderLineNumber = JsonParse.str(json['ZDELIISEQ']);
+    purchaseOrderNumber = JsonParse.str(json['ZEBELN']);
+    purchaseOrderLineNumber = JsonParse.str(json['ZEBELP']);
+    deliveryAddress = JsonParse.str(json['ZDELIADDRESS']);
+    materialCode = JsonParse.str(json['ZMATNR']);
+    materialDescription = JsonParse.str(json['ZMAKTX']);
+    basicUnit = JsonParse.str(json['ZBASEUNIT']);
+    baseQuantity = JsonParse.toDouble(json['ZBASEQTY']);
+    coefficient = JsonParse.toDouble(json['ZCOEFFICIENT']);
+    commonUnits = JsonParse.str(json['ZCOMMUNIT']);
+    deliveryQty = JsonParse.toDouble(json['ZDELIQTY']);
+    temporaryReceiveQuantity = JsonParse.toDouble(json['ZTEMPREQTY']);
+    storageQuantity = JsonParse.toDouble(json['ZINSTOCKQTY']);
+    numPage = JsonParse.toInt(json['ZNUMPAGE']);
+    deliveryDate = JsonParse.str(json['EEIND']);
+    checkQty = JsonParse.toDouble(json['ZVERIFYQTY']);
+    inspector = JsonParse.str(json['ZINSPECTOR']);
+    checkDate = JsonParse.str(json['ZINSPECTDATE']);
   }
 
   String? deliveryNumber; //送货单号
@@ -256,9 +257,9 @@ class LocationInfo extends PickerItem{
   });
 
   LocationInfo.fromJson(dynamic json) {
-    factoryNumber = json['FactoryNumber'];
-    storageLocationNumber = json['StorageLocationNumber'];
-    name = json['Name'];
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    storageLocationNumber = JsonParse.str(json['StorageLocationNumber']);
+    name = JsonParse.str(json['Name']);
   }
 
   String? factoryNumber;

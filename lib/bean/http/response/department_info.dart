@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class Department {
   Department({
     this.itemID,
@@ -5,8 +6,8 @@ class Department {
   });
 
   Department.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    name = json['Name'];
+    itemID = JsonParse.toInt(json['ItemID']);
+    name = JsonParse.str(json['Name']);
   }
 
   int? itemID;

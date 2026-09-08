@@ -1,5 +1,6 @@
 
 import 'package:jd_flutter/bean/http/response/photo_bean.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // InterID : "2301"
 // Number : "LFRY2002301"
@@ -78,52 +79,42 @@ class VisitGetDetailInfo {
       this.cardPic,});
 
   VisitGetDetailInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    number = json['Number'];
-    name = json['Name'];
-    iDCard = json['IDCard'];
-    unit = json['Unit'];
-    phone = json['Phone'];
-    visitedFactory = json['VisitedFactory'];
-    gate = json['Gate'];
-    visitedDept = json['VisitedDept'];
-    intervieweeID = json['IntervieweeID'];
-    intervieweeName = json['IntervieweeName'];
-    actionZone = json['ActionZone'];
-    actionZoneID = json['ActionZoneID'];
-    visitorNum = json['VisitorNum'];
-    subjectMatter = json['SubjectMatter'];
-    credentials = json['Credentials'];
-    securityStaff = json['SecurityStaff'];
-    dateTime = json['DateTime'];
-    leaveTime = json['LeaveTime'];
-    carNo = json['CarNo'];
-    carType = json['CarType'];
-    ownGoods = json['OwnGoods'];
-    carBottom = json['CarBottom'];
-    carExterior = json['CarExterior'];
-    carRear = json['CarRear'];
-    carCab = json['CarCab'];
-    landingGear = json['LandingGear'];
-    note = json['Note'];
-    examineID = json['ExamineID'];
-    dataSourceType = json['DataSourceType'];
-    sourceID = json['SourceID'];
-    submitType = json['SubmitType'];
-    if (json['VisitPics'] != null) {
-      visitPics = [];
-      json['VisitPics'].forEach((v) {
-        visitPics?.add(PhotoBean.fromJson(v));
-      });
-    }
-    if (json['LeavePics'] != null) {
-      leavePics = [];
-      json['LeavePics'].forEach((v) {
-        leavePics?.add(PhotoBean.fromJson(v));
-      });
-    }
-    peoPic = json['PeoPic'];
-    cardPic = json['CardPic'];
+    interID = JsonParse.str(json['InterID']);
+    number = JsonParse.str(json['Number']);
+    name = JsonParse.str(json['Name']);
+    iDCard = JsonParse.str(json['IDCard']);
+    unit = JsonParse.str(json['Unit']);
+    phone = JsonParse.str(json['Phone']);
+    visitedFactory = JsonParse.str(json['VisitedFactory']);
+    gate = JsonParse.str(json['Gate']);
+    visitedDept = JsonParse.str(json['VisitedDept']);
+    intervieweeID = JsonParse.str(json['IntervieweeID']);
+    intervieweeName = JsonParse.str(json['IntervieweeName']);
+    actionZone = JsonParse.str(json['ActionZone']);
+    actionZoneID = JsonParse.str(json['ActionZoneID']);
+    visitorNum = JsonParse.str(json['VisitorNum']);
+    subjectMatter = JsonParse.str(json['SubjectMatter']);
+    credentials = JsonParse.str(json['Credentials']);
+    securityStaff = JsonParse.str(json['SecurityStaff']);
+    dateTime = JsonParse.str(json['DateTime']);
+    leaveTime = JsonParse.str(json['LeaveTime']);
+    carNo = JsonParse.str(json['CarNo']);
+    carType = JsonParse.str(json['CarType']);
+    ownGoods = JsonParse.str(json['OwnGoods']);
+    carBottom = JsonParse.str(json['CarBottom']);
+    carExterior = JsonParse.str(json['CarExterior']);
+    carRear = JsonParse.str(json['CarRear']);
+    carCab = JsonParse.str(json['CarCab']);
+    landingGear = JsonParse.str(json['LandingGear']);
+    note = JsonParse.str(json['Note']);
+    examineID = JsonParse.str(json['ExamineID']);
+    dataSourceType = JsonParse.str(json['DataSourceType']);
+    sourceID = JsonParse.str(json['SourceID']);
+    submitType = JsonParse.str(json['SubmitType']);
+    visitPics = JsonParse.list(json['VisitPics'], PhotoBean.fromJson);
+    leavePics = JsonParse.list(json['LeavePics'], PhotoBean.fromJson);
+    peoPic = JsonParse.str(json['PeoPic']);
+    cardPic = JsonParse.str(json['CardPic']);
   }
   String? interID;
   String? number;

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 abstract class PickerItem {
   String pickerName();
 
@@ -22,8 +23,8 @@ class PickerSapSupplier extends PickerItem {
   });
 
   PickerSapSupplier.fromJson(dynamic json) {
-    name = json['Name'];
-    supplierNumber = json['SAPSupplierNumber'];
+    name = JsonParse.str(json['Name']);
+    supplierNumber = JsonParse.str(json['SAPSupplierNumber']);
   }
 
   String? name;
@@ -51,7 +52,7 @@ class PickerSapCompany extends PickerItem {
   });
 
   PickerSapCompany.fromJson(dynamic json) {
-    company = json['FactoryArea'];
+    company = JsonParse.str(json['FactoryArea']);
   }
 
   String? company;
@@ -79,8 +80,8 @@ class PickerSapFactory extends PickerItem {
   });
 
   PickerSapFactory.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['SAPNumber'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.toInt(json['SAPNumber']);
   }
 
   String? name;
@@ -109,8 +110,8 @@ class PickerSapWorkCenter extends PickerItem {
   });
 
   PickerSapWorkCenter.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['SAPNumber'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['SAPNumber']);
   }
 
   String? name;
@@ -140,9 +141,9 @@ class PickerSapDepartment extends PickerItem {
   });
 
   PickerSapDepartment.fromJson(dynamic json) {
-    name = json['Name'];
-    departmentId = json['DepartmentID'];
-    number = json['SAPNumber'];
+    name = JsonParse.str(json['Name']);
+    departmentId = JsonParse.toInt(json['DepartmentID']);
+    number = JsonParse.str(json['SAPNumber']);
   }
 
   String? name;
@@ -173,9 +174,9 @@ class PickerMesWorkShop extends PickerItem {
   });
 
   PickerMesWorkShop.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['Number'];
-    processFlowId = json['ProcessFlowID'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['Number']);
+    processFlowId = JsonParse.toInt(json['ProcessFlowID']);
   }
 
   String? name;
@@ -206,9 +207,9 @@ class PickerMesDepartment extends PickerItem {
   });
 
   PickerMesDepartment.fromJson(dynamic json) {
-    name = json['Name'];
-    departmentId = json['DepartmentID'];
-    number = json['SAPNumber'];
+    name = JsonParse.str(json['Name']);
+    departmentId = JsonParse.toInt(json['DepartmentID']);
+    number = JsonParse.str(json['SAPNumber']);
   }
 
   String? name;
@@ -241,11 +242,11 @@ class PickerMesOrganization extends PickerItem {
   });
 
   PickerMesOrganization.fromJson(dynamic json) {
-    itemId = json['ItemID'];
-    code = json['Code'];
-    name = json['Name'];
-    number = json['Number'];
-    adminOrganizeId = json['AdminOrganizeID'];
+    itemId = JsonParse.toInt(json['ItemID']);
+    code = JsonParse.str(json['Code']);
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['Number']);
+    adminOrganizeId = JsonParse.toInt(json['AdminOrganizeID']);
   }
 
   String? name;
@@ -277,8 +278,8 @@ class PickerSapProcessFlow extends PickerItem {
   });
 
   PickerSapProcessFlow.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['SAPNumber'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['SAPNumber']);
   }
 
   String? name;
@@ -307,8 +308,8 @@ class PickerMesProcessFlow extends PickerItem {
   });
 
   PickerMesProcessFlow.fromJson(dynamic json) {
-    name = json['ProcessFlowName'];
-    processFlowId = json['ProcessFlowID'];
+    name = JsonParse.str(json['ProcessFlowName']);
+    processFlowId = JsonParse.toInt(json['ProcessFlowID']);
   }
 
   String? name;
@@ -341,12 +342,12 @@ class PickerSapMachine extends PickerItem {
   });
 
   PickerSapMachine.fromJson(dynamic json) {
-    id = json['ID'];
-    number = json['FNumber'];
-    name = json['FName'];
-    sapNumber = json['SAPNumber'];
-    sapCostCenterNumber = json['FSAPCostCenterNumber'];
-    deptID = json['DeptID'];
+    id = JsonParse.toInt(json['ID']);
+    number = JsonParse.str(json['FNumber']);
+    name = JsonParse.str(json['FName']);
+    sapNumber = JsonParse.str(json['SAPNumber']);
+    sapCostCenterNumber = JsonParse.str(json['FSAPCostCenterNumber']);
+    deptID = JsonParse.toInt(json['DeptID']);
   }
 
   int? id;
@@ -380,9 +381,9 @@ class PickerSapWorkCenterNew extends PickerItem {
   });
 
   PickerSapWorkCenterNew.fromJson(dynamic json) {
-    name = json['Name'];
-    number = json['SAPNumber'];
-    departmentID = json['DepartmentID'];
+    name = JsonParse.str(json['Name']);
+    number = JsonParse.str(json['SAPNumber']);
+    departmentID = JsonParse.toInt(json['DepartmentID']);
   }
 
   String? name;
@@ -412,8 +413,8 @@ class PickerSapGroup extends PickerItem {
   });
 
   PickerSapGroup.fromJson(dynamic json) {
-    name = json['Name'];
-    itemId = json['ItemID'];
+    name = JsonParse.str(json['Name']);
+    itemId = JsonParse.toInt(json['ItemID']);
   }
 
   String? name;
@@ -443,14 +444,9 @@ class PickerSapFactoryAndWarehouse extends LinkPickerItem {
   });
 
   PickerSapFactoryAndWarehouse.fromJson(dynamic json) {
-    name = json['SapFactoryName'];
-    number = json['SapFactoryNumber'];
-    if (json['StockList'] != null) {
-      warehouseList = [];
-      json['StockList'].forEach((v) {
-        warehouseList?.add(PickerSapWarehouse.fromJson(v));
-      });
-    }
+    name = JsonParse.str(json['SapFactoryName']);
+    number = JsonParse.str(json['SapFactoryNumber']);
+    warehouseList = JsonParse.list(json['StockList'], PickerSapWarehouse.fromJson);
   }
 
   String? name;
@@ -486,9 +482,9 @@ class PickerSapWarehouse extends PickerItem {
   });
 
   PickerSapWarehouse.fromJson(dynamic json) {
-    warehouseName = json['SAPStockName'];
-    warehouseId = json['StockID'];
-    warehouseNumber = json['SAPStockNumber'];
+    warehouseName = JsonParse.str(json['SAPStockName']);
+    warehouseId = JsonParse.str(json['StockID']);
+    warehouseNumber = JsonParse.str(json['SAPStockNumber']);
   }
 
   String? warehouseName;
@@ -518,8 +514,8 @@ class PickerMesProductionReportType extends PickerItem {
   });
 
   PickerMesProductionReportType.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    itemName = json['ItemName'];
+    itemID = JsonParse.toInt(json['ItemID']);
+    itemName = JsonParse.str(json['ItemName']);
   }
 
   int? itemID;
@@ -548,8 +544,8 @@ class PickerMesMoldingPackArea extends PickerItem {
   });
 
   PickerMesMoldingPackArea.fromJson(dynamic json) {
-    id = json['InterID'];
-    name = json['Name'];
+    id = JsonParse.toInt(json['InterID']);
+    name = JsonParse.str(json['Name']);
   }
 
   int? id;
@@ -579,8 +575,8 @@ class PickerSapWarehouseLocation extends PickerItem {
   });
 
   PickerSapWarehouseLocation.fromJson(dynamic json) {
-    location = json['Location'];
-    noUsedNum = json['NoUsedNum'];
+    location = JsonParse.str(json['Location']);
+    noUsedNum = JsonParse.toDouble(json['NoUsedNum']);
   }
 
   String? location;
@@ -610,9 +606,9 @@ class PickerMesGroup extends PickerItem {
   });
 
   PickerMesGroup.fromJson(dynamic json) {
-    departmentID = json['DepartmentID'];
-    departmentNumber = json['DepartmentNumber'];
-    departmentName = json['DepartmentName'];
+    departmentID = JsonParse.toInt(json['DepartmentID']);
+    departmentNumber = JsonParse.str(json['DepartmentNumber']);
+    departmentName = JsonParse.str(json['DepartmentName']);
   }
 
   int? departmentID;
@@ -643,14 +639,9 @@ class MesStockInfo extends LinkPickerItem {
   });
 
   MesStockInfo.fromJson(dynamic json) {
-    name = json['Name'];
-    itemID = json['ItemID'];
-    if (json['EntryList'] != null) {
-      stockList = [];
-      json['EntryList'].forEach((v) {
-        stockList?.add(StockItem.fromJson(v));
-      });
-    }
+    name = JsonParse.str(json['Name']);
+    itemID = JsonParse.toInt(json['ItemID']);
+    stockList = JsonParse.list(json['EntryList'], StockItem.fromJson);
   }
 
   int? itemID;
@@ -685,8 +676,8 @@ class StockItem extends PickerItem {
   });
 
   StockItem.fromJson(dynamic json) {
-    itemID = json['ItemID'];
-    name = json['Name'];
+    itemID = JsonParse.toInt(json['ItemID']);
+    name = JsonParse.str(json['Name']);
   }
 
   int? itemID;
@@ -716,9 +707,9 @@ class OrderStockItem extends PickerItem {
   });
 
   OrderStockItem.fromJson(dynamic json) {
-    factoryID = json['FactoryID'];
-    stockName = json['StockName'];
-    stockID = json['StockID'];
+    factoryID = JsonParse.str(json['FactoryID']);
+    stockName = JsonParse.str(json['StockName']);
+    stockID = JsonParse.toInt(json['StockID']);
   }
 
   String? factoryID;
@@ -748,8 +739,8 @@ class PickerSapDestination extends PickerItem {
   });
 
   PickerSapDestination.fromJson(dynamic json) {
-    destinationId = json['ZADGE_RCVER'];
-    destinationName = json['ZADGE_RCVER_TEXT'];
+    destinationId = JsonParse.str(json['ZADGE_RCVER']);
+    destinationName = JsonParse.str(json['ZADGE_RCVER_TEXT']);
   }
 
   String? destinationId;
@@ -778,8 +769,8 @@ class PickerSapDivision extends PickerItem {
   });
 
   PickerSapDivision.fromJson(dynamic json) {
-    divisionId = json['DOMVALUE_L'];
-    divisionName = json['DDTEXT'];
+    divisionId = JsonParse.str(json['DOMVALUE_L']);
+    divisionName = JsonParse.str(json['DDTEXT']);
   }
 
   String? divisionId;

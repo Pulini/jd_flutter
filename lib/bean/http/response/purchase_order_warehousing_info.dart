@@ -41,22 +41,22 @@ class PurchaseOrderInfo {
   });
 
   PurchaseOrderInfo.fromJson(dynamic json) {
-    companyCode = json['CompanyCode'];
-    factoryNumber = json['FactoryNumber'];
-    factoryDescription = json['FactoryDescription'];
-    purchaseOrderNumber = json['PurchaseOrderNumber'];
-    materialCode = json['SATNR'];
-    materialName = json['MAKTX_YB'];
-    factoryArea = json['ZQY'];
-    typeBody = json['ZZXTNO'];
-    salesOrder = json['VBELN'];
-    supplier = json['LIFNR'];
-    supplierName = json['NAME1'];
-    unit = json['MEINS'];
-    isScanPieces = json['IsScanPieces'];
-    isNoCheck = json['IsNoCheck'];
-    customerPO = json['CustomerPO'];
-    type = json['Type'];
+    companyCode = JsonParse.str(json['CompanyCode']);
+    factoryNumber = JsonParse.str(json['FactoryNumber']);
+    factoryDescription = JsonParse.str(json['FactoryDescription']);
+    purchaseOrderNumber = JsonParse.str(json['PurchaseOrderNumber']);
+    materialCode = JsonParse.str(json['SATNR']);
+    materialName = JsonParse.str(json['MAKTX_YB']);
+    factoryArea = JsonParse.str(json['ZQY']);
+    typeBody = JsonParse.str(json['ZZXTNO']);
+    salesOrder = JsonParse.str(json['VBELN']);
+    supplier = JsonParse.str(json['LIFNR']);
+    supplierName = JsonParse.str(json['NAME1']);
+    unit = JsonParse.str(json['MEINS']);
+    isScanPieces = JsonParse.str(json['IsScanPieces']);
+    isNoCheck = JsonParse.str(json['IsNoCheck']);
+    customerPO = JsonParse.str(json['CustomerPO']);
+    type = JsonParse.str(json['Type']);
     details = [];
     if (json['ZCGSLTZD_ITEM'] != null) {
       json['ZCGSLTZD_ITEM'].forEach((v) {
@@ -112,25 +112,20 @@ class PurchaseOrderDetailsInfo {
   });
 
   PurchaseOrderDetailsInfo.fromJson(dynamic json,this.unit) {
-    purchaseOrder = json['EBELN'];
-    purchaseOrderLineItem = json['EBELP'];
-    remark = json['ZREMARK'];
-    size = json['SIZE1'];
-    orderQty = json['MENGE'];
-    receivedQty = json['WEMNG'];
-    underNum = json['UnderNum'];
-    issuedDeliveryOrderNum = json['IssuedDeliveryOrderNum'];
-    unqualifiedNum = json['UnqualifiedNum'];
-    location = json['Location'];
-    locationDescription = json['LocationDescription'];
-    customerPO = json['CustomerPO'];
-    trackNo = json['TrackNo'];
-    if (json['GT_ITEMS'] != null) {
-      receiptVoucher = [];
-      json['GT_ITEMS'].forEach((v) {
-        receiptVoucher!.add(ReceiptVoucherInfo.fromJson(v));
-      });
-    }
+    purchaseOrder = JsonParse.str(json['EBELN']);
+    purchaseOrderLineItem = JsonParse.str(json['EBELP']);
+    remark = JsonParse.str(json['ZREMARK']);
+    size = JsonParse.str(json['SIZE1']);
+    orderQty = JsonParse.str(json['MENGE']);
+    receivedQty = JsonParse.str(json['WEMNG']);
+    underNum = JsonParse.str(json['UnderNum']);
+    issuedDeliveryOrderNum = JsonParse.str(json['IssuedDeliveryOrderNum']);
+    unqualifiedNum = JsonParse.str(json['UnqualifiedNum']);
+    location = JsonParse.str(json['Location']);
+    locationDescription = JsonParse.str(json['LocationDescription']);
+    customerPO = JsonParse.str(json['CustomerPO']);
+    trackNo = JsonParse.str(json['TrackNo']);
+    receiptVoucher = JsonParse.list(json['GT_ITEMS'], ReceiptVoucherInfo.fromJson);
     qty.value=underNum.toDoubleTry();
   }
 }
@@ -151,10 +146,10 @@ class ReceiptVoucherInfo {
   });
 
   ReceiptVoucherInfo.fromJson(dynamic json) {
-    materialDocumentNo = json['MBLNR'];
-    materialVoucherYear = json['MJAHR'];
-    materialVoucherItem = json['ZEILE'];
-    quantity = json['MENGE'];
-    unit = json['MEINS'];
+    materialDocumentNo = JsonParse.str(json['MBLNR']);
+    materialVoucherYear = JsonParse.str(json['MJAHR']);
+    materialVoucherItem = JsonParse.str(json['ZEILE']);
+    quantity = JsonParse.str(json['MENGE']);
+    unit = JsonParse.str(json['MEINS']);
   }
 }

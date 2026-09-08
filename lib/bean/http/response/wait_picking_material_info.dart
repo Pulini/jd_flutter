@@ -14,14 +14,9 @@ class CompanyInfo {
   });
 
   CompanyInfo.fromJson(Map<String, dynamic> json) {
-    companyName = json['NAME1_WERKS'];
-    companyID = json['WERKS'];
-    if (json['GT_ITEMS'] != null) {
-      departmentList = [];
-      json['GT_ITEMS'].forEach((v) {
-        departmentList!.add(DepartmentInfo.fromJson(v));
-      });
-    }
+    companyName = JsonParse.str(json['NAME1_WERKS']);
+    companyID = JsonParse.str(json['WERKS']);
+    departmentList = JsonParse.list(json['GT_ITEMS'], DepartmentInfo.fromJson);
   }
 }
 
@@ -35,8 +30,8 @@ class DepartmentInfo {
   });
 
   DepartmentInfo.fromJson(Map<String, dynamic> json) {
-    departmentName = json['KTEXT'];
-    departmentID = json['ARBPL'];
+    departmentName = JsonParse.str(json['KTEXT']);
+    departmentID = JsonParse.str(json['ARBPL']);
   }
 }
 

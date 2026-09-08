@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // EmpCode : "013600"
 // EmpID : 137035
 // EmpName : "潘卓旭"
@@ -23,16 +24,16 @@ class WorkerInfo {
       this.picUrl,});
 
   WorkerInfo.fromJson(dynamic json) {
-    empCode = json['EmpCode'];
-    empID = json['EmpID'];
-    empName = json['EmpName'];
-    empDepartID = json['EmpDepartID'];
-    empDepartName = json['EmpDepartName'];
-    empDuty = json['EmpDuty'];
-    empCreatTime = json['EmpCreatTime'];
-    empOperateTime = json['EmpOperateTime'];
-    empLeaveStatus = json['EmpLeaveStatus'];
-    picUrl = json['PicUrl'];
+    empCode = JsonParse.str(json['EmpCode']);
+    empID = JsonParse.toInt(json['EmpID']);
+    empName = JsonParse.str(json['EmpName']);
+    empDepartID = JsonParse.toInt(json['EmpDepartID']);
+    empDepartName = JsonParse.str(json['EmpDepartName']);
+    empDuty = JsonParse.str(json['EmpDuty']);
+    empCreatTime = JsonParse.str(json['EmpCreatTime']);
+    empOperateTime = JsonParse.str(json['EmpOperateTime']);
+    empLeaveStatus = JsonParse.toInt(json['EmpLeaveStatus']);
+    picUrl = JsonParse.str(json['PicUrl']);
   }
   String? empCode;
   int? empID;

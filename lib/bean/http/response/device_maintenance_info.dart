@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // DeviceMessage : {"DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianName":"廖小燕","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406"}
 // RepairOrder : {"InterID":5,"Number":"SBWXJLD2000005","DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406","MaintenanceUnit":"。","RepairParts":"。","InspectionTime":"2020-07-06","FaultDescription":"，","RepairTime":"2020-07-06","IssueCause":"其它","AssessmentPrevention":"，","Custodian":"","RepairEntryData":[{"AccessoriesName":"，","Manufacturer":"，","Specification":"，","Quantity":1,"Unit":"，","Budget":1,"Remarks":"，"}]}
 
@@ -69,30 +70,25 @@ class RepairOrder {
       this.repairEntryData,});
 
   RepairOrder.fromJson(dynamic json) {
-    interID = json['InterID'];
-    number = json['Number'];
-    deviceID = json['DeviceID'];
-    deviceNo = json['DeviceNo'];
-    deviceName = json['DeviceName'];
-    model = json['Model'];
-    custodianID = json['CustodianID'];
-    custodianCode = json['CustodianCode'];
-    custodianDept = json['CustodianDept'];
-    custodianTel = json['CustodianTel'];
-    maintenanceUnit = json['MaintenanceUnit'];
-    repairParts = json['RepairParts'];
-    inspectionTime = json['InspectionTime'];
-    faultDescription = json['FaultDescription'];
-    repairTime = json['RepairTime'];
-    issueCause = json['IssueCause'];
-    assessmentPrevention = json['AssessmentPrevention'];
-    custodian = json['Custodian'];
-    if (json['RepairEntryData'] != null) {
-      repairEntryData = [];
-      json['RepairEntryData'].forEach((v) {
-        repairEntryData?.add(RepairEntryData.fromJson(v));
-      });
-    }
+    interID = JsonParse.toInt(json['InterID']);
+    number = JsonParse.str(json['Number']);
+    deviceID = JsonParse.toInt(json['DeviceID']);
+    deviceNo = JsonParse.str(json['DeviceNo']);
+    deviceName = JsonParse.str(json['DeviceName']);
+    model = JsonParse.str(json['Model']);
+    custodianID = JsonParse.toInt(json['CustodianID']);
+    custodianCode = JsonParse.str(json['CustodianCode']);
+    custodianDept = JsonParse.str(json['CustodianDept']);
+    custodianTel = JsonParse.str(json['CustodianTel']);
+    maintenanceUnit = JsonParse.str(json['MaintenanceUnit']);
+    repairParts = JsonParse.str(json['RepairParts']);
+    inspectionTime = JsonParse.str(json['InspectionTime']);
+    faultDescription = JsonParse.str(json['FaultDescription']);
+    repairTime = JsonParse.str(json['RepairTime']);
+    issueCause = JsonParse.str(json['IssueCause']);
+    assessmentPrevention = JsonParse.str(json['AssessmentPrevention']);
+    custodian = JsonParse.str(json['Custodian']);
+    repairEntryData = JsonParse.list(json['RepairEntryData'], RepairEntryData.fromJson);
   }
   int? interID;
   String? number;
@@ -161,13 +157,13 @@ class RepairEntryData {
       this.remarks,});
 
   RepairEntryData.fromJson(dynamic json) {
-    accessoriesName = json['AccessoriesName'];
-    manufacturer = json['Manufacturer'];
-    specification = json['Specification'];
-    quantity = json['Quantity'];
-    unit = json['Unit'];
-    budget = json['Budget'];
-    remarks = json['Remarks'];
+    accessoriesName = JsonParse.str(json['AccessoriesName']);
+    manufacturer = JsonParse.str(json['Manufacturer']);
+    specification = JsonParse.str(json['Specification']);
+    quantity = JsonParse.toDouble(json['Quantity']);
+    unit = JsonParse.str(json['Unit']);
+    budget = JsonParse.toDouble(json['Budget']);
+    remarks = JsonParse.str(json['Remarks']);
   }
   String? accessoriesName;
   String? manufacturer;
@@ -214,15 +210,15 @@ class DeviceMessage {
       this.custodianTel,});
 
   DeviceMessage.fromJson(dynamic json) {
-    deviceID = json['DeviceID'];
-    deviceNo = json['DeviceNo'];
-    deviceName = json['DeviceName'];
-    model = json['Model'];
-    custodianID = json['CustodianID'];
-    custodianCode = json['CustodianCode'];
-    custodianName = json['CustodianName'];
-    custodianDept = json['CustodianDept'];
-    custodianTel = json['CustodianTel'];
+    deviceID = JsonParse.toInt(json['DeviceID']);
+    deviceNo = JsonParse.str(json['DeviceNo']);
+    deviceName = JsonParse.str(json['DeviceName']);
+    model = JsonParse.str(json['Model']);
+    custodianID = JsonParse.toInt(json['CustodianID']);
+    custodianCode = JsonParse.str(json['CustodianCode']);
+    custodianName = JsonParse.str(json['CustodianName']);
+    custodianDept = JsonParse.str(json['CustodianDept']);
+    custodianTel = JsonParse.str(json['CustodianTel']);
   }
   int? deviceID;
   String? deviceNo;

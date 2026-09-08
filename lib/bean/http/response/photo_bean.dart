@@ -1,8 +1,9 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class PhotoBean {
   PhotoBean({this.photo});
 
   PhotoBean.fromJson(dynamic json) {
-    photo = json['Photo'];
+    photo = JsonParse.str(json['Photo']);
   }
 
   String? photo;

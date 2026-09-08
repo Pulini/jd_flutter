@@ -56,35 +56,35 @@ class LabelInfo {
   });
 
   LabelInfo.fromJson(dynamic json) {
-    orderType = json['OrderType'];
-    productName = json['ProductName'];
-    barCode = json['BarCode'];
-    grossWeight = json['GrossWeight'];
-    netWeight = json['NetWeight'];
-    isBillPrint = json['IsBillPrint'];
-    isTempRec = json['IsTempRec'];
-    isInStock = json['IsInStock'];
-    isOutStock = json['IsOutStock'];
-    isScReport = json['IsScReport'];
-    isScProcessReport = json['IsScProcessReport'];
-    serviceName = json['ServiceName'];
-    barCodeTypeID = json['BarCodeTypeID'];
-    packType = json['PackType'];
-    interID = json['InterID'];
-    customFactoryID = json['CustomFactoryID'];
-    myanmarApprovalDocument = json['MyanmarApprovalDocument'];
-    trackNo = json['TrackNo'];
-    customsDeclarationUnit = json['CustomsDeclarationUnit'];
-    customsDeclarationType = json['CustomsDeclarationType'];
-    pieceNo = json['PieceNo'];
-    pieceID = json['PieceID'];
-    volume = json['Volume'];
-    supplier = json['Supplier'];
-    manufactureDate = json['ManufactureDate'];
-    notes = json['Notes'];
-    labelType = json['LabelType'];
-    labelModel = json['LabelModel'];
-    departName = json['DepartName'];
+    orderType = JsonParse.str(json['OrderType']);
+    productName = JsonParse.str(json['ProductName']);
+    barCode = JsonParse.str(json['BarCode']);
+    grossWeight = JsonParse.toDouble(json['GrossWeight']);
+    netWeight = JsonParse.toDouble(json['NetWeight']);
+    isBillPrint = JsonParse.toBool(json['IsBillPrint']);
+    isTempRec = JsonParse.toBool(json['IsTempRec']);
+    isInStock = JsonParse.toBool(json['IsInStock']);
+    isOutStock = JsonParse.toBool(json['IsOutStock']);
+    isScReport = JsonParse.toBool(json['IsScReport']);
+    isScProcessReport = JsonParse.toBool(json['IsScProcessReport']);
+    serviceName = JsonParse.str(json['ServiceName']);
+    barCodeTypeID = JsonParse.toInt(json['BarCodeTypeID']);
+    packType = JsonParse.toBool(json['PackType']);
+    interID = JsonParse.toInt(json['InterID']);
+    customFactoryID = JsonParse.str(json['CustomFactoryID']);
+    myanmarApprovalDocument = JsonParse.str(json['MyanmarApprovalDocument']);
+    trackNo = JsonParse.str(json['TrackNo']);
+    customsDeclarationUnit = JsonParse.str(json['CustomsDeclarationUnit']);
+    customsDeclarationType = JsonParse.str(json['CustomsDeclarationType']);
+    pieceNo = JsonParse.str(json['PieceNo']);
+    pieceID = JsonParse.str(json['PieceID']);
+    volume = JsonParse.str(json['Volume']);
+    supplier = JsonParse.str(json['Supplier']);
+    manufactureDate = JsonParse.str(json['ManufactureDate']);
+    notes = JsonParse.str(json['Notes']);
+    labelType = JsonParse.toInt(json['LabelType']);
+    labelModel = JsonParse.str(json['LabelModel']);
+    departName = JsonParse.str(json['DepartName']);
     subList = [
       if (json['SubList'] != null)
         for (var item in json['SubList']) LabelMaterialInfo.fromJson(item)
@@ -186,17 +186,17 @@ class LabelMaterialInfo {
   List<LabelSizeInfo>? items;
 
   LabelMaterialInfo.fromJson(dynamic json) {
-    billNo = json['BillNo'];
+    billNo = JsonParse.str(json['BillNo']);
     materialOtherName = [
       if (json['MaterialOtherName'] != null)
         for (var item in json['MaterialOtherName'])
           LabelLanguageInfo.fromJson(item)
     ];
-    meas = json['Meas'];
-    factoryType = json['FactoryType'];
-    materialID = json['MaterialID'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
+    meas = JsonParse.str(json['Meas']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
     items = [
       if (json['Items'] != null)
         for (var item in json['Items']) LabelSizeInfo.fromJson(item)
@@ -246,8 +246,8 @@ class LabelSizeInfo {
   });
 
   LabelSizeInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
   }
 
   String? size;
@@ -272,12 +272,12 @@ class LabelLanguageInfo {
   });
 
   LabelLanguageInfo.fromJson(dynamic json) {
-    deliveryDate = json['DeliveryDate'];
-    languageCode = json['LanguageCode'];
-    languageName = json['LanguageName'];
-    name = json['Name'];
-    pageNumber = json['PageNumber'];
-    unitName = json['UnitName'];
+    deliveryDate = JsonParse.str(json['DeliveryDate']);
+    languageCode = JsonParse.str(json['LanguageCode']);
+    languageName = JsonParse.str(json['LanguageName']);
+    name = JsonParse.str(json['Name']);
+    pageNumber = JsonParse.str(json['PageNumber']);
+    unitName = JsonParse.str(json['UnitName']);
   }
 
   String? deliveryDate;

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class MoldingPackAreaReportInfo {
   // 类型
   int? type;
@@ -79,25 +80,25 @@ class MoldingPackAreaReportInfo {
   });
 
   MoldingPackAreaReportInfo.fromJson(dynamic json) {
-    type = json['Type'];
+    type = JsonParse.toInt(json['Type']);
     departmentName = json['DepartmentName'] ?? '';
-    interID = json['InterID'];
-    orderNo = json['OrderNo'];
-    clientOrderNumber = json['ClientOrderNumber'];
-    fetchDate = json['FetchDate'];
-    factoryType = json['FactoryType'];
-    color = json['Color'];
-    orderPiece = json['OrderPiece'];
-    orderQty = json['OrderQty'];
-    inPackAreaQty = json['InPackAreaQty'];
-    notInPackAreaQty = json['NotInPackAreaQty'];
-    distributedQty = json['DistributedQty'];
-    distributedPiece = json['DistributedPiece'];
-    remainQty = json['RemainQty'];
-    sapFinishQty = json['SAPFinishQty'];
-    sapFinishPiece = json['SAPFinishPiece'];
-    sapUnFinishQty = json['SAPUnfinishQty'];
-    sapUnFinishPiece = json['SAPUnfinishPiece'];
+    interID = JsonParse.toInt(json['InterID']);
+    orderNo = JsonParse.str(json['OrderNo']);
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    fetchDate = JsonParse.str(json['FetchDate']);
+    factoryType = JsonParse.str(json['FactoryType']);
+    color = JsonParse.str(json['Color']);
+    orderPiece = JsonParse.toDouble(json['OrderPiece']);
+    orderQty = JsonParse.toDouble(json['OrderQty']);
+    inPackAreaQty = JsonParse.toDouble(json['InPackAreaQty']);
+    notInPackAreaQty = JsonParse.toDouble(json['NotInPackAreaQty']);
+    distributedQty = JsonParse.toDouble(json['DistributedQty']);
+    distributedPiece = JsonParse.toDouble(json['DistributedPiece']);
+    remainQty = JsonParse.toDouble(json['RemainQty']);
+    sapFinishQty = JsonParse.toDouble(json['SAPFinishQty']);
+    sapFinishPiece = JsonParse.toDouble(json['SAPFinishPiece']);
+    sapUnFinishQty = JsonParse.toDouble(json['SAPUnfinishQty']);
+    sapUnFinishPiece = JsonParse.toDouble(json['SAPUnfinishPiece']);
   }
 }
 
@@ -138,13 +139,13 @@ class MoldingPackAreaReportDetailInfo {
   });
 
   MoldingPackAreaReportDetailInfo.fromJson(dynamic json) {
-    clientOrderNumber = json['ClientOrderNumber'];
-    clientOrderIndex = json['ClientOrderIndex'];
-    size = json['Size'];
-    orderQty = json['OrderQty'];
-    orderPiece = json['OrderPiece'];
-    distributedQty = json['DistributedQty'];
-    distributedPiece = json['DistributedPiece'];
-    remainQty = json['RemainQty'];
+    clientOrderNumber = JsonParse.str(json['ClientOrderNumber']);
+    clientOrderIndex = JsonParse.str(json['ClientOrderIndex']);
+    size = JsonParse.str(json['Size']);
+    orderQty = JsonParse.toDouble(json['OrderQty']);
+    orderPiece = JsonParse.toDouble(json['OrderPiece']);
+    distributedQty = JsonParse.toDouble(json['DistributedQty']);
+    distributedPiece = JsonParse.toDouble(json['DistributedPiece']);
+    remainQty = JsonParse.toDouble(json['RemainQty']);
   }
 }

@@ -81,39 +81,39 @@ class DeliveryOrderInfo {
   });
 
   DeliveryOrderInfo.fromJson(dynamic json) {
-    baseUnit = json['BaseUnit'];
-    billDate = json['BillDate'];
-    checkQuantity = json['CheckQuantity'];
-    inspector = json['Inspector'];
-    coefficient = json['Coefficient'];
-    commUnit = json['CommUnit'];
-    companyCode = json['CompanyCode'];
-    deliNo = json['DeliNo'];
-    finalCustomer = json['FinalCustomer'];
-    deliveryLocation = json['DeliveryLocation'];
-    distributionType = json['DistributionType'];
-    factoryNO = json['FactoryNO'];
-    factoryName = json['FactoryName'];
-    isExempt = json['IsExempt'];
-    isGenerate = json['IsGenerate'];
-    isPackingMaterials = json['IsPackingMaterials'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
-    model = json['Model'];
-    numPage = json['NumPage'];
-    remark = json['Remark'];
-    remarks = json['Remarks'];
-    supplierCode = json['SupplierCode'];
-    supplierName = json['SupplierName'];
-    location = json['Location'];
-    locationName = json['LocationName'];
-    matchCode = json['MatchCode'];
-    produceOrderNo = json['ScWorkcardNo'];
-    isScanPieces = json['IsScanPieces'];
-    isPiece = json['IsPiece'];
-    division = json['Division'];
-    trackNo = json['TrackNo'];
-    mes = json['Mes'];
+    baseUnit = JsonParse.str(json['BaseUnit']);
+    billDate = JsonParse.str(json['BillDate']);
+    checkQuantity = JsonParse.str(json['CheckQuantity']);
+    inspector = JsonParse.str(json['Inspector']);
+    coefficient = JsonParse.str(json['Coefficient']);
+    commUnit = JsonParse.str(json['CommUnit']);
+    companyCode = JsonParse.str(json['CompanyCode']);
+    deliNo = JsonParse.str(json['DeliNo']);
+    finalCustomer = JsonParse.str(json['FinalCustomer']);
+    deliveryLocation = JsonParse.str(json['DeliveryLocation']);
+    distributionType = JsonParse.str(json['DistributionType']);
+    factoryNO = JsonParse.str(json['FactoryNO']);
+    factoryName = JsonParse.str(json['FactoryName']);
+    isExempt = JsonParse.toBool(json['IsExempt']);
+    isGenerate = JsonParse.str(json['IsGenerate']);
+    isPackingMaterials = JsonParse.toBool(json['IsPackingMaterials']);
+    materialCode = JsonParse.str(json['MaterialCode']);
+    materialName = JsonParse.str(json['MaterialName']);
+    model = JsonParse.str(json['Model']);
+    numPage = JsonParse.str(json['NumPage']);
+    remark = JsonParse.str(json['Remark']);
+    remarks = JsonParse.str(json['Remarks']);
+    supplierCode = JsonParse.str(json['SupplierCode']);
+    supplierName = JsonParse.str(json['SupplierName']);
+    location = JsonParse.str(json['Location']);
+    locationName = JsonParse.str(json['LocationName']);
+    matchCode = JsonParse.str(json['MatchCode']);
+    produceOrderNo = JsonParse.str(json['ScWorkcardNo']);
+    isScanPieces = JsonParse.str(json['IsScanPieces']);
+    isPiece = JsonParse.str(json['IsPiece']);
+    division = JsonParse.str(json['Division']);
+    trackNo = JsonParse.str(json['TrackNo']);
+    mes = JsonParse.str(json['Mes']);
     deliSize = [
       if (json['DeliSize'] != null)
         for (var item in json['DeliSize']) DeliveryOrderSizeInfo.fromJson(item)
@@ -210,9 +210,9 @@ class DeliveryOrderSizeInfo {
   });
 
   DeliveryOrderSizeInfo.fromJson(dynamic json) {
-    size = json['Size'];
-    qty = json['Qty'];
-    baseQty = json['BaseQty'];
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.str(json['Qty']);
+    baseQty = JsonParse.str(json['BaseQty']);
   }
 
   Map<String, dynamic> toJson() {
@@ -240,11 +240,11 @@ class DeliveryOrderLineInfo {
   });
 
   DeliveryOrderLineInfo.fromJson(dynamic json) {
-    deliSeq = json['DeliSeq'];
-    remarks = json['Remarks'];
-    verifyQty = json['VerifyQty'];
-    purchaseOrderNumber = json['PurchaseOrderNumber'];
-    purchaseDocumentItemNumber = json['PurchaseDocumentItemNumber'];
+    deliSeq = JsonParse.str(json['DeliSeq']);
+    remarks = JsonParse.str(json['Remarks']);
+    verifyQty = JsonParse.str(json['VerifyQty']);
+    purchaseOrderNumber = JsonParse.str(json['PurchaseOrderNumber']);
+    purchaseDocumentItemNumber = JsonParse.str(json['PurchaseDocumentItemNumber']);
   }
 
   Map<String, dynamic> toJson() {
@@ -274,11 +274,11 @@ class DeliveryOrderBindingLabelInfo {
   });
 
   DeliveryOrderBindingLabelInfo.fromJson(dynamic json) {
-    pieceNo = json['PieceNo'];
-    volume = json['Ladevol'];
-    grossWeight = json['Brgew'];
-    netWeight = json['Ntgew'];
-    quantity = json['Qty'];
+    pieceNo = JsonParse.str(json['PieceNo']);
+    volume = JsonParse.str(json['Ladevol']);
+    grossWeight = JsonParse.str(json['Brgew']);
+    netWeight = JsonParse.str(json['Ntgew']);
+    quantity = JsonParse.str(json['Qty']);
   }
 
   Map<String, dynamic> toJson() {

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 enum BarCodeReportType {
   supplierScanInStock(1, 'SupplierScanInStock'), // 供应商扫码入库
@@ -51,10 +52,10 @@ class BarCodeInfo {
   });
 
   BarCodeInfo.fromJson(dynamic json) {
-    id = json['id'];
-    code = json['code'];
-    type = json['type'];
-    palletNo = json['palletNo'];
+    id = JsonParse.toInt(json['id']);
+    code = JsonParse.str(json['code']);
+    type = JsonParse.str(json['type']);
+    palletNo = JsonParse.str(json['palletNo']);
   }
 
   Map<String, dynamic> toJson() {
@@ -145,8 +146,8 @@ class UsedBarCodeInfo {
   });
 
   UsedBarCodeInfo.fromJson(dynamic json) {
-    barCode = json['BarCode'];
-    name = json['Name'];
+    barCode = JsonParse.str(json['BarCode']);
+    name = JsonParse.str(json['Name']);
   }
 
   String? barCode;
@@ -178,11 +179,11 @@ class BarCodeProcessInfo {
   });
 
   BarCodeProcessInfo.fromJson(dynamic json) {
-    processFlowID = json['ProcessFlowID'];
-    processFlowName = json['ProcessFlowName'];
-    processFlowShowName = json['ProcessFlowShowName'];
-    processNodeName = json['ProcessNodeName'];
-    processNodeShowName = json['ProcessNodeShowName'];
+    processFlowID = JsonParse.toInt(json['ProcessFlowID']);
+    processFlowName = JsonParse.str(json['ProcessFlowName']);
+    processFlowShowName = JsonParse.str(json['ProcessFlowShowName']);
+    processNodeName = JsonParse.str(json['ProcessNodeName']);
+    processNodeShowName = JsonParse.str(json['ProcessNodeShowName']);
   }
 
   @override
@@ -201,7 +202,7 @@ class BarCodeReportableProcessInfo {
   });
 
   BarCodeReportableProcessInfo.fromJson(dynamic json) {
-    dataType = json['DataType'];
+    dataType = JsonParse.str(json['DataType']);
     process = [
       if (json['ProcessTable'] != null)
         for (var v in json['ProcessTable']) BarCodeProcessInfo.fromJson(v)

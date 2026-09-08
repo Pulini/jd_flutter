@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // FactoryType : "PDS23394160-1"
 // Size : "3.5"
 // MonoNum : 145
@@ -15,12 +16,12 @@ class FormingMonoDetailInfo {
       this.underNum,});
 
   FormingMonoDetailInfo.fromJson(dynamic json) {
-    factoryType = json['FactoryType'];
-    size = json['Size'];
-    monoNum = json['MonoNum'];
-    reportNum = json['ReportNum'];
-    totalNum = json['TotalNum'];
-    underNum = json['UnderNum'];
+    factoryType = JsonParse.str(json['FactoryType']);
+    size = JsonParse.str(json['Size']);
+    monoNum = JsonParse.toInt(json['MonoNum']);
+    reportNum = JsonParse.toInt(json['ReportNum']);
+    totalNum = JsonParse.toInt(json['TotalNum']);
+    underNum = JsonParse.toInt(json['UnderNum']);
   }
   String? factoryType;
   String? size;

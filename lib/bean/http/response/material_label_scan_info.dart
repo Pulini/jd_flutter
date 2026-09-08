@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class MaterialLabelScanInfo {
   MaterialLabelScanInfo({
     this.interID,
@@ -15,17 +16,17 @@ class MaterialLabelScanInfo {
   });
 
   MaterialLabelScanInfo.fromJson(dynamic json) {
-    interID = json['InterID'];
-    workCardNo = json['WorkCardNo'];
-    materialID = json['MaterialID'];
-    proMaterialNumber = json['ProMaterialNumber'];
-    proMaterialName = json['ProMaterialName'];
-    productName = json['ProductName'];
-    mtoNo = json['MtoNo'];
-    noticeDate = json['NoticeDate'];
-    dispatchQty = json['DispatchQty'];
-    matReqStatus = json['MatReqStatus'];
-    proMaterialID = json['ProMaterialID'];
+    interID = JsonParse.toInt(json['InterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    proMaterialNumber = JsonParse.str(json['ProMaterialNumber']);
+    proMaterialName = JsonParse.str(json['ProMaterialName']);
+    productName = JsonParse.str(json['ProductName']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    noticeDate = JsonParse.str(json['NoticeDate']);
+    dispatchQty = JsonParse.toDouble(json['DispatchQty']);
+    matReqStatus = JsonParse.toInt(json['MatReqStatus']);
+    proMaterialID = JsonParse.toInt(json['ProMaterialID']);
 
   }
 
@@ -71,24 +72,9 @@ class MaterialLabelScanDetailInfo {
   });
 
   MaterialLabelScanDetailInfo.fromJson(dynamic json) {
-    if (json['Head'] != null) {
-      head = [];
-      json['Head'].forEach((v) {
-        head?.add(Head.fromJson(v));
-      });
-    }
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(Items.fromJson(v));
-      });
-    }
-    if (json['PicItems'] != null) {
-      picItems = [];
-      json['PicItems'].forEach((v) {
-        picItems?.add(PicItems.fromJson(v));
-      });
-    }
+    head = JsonParse.list(json['Head'], Head.fromJson);
+    items = JsonParse.list(json['Items'], Items.fromJson);
+    picItems = JsonParse.list(json['PicItems'], PicItems.fromJson);
   }
   List<Head>? head;
   List<Items>? items;
@@ -143,20 +129,20 @@ class Items {
   });
 
   Items.fromJson(dynamic json) {
-    interID = json['InterID'];
-    workCardNo = json['WorkCardNo'];
-    materialID = json['MaterialID'];
-    productName = json['ProductName'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    srcICMOInterID = json['SrcICMOInterID'];
-    mtoNo = json['MtoNo'];
-    size = json['Size'];
-    orderQty = json['OrderQty'];
-    qtyReceived = json['QtyReceived'];
-    unclaimedQty = json['UnclaimedQty'];
-    unitName = json['UnitName'];
-    productID = json['ProductID'];
+    interID = JsonParse.toInt(json['InterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    productName = JsonParse.str(json['ProductName']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    srcICMOInterID = JsonParse.toInt(json['SrcICMOInterID']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    size = JsonParse.str(json['Size']);
+    orderQty = JsonParse.toDouble(json['OrderQty']);
+    qtyReceived = JsonParse.toDouble(json['QtyReceived']);
+    unclaimedQty = JsonParse.toDouble(json['UnclaimedQty']);
+    unitName = JsonParse.str(json['UnitName']);
+    productID = JsonParse.toInt(json['ProductID']);
   }
   int? interID;
   String? workCardNo;
@@ -218,15 +204,15 @@ class Head {
     this.unitName,});
 
   Head.fromJson(dynamic json) {
-    interID = json['InterID'];
-    workCardNo = json['WorkCardNo'];
-    productName = json['ProductName'];
-    proMaterialNumber = json['ProMaterialNumber'];
-    proMaterialName = json['ProMaterialName'];
-    proMaterialID = json['ProMaterialID'];
-    mtoNo = json['MtoNo'];
-    unitName = json['UnitName'];
-    scWorkCardQty = json['ScWorkCardQty'];
+    interID = JsonParse.toInt(json['InterID']);
+    workCardNo = JsonParse.str(json['WorkCardNo']);
+    productName = JsonParse.str(json['ProductName']);
+    proMaterialNumber = JsonParse.str(json['ProMaterialNumber']);
+    proMaterialName = JsonParse.str(json['ProMaterialName']);
+    proMaterialID = JsonParse.toInt(json['ProMaterialID']);
+    mtoNo = JsonParse.str(json['MtoNo']);
+    unitName = JsonParse.str(json['UnitName']);
+    scWorkCardQty = JsonParse.toDouble(json['ScWorkCardQty']);
   }
   int? interID;
   String? workCardNo;
@@ -263,10 +249,10 @@ class PicItems {
 });
 
   PicItems.fromJson(dynamic json) {
-    productID = json['ProductID'];
-    materialID = json['MaterialID'];
-    pictureUrl = json['PictureUrl'];
-    pictureThumbnailUrl = json['PictureThumbnailUrl'];
+    productID = JsonParse.toInt(json['ProductID']);
+    materialID = JsonParse.toInt(json['MaterialID']);
+    pictureUrl = JsonParse.str(json['PictureUrl']);
+    pictureThumbnailUrl = JsonParse.str(json['PictureThumbnailUrl']);
 
   }
   int? productID;
@@ -300,12 +286,12 @@ class MaterialLabelScanBarCodeInfo {
   });
 
   MaterialLabelScanBarCodeInfo.fromJson(dynamic json) {
-    materialID = json['MaterialID'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
-    srcICMOInterID = json['SrcICMOInterID'];
-    size = json['Size'];
-    barCodeQty = json['BarCodeQty'];
+    materialID = JsonParse.toInt(json['MaterialID']);
+    materialNumber = JsonParse.str(json['MaterialNumber']);
+    materialName = JsonParse.str(json['MaterialName']);
+    srcICMOInterID = JsonParse.toInt(json['SrcICMOInterID']);
+    size = JsonParse.str(json['Size']);
+    barCodeQty = JsonParse.toDouble(json['BarCodeQty']);
 
   }
 

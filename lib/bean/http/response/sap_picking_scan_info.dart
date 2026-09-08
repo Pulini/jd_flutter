@@ -41,13 +41,13 @@ class SapPackingScanMaterialInfo {
   });
 
   SapPackingScanMaterialInfo.fromJson(dynamic json) {
-    isDutyFree = json['DUTY_FREE'];
+    isDutyFree = JsonParse.str(json['DUTY_FREE']);
     quality = json['ERFMG'].toString().toDoubleTry();
-    materialNumber = json['MATNR'];
-    materialName = json['ZMAKTG'];
-    unit = json['VRKME'];
-    plannedShippingSchedule = json['ZZCQ'];
-    trackNo = json['ZTRACKNO'];
+    materialNumber = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTG']);
+    unit = JsonParse.str(json['VRKME']);
+    plannedShippingSchedule = JsonParse.str(json['ZZCQ']);
+    trackNo = JsonParse.str(json['ZTRACKNO']);
     labelList = [
       if (json['MATERIALLIST'] != null)
         for (var item in json['MATERIALLIST'])
@@ -96,11 +96,11 @@ class SapPackingScanLabelInfo {
   });
 
   SapPackingScanLabelInfo.fromJson(dynamic json) {
-    labelNumber = json['BQID'];
-    pieceQuality = json['CLABS'];
-    unit = json['ERFME'];
+    labelNumber = JsonParse.str(json['BQID']);
+    pieceQuality = JsonParse.toDouble(json['CLABS']);
+    unit = JsonParse.str(json['ERFME']);
     quality = json['ERFMG'].toString().toDoubleTry();
-    pieceNumber = json['ZPIECE_NO'];
+    pieceNumber = JsonParse.str(json['ZPIECE_NO']);
   }
 
   Map<String, dynamic> toJson() {
@@ -154,18 +154,18 @@ class SapPackingScanSubmitAbnormalInfo {
   });
 
   SapPackingScanSubmitAbnormalInfo.fromJson(dynamic json) {
-    factory = json['WERKS'];
-    plannedDate = json['ZZCQ'];
-    destination = json['ZADGE_RCVER'];
-    cabinetNumber = json['ZZKHXH1'];
-    warehouse = json['LGORT'];
-    labelNumber = json['BQID'];
-    postingDate = json['BUDAT_MKPF'];
-    user = json['USNAM'];
-    userName = json['ZNAME_CN'];
-    date = json['CPUDT'];
-    time = json['CPUTM'];
-    message = json['MESSAGE'];
+    factory = JsonParse.str(json['WERKS']);
+    plannedDate = JsonParse.str(json['ZZCQ']);
+    destination = JsonParse.str(json['ZADGE_RCVER']);
+    cabinetNumber = JsonParse.str(json['ZZKHXH1']);
+    warehouse = JsonParse.str(json['LGORT']);
+    labelNumber = JsonParse.str(json['BQID']);
+    postingDate = JsonParse.str(json['BUDAT_MKPF']);
+    user = JsonParse.str(json['USNAM']);
+    userName = JsonParse.str(json['ZNAME_CN']);
+    date = JsonParse.str(json['CPUDT']);
+    time = JsonParse.str(json['CPUTM']);
+    message = JsonParse.str(json['MESSAGE']);
   }
 
   Map<String, dynamic> toJson() {
@@ -221,20 +221,20 @@ class SapPackingScanAbnormalInfo {
   });
 
   SapPackingScanAbnormalInfo.fromJson(dynamic json) {
-    labelNumber = json['BQID'];
-    date = json['BUDAT_MKPF'];
-    warehouse = json['LGORT'];
-    factory = json['WERKS'];
-    destination = json['ZADGE_RCVER'];
-    plannedDate = json['ZZCQ'];
-    containerNumber = json['ZZKHXH1'];
-    orderLine = json['BQITEM'];
-    unit = json['ERFME'];
+    labelNumber = JsonParse.str(json['BQID']);
+    date = JsonParse.str(json['BUDAT_MKPF']);
+    warehouse = JsonParse.str(json['LGORT']);
+    factory = JsonParse.str(json['WERKS']);
+    destination = JsonParse.str(json['ZADGE_RCVER']);
+    plannedDate = JsonParse.str(json['ZZCQ']);
+    containerNumber = JsonParse.str(json['ZZKHXH1']);
+    orderLine = JsonParse.str(json['BQITEM']);
+    unit = JsonParse.str(json['ERFME']);
     quality = json['ERFMG'].toString().toDoubleTry();
-    materialNumber = json['MATNR'];
-    materialName = json['ZMAKTG'];
-    pieceNumber = json['ZPIECE_NO'];
-    trackNo = json['ZTRACKNO'];
+    materialNumber = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTG']);
+    pieceNumber = JsonParse.str(json['ZPIECE_NO']);
+    trackNo = JsonParse.str(json['ZTRACKNO']);
   }
 
   bool search(String text) =>
@@ -258,9 +258,9 @@ class SapPackingScanReverseLabelInfo{
     this.materialList,
   });
   SapPackingScanReverseLabelInfo.fromJson(dynamic json) {
-    pieceId = json['ZPIECE_NO'];
+    pieceId = JsonParse.str(json['ZPIECE_NO']);
     pieceNo = json['CLABS'].toString().toDoubleTry();
-    deliveryOrderNo = json['VBELN_VL'];
+    deliveryOrderNo = JsonParse.str(json['VBELN_VL']);
     materialList = [
       if(json['MATERIALLIST'] != null)
       for (var item in json['MATERIALLIST'])
@@ -284,11 +284,11 @@ class SapPackingScanReverseLabelMaterialInfo{
     this.commonUnit,
   });
   SapPackingScanReverseLabelMaterialInfo.fromJson(dynamic json) {
-    materialNumber = json['MATNR'];
-    materialName = json['ZMAKTG'];
-    trackNo = json['ZTRACKNO'];
+    materialNumber = JsonParse.str(json['MATNR']);
+    materialName = JsonParse.str(json['ZMAKTG']);
+    trackNo = JsonParse.str(json['ZTRACKNO']);
     commonQty = json['ERFMG'].toString().toDoubleTry();
-    commonUnit = json['ERFME'];
+    commonUnit = JsonParse.str(json['ERFME']);
   }
 }
 class PickingScanDeliveryOrderInfo{
@@ -300,7 +300,7 @@ class PickingScanDeliveryOrderInfo{
     this.orderDate,
   });
   PickingScanDeliveryOrderInfo.fromJson(dynamic json) {
-    orderNo = json['VBELN_VL'];
-    orderDate = json['WADAT_IST'];
+    orderNo = JsonParse.str(json['VBELN_VL']);
+    orderDate = JsonParse.str(json['WADAT_IST']);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 // Entry : [{"exNumber":"SCPZYCD200000108","billDate":"2020/7/9 16:35:01","empID":139697,"qty":"28","exceptionID":34,"exceptionName":"鞋口高低、不平顺","exceptionLevel":"轻微","reCheck":"复检合格"}]
 // interID : 190109
 // entryID : 2
@@ -20,19 +21,14 @@ class AbnormalQualityInfo {
   });
 
   AbnormalQualityInfo.fromJson(dynamic json) {
-    if (json['Entry'] != null) {
-      entry = [];
-      json['Entry'].forEach((v) {
-        entry?.add(Entry.fromJson(v));
-      });
-    }
-    interID = json['interID'];
-    entryID = json['entryID'];
-    orderNumber = json['orderNumber'];
-    deptName = json['deptName'];
-    processFlowID = json['processFlowID'];
-    productName = json['productName'];
-    qty = json['qty'];
+    entry = JsonParse.list(json['Entry'], Entry.fromJson);
+    interID = JsonParse.toInt(json['interID']);
+    entryID = JsonParse.toInt(json['entryID']);
+    orderNumber = JsonParse.str(json['orderNumber']);
+    deptName = JsonParse.str(json['deptName']);
+    processFlowID = JsonParse.toInt(json['processFlowID']);
+    productName = JsonParse.str(json['productName']);
+    qty = JsonParse.toDouble(json['qty']);
   }
 
   List<Entry>? entry;
@@ -85,16 +81,16 @@ class Entry {
   });
 
   Entry.fromJson(dynamic json) {
-    exNumber = json['exNumber'];
-    billDate = json['billDate'];
-    empNumber = json['empNumber'];
-    empName = json['empName'];
-    empID = json['empID'];
-    qty = json['qty'];
-    exceptionID = json['exceptionID'];
-    exceptionName = json['exceptionName'];
-    exceptionLevel = json['exceptionLevel'];
-    reCheck = json['reCheck'];
+    exNumber = JsonParse.str(json['exNumber']);
+    billDate = JsonParse.str(json['billDate']);
+    empNumber = JsonParse.str(json['empNumber']);
+    empName = JsonParse.str(json['empName']);
+    empID = JsonParse.toInt(json['empID']);
+    qty = JsonParse.toDouble(json['qty']);
+    exceptionID = JsonParse.toInt(json['exceptionID']);
+    exceptionName = JsonParse.str(json['exceptionName']);
+    exceptionLevel = JsonParse.str(json['exceptionLevel']);
+    reCheck = JsonParse.str(json['reCheck']);
   }
 
   String? empName;

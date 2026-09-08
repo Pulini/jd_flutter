@@ -21,13 +21,13 @@ class PickingBarCodeInfo {
   });
 
   PickingBarCodeInfo.fromJson(dynamic json) {
-    capacityQty = json['CapacityQty'];
-    interID = json['InterID'];
-    mtono = json['Mtono'];
-    size = json['Size'];
-    qty = json['Qty'];
-    labelCount = json['LabelCount'];
-    totalQty = json['TotalQty'];
+    capacityQty = JsonParse.toDouble(json['CapacityQty']);
+    interID = JsonParse.toInt(json['InterID']);
+    mtono = JsonParse.str(json['Mtono']);
+    size = JsonParse.str(json['Size']);
+    qty = JsonParse.toDouble(json['Qty']);
+    labelCount = JsonParse.toInt(json['LabelCount']);
+    totalQty = JsonParse.toDouble(json['TotalQty']);
     packingQty.value = (qty == 0.0) ? 0 : totalQty.sub(qty ?? 0);
     surplusQty = totalQty.sub(qty ?? 0);
     packingQtyController = TextEditingController(

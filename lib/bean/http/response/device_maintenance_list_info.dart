@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class DeviceMaintenanceListInfo {
   DeviceMaintenanceListInfo({
     this.billDate,
@@ -14,17 +15,17 @@ class DeviceMaintenanceListInfo {
   });
 
   DeviceMaintenanceListInfo.fromJson(dynamic json) {
-    billDate = json['BillDate'];
-    biller = json['Biller'];
-    custodian = json['Custodian'];
-    deviceName = json['DeviceName'];
-    deviceNo = json['DeviceNo'];
-    interID = json['InterID'];
-    number = json['Number'];
-    repairUnit = json['RepairUnit'];
-    voidDate = json['VoidDate'];
-    voider = json['Voider'];
-    voidReason = json['VoidReason'];
+    billDate = JsonParse.str(json['BillDate']);
+    biller = JsonParse.str(json['Biller']);
+    custodian = JsonParse.str(json['Custodian']);
+    deviceName = JsonParse.str(json['DeviceName']);
+    deviceNo = JsonParse.str(json['DeviceNo']);
+    interID = JsonParse.toInt(json['InterID']);
+    number = JsonParse.str(json['Number']);
+    repairUnit = JsonParse.str(json['RepairUnit']);
+    voidDate = JsonParse.str(json['VoidDate']);
+    voider = JsonParse.str(json['Voider']);
+    voidReason = JsonParse.str(json['VoidReason']);
 
   }
 

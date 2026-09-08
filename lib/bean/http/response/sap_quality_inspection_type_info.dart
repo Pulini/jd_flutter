@@ -1,3 +1,4 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class SapQualityInspectionTypeInfo {
   String? number; //编号
   String? name; //名称
@@ -10,8 +11,8 @@ class SapQualityInspectionTypeInfo {
   });
 
   SapQualityInspectionTypeInfo.fromJson(dynamic json) {
-    number = json['DOMVALUE_L'];
-    name = json['DDTEXT'];
+    number = JsonParse.str(json['DOMVALUE_L']);
+    name = JsonParse.str(json['DDTEXT']);
 
   }
 

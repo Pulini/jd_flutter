@@ -1,17 +1,13 @@
+import 'package:jd_flutter/utils/extension_util.dart';
 class QualityInspectionReceiptInfo {
   String? materialCode; //物料编码
   String? materialDescription; //物料描述
   List<Item>? item;
 
   QualityInspectionReceiptInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialDescription = json['MAKTX'];
-    if (json['GT_ITEMS'] != null) {
-      item = [];
-      json['GT_ITEMS'].forEach((v) {
-        item?.add(Item.fromJson(v));
-      });
-    }
+    materialCode = JsonParse.str(json['MATNR']);
+    materialDescription = JsonParse.str(json['MAKTX']);
+    item = JsonParse.list(json['GT_ITEMS'], Item.fromJson);
   }
 
   Map<String, dynamic> toJson() {
@@ -37,8 +33,8 @@ class Item {
   });
 
   Item.fromJson(dynamic json) {
-    batch = json['CHARG'];
-    qty = json['ZCOSEPQTY'];
+    batch = JsonParse.str(json['CHARG']);
+    qty = JsonParse.toDouble(json['ZCOSEPQTY']);
 
   }
 
