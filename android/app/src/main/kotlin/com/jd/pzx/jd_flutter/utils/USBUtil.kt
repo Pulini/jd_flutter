@@ -23,7 +23,16 @@ const val SEND_COMMAND_STATE_USB_ERROR = 1004//usb设备异常
 const val SEND_COMMAND_STATE_NO_PERMISSION = 1005//没有串口指定权限
 const val SEND_COMMAND_STATE_NO_DEVICE = 1006//找不到指定设备
 const val SEND_COMMAND_STATE_BROKEN_PIPE = 1007//蓝牙通道已断开
+// USB 已断开/不可用（设备被拔出、或发送中断）。上层收到该码后可等待设备重新接入，
+// 然后从中断的那一标签继续打印，而不是简单记为失败。
+const val SEND_COMMAND_STATE_USB_DISCONNECTED = 1008
 private const val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
+
+// 单张标签发送的总超时：USB 松动/断开后 bulkTransfer 会持续失败，
+// 没有总超时保护会让发送线程陷入死循环，上层永远收不到回调（表现为“卡住”）
+private const val USB_SEND_TIMEOUT_MILLIS = 5000L
+// 单个分片连续发送失败次数上限，超过即判定本次发送失败并中止
+private const val USB_SEND_MAX_RETRY = 5
 
 fun usbQuickSendCommand(
     context: Context,
@@ -46,10 +55,13 @@ fun usbQuickSendCommand(
             }
             if (device != null) {//已找到指定USB设备
                 if (!usbManager.hasPermission(device)) {
+                    // 权限丢失（重新插拔后可能出现）：请求权限的同时必须回调，
+                    // 否则上层一直等不到结果，同样表现为“卡住”
                     usbManager.requestPermission(
                         device,
                         getBroadcast(context, 0, Intent(ACTION_USB_PERMISSION), FLAG_IMMUTABLE)
                     )
+                    sendCallback.invoke(SEND_COMMAND_STATE_NO_PERMISSION)
                 } else {//以获取指定USB串口权限
                     val usbInterface = device.getInterface(0)
                     val usbEndpoint = usbInterface.getEndpoint(0)
@@ -63,11 +75,29 @@ fun usbQuickSendCommand(
                         }
                     }
                     val usbConnection = usbManager.openDevice(device)
+                    if (usbConnection == null) {
+                        // 打开失败：设备刚松动重连时可能短暂不可用，必须回调，不能静默返回
+                        Log.e("Pan", "USB 打开设备失败（设备可能刚重连）")
+                        sendCallback.invoke(SEND_COMMAND_STATE_USB_DISCONNECTED)
+                        return
+                    }
 
-                    usbConnection?.claimInterface(usbInterface, true)
+                    // claim 失败在重新插拔后较常见，必须判定并回调，不能继续发送
+                    if (!usbConnection.claimInterface(usbInterface, true)) {
+                        Log.e("Pan", "USB claimInterface 失败（设备可能刚重连）")
+                        try {
+                            usbConnection.close()
+                        } catch (e: Exception) {
+                            Log.w("Pan", "关闭USB连接失败：$e")
+                        }
+                        sendCallback.invoke(SEND_COMMAND_STATE_USB_DISCONNECTED)
+                        return
+                    }
                     //串口打开成功 开始发送数据
                     Thread {
                         var status=-1
+                        // 是否因设备断开导致失败（用于区分“普通失败”与“等待重连”）
+                        var disconnected=false
                         try {
                             val byte = bytesMerger(dataList)
                             // bulkTransfer 单次调用并不保证把整个数组发完（返回值=实际发送字节数），
@@ -76,40 +106,73 @@ fun usbQuickSendCommand(
                             // 因此按端点包大小(maxPacketSize)循环分片发送，并严格累加已发送字节，
                             // 确保整张标签指令完整下发后再等打印机回执，避免指令追尾。
                             var offset = 0
+                            var failCount = 0
+                            val startAt = System.currentTimeMillis()
                             val packetSize = usbEndpoint.maxPacketSize.takeIf { it > 0 } ?: 64
                             while (offset < byte.size) {
+                                // 总超时保护：设备断开后 bulkTransfer 会恒失败，
+                                // 若无此保护会陷入死循环，线程永不结束、回调永不触发
+                                if (System.currentTimeMillis() - startAt > USB_SEND_TIMEOUT_MILLIS) {
+                                    Log.e("Pan", "USB 发送超时，已发送 $offset/${byte.size} 字节")
+                                    disconnected=true
+                                    status = -1
+                                    break
+                                }
                                 val len = (byte.size - offset).coerceAtMost(packetSize)
                                 val sent = usbConnection.bulkTransfer(
                                     usbEndpoint,
                                     byte,
                                     offset,
                                     len,
-                                    100
+                                    200
                                 )
                                 if (sent <= 0) {
-                                    // 发送受阻：短暂让出后重试该分片，避免丢字节
-                                    Log.w("Pan", "USB 分片发送受阻 sent=$sent，重试 offset=$offset")
-                                    Thread.sleep(20)
+                                    // 发送受阻：累计连续失败次数，超过上限即放弃，
+                                    // 避免 USB 松动/重连后无限重试导致线程卡死
+                                    failCount++
+                                    Log.w("Pan", "USB 分片发送受阻 sent=$sent，第 $failCount 次，offset=$offset")
+                                    if (failCount >= USB_SEND_MAX_RETRY) {
+                                        Log.e("Pan", "USB 连续发送失败达上限，判定设备已断开")
+                                        disconnected=true
+                                        status = -1
+                                        break
+                                    }
+                                    Thread.sleep(30)
                                     continue
                                 }
+                                failCount = 0
                                 offset += sent
                             }
-                            status = if (offset == byte.size) byte.size else -1
-                            // 每下发完一张标签后：先稳定等待 300ms，再查询打印机状态，
-                            // 确认其回到就绪(@)状态后再返回，由上层继续下发下一张，
-                            // 避免缓冲粘连导致的内容重叠/报错。
-                            Thread.sleep(300)
-                            getPrinterReadyUsb(usbConnection, usbEndpoint, usbEndpointIn)
+                            if (offset == byte.size) {
+                                status = byte.size
+                                // 每下发完一张标签后：先稳定等待 300ms，再查询打印机状态，
+                                // 确认其回到就绪(@)状态后再返回，由上层继续下发下一张，
+                                // 避免缓冲粘连导致的内容重叠/报错。
+                                Thread.sleep(300)
+                                getPrinterReadyUsb(usbConnection, usbEndpoint, usbEndpointIn)
+                            }
                         } catch (e: Exception) {
+                            Log.e("Pan", "USB 发送异常", e)
                             runBlocking(Dispatchers.Main) {
                                 Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
                             }
                         } finally {
+                            // 释放接口并关闭连接：每次发送都 openDevice，
+                            // 不释放会造成句柄泄漏，重新插拔后旧连接残留导致后续发送卡死
+                            try {
+                                usbConnection.releaseInterface(usbInterface)
+                                usbConnection.close()
+                            } catch (e: Exception) {
+                                Log.w("Pan", "释放USB连接失败：$e")
+                            }
                             runBlocking(Dispatchers.Main) {
-                                if (status >= 0) {
-                                    sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
-                                } else {
-                                    sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
+                                when {
+                                    status >= 0 -> sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
+                                    // 设备断开：交由上层等待重连后继续
+                                    disconnected -> sendCallback.invoke(
+                                        SEND_COMMAND_STATE_USB_DISCONNECTED
+                                    )
+                                    else -> sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
                                 }
                             }
                         }

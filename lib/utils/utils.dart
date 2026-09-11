@@ -248,8 +248,8 @@ void getWorkerInfo({
   required Function(String) error,
 }) {
   httpGet(method: webApiGetWorkerInfo, params: {
-    'EmpNumber': number,
-    'DeptmentID': department,
+    'EmpNumber': number??'',
+    'DeptmentID': department??'',
   }).then((worker) {
     if (worker.resultCode == resultSuccess) {
       workers.call([for (var json in worker.data) WorkerInfo.fromJson(json)]);

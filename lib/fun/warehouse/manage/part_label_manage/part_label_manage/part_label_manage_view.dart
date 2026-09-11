@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_label_manage_dialog.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_label_manage/part_dispatch_label_manage_dialog.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

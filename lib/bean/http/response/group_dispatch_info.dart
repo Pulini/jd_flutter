@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 // ============================================================================
@@ -24,8 +22,6 @@ class WorkCardDetail {
   final List<DispatchedItem> dispatchedList;
   final List<SizeInfo> sizeList;
 
-  var dispatchList = <WorkerInfo>[].obs;
-
   WorkCardDetail({
     this.processWorkCardInfo,
     this.componentList = const [],
@@ -36,8 +32,7 @@ class WorkCardDetail {
   factory WorkCardDetail.fromJson(Map<String, dynamic> json) => WorkCardDetail(
         processWorkCardInfo: json['ProcessWorkCardInfo'] == null
             ? null
-            : ProcessWorkCardInfo.fromJson(
-                JsonParse.map(json['ProcessWorkCardInfo'])),
+            : ProcessWorkCardInfo.fromJson(json['ProcessWorkCardInfo']),
         componentList:
             JsonParse.list(json['ComponentList'], ComponentItem.fromJson),
         dispatchedList:
@@ -197,7 +192,6 @@ class ComponentItem {
       ),
     );
   }
-
 }
 
 /// 物料项（MaterialList 元素）
@@ -232,6 +226,7 @@ class MaterialItem {
         'Ingredients': ingredients,
       };
 
+  /// 物料展示文本，格式：`(物料编码) 物料名称 <用量单位>`
   String get materialText => '($materialNo) $materialName <$ingredients$unit>';
 }
 
@@ -251,8 +246,7 @@ class DispatchedItem {
     this.size = '',
   });
 
-  factory DispatchedItem.fromJson(Map<String, dynamic> json) =>
-      DispatchedItem(
+  factory DispatchedItem.fromJson(Map<String, dynamic> json) => DispatchedItem(
         itemId: JsonParse.toInt(json['ItemID']),
         number: JsonParse.str(json['Number']),
         name: JsonParse.str(json['Name']),
@@ -270,6 +264,9 @@ class DispatchedItem {
 }
 
 /// 尺码数量（SizeList 元素）
+///
+/// 纯数据对象：不含响应式状态，该尺码下已分配的员工由
+/// [GroupDispatchState.dispatchMap] 按尺码维护。
 class SizeInfo {
   final String size;
   final double totalQty;
@@ -288,5 +285,14 @@ class SizeInfo {
         'Size': size,
         'TotalQty': totalQty,
       };
-}
 
+  /// 提交派工时的数据：尺码、数量，以及该尺码下所有员工 ID（逗号分隔）
+  ///
+  /// [workers] 该尺码下已分配的员工列表
+  Map<String, dynamic> getSubmitData(List<DispatchedItem> workers) =>
+      <String, dynamic>{
+        'Size': size,
+        'TotalQty': totalQty,
+        'EmpID': workers.map((v) => v.itemId).toList(),
+      };
+}

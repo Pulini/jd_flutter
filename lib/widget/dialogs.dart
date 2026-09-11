@@ -133,6 +133,8 @@ void errorDialog({
   String title = '',
   required String? content,
   Function()? back,
+  // 自定义按钮文本（不传时沿用默认的“知道了”）
+  String? confirmText,
 }) {
   loadingDismiss();
   _isErrorDialogShowing = true;
@@ -151,7 +153,7 @@ void errorDialog({
               Get.back();
               back?.call();
             },
-            child: Text('dialog_default_got_it'.tr),
+            child: Text(confirmText ?? 'dialog_default_got_it'.tr),
           ),
         ],
       ),

@@ -1,15 +1,17 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/routes.dart';
-import 'package:jd_flutter/fun/dispatching/group_dispatch/group_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_dispatch/group_dispatch/group_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_dispatch/pack_order_list/pack_order_list_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_dispatch/part_dispatch_order_list/part_dispatch_order_list_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
-import 'package:jd_flutter/fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_state.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/attendance_dashboard/attendance_dashboard_view.dart';
@@ -49,11 +51,8 @@ import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/new_carton_label_scan/new_carton_label_scan_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/pack_order_list/pack_order_list_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_dispatch_order_list/part_dispatch_order_list_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_label_manage/part_label_manage_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/part_label_print/part_label_print_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_label_manage/part_label_manage/part_label_manage_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_label_manage/part_label_print/part_label_print_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
@@ -94,7 +93,6 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 
-import 'fun/dispatching/team_leader_assigns_task/team_leader_assigns_task_view.dart';
 import 'fun/report/order_production_table/order_production_table_view.dart';
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
@@ -747,12 +745,11 @@ class RouteConfig {
     const OrderProductionTablePage(),
   );
 
-  //组长派工
-  static Routes teamLeaderAssignsTask = Routes(
-    '/team_leader_assigns_tasks',
-    202,
-    const TeamLeaderAssignsTaskPage(),
-    // const GroupDispatchPage(),
+  //班组派工
+  static Routes groupDispatch = Routes(
+    '/group_dispatch',
+    204,
+    const GroupDispatchPage(),
   );
 
   //本地功能入口列表
@@ -848,7 +845,7 @@ class RouteConfig {
     partLabelPrintPage,
     partLabelManagePage,
     orderProductionTable,
-    teamLeaderAssignsTask,
+    groupDispatch,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1230,8 +1227,8 @@ class RouteConfig {
       page: () => orderProductionTable.page,
     ),
     GetPage(
-      name: teamLeaderAssignsTask.name,
-      page: () => teamLeaderAssignsTask.page,
+      name: groupDispatch.name,
+      page: () => groupDispatch.page,
     ),
   ];
 }

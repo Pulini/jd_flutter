@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_dispatch/confirm_packing_method/confirm_packing_method_view.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';

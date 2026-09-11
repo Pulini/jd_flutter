@@ -13,12 +13,33 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PrintUtil {
+  /// 原生返回的发送状态码
+  /// - 1000 发送成功
+  /// - 1003 发送失败
+  /// - 1006 找不到指定设备
+  /// - 1007 蓝牙通道已断开
+  /// - 1008 USB 已断开/不可用（等待重新接入后可继续）
+  static const int sendSuccess = 1000;
+  static const int sendFailed = 1003;
+  static const int usbNoDevice = 1006;
+  static const int sendBrokenPipe = 1007;
+  static const int usbDisconnected = 1008;
+
+  /// 用户在“连接断开”弹窗中点“结束打印”后的返回码：本次打印流程终止
+  static const int userAbort = -1;
+
+  /// USB 断开后等待重新接入的最长时间（超时则记为失败）
+  static const Duration usbReconnectTimeout = Duration(minutes: 3);
+
   static final PrintUtil _instance = PrintUtil._internal();
   var bluetoothChannel = const MethodChannel(channelBluetooth);
   var usbChannel = const MethodChannel(channelUsbTsc);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
   var _dialogIsShowing = false;
+
+  /// 用户在“连接断开”弹窗中选择了“结束打印”：本次打印流程终止，不再继续下发
+  var _abortPrinting = false;
 
   factory PrintUtil() => _instance;
 
@@ -400,20 +421,93 @@ class PrintUtil {
     required Function(List<int>, List<int>)? finished,
   }) async {
     start?.call();
+    _abortPrinting = false; // 每次新的打印流程重置“结束打印”标志
     var success = <int>[];
     var fail = <int>[];
     for (var i = 0; i < labels.length; ++i) {
       progress?.call(i + 1, labels.length);
-      var code = await mChannel.invokeMethod('SendTSC', labels[i]);
-      if (code == 1000) {
+      // 用 _sendOne 发送：USB 断开时会等待重新接入并重发该张（断点继续）
+      var code = await _sendOne(mChannel, labels[i]);
+      if (code == userAbort) {
+        // 用户选择“结束打印”：本次流程终止（已打印的计入成功）
+        break;
+      }
+      if (code == sendSuccess) {
         success.add(i);
-      } else if (code == 1003 || code == 1007) {
+      } else if (code == sendFailed || code == sendBrokenPipe) {
+        fail.add(i);
+      } else if (code == usbDisconnected || code == usbNoDevice) {
+        // 等待重连超时（始终未重新接入）才记为失败
         fail.add(i);
       }
       // 不再额外延迟：Kotlin 端 waitPrinterIdle 已串行等打印机就绪，
       // 这里再加延迟只会累积批量打印的总停顿。
     }
     finished?.call(success, fail);
+  }
+
+  /// 发送单张标签
+  ///
+  /// 当返回“USB 已断开”([usbDisconnected] / [usbNoDevice])时，
+  /// 会轮询等待打印机重新接入，接入后**重发当前这一张**，
+  /// 从而实现“断开重连后自动继续任务”，而不是整批中断。
+  ///
+  /// 仅在 USB 通道下等待重连；蓝牙沿用原有（1007 断线重连）逻辑。
+  Future<int> _sendOne(MethodChannel mChannel, dynamic label) async {
+    final deadline = DateTime.now().add(usbReconnectTimeout);
+    var notified = false;
+    while (true) {
+      final result = await mChannel.invokeMethod('SendTSC', label);
+      final code = result is int ? result : -1;
+
+      // 非“设备断开”结果：直接返回（成功或普通失败）
+      final disconnected = code == usbDisconnected || code == usbNoDevice;
+      if (!disconnected) return code;
+      // 蓝牙通道不做 USB 重连等待
+      if (mChannel != usbChannel) return code;
+      // 用户已选择“结束打印”
+      if (_abortPrinting) return userAbort;
+      // 超过最长等待时间则放弃
+      if (DateTime.now().isAfter(deadline)) return code;
+
+      if (!notified) {
+        notified = true;
+        logger.w('USB 打印机已断开，等待重新接入后自动继续打印...');
+        // 提示用户：线路恢复后会自动继续；点“结束打印”则终止本次流程
+        _showDisconnectedDialog();
+      }
+      final reconnected = await _waitUsbReconnect(deadline);
+      if (_abortPrinting) return userAbort;
+      if (!reconnected) return code;
+      // 设备刚接入，给其一点初始化时间再重发当前这张
+      await Future.delayed(const Duration(milliseconds: 800));
+    }
+  }
+
+  /// 弹出“连接断开”提示：按钮为“结束打印”，点击后本次打印流程终止
+  void _showDisconnectedDialog() {
+    errorDialog(
+      content: 'printer_usb_disconnected_tip'.tr,
+      confirmText: 'printer_end_print'.tr,
+      back: () => _abortPrinting = true,
+    );
+  }
+
+  /// 轮询等待 USB 打印机重新接入
+  ///
+  /// 在 [deadline] 前重新接入返回 true（并自动关闭断开提示弹窗）；
+  /// 超时或用户选择“结束打印”返回 false。
+  Future<bool> _waitUsbReconnect(DateTime deadline) async {
+    while (DateTime.now().isBefore(deadline)) {
+      await Future.delayed(const Duration(milliseconds: 800));
+      if (_abortPrinting) return false;
+      if (await _getUsbState()) {
+        // 线路已恢复：自动关闭断开提示弹窗，随后继续打印
+        if (isErrorDialogShowing) Get.back();
+        return true;
+      }
+    }
+    return false;
   }
 
   bool isConnected() => deviceList.any((v) => v.deviceIsConnected);

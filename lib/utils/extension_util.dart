@@ -379,9 +379,6 @@ extension JsonExt on Object? {
     return v.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
   }
 
-  /// 转 Map：非 Map 返回空 Map；兼容 JSON 字符串与数组（同 [JsonParse.map]）。
-  Map<String, dynamic> parseMap() => JsonParse.map(this);
-
   /// 转字符串：null -> ''，其余调用 toString()。
   String toStr() => this?.toString() ?? '';
 
@@ -432,26 +429,6 @@ class JsonParse {
     return value.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
   }
 
-  /// 转 Map：非 Map 返回空 Map（绝不返回 null）。
-  ///
-  /// 兼容后端返回结构不稳定的情况：
-  ///   - Map：直接转换；
-  ///   - String：按 JSON 字符串先解码（decode 失败返回空 Map）；
-  ///   - List：取首元素后按上述规则再处理。
-  /// 说明：直接对 String/List 用 `json['Key']` 取索引会抛
-  /// "type 'String' is not a subtype of type 'int' of 'index'"。
-  static Map<String, dynamic> map(dynamic value) {
-    var v = value;
-    // 后端偶发把节点以 JSON 字符串形式返回，需先解码
-    if (v is String) v = _tryDecode(v);
-    // 后端偶发返回数组，取首元素
-    if (v is List) {
-      v = v.isNotEmpty ? v.first : null;
-      if (v is String) v = _tryDecode(v);
-    }
-    return v is Map ? Map<String, dynamic>.from(v) : <String, dynamic>{};
-  }
-
   /// 转字符串：null -> ''，其余调用 toString()。
   static String str(dynamic v) => v == null ? '' : v.toString();
 
@@ -470,15 +447,6 @@ class JsonParse {
       return s == 'true' || s == '1' || s == 'x' || s == 'yes';
     }
     return false;
-  }
-}
-
-/// JSON 字符串解码辅助：解码失败返回 null（供 [JsonParse.map] 使用）。
-dynamic _tryDecode(String s) {
-  try {
-    return jsonDecode(s);
-  } catch (_) {
-    return null;
   }
 }
 

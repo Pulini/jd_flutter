@@ -38,10 +38,8 @@ enum PickerType {
 abstract class PickerController {
   late PickerType pickerType;
   late bool hasAll;
-  late bool hasNone;
 
-  PickerController(this.pickerType,
-      {this.hasAll = false, this.hasNone = false});
+  PickerController(this.pickerType, {this.hasAll = false});
 
   String getButtonName() {
     switch (pickerType) {
@@ -483,8 +481,6 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasNone)
-            PickerSapWorkCenterNew(name: '无', number: '', departmentID: -1),
           if (hasAll)
             PickerSapWorkCenterNew(name: '全部', number: '', departmentID: -1)
         ];
@@ -800,7 +796,6 @@ class OptionsPickerController extends PickerController {
   OptionsPickerController(
     super.pickerType, {
     super.hasAll,
-    super.hasNone,
     this.saveKey,
     this.buttonName,
     this.dataList,
@@ -901,7 +896,6 @@ class LinkOptionsPickerController extends PickerController {
   LinkOptionsPickerController(
     super.pickerType, {
     super.hasAll,
-    super.hasNone,
     this.saveKey,
     this.buttonName,
     this.dataList,
