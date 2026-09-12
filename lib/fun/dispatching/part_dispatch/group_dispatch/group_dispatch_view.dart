@@ -161,6 +161,7 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
 
   /// 已派工员工卡片：头像 + 右上角删除按钮 + 底部工号
   Widget workerItem(DispatchedItem data, Function() delete) => Container(
+        margin: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: Colors.white,
@@ -168,7 +169,12 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.only(
+                left: 5,
+                top: 5,
+                right: 5,
+                bottom: 20,
+              ),
               child: avatarPhoto(data.avatarPath),
             ),
             Positioned(
@@ -189,85 +195,104 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
         ),
       );
 
-  /// 单个尺码派工卡片：左侧尺码/数量/添加员工按钮，横向列表展示该尺码已派工员工
+  /// 单个尺码派工卡片（支持多选）
+  ///
+  /// 点击卡片切换选中状态，选中记录保存在
+  /// [GroupDispatchState.selectedSizes]；选中时卡片显示浅蓝背景 + 蓝色边框，
+  /// 尺码前显示勾选图标。卡片内的“添加员工”与“删除员工”按钮会优先响应，
+  /// 不会触发选中切换。
   Widget dispatchItem(SizeInfo data) {
-    return Container(
-      height: 160,
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Column(
+    return Obx(() {
+      final selected = state.isSizeSelected(data.size);
+      return GestureDetector(
+        onTap: () => state.toggleSizeSelected(data.size),
+        child: Container(
+          height: 160,
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: selected ? Colors.blue.shade50 : Colors.white,
+            // 未选中时用透明边框占位，避免选中/未选中切换时尺寸跳动
+            border: Border.all(
+              color: selected ? Colors.blueAccent : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Row(
             children: [
-              Text('${data.size}#',
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  )),
-              Text(
-                data.totalQty.toShowString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.blue.shade100,
-                    boxShadow: boxShadow),
-                child: IconButton(
-                  onPressed: () => logic.getWorkCenter(
-                    (wc) => addWorkerDialog(
-                      size: data.size,
-                      departmentId: state.departmentId,
-                      workerCenterList: wc,
-                      selected: state.dispatchListOf(data.size),
-                      callback: (workers) =>
-                          state.dispatchListOf(data.size).value = workers,
+              SizedBox(
+                width: 80,
+                child: Column(
+                  children: [
+                    Text('${data.size}#',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        )),
+                    Text(
+                      data.totalQty.toShowString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  icon: const Icon(
-                    Icons.manage_accounts_outlined,
-                    color: Colors.blueAccent,
-                    size: 50,
-                  ),
+                    const Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.blue.shade100,
+                          boxShadow: boxShadow),
+                      child: IconButton(
+                        onPressed: () => logic.getWorkCenter(
+                          (wc) => addWorkerDialog(
+                            size: data.size,
+                            departmentId: state.departmentId,
+                            workerCenterList: wc,
+                            selected: state.dispatchListOf(data.size),
+                            callback: (workers) =>
+                                state.dispatchListOf(data.size).value = workers,
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.manage_accounts_outlined,
+                          color: Colors.blueAccent,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.shade200,
+                  ),
+                  child: Obx(() {
+                    // 该尺码下已分配的员工（不存在时自动创建）
+                    var workers = state.dispatchListOf(data.size);
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: workers.length,
+                      itemBuilder: (c, i) => workerItem(
+                        workers[i],
+                        // 按对象移除而非按索引，避免列表变动时删错人
+                        () => workers.remove(workers[i]),
+                      ),
+                    );
+                  }),
+                ),
+              )
             ],
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(left: 10),
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade200,
-              ),
-              child: Obx(() {
-                // 该尺码下已分配的员工（不存在时自动创建）
-                var workers = state.dispatchListOf(data.size);
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: workers.length,
-                  itemBuilder: (c, i) => workerItem(
-                    workers[i],
-                    // 按对象移除而非按索引，避免列表变动时删错人
-                    () => workers.remove(workers[i]),
-                  ),
-                );
-              }),
-            ),
-          )
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   /// 右侧尺码派工列表区：标题 + 尺码卡片列表
@@ -282,7 +307,24 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
           ),
           child: Column(
             children: [
-              boxTitle('team_leader_size_worker_assign_detail'.tr),
+              Row(
+                children: [
+                  boxTitle('team_leader_size_worker_assign_detail'.tr),
+                  const Spacer(),
+                  CombinationButton(
+                        combination: Combination.left,
+                        text: 'group_dispatch_select_all'.tr,
+                        click: () =>state.toggleSizeSelectAll(),
+                      ),
+                  Obx(() => CombinationButton(
+                        combination: Combination.right,
+                        // 批量添加作用于所有尺码，故只要有尺码数据即可用
+                        isEnabled: state.sizeList.isNotEmpty,
+                        text: 'group_dispatch_batch_setting'.tr,
+                        click: () => _batchAddWorker(),
+                      ))
+                ],
+              ),
               Expanded(
                 child: Obx(() => ListView.builder(
                       itemCount: state.sizeList.length,
@@ -294,6 +336,37 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
           ),
         ),
       );
+
+  /// 打开“批量添加员工”弹窗
+  ///
+  /// 与单个尺码的 [addWorkerDialog] 操作逻辑一致，区别在于：
+  /// 这里勾选的员工会作用到**所有尺码**（每个尺码各添加一条记录）；
+  /// 已存在于所有尺码的员工再次点击，则从所有尺码中移除。
+  void _batchAddWorker() {
+    if (state.sizeList.isEmpty) {
+      msgDialog(content: 'group_dispatch_no_data_submit'.tr);
+      return;
+    }
+    logic.getWorkCenter(
+      (wc) => addWorkerBatchDialog(
+        departmentId: state.departmentId,
+        workerCenterList: wc,
+        isWorkerSelected: state.isWorkerInAllSizes,
+        onToggle: (worker, selected) {
+          if (selected) {
+            state.removeWorkerFromAllSizes(worker.empID ?? -1);
+          } else {
+            state.addWorkerToAllSizes(
+              itemId: worker.empID ?? -1,
+              number: worker.empCode ?? '',
+              name: worker.empName ?? '',
+              avatarPath: worker.picUrl ?? '',
+            );
+          }
+        },
+      ),
+    );
+  }
 
   /// 右侧派工区整体：工单信息 + 尺码派工列表 + 底部（重置/派工）操作按钮
   Widget personnelAllocation() {

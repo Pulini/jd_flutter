@@ -27,6 +27,8 @@ class GroupDispatchLogic extends GetxController {
         state.partList.value = data.componentList;
         // 按尺码把已派工人员登记到 dispatchMap（每个尺码只保留属于该尺码的人）
         state.dispatchMap.clear();
+        // 换单时清空多选状态
+        state.clearSelectedSizes();
         for (var v in data.sizeList) {
           state.dispatchMap[v.size] = data.dispatchedList
               .where((v2) => v2.size == v.size)
@@ -105,6 +107,7 @@ class GroupDispatchLogic extends GetxController {
           state.titleInfo.value = null;
           state.partList.clear();
           state.dispatchMap.clear();
+          state.clearSelectedSizes();
           refresh.call();
         },
       ),

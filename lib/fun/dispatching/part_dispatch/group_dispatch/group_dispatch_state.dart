@@ -49,6 +49,75 @@ class GroupDispatchState {
     }
   }
 
+  /// 已选中的尺码（多选列表用），元素为尺码字符串
+  var selectedSizes = <String>{}.obs;
+
+  /// 判断某尺码是否被选中
+  bool isSizeSelected(String size) => selectedSizes.contains(size);
+
+  /// 切换某尺码的选中状态（多选列表点击时调用）
+  void toggleSizeSelected(String size) {
+    if (selectedSizes.contains(size)) {
+      selectedSizes.remove(size);
+    } else {
+      selectedSizes.add(size);
+    }
+  }
+
+  /// 全选 / 取消全选所有尺码
+  void selectAllSizes(bool selected) {
+    selectedSizes.clear();
+    if (selected) {
+      selectedSizes.addAll(sizeList.map((v) => v.size));
+    }
+  }
+
+  void toggleSizeSelectAll(){
+    if (selectedSizes.length == sizeList.length) {
+      selectedSizes.clear();
+    } else {
+      selectedSizes.addAll(sizeList.map((v) => v.size));
+    }
+  }
+  /// 清空已选中的尺码
+  void clearSelectedSizes() => selectedSizes.clear();
+
+  /// 判断某员工是否已分配到**所有**尺码（批量添加场景下的“已选中”判定）
+  bool isWorkerInAllSizes(int empId) {
+    if (sizeList.isEmpty) return false;
+    return sizeList.every(
+      (s) => dispatchMap[s.size]?.any((v) => v.itemId == empId) ?? false,
+    );
+  }
+
+  /// 把某员工添加到**所有**尺码（每个尺码的记录带各自的 size）
+  void addWorkerToAllSizes({
+    required int itemId,
+    required String number,
+    required String name,
+    required String avatarPath,
+  }) {
+    for (var s in sizeList) {
+      final list = dispatchListOf(s.size);
+      if (!list.any((v) => v.itemId == itemId)) {
+        list.add(DispatchedItem(
+          itemId: itemId,
+          number: number,
+          name: name,
+          avatarPath: avatarPath,
+          size: s.size,
+        ));
+      }
+    }
+  }
+
+  /// 从**所有**尺码中移除某员工
+  void removeWorkerFromAllSizes(int empId) {
+    for (var s in sizeList) {
+      dispatchMap[s.size]?.removeWhere((v) => v.itemId == empId);
+    }
+  }
+
   /// 查询工序卡明细
   ///
   /// [order] 工序卡号，如 `GXPG250103497/1`
@@ -81,6 +150,7 @@ class GroupDispatchState {
     required Function(String) error,
   }) {
     httpGet(
+      loading: 'group_dispatch_getting_work_center'.tr,
       method: webApiPickerSapWorkCenterNew,
       params: {
         'ShowType': 'GetWorkcenterAndDevices',
@@ -123,5 +193,6 @@ class GroupDispatchState {
       }
     });
   }
+
 
 }
