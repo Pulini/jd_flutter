@@ -181,7 +181,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    229,
+    230,
     const ProductionDispatchPage(),
   );
 
@@ -209,7 +209,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    211,
+    212,
     const WorkOrderListPage(),
   );
 
@@ -748,7 +748,7 @@ class RouteConfig {
   //班组派工
   static Routes groupDispatch = Routes(
     '/group_dispatch',
-    204,
+    205,
     const GroupDispatchPage(),
   );
 
