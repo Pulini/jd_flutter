@@ -727,14 +727,14 @@ class RouteConfig {
   //部件标签打印
   static Routes partLabelPrintPage = Routes(
     '/part_label_print',
-    202,
+    203,
     const PartLabelPrintPage(),
   );
 
   //部件标签管理
   static Routes partLabelManagePage = Routes(
     '/part_label_manage',
-    201,
+    202,
     const PartLabelManagePage(),
   );
 

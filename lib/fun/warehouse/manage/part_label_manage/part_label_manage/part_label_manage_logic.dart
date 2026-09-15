@@ -90,8 +90,8 @@ Widget createPartLabel(PartLabelInfo label) => partDynamicLabel(
       qrCodeTips: '${label.materialList!.first.totalQty()} Pr/pc',
       title: label.productName ?? '',
       subTitleList: label.partList,
-      tableFirstLineTitle: 'part_dispatch_label_print_size'.tr,
-      tableLastLineTitle: 'part_dispatch_label_print_total'.tr,
+      tableFirstLineTitle: 'Size',
+      tableLastLineTitle: 'Total',
       map: {
         for (var v in groupBy(label.instructionList, (v) => v.instruction ?? '')
             .entries)
@@ -101,10 +101,6 @@ Widget createPartLabel(PartLabelInfo label) => partDynamicLabel(
           ]
       },
       batchNo: label.batchNo ?? '',
-      pageNumber: 'part_dispatch_label_print_piece_no'.trArgs(
-        [label.pieceNo.toString()],
-      ),
-      deliveryDate: 'part_dispatch_label_print_fetch_date'.trArgs(
-        [label.fetchDate ?? ''],
-      ),
+      pageNumber: 'No：${label.pieceNo}',
+      deliveryDate: 'DD：${label.fetchDate}',
     );

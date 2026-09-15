@@ -124,7 +124,12 @@ dependencies:
   #PDF生成工具
   pdf: ^3.11.3
   #网页转图片
-  webcontent_converter: ^0.0.10+6
+  # 注意：原插件（0.0.14）已停止维护，其 android/build.gradle 使用 Gradle 9 已移除的
+  # jcenter() 且锁定 AGP 8.7.0 / Kotlin 1.8.22，无法适配 AGP 9。
+  # 已 fork 到 packages/webcontent_converter（仅改 android 构建配置，Dart 代码未改动），
+  # 详情见 packages/webcontent_converter/android/build.gradle 顶部注释。
+  webcontent_converter:
+    path: packages/webcontent_converter
   #隔离区子线程
 #  flutter_isolate: ^2.0.4
   # 华为官方肢体识别库

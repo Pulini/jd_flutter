@@ -24,3 +24,13 @@
 # 保留极光推送相关类不被混淆
 -dontwarn cn.jpush.**
 -keep class cn.jpush.** { *; }
+
+# ===== Flutter 标准混淆规则 =====
+# 启用 R8 优化(proguard-android-optimize) 后需保留 Flutter 相关类，
+# 避免插件注册、反射调用在 release 包中被移除导致崩溃
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.** { *; }
+-keep class io.flutter.plugins.** { *; }

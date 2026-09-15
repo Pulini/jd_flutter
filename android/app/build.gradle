@@ -1,6 +1,12 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
+    // 注意：不再显式声明 kotlin-android（KGP）。
+    // Flutter 3.47 起对仍在使用 legacy KGP 的项目（android.builtInKotlin=false）
+    // 会在应用 Flutter Gradle Plugin 时自动补上 kotlin-android，版本取自
+    // settings.gradle 中声明的 org.jetbrains.kotlin.android（2.3.20）。
+    // 保留显式声明会触发警告：
+    // "applies the Kotlin Gradle Plugin, which will cause build failures in future versions of Flutter"
+    // 详见 https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -30,15 +36,22 @@ android {
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
+    // AGP 9 起需在 buildFeatures 中显式开启（取代已移除的
+    // android.defaults.buildfeatures.buildconfig 属性）
+    buildFeatures {
+        buildConfig = true
+    }
+
     useLibrary 'org.apache.http.legacy'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        // AGP 9 起建议/要求使用 Java 17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     sourceSets {
@@ -83,7 +96,9 @@ android {
             // 启用资源压缩
             shrinkResources true
             // 指定混淆规则文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // AGP 9 起不再支持 proguard-android.txt（含 -dontoptimize 会阻止 R8 优化），
+            // 统一使用 proguard-android-optimize.txt
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

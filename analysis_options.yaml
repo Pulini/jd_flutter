@@ -16,6 +16,9 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+    # packages/ 下是本地 fork 的第三方插件（如 webcontent_converter），
+    # 仅用于绕过原插件的 Gradle 兼容问题，其代码风格不计入本项目规范
+    - packages/**
 include: package:flutter_lints/flutter.yaml
 
 linter:

@@ -32,6 +32,9 @@ class GroupDispatchState {
   /// 工作中心列表缓存（非响应式：仅用于避免重复请求，不驱动 UI 刷新）
   var workCenterList = <PickerSapWorkCenterNew>[];
 
+  var isMachineModel= false.obs;
+  var machineDispatchMap=<String,RxString>{}.obs;
+
   /// 默认部门 ID：优先取本地缓存的部门，其次取工序卡上的部门，都没有则为空
   String get departmentId =>
       spGet(groupDispatchDepartmentId) ??
@@ -51,6 +54,8 @@ class GroupDispatchState {
 
   /// 已选中的尺码（多选列表用），元素为尺码字符串
   var selectedSizes = <String>{}.obs;
+
+
 
   /// 判断某尺码是否被选中
   bool isSizeSelected(String size) => selectedSizes.contains(size);
