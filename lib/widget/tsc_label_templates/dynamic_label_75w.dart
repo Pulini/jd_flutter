@@ -767,6 +767,28 @@ Widget maintainLabelMixEnglishDynamicLabel({
       ),
     );
 
+/// 按"全角字符数"切分字符串。
+/// 全角字符计 1，半角字符（ASCII）计 0.5；累计超过 [charCount] 就拆出一段新串，
+/// 保证每段在按该字符数排版时单行显示、无需换行。
+List<String> _splitByFullWidthChars(String text, int charCount) {
+  if (charCount <= 0) return [text];
+  final result = <String>[];
+  var buf = StringBuffer();
+  var width = 0.0;
+  for (final rune in text.runes) {
+    final w = rune > 0x7F ? 1.0 : 0.5;
+    if (width + w > charCount && buf.isNotEmpty) {
+      result.add(buf.toString());
+      buf = StringBuffer();
+      width = 0;
+    }
+    buf.write(String.fromCharCode(rune));
+    width += w;
+  }
+  if (buf.isNotEmpty) result.add(buf.toString());
+  return result;
+}
+
 ///部件动态标
 Widget partDynamicLabel({
   required String qrCode,
@@ -780,13 +802,26 @@ Widget partDynamicLabel({
   required String pageNumber,
   required String deliveryDate,
 }) {
-  var subTitle = <String>[];
-  var header = <String>[];
-  if (subTitleList.length > 4) {
-    subTitle = subTitleList.sublist(0, 4);
-    header = subTitleList.sublist(4, subTitleList.length);
-  } else {
-    subTitle = subTitleList;
+  const subTitleLineCount = 4;
+  const charCountPerLine = 19;
+
+  final subTitle = <String>[];
+  final header = <String>[];
+  var subTitleFull = false;
+  for (final item in subTitleList) {
+    if (subTitleFull) {
+      header.add(item);
+      continue;
+    }
+    final pieces = _splitByFullWidthChars(item, charCountPerLine);
+    for (final p in pieces) {
+      if (subTitle.length < subTitleLineCount) {
+        subTitle.add(p);
+      } else {
+        header.add(p);
+        subTitleFull = true;
+      }
+    }
   }
 
   return _dynamicPartLabelTemplate75xN(
@@ -825,21 +860,22 @@ Widget partDynamicLabel({
         children: [
           Text(
             batchNo,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-           Row(
+          Row(
             children: [
               Expanded(
                 child: Text(
                   pageNumber,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
               Expanded(
                 child: Text(
                   deliveryDate,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
             ],

@@ -699,7 +699,7 @@ class RouteConfig {
   //包装清单列表
   static Routes packOrderList = Routes(
     '/pack_order_list',
-    202,
+    203,
     const PackOrderListPage(),
   );
 
@@ -727,14 +727,14 @@ class RouteConfig {
   //部件标签打印
   static Routes partLabelPrintPage = Routes(
     '/part_label_print',
-    203,
+    205,
     const PartLabelPrintPage(),
   );
 
   //部件标签管理
   static Routes partLabelManagePage = Routes(
     '/part_label_manage',
-    202,
+    203,
     const PartLabelManagePage(),
   );
 

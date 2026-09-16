@@ -463,6 +463,101 @@ List<List<String>> tableFormat(
   return list;
 }
 
+/// 按打印机纸张宽度（毫米）自动换行拆分 [list]，用于位图文字（`_tscBitmapText`）。
+///
+/// 内部用 [contextFormat]（Flutter [TextPainter] 真实测宽，中/英/印尼文/缅甸文宽度自动算），
+/// 把超宽元素拆成多个子串，**超宽部分作为新元素紧随其后**，保持原顺序。
+///
+/// [paperWidthMm] 纸张可用宽度（毫米）
+/// [fontSize]     打印字号，须与同次 `_tscBitmapText` 调用一致
+///
+/// 例（纸宽 70mm、字号 40）：`substringList(['一段很长的中文标题需换行'], 70, 40)`
+List<String> substringList(
+    List<String> list, int paperWidthMm, double fontSize) {
+  if (paperWidthMm <= 0) return list;
+  // 毫米 → 与 contextFormat 一致的测量单位（_dpi 为 dots/mm，见文件顶部）
+  final maxWidthPx = paperWidthMm * _dpi.toDouble();
+  final result = <String>[];
+  for (final item in list) {
+    // contextFormat 已按真实字体宽度逐字符测宽并换行，其返回的每一行即一个
+    // "不超过限宽的子串"，正好等价于"超宽部分作为新元素插入后面"。
+    result.addAll(contextFormat(item, fontSize, maxWidthPx));
+  }
+  return result;
+}
+
+/// 一段连续行使用同一打印宽度的配置（用于 [substringListBySegments]）。
+///
+/// [lineCount] 该段占多少行；传 `0` 表示“剩余所有行”。
+/// [widthMm]  该段每行的纸张可用宽度（毫米）。
+class WidthSegment {
+  final int lineCount;
+  final double widthMm;
+
+  const WidthSegment(this.lineCount, this.widthMm);
+}
+
+/// 在 [substringList] 基础上支持**按输出行号分段改变宽度**地自动换行。
+///
+/// 与 [substringList]（整段同一宽度）不同，本方法逐行选择宽度：前若干行用一种宽度，
+/// 接着若干行换一种，其余再用一种，常用于“上窄下宽 / 分区排版”的标签。
+///
+/// [segments] 宽度段配置，按顺序应用；最后一段 [WidthSegment.lineCount] 传 `0` 表示剩余全部。
+/// [fontSize] 打印字号，须与同次 `_tscBitmapText` 调用一致。
+///
+/// 例：前 4 行 50mm、第 5–7 行 70mm、其余 60mm：
+/// ```dart
+/// substringListBySegments(list, const [
+///   WidthSegment(4, 50),
+///   WidthSegment(3, 70),
+///   WidthSegment(0, 60),
+/// ], 40)
+/// ```
+/// 处理时逐行确定宽度——若前两个串按 50mm 已拆出 4 行，则第三个串起自动改用 70mm，
+/// 保证输出第 1–4 行宽 50mm、第 5–7 行宽 70mm、之后均为 60mm。
+List<String> substringListBySegments(
+  List<String> list,
+  List<WidthSegment> segments,
+  double fontSize,
+) {
+  if (segments.isEmpty) return list;
+
+  double widthMmForLine(int lineNo) {
+    var acc = 0;
+    for (final seg in segments) {
+      if (seg.lineCount <= 0) return seg.widthMm; // 无限段
+      if (lineNo <= acc + seg.lineCount) return seg.widthMm;
+      acc += seg.lineCount;
+    }
+    return segments.last.widthMm;
+  }
+
+  final tp = TextPainter(textDirection: ui.TextDirection.ltr);
+  bool exceeds(String text, double widthMm) {
+    tp.text = TextSpan(text: text, style: TextStyle(fontSize: fontSize));
+    tp.layout();
+    return tp.width > widthMm * _dpi;
+  }
+
+  final lines = <String>[];
+  var current = '';
+  for (final item in list) {
+    for (final ch in item.characters) {
+      final w = widthMmForLine(lines.length + 1);
+      if (current.isNotEmpty && exceeds(current + ch, w)) {
+        lines.add(current);
+        current = '';
+      }
+      current += ch;
+    }
+    if (current.isNotEmpty) {
+      lines.add(current);
+      current = '';
+    }
+  }
+  return lines;
+}
+
 //------------------------------------以上为tsc指令集--------------------------------------
 
 // 财产标签
@@ -516,6 +611,7 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   double speed = 3.0,
   double density = 10.0,
   bool isCutter = false,
+// dart format off
 }) async {
   var list = <Uint8List>[];
 
@@ -525,7 +621,7 @@ Future<List<Uint8List>> labelForSurplusMaterial({
       2 * _dpi, 2 * _dpi + _halfDpi, qrCode.replaceAll('"', '\\["]'),
       cell: '5'));
   list.add(
-      await _tscBitmapText(39 * _dpi, 2 * _dpi, 26, '机台:$machine  班次:$shift'));
+      await _tscBitmapText(39 * _dpi, 2 * _dpi, 26, '机台:$machine 班次:$shift'));
   list.add(await _tscBitmapText(39 * _dpi, 7 * _dpi, 26, '派工日期:$startDate'));
   list.add(await _tscBitmapText(2 * _dpi, 39 * _dpi, 30, '型体:$factoryType'));
   var format = contextFormat('($stuBarCode)$stubBar', 30, 33.0 * _dpi);
@@ -1139,7 +1235,6 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   return list;
 }
 
-
 /// labelMultipurposeDynamic2(
 ///   qrCode: Uuid().v1(),
 ///   qrCodeTips: '2446 Pr/pc',
@@ -1212,7 +1307,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   Map<String, List<List<String>>> tableData = const {},
   String bottomLeftText1 = '',
   String bottomLeftText2 = '',
-  String bottomRightText1= '',
+  String bottomRightText1 = '',
   String bottomRightText2 = '',
   double speed = 3.0,
   double density = 10.0,
@@ -1239,9 +1334,16 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   //主标题文本高度
   var titleTextHeight = 6;
 
+  if (subTitleList.isNotEmpty) {
+    subTitleList = substringListBySegments(
+      subTitleList,
+      [const WidthSegment(4, 50), const WidthSegment(0, 69)],
+      28,
+    );
+  }
   //表格子标题文本高度
   var titleViewToTableHeight =
-      subTitleList.length > 4 ? 4 * subTitleList.length - 4 * 4 : 0;
+      subTitleList.length > 4 ? 4 * (subTitleList.length - 4) : 0;
 
   //表格行高
   var tableLineHeight = 5;
@@ -1257,8 +1359,15 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
   var tableHeight = table.where((e) => e.isEmpty).length * tableLineWrap +
       table.where((e) => e.isNotEmpty).length * tableLineHeight +
       tableMargin;
+  var bottomTextLine1 = bottomLeftText1 + bottomLeftText1;
+  var bottomTextLine2 = bottomLeftText2 + bottomLeftText2;
   //底部文本高度
-  var bottomTextHeight = 4;
+  var bottomTextHeight =
+      bottomTextLine1.isNotEmpty && bottomTextLine2.isNotEmpty
+          ? 8
+          : bottomTextLine1.isEmpty && bottomTextLine2.isEmpty
+              ? 0
+              : 4;
 
   //height:标签高度 = 边距 + 内缩 + 二维码宽度 + 二维码底部框高度 + 头部控件到表格的高度 + 表格高度 + 底部文本高度 + 内缩 + 边距
   var height = margin +
@@ -1288,37 +1397,35 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
 
   var bLeftText1X = (1 + padding) * _dpi;
   var bLeftText1Y = (margin +
-      padding +
-      qrCodeWidth +
-      qrCodeBottomLineHeight +
-      titleViewToTableHeight +
-      tableHeight) *
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight) *
       _dpi;
   var bLeftText2X = (1 + padding) * _dpi;
   var bLeftText2Y = (margin +
-      padding +
-      qrCodeWidth +
-      qrCodeBottomLineHeight +
-      titleViewToTableHeight +
-      tableHeight +
-      4) *
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight +(bottomLeftText1.isNotEmpty?4:0)) *
       _dpi;
   var bRightText1X = (1 + padding + 35) * _dpi;
   var bRightText1Y = (margin +
-      padding +
-      qrCodeWidth +
-      qrCodeBottomLineHeight +
-      titleViewToTableHeight +
-      tableHeight) *
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight) *
       _dpi;
   var bRightText2X = (1 + padding + 35) * _dpi;
   var bRightText2Y = (margin +
-      padding +
-      qrCodeWidth +
-      qrCodeBottomLineHeight +
-      titleViewToTableHeight +
-      tableHeight +
-      4) *
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight + (bottomRightText1.isNotEmpty?4:0)) *
       _dpi;
 
   list.add(_tscEndMode(isCutter));
@@ -1362,22 +1469,22 @@ Future<List<Uint8List>> labelMultipurposeDynamic2({
       list.add(await _tscBitmapText(
         subTitleX,
         subTitleY + lineHeight * i * _dpi,
-        30,
+        28,
         subTitleList[i],
       ));
     }
-  }
-
-  if (subTitleList.isNotEmpty && subTitleList.length > 4) {
-    for (var i = 4; i < subTitleList.length; ++i) {
-      //行高
-      var lineHeight = 4;
-      list.add(await _tscBitmapText(
-        subTitle2X,
-        subTitle2Y + (lineHeight * i - lineHeight * 4) * _dpi,
-        30,
-        subTitleList[i],
-      ));
+    //副标题大于4行后在表格上方显示
+    if (subTitleList.length > 4) {
+      for (var i = 4; i < subTitleList.length; ++i) {
+        //行高
+        var lineHeight = 4;
+        list.add(await _tscBitmapText(
+          subTitle2X,
+          subTitle2Y + (lineHeight * i - lineHeight * 4) * _dpi,
+          28,
+          subTitleList[i],
+        ));
+      }
     }
   }
 
