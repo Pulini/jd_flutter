@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="zWmA31tUq02k4Dj1Zz1cAk">
+<head data-page-node-id="o6etxbUtATmL3M9DCORZi7">
+<meta charset="UTF-8" data-page-node-id="3Yq3cWstlG60ht8AT5Vn9f">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="uUGG2ZLr9fb0jUM8BQua4u">
+<title>唛头查询测试</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: #f2f3f5; color: #1f2329; }
+  .topbar { position: sticky; top: 0; z-index: 10; background: #07c160; color: #fff;
+            padding: 14px 16px; font-size: 17px; font-weight: 600; display: flex; align-items: center; }
+  .topbar .back { margin-right: 12px; cursor: pointer; font-size: 15px; font-weight: 400; }
+  .search { display: flex; gap: 8px; padding: 12px; background: #fff; }
+  .search input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid #d9d9d9;
+                  border-radius: 8px; font-size: 15px; outline: none; }
+  .search button { padding: 0 18px; border: none; border-radius: 8px; background: #07c160;
+                   color: #fff; font-size: 15px; flex: 0 0 auto; }
+  .search button:disabled { opacity: .55; }
+  #loading, #error { padding: 12px; font-size: 14px; }
+  #error { color: #e54545; white-space: pre-line; line-height: 1.6; }
+  .list, .detail { padding: 12px; }
+  .item { background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 10px;
+          box-shadow: 0 1px 3px rgba(0,0,0,.06); cursor: pointer; }
+  .item:active { background: #f6f6f6; }
+  .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .row .label { color: #8a8f99; font-size: 12px; }
+  .row .val { font-size: 15px; font-weight: 600; text-align: right; word-break: break-all; margin-left: 12px; }
+  .types { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #e8f8ef; color: #07c160; font-size: 12px; padding: 2px 8px; border-radius: 4px; }
+  .empty, .hint { text-align: center; color: #8a8f99; padding: 40px 0; }
+  /* 纸箱样式：牛皮纸底色 + 内容双向居中 */
+  .dmark { background: #d2a679; border: 1px solid #a87b4a; border-radius: 8px; padding: 18px 14px;
+           margin-bottom: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+           min-height: 192px; box-shadow: 0 2px 4px rgba(0,0,0,.12); }
+  .dmark .dtype { color: #5a3a1a; font-size: 13px; font-weight: 700; align-self: flex-start;
+                  text-align: left; margin-bottom: 8px; }
+  .dmark pre { margin: 0; align-self: center; display: inline-block; max-width: 100%; white-space: pre-wrap;
+               word-break: break-all; font-size: 14px; line-height: 1.7; font-family: inherit;
+               text-align: left; color: #3b2a16; }
+</style>
+</head>
+<body data-page-node-id="jQ2N3c6j7XDQsSCyZCSmLM">
+
+<!-- ============ 列表页 ============ -->
+<div id="viewList" data-page-node-id="eZ48C47cCJdXbOrqpzm7Bw">
+  <div class="topbar" data-page-node-id="DM0vW22zt9O3RhgExVn2j3">唛头查询测试</div>
+  <div class="search" data-page-node-id="K5qgzQxihYY66JoNg2JvHC">
+    <input id="deliveryNo" type="text" placeholder="请输入送货单号" autocomplete="off" data-page-node-id="mFBSOaAWFUorevv2gHNE7d">
+    <button id="btnQuery" data-page-node-id="npDDYPTTNJnU6yUycn0BgV">查询</button>
+  </div>
+  <div id="loading" style="display:none;" data-page-node-id="YdsN953sXsOPHS29WEZIrt">查询中…</div>
+  <div id="error" style="display:none;" data-page-node-id="WlKJK44s1229c5GWP9B2rW"></div>
+  <div class="list" id="markList" data-page-node-id="JdxH2ouJIN2LZNxuuZ7g2z">
+    <div class="hint" data-page-node-id="Gvzpy3SunepP6NqA0P72Js">输入送货单号后点击「查询」</div>
+  </div>
+</div>
+
+<!-- ============ 详情页（点击 item 后打开） ============ -->
+<div id="viewDetail" style="display:none;" data-page-node-id="EWCXHqS7nJDGCFzHgclfEX">
+  <div class="topbar" data-page-node-id="BFZ5qsTiCV8ubuXgWBrsQd"><span class="back" id="btnBack" data-page-node-id="CGw3vOlFJVcIWQt5zXe0tH">← 返回</span>唛头详情</div>
+  <div class="detail" id="detailContent" data-page-node-id="cEAlVnlOgBFkTeyNVebAD7"></div>
+</div>
+
+<script>
+const API = 'https://geapp.goldemperor.com:1299/api/shared/ocr/getShippingMarks';
+let currentItems = [];   // 最近一次查询返回的条目，供详情页按索引取用
+
+const $ = (id) => document.getElementById(id);
+
+$('btnQuery').addEventListener('click', doQuery);
+$('deliveryNo').addEventListener('keydown', (e) => { if (e.key === 'Enter') doQuery(); });
+$('btnBack').addEventListener('click', () => switchView('list'));
+
+function switchView(v) {
+  $('viewList').style.display   = (v === 'list')   ? 'block' : 'none';
+  $('viewDetail').style.display = (v === 'detail') ? 'block' : 'none';
+}
+
+async function doQuery() {
+  const no = $('deliveryNo').value.trim();
+  if (!no) { showError('请输入送货单号'); return; }
+  showLoading(true); hideError();
+  const btn = $('btnQuery'); btn.disabled = true;
+  try {
+    const resp = await fetch(`${API}?deliveryOrderNo=${encodeURIComponent(no)}`, {
+      method: 'GET', headers: { 'Accept': 'application/json' }
+    });
+    const r = await resp.json();
+    const ok = (r.ResultCode === 1 || r.resultCode === 1);
+    if (!ok) { showLoading(false); btn.disabled = false; showError('查询失败：' + (r.Message || r.message || '未知错误')); return; }
+    const items = parseItems(r);
+    currentItems = items;
+    showLoading(false); btn.disabled = false;
+    renderList(items);
+  } catch (e) {
+    showLoading(false); btn.disabled = false;
+    showError('请求失败：' + e + '\n' + await diagnoseNetwork());
+  }
+}
+
+// 请求失败时的自助诊断：
+// 用 no-cors 模式再发一次请求——该模式**不检查 CORS**，只反映网络层能否连通。
+// 据此区分「网络层不通」与「CORS 被拒」，两者的排查方向完全不同。
+async function diagnoseNetwork() {
+  try {
+    await fetch(API + '?deliveryOrderNo=__probe__', { mode: 'no-cors', cache: 'no-store' });
+    return '【诊断】网络可连通，但被浏览器跨域策略（CORS）拒绝。\n'
+         + '请检查后端返回的 Access-Control-Allow-Origin 是否包含本页源。';
+  } catch (e2) {
+    return '【诊断】网络层不通，浏览器连不上 geapp.goldemperor.com:1299。\n'
+         + '可能原因：① 1299 端口未做公网映射（在外网/4G 下必然失败）；\n'
+         + '② 当前网络不可达该地址；③ HTTPS 证书不被本设备信任。\n'
+         + '本问题与页面代码无关，换成任何页面结果都一样。';
+  }
+}
+
+// 解析 { ResultCode, Message, Data:[ { deliveryOrderNo, instruction, rowId,
+//        shippingMarks:[ { shippingMark:<文本或数组>, type } ] } ] }
+function parseItems(r) {
+  const list = Array.isArray(r.Data) ? r.Data : (Array.isArray(r.data) ? r.data : []);
+  return list.map(it => ({
+    deliveryOrderNo: String(it.deliveryOrderNo ?? it.DeliveryOrderNo ?? ''),
+    instruction:     String(it.instruction ?? it.Instruction ?? ''),
+    rowId:           it.rowId ?? it.RowId ?? null,
+    shippingMarks:   (Array.isArray(it.shippingMarks) ? it.shippingMarks
+                     : Array.isArray(it.ShippingMarks) ? it.ShippingMarks : []).map(m => ({
+      type: String(m.type ?? m.Type ?? ''),
+      text: toText(m.shippingMark ?? m.ShippingMark)
+    }))
+  }));
+}
+
+// shippingMark 可能是字符串（按 ## 拆多行）或已是数组（逐项），统一成换行文本
+function toText(v) {
+  if (Array.isArray(v)) return v.map(s => String(s)).join('\n');
+  if (v === null || v === undefined) return '';
+  return String(v).split('##').map(x => x.trim()).filter(x => x.length).join('\n');
+}
+
+function renderList(items) {
+  const box = $('markList');
+  if (!items.length) { box.innerHTML = '<div class="hint">未找到该送货单的唛头数据</div>'; return; }
+  box.innerHTML = items.map((it, idx) => {
+    const types = [...new Set(it.shippingMarks.map(m => m.type).filter(Boolean))];
+    const tags = types.length
+      ? types.map(t => `<span class="tag">${esc(t)}</span>`).join('')
+      : '<span class="tag">无类型</span>';
+    return `<div class="item" data-idx="${idx}">
+      <div class="row"><span class="label">送货单号</span><span class="val">${esc(it.deliveryOrderNo)}</span></div>
+      <div class="row"><span class="label">指令号</span><span class="val">${esc(it.instruction || '—')}</span></div>
+      <div class="types">${tags}</div>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('.item').forEach(el => {
+    el.addEventListener('click', () => openDetail(Number(el.dataset.idx)));
+  });
+}
+
+function openDetail(idx) {
+  const it = currentItems[idx];
+  const box = $('detailContent');
+  if (!it) { box.innerHTML = '<div class="hint">数据不存在</div>'; switchView('detail'); return; }
+  if (!it.shippingMarks.length) {
+    box.innerHTML = '<div class="hint">该条目没有唛头数据</div>';
+  } else {
+    box.innerHTML =
+      `<div class="row" style="margin-bottom:12px;"><span class="label">送货单号</span><span class="val">${esc(it.deliveryOrderNo)}</span></div>
+       <div class="row" style="margin-bottom:12px;"><span class="label">指令号</span><span class="val">${esc(it.instruction || '—')}</span></div>` +
+      it.shippingMarks.map(m =>
+        `<div class="dmark"><div class="dtype">${esc(m.type || '唛头')}</div><pre>${esc(m.text)}</pre></div>`
+      ).join('');
+  }
+  switchView('detail');
+}
+
+function esc(s) { return String(s).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+function showLoading(b) { $('loading').style.display = b ? 'block' : 'none'; }
+function showError(msg) { const e = $('error'); e.textContent = msg; e.style.display = 'block'; }
+function hideError()    { $('error').style.display = 'none'; }
+</script>
+</body>
+</html>

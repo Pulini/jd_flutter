@@ -741,7 +741,7 @@ class RouteConfig {
   //我的工单
   static Routes orderProductionTable = Routes(
     '/order_production_table',
-    203,
+    204,
     const OrderProductionTablePage(),
   );
 

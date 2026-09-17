@@ -28,20 +28,19 @@ class _OrderProductionTableDetailPageState
   final OrderProductionTableState state =
       Get.find<OrderProductionTableLogic>().state;
 
-  late AudioPlayer player;
+  AudioPlayer? player;
   var ae1 = 'audios/audio_error1.mp3'; // 错误
   var as1 = 'audios/audio_success1.mp3'; // 成功
 
   void playAudio(String as) {
-    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
-        8) {
-      if (player.state != PlayerState.completed) {
-        player.stop();
-        player.setSource(AssetSource(as));
-        player.resume();
-      } else {
-        player.play(AssetSource(as));
-      }
+    final p = player;
+    if (p == null) return;
+    if (p.state != PlayerState.completed) {
+      p.stop();
+      p.setSource(AssetSource(as));
+      p.resume();
+    } else {
+      p.play(AssetSource(as));
     }
   }
 
@@ -376,7 +375,7 @@ class _OrderProductionTableDetailPageState
 
   @override
   void dispose() {
-    player.dispose();
+    player?.dispose();
     super.dispose();
   }
 }

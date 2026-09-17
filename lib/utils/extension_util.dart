@@ -355,28 +355,28 @@ extension JsonExt on Object? {
     return v
         .whereType<Map<String, dynamic>>()
         .map(fromJson)
-        .toList(growable: false);
+        .toList();
   }
 
   /// 解析字符串数组：非 List 返回空数组，只保留 String 元素。
   List<String> parseStrList() {
     final v = this;
     if (v is! List) return <String>[];
-    return v.whereType<String>().toList(growable: false);
+    return v.whereType<String>().toList();
   }
 
   /// 解析 int 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
   List<int> parseIntList() {
     final v = this;
     if (v is! List) return <int>[];
-    return v.map(_asIntOrNull).whereType<int>().toList(growable: false);
+    return v.map(_asIntOrNull).whereType<int>().toList();
   }
 
   /// 解析 double 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
   List<double> parseDoubleList() {
     final v = this;
     if (v is! List) return <double>[];
-    return v.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
+    return v.map(_asDoubleOrNull).whereType<double>().toList();
   }
 
   /// 转字符串：null -> ''，其余调用 toString()。
@@ -408,25 +408,25 @@ class JsonParse {
     return value
         .whereType<Map<String, dynamic>>()
         .map(fromJson)
-        .toList(growable: false);
+        .toList();
   }
 
   /// 解析字符串数组：非 List 返回空数组，只保留 String 元素。
   static List<String> strList(dynamic value) {
     if (value is! List) return <String>[];
-    return value.whereType<String>().toList(growable: false);
+    return value.whereType<String>().toList();
   }
 
   /// 解析 int 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
   static List<int> intList(dynamic value) {
     if (value is! List) return <int>[];
-    return value.map(_asIntOrNull).whereType<int>().toList(growable: false);
+    return value.map(_asIntOrNull).whereType<int>().toList();
   }
 
   /// 解析 double 数组：非 List 返回空数组；num 直接转，数字字符串尝试 parse，其余跳过。
   static List<double> doubleList(dynamic value) {
     if (value is! List) return <double>[];
-    return value.map(_asDoubleOrNull).whereType<double>().toList(growable: false);
+    return value.map(_asDoubleOrNull).whereType<double>().toList();
   }
 
   /// 转字符串：null -> ''，其余调用 toString()。
