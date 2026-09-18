@@ -24,16 +24,16 @@ class SapPackingScanLogic extends GetxController {
             .toList();
 
         if (groupBy(labelDutyFree, (v) => v.isDutyFree).length > 1) {
-          errorDialog(content: '该标签内物料包含了免税和非免税物料，不能一桶装柜！');
+          errorDialog(content: 'sap_packing_scan_duty_free_mix_error'.tr);
           return;
         }
 
         if (containerDutyFree.isNotEmpty && labelDutyFree.isNotEmpty) {
           if (containerDutyFree[0].isDutyFree != labelDutyFree[0].isDutyFree) {
             if (labelDutyFree[0].isDutyFree == '') {
-              errorDialog(content: '该标签内物料包含免税物料，不能与非免税物料一同装柜！');
+              errorDialog(content: 'sap_packing_scan_contains_duty_free_error'.tr);
             } else {
-              errorDialog(content: '该标签内物料包含非免税物料，不能与免税物料一同装柜！');
+              errorDialog(content: 'sap_packing_scan_contains_non_duty_free_error'.tr);
             }
             return;
           }
@@ -42,7 +42,7 @@ class SapPackingScanLogic extends GetxController {
       for (var material in state.materialList) {
         if (material.labelList!
             .any((v) => v.labelNumber == code && v.isScanned.value)) {
-          errorDialog(content: '该标签已扫，请勿重复扫码！');
+          errorDialog(content: 'sap_packing_scan_label_scanned'.tr);
           return;
         }
         double total = material.labelList!.any((v) => v.isScanned.value)
@@ -61,7 +61,7 @@ class SapPackingScanLogic extends GetxController {
         if (total.add(qty) > (material.quality ?? 0)) {
           errorDialog(
               content:
-                  '物料 (<${material.materialNumber}>${material.materialName} 跟踪号:${material.trackNo}) 超出待装柜数量，请勿再扫该物料！');
+                  'sap_packing_scan_qty_exceed'.trArgs(['(<${material.materialNumber}>${material.materialName} ${'sap_packing_scan_track_no'.tr}:${material.trackNo})']));
           return;
         }
       }
@@ -123,7 +123,7 @@ class SapPackingScanLogic extends GetxController {
             .where((v) => v.labelList!.any((v2) => v2.labelNumber == code))
             .toList();
         if (groupBy(codeList, (v) => v.isDutyFree).length > 1) {
-          errorDialog(content: '该标签内物料包含了免税与非免税两种物料，不能一同装柜！');
+          errorDialog(content: 'sap_packing_scan_duty_free_two_types'.tr);
         } else {
           if (state.materialList.isEmpty) {
             _addMaterial(code, list);
@@ -131,9 +131,9 @@ class SapPackingScanLogic extends GetxController {
             if (state.destination!.pickerId() == 'ID' &&
                 codeList[0].isDutyFree != state.materialList[0].isDutyFree) {
               if (list[0].isDutyFree == '') {
-                errorDialog(content: '该标签内物料包含免税物料，不能与非免税物料一同装柜！');
+                errorDialog(content: 'sap_packing_scan_contains_duty_free_error'.tr);
               } else {
-                errorDialog(content: '该标签内物料包含非免税物料，不能与免税物料一同装柜！');
+                errorDialog(content: 'sap_packing_scan_contains_non_duty_free_error'.tr);
               }
             } else {
               _addMaterial(code, list);
@@ -207,7 +207,7 @@ class SapPackingScanLogic extends GetxController {
   void sealingCabinet() {
     state.checkContainer(
       success: (msg) => askDialog(
-        title: '封柜',
+        title: 'sap_packing_scan_seal_cabinet'.tr,
         content: msg,
         confirm: () => state.sealingCabinet(
           success: (msg) => successDialog(content: msg),
@@ -228,11 +228,11 @@ class SapPackingScanLogic extends GetxController {
       });
     }
     if (list.isEmpty) {
-      errorDialog(content: '没有可提交的数据!');
+      errorDialog(content: 'sap_packing_scan_no_submit_data'.tr);
       return;
     }
     if (state.actualCabinet.isEmpty) {
-      errorDialog(content: '请填写实际柜号!');
+      errorDialog(content: 'sap_packing_scan_please_fill_cabinet'.tr);
       return;
     }
     callback.call(list);
@@ -248,8 +248,8 @@ class SapPackingScanLogic extends GetxController {
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
       save: (abnormalList, msg) => askDialog(
-        title: '保存异常单',
-        content: '过账失败，是否先缓存？\r\n原因：$msg',
+        title: 'sap_packing_scan_save_abnormal'.tr,
+        content: 'sap_packing_scan_post_fail_cache'.trArgs([msg]),
         confirm: () => state.saveAbnormalPiece(
           abnormalList: abnormalList,
           success: (msg) => successDialog(content: msg),

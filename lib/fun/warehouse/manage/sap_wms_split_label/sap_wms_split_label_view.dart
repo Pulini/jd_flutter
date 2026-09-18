@@ -238,7 +238,7 @@ class _SplitOriginalLabelItem extends StatelessWidget {
                       ),
                       hintStyle: const TextStyle(color: Colors.white),
                       suffixIcon: CombinationButton(
-                        text: '拆出',
+                        text: 'sap_wms_split_label_split_out'.tr,
                         click: () => onSplit(),
                       ),
                     ),
@@ -305,7 +305,7 @@ class _SplitLabelItem extends StatelessWidget {
                     textColor: Colors.green.shade900,
                   ),
                   textSpan(
-                    hint: '数量：',
+                    hint: 'sap_wms_split_label_qty'.tr,
                     text: '${label.quantity.toShowString()} ${label.unit}',
                   ),
                 ],

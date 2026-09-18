@@ -75,10 +75,10 @@ class PartReportScanLogic extends GetxController {
         // 创建自定义表头
         var headerItem = SummaryLists(
           type: -1, // 使用特殊type标识表头
-          mtono: '指令',
-          name: '工序',
-          size: '尺码',
-          empName: '员工',
+          mtono: 'work_reporting_instruction'.tr,
+          name: 'work_reporting_process'.tr,
+          size: 'work_reporting_size'.tr,
+          empName: 'work_reporting_employee'.tr,
           // 设置其他需要的字段
         );
 
@@ -123,7 +123,7 @@ class PartReportScanLogic extends GetxController {
             }
             errorDialog(content:  jsonMap['Info']);
           } catch (e) {
-            errorDialog(content:  '解析出错');
+            errorDialog(content: 'work_reporting_parse_error'.tr);
           }
         }
       }

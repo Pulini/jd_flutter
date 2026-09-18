@@ -23,7 +23,7 @@ class _ProductionDispatchProgressPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '工单进度',
+      title: 'dispatching_production_order_progress'.tr,
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: SingleChildScrollView(
@@ -190,7 +190,7 @@ class _ProductionDispatchProgressItem extends StatelessWidget {
             alignment: Alignment.center,
             backgroundColor: Colors.green.shade50,
             flex: 6,
-            text: '合计',
+            text: 'work_reporting_subtotal'.tr,
           ),
           ExpandedFrameText(
             alignment: Alignment.centerRight,
@@ -224,7 +224,7 @@ class _ProductionDispatchProgressItem extends StatelessWidget {
             alignment: Alignment.center,
             backgroundColor: Colors.orange.shade50,
             flex: 6,
-            text: '预补1%',
+            text: 'dispatching_production_pre_fill_1pct'.tr,
           ),
           ExpandedFrameText(
             alignment: Alignment.centerRight,

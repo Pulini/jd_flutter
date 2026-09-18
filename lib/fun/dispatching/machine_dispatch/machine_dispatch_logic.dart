@@ -178,8 +178,8 @@ class MachineDispatchLogic extends GetxController {
     required Function() callback,
   }) {
     state.handoverList.clear();
-    state.handoverList.add(HandoverInfo('当班交接人员'));
-    state.handoverList.add(HandoverInfo('接收尾数人员'));
+    state.handoverList.add(HandoverInfo('machine_dispatch_current_shift_handover'.tr));
+    state.handoverList.add(HandoverInfo('machine_dispatch_receive_tail_worker'.tr));
     Get.to(() => const MachineDispatchHandoverPage())?.then((v) {
       if (v != null) {
         callback.call();
@@ -327,15 +327,15 @@ class MachineDispatchLogic extends GetxController {
       PrintUtil().printLabel(
           label: printLabel,
           start: () {
-            loadingShow('正在打印');
+            loadingShow('machine_dispatch_printing'.tr);
           },
           success: () {
             loadingDismiss();
-            showSnackBar(message: '打印成功');
+            showSnackBar(message: 'machine_dispatch_print_success'.tr);
           },
           failed: () {
             loadingDismiss();
-            showSnackBar(message: '打印失败');
+            showSnackBar(message: 'machine_dispatch_print_failed'.tr);
           });
     });
   }
@@ -366,15 +366,15 @@ class MachineDispatchLogic extends GetxController {
       PrintUtil().printLabel(
           label: printLabel,
           start: () {
-            loadingShow('正在打印');
+            loadingShow('machine_dispatch_printing'.tr);
           },
           success: () {
             loadingDismiss();
-            showSnackBar(message: '打印成功');
+            showSnackBar(message: 'machine_dispatch_print_success'.tr);
           },
           failed: () {
             loadingDismiss();
-            showSnackBar(message: '打印失败');
+            showSnackBar(message: 'machine_dispatch_print_failed'.tr);
           });
     });
   }
@@ -406,7 +406,7 @@ class MachineDispatchLogic extends GetxController {
           }
         } else {
           errorDialog(
-            content: '数量必须大于0',
+            content: 'machine_dispatch_qty_must_greater_than_zero'.tr,
           );
           return;
         }
@@ -415,7 +415,7 @@ class MachineDispatchLogic extends GetxController {
           printQty = item.capacity ?? 0;
         } else {
           errorDialog(
-            content: '数量必须大于0',
+            content: 'machine_dispatch_qty_must_greater_than_zero'.tr,
           );
           return;
         }
@@ -464,15 +464,15 @@ class MachineDispatchLogic extends GetxController {
           PrintUtil().printLabel(
               label: printLabel,
               start: () {
-                loadingShow('正在打印');
+                loadingShow('machine_dispatch_printing'.tr);
               },
               success: () {
                 loadingDismiss();
-                showSnackBar(message: '打印成功');
+                showSnackBar(message: 'machine_dispatch_print_success'.tr);
               },
               failed: () {
                 loadingDismiss();
-                showSnackBar(message: '打印失败');
+                showSnackBar(message: 'machine_dispatch_print_failed'.tr);
               });
         });
       },
@@ -488,7 +488,7 @@ class MachineDispatchLogic extends GetxController {
         .map((v) => v.size)
         .toList();
     if (noWorkingHours != null && noWorkingHours.isNotEmpty) {
-      errorDialog(content: '尺码 < ${noWorkingHours.join(',')} > 无工时！');
+      errorDialog(content: 'machine_dispatch_size_no_workhours'.trArgs([noWorkingHours.join(',')]));
       return;
     }
     state.productionReport(
@@ -507,7 +507,7 @@ class MachineDispatchLogic extends GetxController {
     }
     if (reportQty < 0) {
       showSnackBar(
-        message: '合计报工数小于0',
+        message: 'machine_dispatch_total_report_less_than_zero'.tr,
         isWarning: true,
       );
       return false;
@@ -519,7 +519,7 @@ class MachineDispatchLogic extends GetxController {
   bool checkSizeTotal() {
     if (state.sizeItemList.any((v) => v.getReportQty() < 0)) {
       showSnackBar(
-        message: '含有尺码报工数小于0',
+        message: 'machine_dispatch_size_report_less_than_zero'.tr,
         isWarning: true,
       );
       return false;
@@ -535,13 +535,13 @@ class MachineDispatchLogic extends GetxController {
 
     if (state.detailsInfo?.stubBarName1 != '' &&
         state.detailsInfo?.stubBar1PrintFlag != 1) {
-      errorDialog(content: '料头一未打印');
+      errorDialog(content: 'machine_dispatch_stubbar1_not_printed'.tr);
       stuBar = false;
     }
 
     if (state.detailsInfo?.stubBarName2 != '' &&
         state.detailsInfo?.stubBar2PrintFlag != 1) {
-      errorDialog(content: '料头二未打印');
+      errorDialog(content: 'machine_dispatch_stubbar2_not_printed'.tr);
       stuBar2 = false;
     }
 

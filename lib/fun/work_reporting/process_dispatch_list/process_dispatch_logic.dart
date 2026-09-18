@@ -239,7 +239,7 @@ class ProcessDispatchLogic extends GetxController
   //添加汇总
   void addAll() {
     state.showDetailList.add(SizeLists(
-      size: '总',
+      size: 'work_reporting_total'.tr,
       fIDs: [],
       mtonoQty: state.showDetailList
           .map((sub) => sub.mtonoQty)

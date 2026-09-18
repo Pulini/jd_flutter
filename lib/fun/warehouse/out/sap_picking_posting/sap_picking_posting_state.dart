@@ -17,7 +17,7 @@ class SapPickingPostingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在生成拣配单号...',
+      loading: 'sap_picking_posting_loading_generate_order'.tr,
       method: webApiSapCreatePickingOrderNumber,
       body: {'ORDER_TYPE': 'SCJP'},
     ).then((response) {
@@ -35,7 +35,7 @@ class SapPickingPostingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在查询物料信息...',
+      loading: 'sap_picking_posting_loading_query_material'.tr,
       method: webApiSapGetPickingMaterialDetail,
       body: {'BQID': code},
     ).then((response) {
@@ -53,7 +53,7 @@ class SapPickingPostingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交拣配过账...',
+      loading: 'sap_picking_posting_loading_submit_posting'.tr,
       method: webApiSapSubmitPickingOrder,
       body: {
         'ORDER_NUM': order.value,

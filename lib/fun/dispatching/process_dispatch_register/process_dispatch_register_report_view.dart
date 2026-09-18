@@ -38,8 +38,8 @@ class _ProcessDispatchRegisterReportViewState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '报工',
-      actions: [TextButton(onPressed: () {}, child: const Text('清空'))],
+      title: 'dispatching_register_title'.tr,
+      actions: [TextButton(onPressed: () {}, child: Text('dispatching_register_clear'.tr))],
       body: Column(
         children: [
           Expanded(
@@ -53,12 +53,12 @@ class _ProcessDispatchRegisterReportViewState
             child: Obx(
               () => CombinationButton(
                 isEnabled: state.barCodeList.isNotEmpty,
-                text: '提交',
+                text: 'dispatching_register_submit'.tr,
                 click: () {
                   if (checkUserPermission('1052502')) {
                     logic.submitReport();
                   } else {
-                    errorDialog(content: '缺少报工权限');
+                    errorDialog(content: 'dispatching_register_no_permission'.tr);
                   }
                 },
               ),
@@ -86,7 +86,7 @@ class _ProcessDispatchReportItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => reportDialog(data, () => setStateFn(() {})),
       onLongPress: () => askDialog(
-        content: '确定要删除贴标吗？',
+        content: 'dispatching_register_confirm_delete_label'.tr,
         confirm: () => state.barCodeList.remove(data),
       ),
       child: Container(

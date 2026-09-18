@@ -32,7 +32,7 @@ class TemporaryOrderState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在查询暂收单列表...',
+      loading: 'temporary_order_loading_query_list'.tr,
       method: webApiGetTemporaryList,
       params: {
         'StartDate': startDate,
@@ -78,7 +78,7 @@ class TemporaryOrderState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在删除暂收单...',
+      loading: 'temporary_order_loading_delete'.tr,
       method: webApiDeleteTemporary,
       params: {
         'TempreNo': temporaryNo,
@@ -101,7 +101,7 @@ class TemporaryOrderState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在查询暂收单详情...',
+      loading: 'temporary_order_loading_query_detail'.tr,
       method: webApiGetTemporaryDetail,
       params: {
         'Type': 'TempInstock',

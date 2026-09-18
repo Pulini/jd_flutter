@@ -125,14 +125,14 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                 Expanded(
                   child: SwitchButton(
                     onChanged: (s) => state.isMaterialLabel.value = s,
-                    name: '打印物料表',
+                    name: 'sap_label_reprint_print_material_table'.tr,
                     value: state.isMaterialLabel.value,
                   ),
                 ),
                 Expanded(
                     child: SwitchButton(
                   onChanged: (s) => state.isMaterialLabel.value = s,
-                  name: '打印备注行',
+                  name: 'sap_label_reprint_print_remark_line'.tr,
                   value: state.isMaterialLabel.value,
                 )),
               ],
@@ -190,18 +190,18 @@ class _LabelPrintItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           textSpan(
-                            hint: '外箱件号：',
+                            hint: 'sap_label_reprint_outer_box_piece_no'.tr,
                             text: label.pieceID ?? '',
                             textColor: Colors.green,
                           ),
                           Row(
                             children: [
                               expandedTextSpan(
-                                hint: '规格：',
+                                hint: 'sap_label_reprint_specification'.tr,
                                 text: label.getLongWidthHeight(),
                               ),
                               textSpan(
-                                hint: '总数：',
+                                hint: 'sap_label_reprint_total'.tr,
                                 text: state.labelList
                                     .map((v) => v.getInBoxQty())
                                     .reduce((a, b) => a.add(b))
@@ -222,12 +222,12 @@ class _LabelPrintItem extends StatelessWidget {
                   children: [
                     expandedTextSpan(
                       flex: 2,
-                      hint: '供应商：',
+                      hint: 'sap_label_reprint_supplier'.tr,
                       text: label.supplierNumber ?? '',
                     ),
                     expandedTextSpan(
                       flex: 3,
-                      hint: '收货方：',
+                      hint: 'sap_label_reprint_receiver'.tr,
                       text: label.shipToParty ?? '',
                     ),
                   ],
@@ -240,7 +240,7 @@ class _LabelPrintItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: textSpan(
-                          hint: '件号：',
+                          hint: 'sap_label_reprint_piece_no'.tr,
                           text: label.pieceID ?? '',
                           textColor: Colors.green,
                         ),
@@ -263,7 +263,7 @@ class _LabelPrintItem extends StatelessWidget {
                         ),
                       ),
                       textSpan(
-                          hint: '数量：',
+                          hint: 'sap_label_reprint_qty'.tr,
                           text: '${sub.inBoxQty.toShowString()}${sub.unit}')
                     ],
                   )

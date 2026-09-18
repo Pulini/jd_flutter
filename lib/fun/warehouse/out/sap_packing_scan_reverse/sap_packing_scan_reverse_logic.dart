@@ -19,10 +19,10 @@ class SapPackingScanReverseLogic extends GetxController {
                 .none((v) => v.pieceId == label.pieceId)) {
               state.reverseLabelList.add(label);
             } else {
-              errorDialog(content: '标签已存在！');
+              errorDialog(content: 'sap_packing_scan_label_exists'.tr);
             }
           } else {
-            errorDialog(content: '不同交货单不能同时操作！');
+            errorDialog(content: 'sap_packing_scan_diff_delivery_not_allowed'.tr);
           }
         } else {
           state.reverseLabelList.add(label);

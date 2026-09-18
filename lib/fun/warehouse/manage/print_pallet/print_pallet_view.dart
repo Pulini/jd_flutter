@@ -45,7 +45,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
         Obx(() => state.palletList.any((v) => v.any((v2) => v2.isSelect.value))
             ? IconButton(
                 onPressed: () => askDialog(
-                  content: '确定要从托盘移除该标签吗？',
+                  content: 'print_pallet_remove_label_confirm'.tr,
                   confirm: () => logic.deleteLabel(),
                 ),
                 icon: const Icon(
@@ -82,7 +82,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
-                    labelText: '输入托盘号',
+                    labelText: 'print_pallet_input_tray_no'.tr,
                     prefixIcon: state.palletNo.value.isNotEmpty
                         ? IconButton(
                             onPressed: () {
@@ -172,12 +172,12 @@ class _PalletItemState extends State<_PalletItem> {
                       onChanged: (v) => isSelected.value = v!,
                     )),
                 expandedTextSpan(
-                  hint: '托盘号：',
+                  hint: 'print_pallet_tray_no'.tr,
                   text: pallet.first.palletNumber ?? '',
                 ),
                 IconButton(
                   onPressed: () => askDialog(
-                      content: '确定要删除该托盘码？',
+                      content: 'print_pallet_delete_tray_confirm'.tr,
                       confirm: () => widget.logic.deletePallet(widget.index)),
                   icon: const Icon(
                     Icons.delete_forever,
@@ -218,14 +218,14 @@ class _PalletMaterialItem extends StatelessWidget {
           Row(
             children: [
               expandedTextSpan(
-                hint: '物料：',
+                hint: 'print_pallet_material'.tr,
                 maxLines: 3,
                 text:
                     '(${material.first.materialCode})${material.first.materialName}',
                 textColor: Colors.green.shade700,
               ),
               textSpan(
-                hint: '总数：',
+                hint: 'print_pallet_total_qty'.tr,
                 text:
                     '${material.map((v) => v.quantity ?? 0).reduce((a, b) => a.add(b)).toShowString()} ${material.first.unit}',
                 textColor: Colors.green.shade700,
@@ -237,8 +237,8 @@ class _PalletMaterialItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('件号：${item.pieceNo}'),
-                Text('数量：${item.quantity.toShowString()} ${item.unit}'),
+                Text('${'print_pallet_piece_no_colon'.tr}${item.pieceNo}'),
+                Text('${'print_pallet_qty_colon'.tr}${item.quantity.toShowString()} ${item.unit}'),
                 Obx(() => Checkbox(
                     value: item.isSelect.value,
                     onChanged: (v) => item.isSelect.value = v!))

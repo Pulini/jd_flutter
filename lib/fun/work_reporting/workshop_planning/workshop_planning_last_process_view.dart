@@ -108,24 +108,24 @@ class _WorkshopPlanningLastProcessPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '末道计工',
-      popTitle: '确定要退出本次末道计工吗？',
+      title: 'workshop_planning_last_process'.tr,
+      popTitle: 'workshop_planning_exit_last_process_confirm'.tr,
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
           children: [
             Row(
               children: [
-                expandedTextSpan(hint: '组别：', text: state.groupName),
+                expandedTextSpan(hint: 'workshop_planning_group_colon'.tr, text: state.groupName),
                 Obx(() => CheckBox(
                       onChanged: (v) => state.isDayShift.value = true,
-                      name: '昼班',
+                      name: 'workshop_planning_day_shift'.tr,
                       value: state.isDayShift.value,
                     )),
                 Obx(
                   () => CheckBox(
                     onChanged: (v) => state.isDayShift.value = false,
-                    name: '夜班',
+                    name: 'workshop_planning_night_shift'.tr,
                     value: !state.isDayShift.value,
                   ),
                 ),
@@ -140,10 +140,10 @@ class _WorkshopPlanningLastProcessPageState
               unselectedLabelColor: Colors.grey,
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               controller: tabController,
-              tabs: const [
-                Tab(text: '物料'),
-                Tab(text: '工序'),
-                Tab(text: '报工'),
+              tabs: [
+                Tab(text: 'workshop_planning_tab_material'.tr),
+                Tab(text: 'workshop_planning_tab_process'.tr),
+                Tab(text: 'workshop_planning_tab_report'.tr),
               ],
               onTap: (i) => pageController.jumpToPage(i),
             ),
@@ -191,11 +191,11 @@ class _WorkshopPlanningLastProcessPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(() => textSpan(
-                      hint: '数量：',
+                      hint: 'workshop_planning_quantity_colon'.tr,
                       text: state.reportQuantity.value.toShowString(),
                     )),
                 Obx(() => textSpan(
-                      hint: '总价：',
+                      hint: 'workshop_planning_total_price_colon'.tr,
                       text: state.price.value.toShowString(),
                     )),
               ],
@@ -205,7 +205,7 @@ class _WorkshopPlanningLastProcessPageState
                 Expanded(
                   child: CombinationButton(
                     combination: Combination.left,
-                    text: '报工列表',
+                    text: 'workshop_planning_report_list'.tr,
                     click: () => logic.getGroupPayEndingProcessList(
                       date: dpcDate.getDateFormatYMD(),
                       processFlowID: opcProcessFlow.getPickItem().pickerId(),
@@ -216,7 +216,7 @@ class _WorkshopPlanningLastProcessPageState
                 Expanded(
                   child: CombinationButton(
                     combination: Combination.right,
-                    text: '提交报工',
+                    text: 'workshop_planning_submit_report'.tr,
                     click: () => logic.submitLastProcessReport(
                       dpcDate.getDateFormatYMD(),
                     ),
@@ -321,24 +321,24 @@ class _LastProcessProcessItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textSpan(
-                      hint: '单号：',
+                      hint: 'workshop_planning_order_no_colon'.tr,
                       text: data.planTrackingNumber ?? '',
                     ),
-                    Text('尺码：${data.size}'),
+                    Text('${'workshop_planning_size_colon'.tr}${data.size}'),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('订单数：${data.processQty.toShowString()}'),
-                    Text('已报工数：${data.finishQty.toShowString()}'),
+                    Text('${'workshop_planning_order_count_colon'.tr}${data.processQty.toShowString()}'),
+                    Text('${'workshop_planning_finished_count_colon'.tr}${data.finishQty.toShowString()}'),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('未报工数：${data.unFinishQty.toShowString()}'),
-                    Text('报工数：${data.qty.toShowString()}'),
+                    Text('${'workshop_planning_unfinished_count_colon'.tr}${data.unFinishQty.toShowString()}'),
+                    Text('${'workshop_planning_report_qty_colon'.tr}${data.qty.toShowString()}'),
                   ],
                 ),
               ],
@@ -441,7 +441,7 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                             ),
                           ),
                           Text(
-                            widget.data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            widget.data.attendanceStatus == true ? 'workshop_planning_attended'.tr : 'workshop_planning_not_attended'.tr,
                             style: TextStyle(
                               color: widget.data.attendanceStatus == true
                                   ? Colors.green
@@ -455,17 +455,17 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                             children: [
                               textSpan(
                                 isBold: false,
-                                hint: '系数：',
+                                hint: 'workshop_planning_coefficient_colon'.tr,
                                 text: widget.data.base.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
-                                hint: '工时：',
+                                hint: 'workshop_planning_man_hours_colon'.tr,
                                 text: widget.data.dayWorkTime.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
-                                hint: '金额：',
+                                hint: 'workshop_planning_amount_colon'.tr,
                                 text: widget.data.money.value.toShowString(),
                               ),
                             ],
@@ -488,7 +488,7 @@ class _LastProcessWorkerItemState extends State<_LastProcessWorkerItem> {
                   padding: EdgeInsets.zero,
                   onPressed: () {
                     askDialog(
-                      content: '确定要删除该组员数据吗？',
+                      content: 'workshop_planning_delete_member_confirm'.tr,
                       confirm: () =>
                           widget.logic.deleteReportWorker(widget.data),
                     );

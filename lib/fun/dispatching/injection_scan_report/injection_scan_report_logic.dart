@@ -193,7 +193,7 @@ class InjectionScanReportLogic extends GetxController {
         dispatchNumber: data.dispatchNumber,
         machine: data.machine,
         factoryType: data.factoryType,
-        size: '合计',
+        size: 'work_reporting_subtotal'.tr,
         lastMantissa: allLastMantissa,
         mantissa: allMantissa,
         allQty: list.map((v) => v.subtotal())
@@ -310,7 +310,7 @@ class InjectionScanReportLogic extends GetxController {
             TextButton(
               onPressed: () {
                 if (textNumber.text.toString().isEmpty) {
-                  showSnackBar(message: '内容为空');
+                  showSnackBar(message: 'dispatching_injection_content_empty'.tr);
                 } else {
                   Get.back();
                   confirm?.call(textNumber.text.toString(), clickData);
@@ -399,7 +399,7 @@ class InjectionScanReportLogic extends GetxController {
                 }
               }
             } else if (v.barCode == code && v.use == true) {
-              showSnackBar(message: '该贴标已扫描');
+              showSnackBar(message: 'dispatching_injection_label_scanned'.tr);
             }
           }
         }

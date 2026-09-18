@@ -66,7 +66,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                         arguments: {'Index': index},
                       );
                     }else{
-                      showSnackBar(message: '无剩余可分配数量');
+                      showSnackBar(message: 'work_reporting_no_remaining_qty'.tr);
                     }
                   },
                   icon: const Icon(
@@ -122,7 +122,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                       ),
                       IconButton(
                         onPressed: () => askDialog(
-                          content: '确定要删除该人员吗？',
+                          content: 'work_reporting_confirm_delete_person'.tr,
                           confirm: () => data.distribution.remove(worker),
                         ),
                         icon: const Icon(

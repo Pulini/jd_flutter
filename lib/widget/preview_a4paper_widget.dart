@@ -59,7 +59,7 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
       // 如果已经打开，则关闭当前重复的实例
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.back();
-        Get.snackbar('提示', '标签预览页面已经打开');
+        Get.snackbar('common_tip'.tr, 'widget_label_preview_opened'.tr);
       });
       return;
     }

@@ -44,8 +44,8 @@ class _MaterialLabelScanDetailPageState
           height: 500,
           child: Column(
             children: [
-              const Text(
-                '材料图片',
+              Text(
+                'material_label_scan_detail_material_image'.tr,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class _MaterialLabelScanDetailPageState
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
@@ -72,7 +72,7 @@ class _MaterialLabelScanDetailPageState
                                   color: Colors.grey,
                                 ),
                                 SizedBox(height: 10),
-                                Text('图片加载失败'),
+                                Text('material_label_scan_detail_image_load_fail'.tr),
                               ],
                             ),
                           );
@@ -83,7 +83,7 @@ class _MaterialLabelScanDetailPageState
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Column(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -92,7 +92,7 @@ class _MaterialLabelScanDetailPageState
                               color: Colors.grey,
                             ),
                             SizedBox(height: 10),
-                            Text('暂无图片'),
+                            Text('material_label_scan_detail_no_image'.tr),
                           ],
                         ),
                       ),
@@ -102,7 +102,7 @@ class _MaterialLabelScanDetailPageState
                 onPressed: () {
                   Get.back(); // 关闭 Dialog
                 },
-                child: const Text('关闭'),
+                child: Text('material_label_scan_detail_close'.tr),
               ),
             ],
           ),
@@ -376,7 +376,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                      mes: '合计',
+                      mes: 'material_label_scan_detail_total'.tr,
                       backColor: Colors.white,
                       paddingNumber: 5,
                       textColor: blackText)),
@@ -490,7 +490,7 @@ class _MaterialLabelScanDetailPageState
                                 flex: 3,
                                 child: InkWell(
                                   child: Text(
-                                    '材料: <${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}',
+                                    '${'material_label_scan_detail_material_colon'.tr}<${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}',
                                     maxLines: 1,
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -501,7 +501,7 @@ class _MaterialLabelScanDetailPageState
                                   onTap: () {
                                     msgDialog(
                                         content:
-                                            '材料: <${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}');
+                                            '${'material_label_scan_detail_material_colon'.tr}<${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}');
                                   },
                                 ),
                               ),

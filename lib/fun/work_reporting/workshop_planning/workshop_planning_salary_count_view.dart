@@ -34,7 +34,7 @@ class _WorkshopPlanningSalaryCountPageState
   Row _processItemTitle() => Row(
         children: [
           ExpandedFrameText(
-            text: '尺码',
+            text: 'workshop_planning_size'.tr,
             borderColor: Colors.white,
             textColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -43,7 +43,7 @@ class _WorkshopPlanningSalaryCountPageState
           ),
           ExpandedFrameText(
             flex: 2,
-            text: '订单数量',
+            text: 'workshop_planning_order_quantity'.tr,
             borderColor: Colors.white,
             textColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -52,7 +52,7 @@ class _WorkshopPlanningSalaryCountPageState
           ),
           ExpandedFrameText(
             flex: 2,
-            text: '累计报工数',
+            text: 'workshop_planning_cumulative_report'.tr,
             borderColor: Colors.white,
             textColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -61,7 +61,7 @@ class _WorkshopPlanningSalaryCountPageState
           ),
           ExpandedFrameText(
             flex: 2,
-            text: '未报工数',
+            text: 'workshop_planning_unreported'.tr,
             borderColor: Colors.white,
             textColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -70,7 +70,7 @@ class _WorkshopPlanningSalaryCountPageState
           ),
           ExpandedFrameText(
             flex: 2,
-            text: '本次报工数',
+            text: 'workshop_planning_current_report_qty'.tr,
             borderColor: Colors.white,
             textColor: Colors.white,
             padding: EdgeInsets.zero,
@@ -110,7 +110,7 @@ class _WorkshopPlanningSalaryCountPageState
 
   @override
   initState() {
-    state.submitButtonName.value = '提交报工';
+    state.submitButtonName.value = 'workshop_planning_submit_report'.tr;
     dpcDate = DatePickerController(PickerType.date, onChanged: (date) {
       if (state.planInfo!.planTrackingNumber?.isNotEmpty == true) {
         _queryGroupData();
@@ -131,8 +131,8 @@ class _WorkshopPlanningSalaryCountPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '团件计工',
-      popTitle: '确定要退出本次团件计工吗？',
+      title: 'workshop_planning_group_piece_report'.tr,
+      popTitle: 'workshop_planning_exit_group_report_confirm'.tr,
       actions: [
         Obx(() => state.workersCache.isNotEmpty
             ? IconButton(
@@ -154,8 +154,8 @@ class _WorkshopPlanningSalaryCountPageState
               height: 30,
               child: Row(
                 children: [
-                  const Text(
-                    '物料：',
+                  Text(
+                    'workshop_planning_material_colon'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -180,13 +180,13 @@ class _WorkshopPlanningSalaryCountPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textSpan(
-                  hint: '单号：',
+                  hint: 'workshop_planning_order_no_colon'.tr,
                   text: state.planInfo!.planTrackingNumber ?? '',
                   isBold: false,
                   textColor: Colors.blue.shade900,
                 ),
                 textSpan(
-                  hint: '组别：',
+                  hint: 'workshop_planning_group_colon'.tr,
                   text: state.groupName,
                   isBold: false,
                   textColor: Colors.blue.shade900,
@@ -197,13 +197,13 @@ class _WorkshopPlanningSalaryCountPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textSpan(
-                  hint: '工序：',
+                  hint: 'workshop_planning_process_colon'.tr,
                   text: state.planInfo!.processName ?? '',
                   isBold: false,
                   textColor: Colors.blue.shade900,
                 ),
                 Obx(() => textSpan(
-                      hint: '数量：',
+                      hint: 'workshop_planning_quantity_colon'.tr,
                       text: state.reportQuantity.value.toShowString(),
                       isBold: false,
                       textColor: Colors.blue.shade900,
@@ -226,14 +226,14 @@ class _WorkshopPlanningSalaryCountPageState
                   Expanded(
                     child: Obx(() => CheckBox(
                           onChanged: (v) => state.isDayShift.value = true,
-                          name: '昼班',
+                          name: 'workshop_planning_day_shift'.tr,
                           value: state.isDayShift.value,
                         )),
                   ),
                   Expanded(
                     child: Obx(() => CheckBox(
                           onChanged: (v) => state.isDayShift.value = false,
-                          name: '夜班',
+                          name: 'workshop_planning_night_shift'.tr,
                           value: !state.isDayShift.value,
                         )),
                   ),
@@ -247,9 +247,9 @@ class _WorkshopPlanningSalaryCountPageState
               unselectedLabelColor: Colors.grey,
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               controller: tabController,
-              tabs: const [
-                Tab(text: '工序'),
-                Tab(text: '报工'),
+              tabs: [
+                Tab(text: 'workshop_planning_tab_process'.tr),
+                Tab(text: 'workshop_planning_tab_report'.tr),
               ],
               onTap: (i) => pageController.jumpToPage(i),
             ),
@@ -287,7 +287,7 @@ class _WorkshopPlanningSalaryCountPageState
                 Expanded(
                   child: CombinationButton(
                     combination: Combination.left,
-                    text: '报工列表',
+                    text: 'workshop_planning_report_list'.tr,
                     click: () => logic.getGroupPayList(),
                   ),
                 ),
@@ -474,7 +474,7 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
                             ),
                           ),
                           Text(
-                            widget.data.attendanceStatus == true ? '已考勤' : '未考勤',
+                            widget.data.attendanceStatus == true ? 'workshop_planning_attended'.tr : 'workshop_planning_not_attended'.tr,
                             style: TextStyle(
                               color: widget.data.attendanceStatus == true
                                   ? Colors.green
@@ -488,17 +488,17 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
                             children: [
                               textSpan(
                                 isBold: false,
-                                hint: '系数：',
+                                hint: 'workshop_planning_coefficient_colon'.tr,
                                 text: widget.data.base.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
-                                hint: '工时：',
+                                hint: 'workshop_planning_man_hours_colon'.tr,
                                 text: widget.data.dayWorkTime.toShowString(),
                               ),
                               textSpan(
                                 isBold: false,
-                                hint: '金额：',
+                                hint: 'workshop_planning_amount_colon'.tr,
                                 text: widget.data.money.value.toShowString(),
                               ),
                             ],
@@ -520,7 +520,7 @@ class _SalaryCountWorkerItemState extends State<_SalaryCountWorkerItem> {
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () => askDialog(
-                    content: '确定要删除该组员数据吗？',
+                    content: 'workshop_planning_delete_member_confirm'.tr,
                     confirm: () => widget.logic.deleteReportWorker(widget.data),
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),

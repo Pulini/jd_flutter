@@ -282,7 +282,7 @@ void showLabelListDialog({
                 text: state.detailsInfo?.materialName ?? '',
               ),
               expandedTextSpan(
-                hint: '制程：',
+                hint: 'machine_dispatch_process_colon'.tr,
                 text: state.detailsInfo?.processflow ?? '',
               ),
             ],
@@ -1201,27 +1201,27 @@ void showMachineInputDialog({
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: const Text('请输入数据',
+        title: Text('machine_dispatch_enter_data'.tr,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 150,
           child: ListView(
             children: [
-              Text('尺码：${data.size}',
+              Text('${'machine_dispatch_size_colon'.tr}${data.size}',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
-              Text('建议模具数：$maxMould',
+              Text('${'machine_dispatch_suggest_mould'.tr}$maxMould',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
-              Text('可用模具数：${data.availableMouldsQty.toShowString()}',
+              Text('${'machine_dispatch_available_mould_colon'.tr}${data.availableMouldsQty.toShowString()}',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
-              Obx(() => Text('派工数量：${qty.value}')),
+              Obx(() => Text('${'machine_dispatch_dispatch_qty_colon'.tr}${qty.value}')),
               NumberDecimalEditText(
                 initQty: data.mould ?? 0,
                 max: data.availableMouldsQty,
-                hint: '输入模具数',
+                hint: 'machine_dispatch_input_mould'.tr,
                 onChanged: (s) {
                   mould = s;
                   qty.value = data.mantissaMark == 'X'
@@ -1273,14 +1273,14 @@ void showInputDayReportDialog({
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: const Text('请输入当日派工数量',
+        title: Text('machine_dispatch_enter_day_dispatch_qty'.tr,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,
           child: ListView(
             children: [
-              Text('尺码：${data.size}',
+              Text('${'machine_dispatch_size_colon'.tr}${data.size}',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
               NumberDecimalEditText(
@@ -1301,7 +1301,7 @@ void showInputDayReportDialog({
                 data.todayDispatchQty = qty;
                 confirm.call();
               } else {
-                showSnackBar(message: '当日派工数量不能为空');
+                showSnackBar(message: 'machine_dispatch_day_dispatch_qty_empty'.tr);
               }
             },
             child: Text('dialog_default_confirm'.tr),
@@ -1333,14 +1333,14 @@ void showInputCapacityDialog({
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: const Text('请输入箱容',
+        title: Text('machine_dispatch_enter_capacity'.tr,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,
           child: ListView(
             children: [
-              Text('尺码：${data.size}',
+              Text('${'machine_dispatch_size_colon'.tr}${data.size}',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
               NumberDecimalEditText(
@@ -1392,14 +1392,14 @@ void showInputLastNumDialog({
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: const Text('请输入尾箱',
+        title: Text('machine_dispatch_enter_last_box'.tr,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,
           child: ListView(
             children: [
-              Text('尺码：${data.size}',
+              Text('${'machine_dispatch_size_colon'.tr}${data.size}',
                   style: const TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
               NumberDecimalEditText(

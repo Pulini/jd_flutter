@@ -275,7 +275,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                     click: () {
                       if (logic.haveSelect()) {
                         askDialog(
-                            content: '确定要提交汇报吗?',
+                            content: 'work_reporting_confirm_submit_report'.tr,
                             confirm: () {
                               logic.checkWork(success: (s) {
                                 successDialog(

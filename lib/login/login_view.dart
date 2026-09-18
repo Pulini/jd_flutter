@@ -79,8 +79,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: 130,
                   height: 130,
                 ),
-                const Text(
-                  'Gold Emperor',
+                Text(
+                  'app_name'.tr,
                   style: TextStyle(
                     fontSize: 40,
                     color: Colors.white,

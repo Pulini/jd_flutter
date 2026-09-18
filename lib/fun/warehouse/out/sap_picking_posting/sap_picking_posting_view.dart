@@ -80,7 +80,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
-        hintText: '请扫描或输入半成品条码',
+        hintText: 'sap_picking_posting_scan_semi_barcode'.tr,
         hintStyle: const TextStyle(color: Colors.grey),
         prefixIcon: IconButton(
           onPressed: () => tecSemiFinishedProduct.clear(),
@@ -128,7 +128,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.blue, width: 2),
         ),
-        hintText: '请扫描或输入成品条码',
+        hintText: 'sap_picking_posting_scan_finished_barcode'.tr,
         hintStyle: const TextStyle(color: Colors.grey),
         prefixIcon: IconButton(
           onPressed: () => tecFinishedProduct.clear(),
@@ -171,7 +171,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
     return pageBody(
       actions: [
         CombinationButton(
-          text: '暂存记录',
+          text: 'sap_picking_posting_temp_record'.tr,
           click: () => pickingCacheDialog(
               refresh: (orderNumber, labels) =>
                   logic.refreshLabels(orderNumber, labels)),
@@ -187,13 +187,13 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               borderRadius: BorderRadius.circular(7),
               border: Border.all(color: Colors.blue, width: 2),
             ),
-            child: Obx(() => textSpan(hint: '拣配单号:', text: state.order.value)),
+            child: Obx(() => textSpan(hint: 'sap_picking_posting_picking_order_no_colon'.tr, text: state.order.value)),
           ),
           Expanded(
             child: Obx(() => ListView(
                   padding: const EdgeInsets.all(10),
                   children: [
-                    productPageTitle(title: '拣配半成品条码明细', bkgColor: Colors.blue),
+                    productPageTitle(title: 'sap_picking_posting_semi_barcode_detail'.tr, bkgColor: Colors.blue),
                     semiFinishedProductPageInput,
                     for (var item in state.semiFinishedProductList)
                       _itemSemiFinishedProduct(item),
@@ -211,7 +211,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                         children: [
                           Expanded(
                             child: CombinationButton(
-                              text: '添加物料',
+                              text: 'sap_picking_posting_add_material'.tr,
                               combination: Combination.left,
                               click: () => addSemiFinishedProductMaterialDialog(
                                   state.semiFinishedProductList),
@@ -219,14 +219,14 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                           ),
                           Expanded(
                             child: CombinationButton(
-                              text: '清空列表',
+                              text: 'sap_picking_posting_clear_list'.tr,
                               combination: Combination.right,
                               isEnabled:
                                   state.semiFinishedProductList.isNotEmpty,
                               backgroundColor: Colors.orange,
                               click: () => askDialog(
-                                title: '半成品拣配',
-                                content: '确定要清空所有已扫入的物料吗？',
+                                title: 'sap_picking_posting_semi_picking'.tr,
+                                content: 'sap_picking_posting_confirm_clear_all'.tr,
                                 confirm: () => logic.clearSemiFinishedProduct(),
                               ),
                             ),
@@ -236,7 +236,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                     ),
                     const SizedBox(height: 10),
                     productPageTitle(
-                      title: '拣配成品条码明，只允许编码/订单相同',
+                      title: 'sap_picking_posting_finished_barcode_detail'.tr,
                       bkgColor: Colors.green,
                     ),
                     finishedProductPageInput,
@@ -267,7 +267,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                     children: [
                                       Expanded(
                                         child: textSpan(
-                                          hint: '订单号：',
+                                          hint: 'sap_picking_posting_order_no_colon'.tr,
                                           hintColor: Colors.grey.shade700,
                                           text: state.finishedProductList.first
                                                   .salesOrder ??
@@ -277,7 +277,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                       ),
                                       Expanded(
                                         child: textSpan(
-                                          hint: '数量：',
+                                          hint: 'sap_picking_posting_qty_colon'.tr,
                                           hintColor: Colors.grey.shade700,
                                           text: state.finishedProductList
                                               .map((v) => v.quantity ?? 0)
@@ -288,7 +288,7 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
                                       ),
                                       IconButton(
                                         onPressed: () => askDialog(
-                                          content: '确定要删除该物料吗？',
+                                          content: 'sap_picking_posting_confirm_delete_material'.tr,
                                           confirm: () =>
                                               logic.clearFinishedProduct(),
                                         ),
@@ -320,9 +320,9 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
             children: [
               Expanded(
                 child: CombinationButton(
-                  text: '暂存',
+                  text: 'sap_picking_posting_temp_save'.tr,
                   click: () => askDialog(
-                    content: '确定要暂存本次拣配吗？',
+                    content: 'sap_picking_posting_confirm_temp_save'.tr,
                     confirm: () => logic.submitPickingLabel(false),
                   ),
                   backgroundColor: Colors.orange,
@@ -331,9 +331,9 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
               ),
               Expanded(
                 child: CombinationButton(
-                  text: '提交',
+                  text: 'sap_picking_posting_submit'.tr,
                   click: () => askDialog(
-                    content: '确定要提交本次拣配吗？',
+                    content: 'sap_picking_posting_confirm_submit'.tr,
                     confirm: () => logic.submitPickingLabel(true),
                   ),
                   backgroundColor: Colors.green,
@@ -393,7 +393,7 @@ class _SapPickingPostingSemiFinishedItemState
                 ),
                 IconButton(
                   onPressed: () => askDialog(
-                    content: '确定要删除该物料吗？',
+                    content: 'sap_picking_posting_confirm_delete_material'.tr,
                     confirm: () => widget.logic.deleteSemiFinishedProductItem(widget.data),
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.red),
@@ -407,7 +407,7 @@ class _SapPickingPostingSemiFinishedItemState
               children: [
                 Expanded(
                   child: textSpan(
-                    hint: '累积数：',
+                    hint: 'sap_picking_posting_cumulative_qty_colon'.tr,
                     hintColor: Colors.grey.shade700,
                     text: widget.data.cumulativeQty().toShowString(),
                     isBold: false,
@@ -416,11 +416,11 @@ class _SapPickingPostingSemiFinishedItemState
                 Expanded(
                   child: widget.data.dataList.first.label.isNullOrEmpty()
                       ? Text(
-                          '手动添加物料',
+                          'sap_picking_posting_manual_add_material'.tr,
                           style: TextStyle(color: Colors.green.shade700),
                         )
                       : textSpan(
-                          hint: '扫码次数：',
+                          hint: 'sap_picking_posting_scan_count_colon'.tr,
                           hintColor: Colors.grey.shade700,
                           text: widget.data.scanCount().toString(),
                           isBold: false,

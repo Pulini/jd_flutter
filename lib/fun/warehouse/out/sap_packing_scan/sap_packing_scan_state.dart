@@ -27,7 +27,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'sap_packing_scan_loading_get_label'.tr,
       method: webApiSapGetContainerLoadingInfo,
       body: {
         'WERKS': factory?.pickerId(),
@@ -59,7 +59,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在检查货柜...',
+      loading: 'sap_packing_scan_loading_check_cabinet'.tr,
       method: webApiSapCheckContainer,
       body: {
         'ZZCQ': getDateYMD(time: plannedDate),
@@ -80,7 +80,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交封柜...',
+      loading: 'sap_packing_scan_loading_submit_seal'.tr,
       method: webApiSapSubmit,
       body: {
         'ITEM1': {},
@@ -110,7 +110,7 @@ class SapPackingScanState {
     required Function(List<SapPackingScanSubmitAbnormalInfo>, String) save,
   }) {
     sapPost(
-      loading: '正在提交排柜信息...',
+      loading: 'sap_packing_scan_loading_submit_arrange'.tr,
       method: webApiSapSubmit,
       body: {
         'ITEM1': {
@@ -158,7 +158,7 @@ class SapPackingScanState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在保存异常单...',
+      loading: 'sap_packing_scan_loading_save_abnormal'.tr,
       method: webApiSapSaveAbnormalPiece,
       body: abnormalList.map((v) => v.toJson()).toList(),
     ).then((response) {
@@ -180,7 +180,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在暂存排柜信息...',
+      loading: 'sap_packing_scan_loading_temp_save'.tr,
       method: webApiSapSubmit,
       body: {
         'ITEM1': {},
@@ -221,7 +221,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取交货单列表...',
+      loading: 'sap_packing_scan_loading_get_delivery'.tr,
       method: webApiSapGetDeliveryOrders,
       body: {
         'ZZCQ': plannedDate,
@@ -248,7 +248,7 @@ class SapPackingScanState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在修改交货单过账日期...',
+      loading: 'sap_packing_scan_loading_modify_date'.tr,
       method: webApiSapModifyDeliveryOrderPostingDate,
       body: {
         'VLLIST': [

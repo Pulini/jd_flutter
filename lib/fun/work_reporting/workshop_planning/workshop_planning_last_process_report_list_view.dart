@@ -22,7 +22,7 @@ class _LastProcessReportListPageState extends State<LastProcessReportListPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '报工列表',
+      title: 'workshop_planning_report_list'.tr,
       body: Obx(() => ListView.builder(
             itemCount: state.lastProcessGroupPayList.length,
             itemBuilder: (c, i) => _LastProcessReportItem(
@@ -72,12 +72,12 @@ class _LastProcessReportItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      textSpan(hint: '单据编号：', text: data.number ?? ''),
+                      textSpan(hint: 'workshop_planning_doc_no_colon'.tr, text: data.number ?? ''),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('报工日期：${data.date}'),
-                          Text('完成数量：${data.finishQty.toShowString()}'),
+                          Text('${'workshop_planning_report_date_colon'.tr}${data.date}'),
+                          Text('${'workshop_planning_complete_qty_colon'.tr}${data.finishQty.toShowString()}'),
                         ],
                       )
                     ],
@@ -97,7 +97,7 @@ class _LastProcessReportItem extends StatelessWidget {
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () => askDialog(
-                    content: '确定要删除此报工单吗？',
+                    content: 'workshop_planning_delete_report_order_confirm'.tr,
                     confirm: onDelete,
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),

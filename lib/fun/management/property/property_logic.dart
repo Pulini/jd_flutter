@@ -34,18 +34,18 @@ class PropertyLogic extends GetxController {
       bool locked = await wifiManager.lockCurrentNetwork();
       if (!locked) {
         // 如果锁定失败，给出警告但不中断流程
-        errorDialog(content: '警告：无法锁定WiFi网络，可能会出现连接不稳定');
+        errorDialog(content: 'management_property_wifi_lock_warning'.tr);
       }
       await Future.delayed(const Duration(seconds: 5));
       success?.call();
     } else {
-      errorDialog(content: '连接失败。');
+      errorDialog(content: 'management_property_connect_failed'.tr);
     }
   }
 
   void connectAndSendData() async {
     try {
-      loadingShow('正在连接到激光打印机，并下发内容...');
+      loadingShow('management_property_laser_printing'.tr);
       // 连接到指定地址和端口
       final socket = await Socket.connect("192.168.6.2", 8050,
           timeout: const Duration(seconds: 10));
@@ -71,7 +71,7 @@ class PropertyLogic extends GetxController {
       socket.destroy();
       loadingDismiss();
     } catch (e) {
-      errorDialog(content: '连接错误: $e');
+      errorDialog(content: 'management_property_connect_error'.trArgs([e.toString()]));
     }
   }
 
@@ -261,7 +261,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.name?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入名称',
+        message: 'management_property_input_name'.tr,
         isWarning: true,
       );
       return false;
@@ -269,7 +269,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.number?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入编号',
+        message: 'management_property_input_number'.tr,
         isWarning: true,
       );
       return false;
@@ -277,7 +277,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.model?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入规格型号',
+        message: 'management_property_input_model'.tr,
         isWarning: true,
       );
       return false;
@@ -285,7 +285,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.price != null && state.detail.price! <= 0) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入单价',
+        message: 'management_property_input_price'.tr,
         isWarning: true,
       );
       return false;
@@ -293,7 +293,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.orgVal != null && state.detail.orgVal! <= 0) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入原值',
+        message: 'management_property_input_org_val'.tr,
         isWarning: true,
       );
       return false;
@@ -301,7 +301,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.manufacturer?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入制造商',
+        message: 'management_property_input_manufacturer'.tr,
         isWarning: true,
       );
       return false;
@@ -309,7 +309,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.guaranteePeriod?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入保修期限(月)',
+        message: 'management_property_input_guarantee'.tr,
         isWarning: true,
       );
       return false;
@@ -317,7 +317,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.expectedLife != null && state.detail.expectedLife! <= 0) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入预计使用时长(月)',
+        message: 'management_property_input_expected_life'.tr,
         isWarning: true,
       );
       return false;
@@ -325,7 +325,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.participator != null && state.detail.participator! == -1) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入参检人工号',
+        message: 'management_property_input_participator'.tr,
         isWarning: true,
       );
       return false;
@@ -333,7 +333,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.keepEmpID != null && state.detail.keepEmpID! == -1) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入保管人工号',
+        message: 'management_property_input_keep_emp'.tr,
         isWarning: true,
       );
       return false;
@@ -341,7 +341,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.liableEmpID != null && state.detail.liableEmpID! == -1) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入监管人工号',
+        message: 'management_property_input_liable_emp'.tr,
         isWarning: true,
       );
       return false;
@@ -349,7 +349,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.writeDate?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请选择登记日期',
+        message: 'management_property_select_write_date'.tr,
         isWarning: true,
       );
       return false;
@@ -357,7 +357,7 @@ class PropertyLogic extends GetxController {
     if (state.detail.address?.isEmpty == true) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请输入存放地点',
+        message: 'management_property_input_address'.tr,
         isWarning: true,
       );
       return false;
@@ -365,7 +365,7 @@ class PropertyLogic extends GetxController {
     if (state.assetPicture.isEmpty) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请拍摄现场照片',
+        message: 'management_property_take_asset_photo'.tr,
         isWarning: true,
       );
       return false;
@@ -373,7 +373,7 @@ class PropertyLogic extends GetxController {
     if (state.ratingPlatePicture.isEmpty) {
       showSnackBar(
         title: 'property_lack_data'.tr,
-        message: '请拍摄铭牌照片',
+        message: 'management_property_take_rating_photo'.tr,
         isWarning: true,
       );
       return false;

@@ -88,10 +88,10 @@ class HandoverReportListLogic extends GetxController {
           arrangeShowData('', true);
           break;
         case 1: // 早班
-          arrangeShowData('白班', true);
+          arrangeShowData('work_reporting_day_shift'.tr, true);
           break;
         default: //晚班
-          arrangeShowData('晚班', true);
+          arrangeShowData('work_reporting_night_shift'.tr, true);
           break;
       }
     } else {
@@ -101,10 +101,10 @@ class HandoverReportListLogic extends GetxController {
           arrangeShowData('', false);
           break;
         case 1: // 早班
-          arrangeShowData('白班', false);
+          arrangeShowData('work_reporting_day_shift'.tr, false);
           break;
         default: //晚班
-          arrangeShowData('晚班', false);
+          arrangeShowData('work_reporting_night_shift'.tr, false);
           break;
       }
     }
@@ -142,7 +142,7 @@ class HandoverReportListLogic extends GetxController {
         });
 
         list.add(SubList(
-            subSize: '合计',
+            subSize: 'work_reporting_subtotal'.tr,
             subCapacity: v.sizeList
                 ?.map((sub) => sub.capacity)
                 .fold(0.0, (total, capacity) => total.add(capacity ?? 0.0)),
@@ -200,7 +200,7 @@ class HandoverReportListLogic extends GetxController {
         });
 
         list.add(SubList(
-            subSize: '合计',
+            subSize: 'work_reporting_subtotal'.tr,
             subCapacity: v.sizeList
                 ?.map((sub) => sub.capacity)
                 .fold(0.0, (total, capacity) => total.add(capacity ?? 0.0)),

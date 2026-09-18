@@ -52,7 +52,7 @@ class _MaintainLabelCreateMixPageState
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: maxLabelNumController,
               decoration: InputDecoration(
-                labelText: '最大标签数',
+                labelText: 'other_maintain_label_max_label_num'.tr,
                 contentPadding: const EdgeInsets.only(left: 15),
                 filled: true,
                 fillColor: Colors.grey.shade200,
@@ -77,7 +77,7 @@ class _MaintainLabelCreateMixPageState
                           isEnabled: state.createMixLabelsData.any(
                             (v) => v.any((v2) => v2.isSelected.value),
                           ),
-                          text: '填满剩余量',
+                          text: 'other_maintain_label_fill_remaining'.tr,
                           click: () => logic.fillRemainingQty(),
                         )),
                     Obx(() => CombinationButton(
@@ -86,7 +86,7 @@ class _MaintainLabelCreateMixPageState
                             (v) => v.any((v2) =>
                                 v2.isSelected.value && v2.packingQty.value > 0),
                           ),
-                          text: '创建',
+                          text: 'other_maintain_label_create'.tr,
                           click: () => logic.createMixLabel(
                               maxLabelNumController.text.toIntTry()),
                         )),
@@ -135,7 +135,7 @@ class _MaintainLabelCreateMixItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-            hint: '尺码:',
+            hint: 'other_maintain_label_size_colon'.tr,
             text: data.first.size ?? '',
           ),
           const SizedBox(height: 10),
@@ -143,7 +143,7 @@ class _MaintainLabelCreateMixItem extends StatelessWidget {
             children: [
               ExpandedFrameText(
                 lineHeight: 40,
-                text: '指令',
+                text: 'other_maintain_label_instruction'.tr,
                 alignment: Alignment.center,
                 isBold: true,
                 flex: 3,
@@ -152,7 +152,7 @@ class _MaintainLabelCreateMixItem extends StatelessWidget {
               ),
               ExpandedFrameText(
                 lineHeight: 40,
-                text: '剩余数',
+                text: 'other_maintain_label_remaining_num'.tr,
                 alignment: Alignment.center,
                 isBold: true,
                 flex: 1,
@@ -161,7 +161,7 @@ class _MaintainLabelCreateMixItem extends StatelessWidget {
               ),
               ExpandedFrameText(
                 lineHeight: 40,
-                text: '装箱数',
+                text: 'other_maintain_label_box_num'.tr,
                 alignment: Alignment.center,
                 isBold: true,
                 flex: 2,

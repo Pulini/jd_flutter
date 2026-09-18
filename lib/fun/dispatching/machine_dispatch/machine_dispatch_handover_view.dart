@@ -254,8 +254,8 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
     return pageBody(
       actions: [
         CombinationButton(
-            text: '交接',
-            click: () => askDialog(content: '确认要进行交接吗?',confirm: (){
+            text: 'machine_dispatch_handover'.tr,
+            click: () => askDialog(content: 'machine_dispatch_confirm_handover'.tr,confirm: (){
               logic.handover();
             }))
       ],

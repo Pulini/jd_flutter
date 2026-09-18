@@ -39,15 +39,15 @@ class _MachineDispatchHistoryPageState
             child: Row(
               children: [
                 expandedTextSpan(
-                  hint: '派工单号：',
+                  hint: 'machine_dispatch_dispatch_no_colon'.tr,
                   text: state.historyInfo[i].dispatchNumber ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '机台：',
+                  hint: 'machine_dispatch_machine_colon'.tr,
                   text: state.historyInfo[i].machine ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '班次：',
+                  hint: 'machine_dispatch_shift_colon'.tr,
                   text: state.historyInfo[i].shift ?? '',
                 ),
               ],
@@ -104,11 +104,11 @@ class _MachineDispatchHistoryDetailPageState
                     children: [
                       expandedTextSpan(
                         flex: 2,
-                        hint: '物料名称：',
+                        hint: 'machine_dispatch_material_name_colon'.tr,
                         text: state.historyLabelInfo[i].materialName,
                       ),
                       expandedTextSpan(
-                        hint: '派工日期：',
+                        hint: 'machine_dispatch_dispatch_date_colon'.tr,
                         text: state.historyLabelInfo[i].date,
                       ),
                     ],
@@ -116,19 +116,19 @@ class _MachineDispatchHistoryDetailPageState
                   Row(
                     children: [
                       expandedTextSpan(
-                        hint: '型体：',
+                        hint: 'machine_dispatch_type_body_colon'.tr,
                         text: state.historyLabelInfo[i].factoryType,
                       ),
                       expandedTextSpan(
-                        hint: '尺码：',
+                        hint: 'machine_dispatch_size_colon'.tr,
                         text: state.historyLabelInfo[i].size,
                       ),
                       expandedTextSpan(
-                        hint: '数量：',
+                        hint: 'machine_dispatch_qty_colon'.tr,
                         text: state.historyLabelInfo[i].qty.toShowString(),
                       ),
                       expandedTextSpan(
-                        hint: '序号：',
+                        hint: 'machine_dispatch_number_colon'.tr,
                         text: state.historyLabelInfo[i].number,
                       ),
                     ],
@@ -136,7 +136,7 @@ class _MachineDispatchHistoryDetailPageState
                 ],
               )),
           onTap: () => askDialog(
-            content: '确定要打印该贴标吗？',
+            content: 'machine_dispatch_confirm_print_label'.tr,
             confirm: () => logic.printHistoryLabel(i),
           ),
         ),

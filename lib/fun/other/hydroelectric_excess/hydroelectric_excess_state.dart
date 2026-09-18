@@ -101,7 +101,7 @@ class HydroelectricExcessState {
   }) {
     springBootPost(
       method: webApiArkImageServer,
-      loading: '识别中...',
+      loading: 'other_hydroelectric_recognizing'.tr,
       body:{
         'imageBase64': 'data:image/png;base64,$base64Image',
         'text': '读取图中电表的水电表的度数，只返回数值。',

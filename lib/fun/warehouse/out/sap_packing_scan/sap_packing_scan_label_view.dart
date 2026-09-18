@@ -32,13 +32,13 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '标签明细',
+      title: 'sap_packing_scan_label_detail'.tr,
       actions: [
         Obx(() => CombinationButton(
               isEnabled: state.pieceList.any((v) => v.isSelected.value),
-              text: '删除',
+              text: 'sap_packing_scan_delete'.tr,
               click: () => askDialog(
-                content: '确定要删除这些标签吗？',
+                content: 'sap_packing_scan_confirm_delete_labels'.tr,
                 confirm: () => logic.deleteLabels(),
               ),
             )),
@@ -55,7 +55,7 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
                       color: Colors.white54,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
+                    placeholder: 'sap_packing_scan_search_placeholder'.tr,
                     onChanged: (v) =>
                         state.pieceList.value = logic.pieceList(v),
                   ),
@@ -107,7 +107,7 @@ class _SapPackingScanLabelItem extends StatelessWidget {
             child: Row(
               children: [
                 expandedTextSpan(
-                  hint: '件ID：',
+                  hint: 'sap_packing_scan_piece_id_colon'.tr,
                   text: data.pieceId,
                   textColor: Colors.blue.shade900,
                 ),
@@ -121,7 +121,7 @@ class _SapPackingScanLabelItem extends StatelessWidget {
           for (SapPackingScanMaterialInfo item in data.materials) ...{
             const Divider(),
             textSpan(
-              hint: '物料：',
+              hint: 'sap_packing_scan_material_colon'.tr,
               hintColor: Colors.grey.shade700,
               text: '(${item.materialNumber})${item.materialName}',
               isBold: false,

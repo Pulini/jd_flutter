@@ -50,15 +50,15 @@ class WorkOrderListLogic extends GetxController {
     pu.printLabelList(
       labelList: labelList,
       start: () {
-        loadingShow('正在下发标签...');
+        loadingShow('work_reporting_label_issuing'.tr);
       },
       progress: (i, j) {
-        loadingShow('正在下发标签($i/$j)');
+        loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
       },
       finished: (success, fail) {
         successDialog(
-            title: '标签下发结束',
-            content: '完成${success.length}张, 失败${fail.length}张',
+            title: 'work_reporting_label_issue_finished'.tr,
+            content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
             back: () {});
       },
     );

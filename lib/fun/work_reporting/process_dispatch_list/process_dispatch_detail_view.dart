@@ -106,15 +106,15 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     pu.printLabelList(
       labelList: labelList,
       start: () {
-        loadingShow('正在下发标签...');
+        loadingShow('work_reporting_label_issuing'.tr);
       },
       progress: (i, j) {
-        loadingShow('正在下发标签($i/$j)');
+        loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
       },
       finished: (success, fail) {
         successDialog(
-            title: '标签下发结束',
-            content: '完成${success.length}张, 失败${fail.length}张',
+            title: 'work_reporting_label_issue_finished'.tr,
+            content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
             back: () {});
       },
     );
@@ -273,9 +273,9 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
               children: [
                 textSpan(
                     hint: 'process_dispatch_label_packing_method'.tr,
-                    text: data.packageType == 1 ? '单码装' : '混码装',
+                    text: data.packageType == 1 ? 'work_reporting_single_code_pack'.tr : 'work_reporting_mixed_code_pack'.tr,
                     textColor: Colors.black),
-                Text(data.received! ? '已入库' : '未入库',
+                Text(data.received! ? 'work_reporting_received'.tr : 'work_reporting_not_received'.tr,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -290,7 +290,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
                     hint: 'process_dispatch_label_code_num'.tr,
                     text: data.index.toString(),
                     textColor: Colors.black),
-                Text(data.printTimes! > 0 ? '已打印' : '未打印',
+                Text(data.printTimes! > 0 ? 'work_reporting_printed'.tr : 'work_reporting_not_printed'.tr,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

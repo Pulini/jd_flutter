@@ -96,7 +96,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
 
   void submitReport() {
     if(state.barCodeList.any((v)=>v.empID==0)){
-      errorDialog(content: '请填入报工人员信息');
+      errorDialog(content: 'dispatching_register_input_report_employee'.tr);
       return;
     }
     state.submitReport(

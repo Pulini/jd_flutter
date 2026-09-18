@@ -40,22 +40,22 @@ class _MaintainLabelCreateCustomPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '创建自定义标签',
+      title: 'other_maintain_label_create_custom'.tr,
       body: Column(
         children: [
           Row(
             children: [
               const SizedBox(width: 15),
-              const Text('批量箱容：'),
+              Text('other_maintain_label_batch_box_capacity'.tr),
               Expanded(
                 child: NumberEditText(controller: batchBoxCapacityController),
               ),
               const SizedBox(width: 15),
-              const Text('批量生成数：'),
+              Text('other_maintain_label_batch_generate_num'.tr),
               Expanded(
                 child: NumberEditText(controller: batchCreateGoodsController),
               ),
-              const Text('混码箱容：'),
+              Text('other_maintain_label_mix_box_capacity'.tr),
               Expanded(
                 child: NumberEditText(
                   controller: mixCapacityController,
@@ -71,7 +71,7 @@ class _MaintainLabelCreateCustomPageState
                     combination: Combination.left,
                     isEnabled: state.createCustomLabelsData.isNotEmpty &&
                         state.createCustomLabelsData.any((v) => v.isSelect.value),
-                    text: '批量设置',
+                    text: 'other_maintain_label_batch_set'.tr,
                     click: () => logic.customLabelsBatchSet(
                       batchBoxCapacityController.text.toIntTry(),
                       batchCreateGoodsController.text.toIntTry(),
@@ -89,7 +89,7 @@ class _MaintainLabelCreateCustomPageState
               Obx(
                 () => CombinationButton(
                   isEnabled: state.mixCapacityControllerText.value.isNotEmpty,
-                  text: '混码拼装',
+                  text: 'other_maintain_label_mix_assemble'.tr,
                   click: () => logic.mixedAssemble(mixCapacityController.text),
                   combination: Combination.middle,
                 ),
@@ -99,7 +99,7 @@ class _MaintainLabelCreateCustomPageState
                     isEnabled: state.createCustomLabelsData.isNotEmpty &&
                         state.createCustomLabelsData
                             .any((v) => v.isCanCreate() && state.mixCapacityControllerText.value.isEmpty),
-                    text: '创建',
+                    text: 'other_maintain_label_create'.tr,
                     click: () => logic.createCustomLabels(widget.labelType),
                   )),
               Padding(
@@ -157,20 +157,20 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                textSpan(hint: '尺码：', text: data.size, textColor: Colors.red),
+                textSpan(hint: 'other_maintain_label_size_colon'.tr, text: data.size, textColor: Colors.red),
                 textSpan(
-                  hint: '总货数：',
+                  hint: 'other_maintain_label_total_goods'.tr,
                   text: data.goodsTotalValue,
                   isBold: false,
                 ),
                 textSpan(
-                  hint: '剩余货数：',
+                  hint: 'other_maintain_label_remaining_goods'.tr,
                   text: data.surplusGoodsValue,
                   isBold: false,
                 ),
                 Row(
                   children: [
-                    const Text('箱容：'),
+                    Text('other_maintain_label_box_capacity'.tr),
                     Container(
                       height: 35,
                       width: 150,
@@ -204,20 +204,20 @@ class _MaintainLabelCreateCustomItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                textSpan(hint: '已生成贴标：', text: data.createdLabels.toString()),
+                textSpan(hint: 'other_maintain_label_generated_label'.tr, text: data.createdLabels.toString()),
                 textSpan(
-                  hint: '已生成货数：',
+                  hint: 'other_maintain_label_generated_goods'.tr,
                   text: data.createdGoodsValue,
                   isBold: false,
                 ),
                 Obx(() => textSpan(
-                      hint: '创建数：',
+                      hint: 'other_maintain_label_create_num'.tr,
                       text: data.createLabel().toString(),
                       textColor: Colors.green,
                     )),
                 Row(
                   children: [
-                    const Text('本次生成货数：'),
+                    Text('other_maintain_label_current_generate_goods'.tr),
                     Container(
                       height: 35,
                       width: 150,

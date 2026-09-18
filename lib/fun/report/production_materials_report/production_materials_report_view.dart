@@ -233,7 +233,7 @@ class _ProductionMaterialsReportPageState
   Widget build(BuildContext context) {
     return Get.arguments == null
         ? pageBodyWithDrawer(
-            title: '用料清单',
+            title: 'report_production_materials_title'.tr,
             queryWidgets: [
               Obx(() => RadioGroup(
                     groupValue: state.select.value,
@@ -285,7 +285,7 @@ class _ProductionMaterialsReportPageState
             ),
             body: getPageBody(),
           )
-        : pageBody(title: '用料清单', body: getPageBody());
+        : pageBody(title: 'report_production_materials_title'.tr, body: getPageBody());
   }
 
   @override

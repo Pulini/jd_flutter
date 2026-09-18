@@ -24,7 +24,7 @@ class PrintPalletLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       );
     } else {
-      errorDialog(content: '请扫描托盘码！');
+      errorDialog(content: 'print_pallet_scan_tray_code'.tr);
     }
   }
 
@@ -41,7 +41,7 @@ class PrintPalletLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       );
     } else {
-      errorDialog(content: '请输入正确的托盘号！');
+      errorDialog(content: 'print_pallet_input_correct_tray_no'.tr);
     }
   }
 
@@ -51,7 +51,7 @@ class PrintPalletLogic extends GetxController {
       state.palletList.add(list);
       state.selectedList.add(true.obs);
     } else {
-      errorDialog(content: '托盘已存在！');
+      errorDialog(content: 'print_pallet_tray_exist'.tr);
     }
   }
 

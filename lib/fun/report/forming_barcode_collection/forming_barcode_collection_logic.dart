@@ -44,7 +44,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   void setDataList() {
     for (var data in state.dataList) {
       data.scWorkCardSizeInfos?.add(ScWorkCardSizeInfos(
-        size: '合计',
+        size: 'work_reporting_subtotal'.tr,
         qty: data.scWorkCardSizeInfos
             ?.map((v) => v.qty ?? 0.0)
             .reduce((a, b) => a.add(b)),

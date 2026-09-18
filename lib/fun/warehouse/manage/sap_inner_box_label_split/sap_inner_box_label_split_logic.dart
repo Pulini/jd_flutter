@@ -91,7 +91,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
                 .toList(),
           ));
     } else {
-      errorDialog(content: '没有可打印的标签');
+      errorDialog(content: 'sap_inner_box_label_split_no_printable_label'.tr);
     }
   }
 

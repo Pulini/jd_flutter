@@ -293,7 +293,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
       actions: [
         CombinationButton(
             text: 'machine_dispatch_report_report'.tr,
-            click: () => askDialog(content: '确定要工资汇报吗?',confirm: (){
+            click: () => askDialog(content: 'machine_dispatch_confirm_salary_report'.tr,confirm: (){
               logic.report();
             }))
       ],

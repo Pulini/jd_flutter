@@ -58,7 +58,7 @@ class SapLabelReprintLogic extends GetxController {
           ));
       // createLabels(labels: selected, print: (labels) => toPrintView(labels));
     } else {
-      errorDialog(content: '没有可打印的标签');
+      errorDialog(content: 'sap_label_reprint_no_printable_label'.tr);
     }
   }
 
@@ -327,7 +327,7 @@ class SapLabelReprintLogic extends GetxController {
     var index = 0;
     try {
       var labelsView = <Widget>[];
-      loadingShow('加载标签数据...');
+      loadingShow('sap_label_reprint_loading_data'.tr);
       for (var label in labels) {
         if (label.factoryNo == '1098') {
           if (label.subLabel!.any((v) => v.size?.isNotEmpty == true)) {
@@ -365,7 +365,8 @@ class SapLabelReprintLogic extends GetxController {
       print.call(labelsView);
     } catch (e) {
       loadingDismiss();
-      errorDialog(content: '第<${index + 1}>张标签<${labels[index].pieceID}>数据异常!');
+      errorDialog(content: 'sap_label_reprint_label_data_abnormal'
+          .trArgs([(index + 1).toString(), labels[index].pieceID.toString()]));
     }
   }
 
@@ -374,7 +375,7 @@ class SapLabelReprintLogic extends GetxController {
       state.labelList.every((v) => v.isSelected.value);
 
   void cleanLabels() {
-    askDialog(content: '确定要清空标签吗？', confirm: () => state.labelList.clear());
+    askDialog(content: 'sap_label_reprint_clear_labels_confirm'.tr, confirm: () => state.labelList.clear());
   }
 
   void selectAll(bool isSelect) {

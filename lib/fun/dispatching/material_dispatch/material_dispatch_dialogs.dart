@@ -83,7 +83,7 @@ void subItemReportDialog(
                             domestic.value = true;
                           }
                         },
-                        name: '默认国内',
+                        name: 'dispatching_material_default_domestic'.tr,
                         value: domestic.value,
                         needSave: false,
                       )),
@@ -99,7 +99,7 @@ void subItemReportDialog(
                             domestic.value = true;
                           }
                         },
-                        name: '印尼标',
+                        name: 'dispatching_material_indonesia_label'.tr,
                         value: indonesia.value,
                         needSave: false,
                       )),
@@ -115,7 +115,7 @@ void subItemReportDialog(
                             domestic.value = true;
                           }
                         },
-                        name: '缅甸标',
+                        name: 'dispatching_material_myanmar_label'.tr,
                         value: myanmar.value,
                         needSave: false,
                       )),

@@ -197,7 +197,7 @@ class ProductionScanWarehouseLogic extends GetxController {
               state.peopleName.value = '';
               showSnackBar(
                   title: 'dialog_default_title_information'.tr,
-                  message: '检查未完成');
+                  message: 'production_scan_warehouse_check_not_finished'.tr);
             } else if (v == true) {
               submitCode();
             }
@@ -277,7 +277,7 @@ class ProductionScanWarehouseLogic extends GetxController {
 
   //生产扫码入库的提交
   void submitCode() {
-    httpPost(method: webApiUploadProductionScanning, loading: '正在提交...', body: {
+    httpPost(method: webApiUploadProductionScanning, loading: 'production_scan_warehouse_submitting'.tr, body: {
       'BarCodeList': [
         for (var i = 0; i < state.barCodeList.length; ++i)
           if (!state.barCodeList[i].isUsed == true)

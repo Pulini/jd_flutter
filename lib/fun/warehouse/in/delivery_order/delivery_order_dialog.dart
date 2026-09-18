@@ -176,7 +176,7 @@ void stockInDialog({
           ),
         );
       } else {
-        errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
+        errorDialog(content: 'delivery_order_no_front_camera'.tr);
       }
       // if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
       //   livenFaceVerification(
@@ -507,7 +507,7 @@ Future<void> _checkLeader({
       ),
     );
   } else {
-    errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
+    errorDialog(content: 'delivery_order_no_front_camera'.tr);
   }
   //  2026年1月23日，张幸民：所有单据都必须使用人脸识别。
   // if (submitList[0].isScanPieces?.isEmpty == true &&  hasFrontCamera()) {

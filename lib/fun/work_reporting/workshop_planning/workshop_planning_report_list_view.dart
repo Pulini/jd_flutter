@@ -78,12 +78,12 @@ class _WorkshopReportListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       textSpan(
-                        hint: '单据编号：',
+                        hint: 'workshop_planning_doc_no_colon'.tr,
                         text: data.number ?? '',
                         textColor: Colors.green.shade700,
                       ),
                       textSpan(
-                        hint: '物料：',
+                        hint: 'workshop_planning_material_colon'.tr,
                         maxLines: 2,
                         text: data.materialName ?? '',
                       ),
@@ -91,12 +91,12 @@ class _WorkshopReportListItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '生产单号：${data.planTrackingNumber}',
+                              '${'workshop_planning_production_no'.tr}${data.planTrackingNumber}',
                             ),
                           ),
                           Expanded(
                             child: Text(
-                              '报工日期：${data.date}',
+                              '${'workshop_planning_report_date_colon'.tr}${data.date}',
                             ),
                           ),
                         ],
@@ -105,12 +105,12 @@ class _WorkshopReportListItem extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '工序：${data.processName}',
+                              '${'workshop_planning_process_colon'.tr}${data.processName}',
                             ),
                           ),
                           Expanded(
                             child: Text(
-                              '完成数量：${data.finishQty.toShowString()}',
+                              '${'workshop_planning_complete_qty_colon'.tr}${data.finishQty.toShowString()}',
                             ),
                           ),
                         ],
@@ -132,7 +132,7 @@ class _WorkshopReportListItem extends StatelessWidget {
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: () => askDialog(
-                    content: '确定要删除此报工单吗？',
+                    content: 'workshop_planning_delete_report_order_confirm'.tr,
                     confirm: onDelete,
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.white),

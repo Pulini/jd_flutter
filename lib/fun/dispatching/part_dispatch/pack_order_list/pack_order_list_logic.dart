@@ -54,7 +54,7 @@ class PackOrderListLogic extends GetxController {
                   .firstWhere((v) => v.packProfileID == orderPackProfileID)
                   .packProfileName ??
               ''
-      : '当前包装清单尚未配置方案';
+      : 'dispatching_pack_order_no_plan'.tr;
 
   void modifyOrderPackProfile({
     required int packOrderID,

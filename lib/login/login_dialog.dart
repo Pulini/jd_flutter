@@ -72,7 +72,7 @@ void changeBaseUrlDialog() {
                 spSave(spSaveSapBaseUrl, sap);
                 Get.offAllNamed(RouteConfig.login);
               } else {
-                errorDialog(content: 'URL 不能为空');
+                errorDialog(content: 'login_url_empty'.tr);
               }
             },
             child: Text('dialog_default_confirm'.tr),

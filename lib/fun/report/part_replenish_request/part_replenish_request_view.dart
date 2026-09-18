@@ -40,13 +40,13 @@ class _PartReplenishRequestPageState extends State<PartReplenishRequestPage>
     return pageBody(
       actions: [
         CombinationButton(
-          text: '预补',
+          text: 'report_part_replenish_pre_fill'.tr,
           combination: Combination.left,
           backgroundColor: Colors.orangeAccent,
           click: () {},
         ),
         CombinationButton(
-          text: '实补',
+          text: 'report_part_replenish_actual_fill'.tr,
           combination: Combination.right,
           backgroundColor: Colors.green,
           click: () {},
@@ -61,9 +61,9 @@ class _PartReplenishRequestPageState extends State<PartReplenishRequestPage>
             unselectedLabelColor: Colors.grey,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             controller: tabController,
-            tabs: const [
-              Tab(text: '部件表'),
-              Tab(text: '补料表'),
+            tabs: [
+              Tab(text: 'report_part_replenish_part_table'.tr),
+              Tab(text: 'report_part_replenish_replenish_table'.tr),
             ],
             onTap: (i) => pageController.jumpToPage(i),
           ),
@@ -162,7 +162,7 @@ class _PartSizeItem extends StatelessWidget {
       padding: const EdgeInsetsGeometry.only(left: 20, right: 5),
       child: Row(
         children: [
-          textSpan(hint: '尺码：', text: '${sizeItem.size}'),
+          textSpan(hint: 'report_part_replenish_size_colon'.tr, text: '${sizeItem.size}'),
           const Spacer(),
           SizedBox(
             width: 150,
@@ -172,7 +172,7 @@ class _PartSizeItem extends StatelessWidget {
                         ? sizeItem.replenishRequest.value.toShowString()
                         : '',
                   ),
-                  hint: '补货数',
+                  hint: 'report_part_replenish_replenish_qty'.tr,
                   onChanged: (d) => sizeItem.replenishRequest.value = d,
                 )),
           ),
@@ -204,13 +204,13 @@ class _PartReplenishSubItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-            hint: '部件号：',
+            hint: 'report_part_replenish_part_no'.tr,
             text: part.partNumber ?? '',
             hintColor: Colors.black54,
             textColor: Colors.black87,
           ),
           textSpan(
-            hint: '部件名：',
+            hint: 'report_part_replenish_part_name'.tr,
             text: part.partName.allowWordTruncation(),
             maxLines: 2,
             hintColor: Colors.black54,
@@ -228,14 +228,14 @@ class _PartReplenishSubItem extends StatelessWidget {
             child: Row(
               children: [
                 ExpandedFrameText(
-                  text: '尺码',
+                  text: 'work_reporting_size'.tr,
                   textColor: Colors.white,
                   isBold: true,
                   alignment: Alignment.center,
                   backgroundColor: Colors.blue.shade300,
                 ),
                 ExpandedFrameText(
-                  text: '补料数',
+                  text: 'report_part_replenish_fill_qty'.tr,
                   textColor: Colors.white,
                   isBold: true,
                   alignment: Alignment.center,
@@ -266,7 +266,7 @@ class _PartReplenishSubItem extends StatelessWidget {
             child: Row(
               children: [
                 ExpandedFrameText(
-                  text: '共计补料数',
+                  text: 'report_part_replenish_total_fill_qty'.tr,
                   textColor: Colors.white,
                   isBold: true,
                   backgroundColor: Colors.green.shade200,

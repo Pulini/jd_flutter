@@ -206,7 +206,7 @@ class PropertyState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call('更新打标次数成功');
+        success.call('management_property_update_mark_success'.tr);
       } else {
         fail.call(response.message ?? '');
       }

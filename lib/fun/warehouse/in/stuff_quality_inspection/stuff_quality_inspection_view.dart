@@ -106,12 +106,12 @@ class _StuffQualityInspectionPageState
                   children: [
                     Expanded(
                         child: Center(
-                      child: textSpan(hint: '入库数量：', text: qty),
+                      child: textSpan(hint: 'stuff_quality_inspection_stock_in_qty'.tr, text: qty),
                     )),
                     Expanded(
                         child: Center(
                       child: Obx(() => textSpan(
-                          hint: '未分色数量：', text: state.unColorQty.value)),
+                          hint: 'stuff_quality_inspection_uncolored_qty'.tr, text: state.unColorQty.value)),
                     ))
                   ],
                 ),
@@ -139,7 +139,7 @@ class _StuffQualityInspectionPageState
                   width: 120,
                   child: CombinationButton(
                     //分色
-                    text: '添加',
+                    text: 'stuff_quality_inspection_add'.tr,
                     click: () {
                       logic.addColor(colorController.text, qtyController.text);
                       qtyController.text = state.unColorQty.value;
@@ -311,7 +311,7 @@ class _StuffQualityInspectionPageState
                     visible: state.isShowTips.value,
                     child: expandedTextSpan(
                         flex: 2,
-                        hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
+                        hint: 'stuff_quality_inspection_select_diff_material_tips'.tr,
                         text: '',
                         hintColor: Colors.red,
                         fontSize: 16),

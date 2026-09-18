@@ -141,16 +141,16 @@ class Downloader {
       isDownloading.value = false;
       logger.e('error:$e');
       if (e.type != DioExceptionType.cancel) {
-        errorDialog(content: '下载异常：$e');
+        errorDialog(content: 'widget_download_exception'.trArgs([e.toString()]));
       }
     } on Exception catch (e) {
       isDownloading.value = false;
       logger.e('error:${e.toString()}');
-      errorDialog(content: '发生错误：$e');
+      errorDialog(content: 'widget_error_occurred'.trArgs([e.toString()]));
     } on Error catch (e) {
       isDownloading.value = false;
       logger.e('error:${e.toString()}');
-      errorDialog(content: '发生异常：${e.toString()}');
+      errorDialog(content: 'widget_exception_occurred'.trArgs([e.toString()]));
     }
   }
 }

@@ -51,7 +51,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取工序计划列表...',
+      loading: 'workshop_planning_loading_process_plan_list'.tr,
       method: webApiProcessPlanningList,
       params: {
         'WorkCardInterID': workCardInterID,
@@ -79,7 +79,7 @@ class WorkshopPlanningState {
     Function()? finish,
   }) {
     httpGet(
-      loading: '正在获取部门信息...',
+      loading: 'workshop_planning_loading_dept_info'.tr,
       method: webApiGetDepartmentWorkerInfo,
       params: {
         'OrganizeID': userInfo?.organizeID,
@@ -106,7 +106,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取工种列表...',
+      loading: 'workshop_planning_loading_work_type_list'.tr,
       method: webApiGetTypeOfWorkListByProcess,
       params: {
         'OrganizeID': userInfo?.organizeID,
@@ -133,7 +133,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取工种列表...',
+      loading: 'workshop_planning_loading_work_type_list'.tr,
       method: webApiGetEmpBaseByNumber,
       params: {
         'FlowProcessID': flowProcessID,
@@ -161,7 +161,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取报工列表...',
+      loading: 'workshop_planning_loading_report_list'.tr,
       method: webApiGetGroupPayList,
       params: {
         'ID': planInfo!.id ?? '',
@@ -187,7 +187,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取报工明细...',
+      loading: 'workshop_planning_loading_report_detail'.tr,
       method: webApiGetGroupPayDetail,
       params: {
         'GroupPayInterID': groupPayInterID,
@@ -210,7 +210,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在删除报工...',
+      loading: 'workshop_planning_loading_delete_report'.tr,
       method: webApiDeleteGroupPay,
       params: {
         'GroupPayInterID': groupPayInterID,
@@ -231,7 +231,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交报工...',
+      loading: 'workshop_planning_loading_submitting_report'.tr,
       method: webApiSubmitGroupPay,
       body: body,
     ).then((response) {
@@ -249,7 +249,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取物料信息...',
+      loading: 'workshop_planning_loading_material_info'.tr,
       method: webApiGetToDayItemInfo,
       params: {
         'DepartmentID': departmentID,
@@ -275,7 +275,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在获取产量...',
+      loading: 'workshop_planning_loading_output'.tr,
       method: webApiGetEndingProcessQty,
       body: {
         'GroupPayInterID': 0, //新增0 修改从报工列表获取
@@ -304,7 +304,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取报工列表...',
+      loading: 'workshop_planning_loading_report_list'.tr,
       method: webApiGetGroupPayEndingProcessList,
       params: {
         'Date': date,
@@ -329,7 +329,7 @@ class WorkshopPlanningState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取报工列表...',
+      loading: 'workshop_planning_loading_report_list'.tr,
       method: webApiGetGroupPayEndingDetail,
       params: {
         'GroupPayInterID': groupPayInterID,

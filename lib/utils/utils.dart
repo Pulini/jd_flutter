@@ -357,7 +357,7 @@ void getWaitInStockBarCodeReport({
   required Function(String) error,
 }) {
   httpPost(
-    loading: '正在获取汇总信息...',
+    loading: 'utils_getting_summary'.tr,
     method: webApiNewGetSubmitBarCodeReport,
     body: {
       'BarCodeList': [
@@ -697,11 +697,11 @@ void livenFaceVerification({
               )
               .catchError(
                 (e) => errorDialog(
-                  content: '人脸验证错误：${(e as PlatformException).message}',
+                  content: 'utils_face_verify_error'.trArgs([(e as PlatformException).message ?? '']),
                 ),
               );
         } else {
-          errorDialog(content: '缺少相机权限');
+          errorDialog(content: 'utils_camera_permission_missing'.tr);
         }
       });
     },

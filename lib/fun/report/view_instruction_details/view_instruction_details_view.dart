@@ -51,7 +51,7 @@ class _ViewInstructionDetailsPageState
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
-              loadingShow('加载中');
+              loadingShow('report_view_instruction_loading'.tr);
             },
             onPageFinished: (String url) {
               loadingDismiss();

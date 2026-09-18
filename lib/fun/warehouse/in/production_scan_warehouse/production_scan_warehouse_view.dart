@@ -241,9 +241,9 @@ class _ProductionScanWarehousePageState
                                 showCustomPickerDialog(context);
                               }),
                           checkBack: (s) => askDialog(
-                            title: '温馨提示',
-                            content: '未汇报的标签有：$s',
-                            confirmText: '继续提交',
+                            title: 'dialog_default_title_information'.tr,
+                            content: 'production_scan_warehouse_unreported_labels'.trArgs([s]),
+                            confirmText: 'production_scan_warehouse_continue_submit'.tr,
                             confirm: () {
                               showCustomPickerDialog(context);
                             },

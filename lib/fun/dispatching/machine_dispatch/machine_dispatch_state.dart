@@ -415,7 +415,7 @@ class MachineDispatchState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在创建标签...',
+      loading: 'machine_dispatch_loading_create_label'.tr,
       method: webApiSapMaterialDispatchLabelMaintain,
       body: [
         {
@@ -453,7 +453,7 @@ class MachineDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在提交产量汇报...',
+      loading: 'machine_dispatch_loading_submit_report'.tr,
       method: webApiModifyWorkCardItem,
       body: {
         'InterID': detailsInfo?.interID,
@@ -506,7 +506,7 @@ class MachineDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在取消工号确认...',
+      loading: 'machine_dispatch_loading_cancel_emp_confirm'.tr,
       method: webApiCancelConfirmation,
       params: {
         'InterID': detailsInfo?.interID,
@@ -526,7 +526,7 @@ class MachineDispatchState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在取消工号确认...',
+      loading: 'machine_dispatch_loading_cancel_emp_confirm'.tr,
       method: webApiSapGetMaterialDispatchEnglishLabel,
       body: {
         'MATNR': code,
@@ -546,13 +546,13 @@ class MachineDispatchState {
   }) {
     if (handoverList
         .any((data) => data.handoverInfoDispatchList.isEmpty)) {
-      showSnackBar(message: '交接人员为空！');
+      showSnackBar(message: 'machine_dispatch_handover_worker_empty'.tr);
     } else if (handoverList.any((data)=> data.handoverInfoDispatchList[0].signature == null)) {
-      showSnackBar(message: '含有未签字人员！');
+      showSnackBar(message: 'machine_dispatch_has_unsigned_worker'.tr);
     } else {
       httpPost(
         method: webApiUpdateScWorkCard,
-        loading: '正在交接...',
+        loading: 'machine_dispatch_loading_handover'.tr,
         body: {
           'InterID': detailsInfo?.interID,
           'NextShiftEmpID': handoverList[0].handoverInfoDispatchList[0]

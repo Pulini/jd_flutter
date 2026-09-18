@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
   Get.dialog(AlertDialog(
-    title: const Text('半成品物料详情'),
+    title: Text('sap_picking_posting_semi_material_detail'.tr),
     content: SizedBox(
       width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
       height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
@@ -18,12 +18,12 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-            hint: '物料编码：',
+            hint: 'sap_picking_posting_material_code_colon'.tr,
             text: groupData.dataList.first.materialCode ?? '',
             fontSize: 18,
           ),
           textSpan(
-            hint: '物料描述：',
+            hint: 'sap_picking_posting_material_desc_colon'.tr,
             text: groupData.dataList.first.materialName ?? '',
             maxLines: 3,
             fontSize: 18,
@@ -62,7 +62,7 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: textSpan(
-                        hint: '数量：',
+                        hint: 'sap_picking_posting_qty_colon'.tr,
                         text: groupData.dataList[i].quantity.toShowString(),
                       ),
                     ),
@@ -96,7 +96,7 @@ void addSemiFinishedProductMaterialDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('添加半成品物料'),
+        title: Text('sap_picking_posting_add_semi_material'.tr),
         content: SizedBox(
           width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
           height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
@@ -106,7 +106,7 @@ void addSemiFinishedProductMaterialDialog(
                 child: ListView(
                   children: [
                     Obx(() => textSpan(
-                          hint: '物料：',
+                          hint: 'sap_picking_posting_material_colon'.tr,
                           text: materialName.value,
                           maxLines: 3,
                         )),
@@ -128,7 +128,7 @@ void addSemiFinishedProductMaterialDialog(
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
-                        hintText: '输入物料编码',
+                        hintText: 'sap_picking_posting_input_material_code'.tr,
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
                           onPressed: () => tecSemiFinishedProduct.clear(),
@@ -157,7 +157,7 @@ void addSemiFinishedProductMaterialDialog(
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 2),
                         ),
-                        hintText: '输入物料数量',
+                        hintText: 'sap_picking_posting_input_material_qty'.tr,
                         hintStyle: const TextStyle(color: Colors.grey),
                         suffixIcon: IconButton(
                           onPressed: () => tecSemiFinishedProductQty.clear(),
@@ -172,7 +172,7 @@ void addSemiFinishedProductMaterialDialog(
                 children: [
                   Expanded(
                     child: CombinationButton(
-                      text: '返回',
+                      text: 'sap_picking_posting_back'.tr,
                       combination: Combination.left,
                       backgroundColor: Colors.grey,
                       click: () => Get.back(),
@@ -180,14 +180,14 @@ void addSemiFinishedProductMaterialDialog(
                   ),
                   Expanded(
                     child: CombinationButton(
-                      text: '查询物料',
+                      text: 'sap_picking_posting_query_material'.tr,
                       combination: Combination.middle,
                       backgroundColor: Colors.green,
                       click: () {
                         var code = tecSemiFinishedProduct.text;
                         if (existsList.any(
                             (v) => v.dataList.first.materialCode == code)) {
-                          errorDialog(content: "该物料已存在！");
+                          errorDialog(content: "sap_picking_posting_material_exists".tr);
                           return;
                         }
                         getPickingMaterialName(
@@ -208,16 +208,16 @@ void addSemiFinishedProductMaterialDialog(
                   ),
                   Expanded(
                     child: CombinationButton(
-                      text: '添加',
+                      text: 'sap_picking_posting_add'.tr,
                       combination: Combination.right,
                       click: () {
                         var qty = tecSemiFinishedProductQty.text.toDoubleTry();
                         if (materialName.isEmpty) {
-                          errorDialog(content: '请先查询物料信息！');
+                          errorDialog(content: 'sap_picking_posting_query_material_first'.tr);
                           return;
                         }
                         if (qty <= 0) {
-                          errorDialog(content: '请输入正确的物料数量！');
+                          errorDialog(content: 'sap_picking_posting_input_correct_qty'.tr);
                           return;
                         }
                         existsList.add(SapPickingPostingGroup()
@@ -269,12 +269,12 @@ void pickingCacheDialog({
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   textSpan(
-                    hint: '拣配单号：',
+                    hint: 'sap_picking_posting_picking_order_no_colon'.tr,
                     text: data.orderNum ?? '',
                   ),
                   IconButton(
                     onPressed: () => askDialog(
-                      content: '确定要删除拣配单号<${data.orderNum}>的暂存记录吗？',
+                      content: 'sap_picking_posting_confirm_delete_temp_record'.trArgs([data.orderNum.toString()]),
                       confirm: () => deletePickingPostingCache(
                         orderNum: data.orderNum ?? '',
                         success: (msg) => successDialog(
@@ -317,12 +317,12 @@ void pickingCacheDialog({
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textSpan(
-                            hint: '订单号：',
+                            hint: 'sap_picking_posting_order_no_colon'.tr,
                             text: data.salesOrder ?? '',
                             isBold: false,
                           ),
                           textSpan(
-                            hint: '数量：',
+                            hint: 'sap_picking_posting_qty_colon'.tr,
                             text: data.quantity.toShowString(),
                             isBold: false,
                           ),
@@ -338,7 +338,7 @@ void pickingCacheDialog({
   var dialog = PopScope(
     canPop: false,
     child: AlertDialog(
-      title: const Text('暂存记录'),
+      title: Text('sap_picking_posting_temp_record'.tr),
       contentPadding: const EdgeInsets.all(10),
       content: SizedBox(
         width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
@@ -355,11 +355,11 @@ void pickingCacheDialog({
               children: [
                 Expanded(
                   child: CombinationButton(
-                    text: '继续操作',
+                    text: 'sap_picking_posting_continue_operation'.tr,
                     combination: Combination.left,
                     click: () {
                       if(selectIndex.value==-1){
-                        errorDialog(content: '请选择拣配单！');
+                        errorDialog(content: 'sap_picking_posting_please_select_order'.tr);
                       }else{
                         getPickingGetCacheDetail(
                           orderNum: cache[selectIndex.value].orderNum ?? '',
@@ -375,7 +375,7 @@ void pickingCacheDialog({
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: '返回',
+                    text: 'sap_picking_posting_back'.tr,
                     combination: Combination.right,
                     backgroundColor: Colors.grey,
                     click: () => Get.back(),
@@ -405,11 +405,11 @@ void getPickingMaterialName({
   required Function(String) error,
 }) {
   if (code.isEmpty) {
-    errorDialog(content: "请扫描或输入半成品条码");
+    errorDialog(content: "sap_picking_posting_scan_semi_barcode".tr);
     return;
   }
   sapPost(
-    loading: '正在物料信息...',
+    loading: 'sap_picking_posting_loading_material_info'.tr,
     method: webApiSapGetPickingMaterial,
     body: {'MATNR': code},
   ).then((response) {
@@ -427,7 +427,7 @@ void getPickingGetCacheDetail({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在获取拣配单明细...',
+    loading: 'sap_picking_posting_loading_get_order_detail'.tr,
     method: webApiSapGetCacheDetail,
     body: {'ORDER_NUM': orderNum},
   ).then((response) {
@@ -446,7 +446,7 @@ void getPickingGetCacheList({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在查询暂存清单...',
+    loading: 'sap_picking_posting_loading_query_temp_list'.tr,
     method: webApiSapGetCacheList,
   ).then((response) {
     if (response.resultCode == resultSuccess) {
@@ -466,7 +466,7 @@ void deletePickingPostingCache({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在删除暂存拣配单...',
+    loading: 'sap_picking_posting_loading_delete_temp_order'.tr,
     method: webApiSapSubmitPickingOrder,
     body: {
       "ORDER_NUM": orderNum,

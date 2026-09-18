@@ -33,7 +33,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
 
   var dpcDate = DatePickerController(
     PickerType.date,
-    buttonName: '计划船期',
+    buttonName: 'sap_packing_scan_planned_ship_date'.tr,
     saveKey: '${RouteConfig.sapPackingScan.name}${PickerType.date}',
   );
   var opcDestination = OptionsPickerController(
@@ -52,7 +52,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
 
     var number = EditText(
-      hint: '实际柜号',
+      hint: 'sap_packing_scan_actual_cabinet'.tr,
       controller: tecNumber,
       hasClose: false,
     );
@@ -60,27 +60,27 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     var cancel = CombinationButton(
       combination: Combination.left,
       backgroundColor: Colors.red,
-      text: '退出',
+      text: 'sap_packing_scan_exit'.tr,
       click: () => exitDialog(
-        content: '确定要退出装柜扫码吗？',
+        content: 'sap_packing_scan_exit_scan_confirm'.tr,
         confirm: () => Get.until((v) => v.isFirst),
       ),
     );
 
     var deliveryOrderList = CombinationButton(
       combination: Combination.middle,
-      text: '交货单列表',
+      text: 'sap_packing_scan_delivery_order_list'.tr,
       click: () {
         if (tecNumber.text.trim().length>11) {
-          errorDialog(content: '实际柜号长度不能超过11位');
+          errorDialog(content: 'sap_packing_scan_cabinet_length_error'.tr);
           return;
         }
         if (tecNumber.text.isEmpty) {
-          errorDialog(content: '请输入实际柜号!');
+          errorDialog(content: 'sap_packing_scan_please_input_cabinet'.tr);
           return;
         }
         if (!opcDestination.isReady()) {
-          errorDialog(content: '请选择目的地!');
+          errorDialog(content: 'sap_packing_scan_please_select_destination'.tr);
           return;
         }
         logic.queryDeliveryOrders(
@@ -97,19 +97,19 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
 
     var confirm = CombinationButton(
       combination: Combination.right,
-      text: '确定',
+      text: 'sap_packing_scan_confirm'.tr,
       click: () {
         var actualCabinet = tecNumber.text;
         if (actualCabinet.isEmpty) {
-          errorDialog(content: '请输入实际柜号!');
+          errorDialog(content: 'sap_packing_scan_please_input_cabinet'.tr);
           return;
         }
         if (!opcDestination.isReady()) {
-          errorDialog(content: '请选择目的地!');
+          errorDialog(content: 'sap_packing_scan_please_select_destination'.tr);
           return;
         }
         if (!lopcFactoryAndWarehouse.isReady()) {
-          errorDialog(content: '请选择工厂和仓库!');
+          errorDialog(content: 'sap_packing_scan_please_select_factory_warehouse'.tr);
           return;
         }
         state.plannedDate = dpcDate.getDate();
@@ -138,11 +138,11 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               expandedTextSpan(
-                hint: '计划船期：',
+                hint: 'sap_packing_scan_planned_ship_date_colon'.tr,
                 text: getDateYMD(time: state.plannedDate),
               ),
               textSpan(
-                hint: '目的地：',
+                hint: 'sap_packing_scan_destination_colon'.tr,
                 text: state.destination?.toShow() ?? '',
               ),
             ],
@@ -151,14 +151,14 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: textSpan(
-            hint: '工厂：',
+            hint: 'sap_packing_scan_factory_colon'.tr,
             text: state.factory?.toShow() ?? '',
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
           child: textSpan(
-            hint: '仓库：',
+            hint: 'sap_packing_scan_warehouse_colon'.tr,
             text: state.warehouse?.toShow() ?? '',
           ),
         ),
@@ -260,7 +260,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      popTitle: '确定要退出装柜扫码吗？',
+      popTitle: 'sap_packing_scan_exit_scan_confirm'.tr,
       actions: [
         IconButton(
           icon: const Icon(Icons.lock_outline),
@@ -278,7 +278,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               Row(
                 children: [
                   Obx(() => textSpan(
-                        hint: '件数：',
+                        hint: 'sap_packing_scan_piece_count_colon'.tr,
                         text: logic.getScanned().toString(),
                       )),
                   const SizedBox(width: 10),
@@ -288,7 +288,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                         color: Colors.white54,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
+                      placeholder: 'sap_packing_scan_search_placeholder'.tr,
                       onChanged: (v) => state.materialSearchText.value = v,
                     ),
                   ),
@@ -298,28 +298,28 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               Row(
                 children: [
                   ExpandedFrameText(
-                    text: '跟踪号',
+                    text: 'sap_packing_scan_track_no'.tr,
                     borderColor: Colors.black,
                     flex: 3,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
                   ExpandedFrameText(
-                    text: '待装柜数',
+                    text: 'sap_packing_scan_pending_qty'.tr,
                     borderColor: Colors.black,
                     flex: 2,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
                   ExpandedFrameText(
-                    text: '单位',
+                    text: 'sap_packing_scan_unit'.tr,
                     borderColor: Colors.black,
                     flex: 1,
                     backgroundColor: Colors.green.shade100,
                     alignment: Alignment.center,
                   ),
                   ExpandedFrameText(
-                    text: '扫码数量',
+                    text: 'sap_packing_scan_scanned_qty'.tr,
                     borderColor: Colors.black,
                     flex: 2,
                     backgroundColor: Colors.green.shade100,
@@ -339,13 +339,13 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               Row(children: [
                 Expanded(
                     child: CombinationButton(
-                  text: '查看扫码件',
+                  text: 'sap_packing_scan_view_scanned'.tr,
                   combination: Combination.left,
                   click: () => Get.to(() => const SapPackingScanLabelPage()),
                 )),
                 Expanded(
                   child: CombinationButton(
-                    text: '暂存',
+                    text: 'sap_packing_scan_temp_save'.tr,
                     combination: Combination.middle,
                     click: () => logic.checkMaterialSubmitData(
                       (list) => _pickDate(
@@ -359,7 +359,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: '提交',
+                    text: 'sap_packing_scan_submit'.tr,
                     combination: Combination.right,
                     click: () => logic.checkMaterialSubmitData(
                       (list) => _pickDate(
@@ -426,7 +426,7 @@ class _SapPackingScanMaterialItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: textSpan(
-              hint: '物料：',
+              hint: 'sap_packing_scan_material_colon'.tr,
               text: '(${data.materialNumber}) ${data.materialName}',
               maxLines: 3,
             ),

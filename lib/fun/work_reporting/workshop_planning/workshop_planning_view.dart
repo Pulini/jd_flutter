@@ -44,11 +44,11 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           EditText(
-            hint: '生产订单',
+            hint: 'workshop_planning_hint_production_order'.tr,
             controller: tecProductionOrderNo,
           ),
           EditText(
-            hint: '工序名称',
+            hint: 'workshop_planning_hint_process_name'.tr,
             controller: tecProcessName,
           ),
           Row(
@@ -56,7 +56,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
               Expanded(
                 child: CombinationButton(
                   combination: Combination.left,
-                  text: '扫码',
+                  text: 'workshop_planning_scan'.tr,
                   click: () => Get.to(() => const Scanner())?.then(
                     (code) => logic.scanCode(
                       code.toString(),
@@ -69,7 +69,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
               Expanded(
                 child: CombinationButton(
                   combination: Combination.right,
-                  text: '查询工序计划',
+                  text: 'workshop_planning_query_process_plan'.tr,
                   click: () => _query(),
                 ),
               ),
@@ -85,7 +85,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
   void initState() {
     opcDepartment = OptionsPickerController(
       PickerType.ghost,
-      buttonName: '部门',
+      buttonName: 'workshop_planning_department'.tr,
       dataList: () => getResponsibleDepartmentList(userInfo?.userID ?? 0),
       initId: saveDepartment,
       onSelected: (pick) {
@@ -102,12 +102,12 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
       actions: [
         CombinationButton(
           combination: Combination.left,
-          text: '末道计工',
+          text: 'workshop_planning_last_process'.tr,
           click: () => Get.to(() => const WorkshopPlanningLastProcessPage()),
         ),
         CombinationButton(
           combination: Combination.right,
-          text: '查询',
+          text: 'workshop_planning_query'.tr,
           click: () => _querySheet(),
         )
       ],
@@ -185,9 +185,9 @@ class _WorkshopPlanningItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            textSpan(hint: '生产单号：', text: data.planTrackingNumber ?? ''),
+            textSpan(hint: 'workshop_planning_production_no'.tr, text: data.planTrackingNumber ?? ''),
             textSpan(
-              hint: '物料：',
+              hint: 'workshop_planning_material_colon'.tr,
               text: data.materialName ?? '',
               maxLines: 3,
               textColor: Colors.green.shade900,
@@ -195,12 +195,12 @@ class _WorkshopPlanningItem extends StatelessWidget {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '工序：',
+                  hint: 'workshop_planning_process_colon'.tr,
                   text: data.processName ?? '',
                   textColor: Colors.blue.shade900,
                 ),
                 textSpan(
-                  hint: '订单数量：',
+                  hint: 'workshop_planning_order_qty_colon'.tr,
                   text: data.processQty.toShowString(),
                   textColor: Colors.blue.shade900,
                 )
@@ -211,28 +211,28 @@ class _WorkshopPlanningItem extends StatelessWidget {
               children: [
                 ExpandedFrameText(
                   flex: 1,
-                  text: '尺码',
+                  text: 'workshop_planning_size'.tr,
                   backgroundColor: Colors.green.shade100,
                   alignment: Alignment.center,
                   isBold: true,
                 ),
                 ExpandedFrameText(
                   flex: 2,
-                  text: '订单数量',
+                  text: 'workshop_planning_order_quantity'.tr,
                   backgroundColor: Colors.green.shade100,
                   alignment: Alignment.center,
                   isBold: true,
                 ),
                 ExpandedFrameText(
                   flex: 2,
-                  text: '累计报工数',
+                  text: 'workshop_planning_cumulative_report'.tr,
                   backgroundColor: Colors.green.shade100,
                   alignment: Alignment.center,
                   isBold: true,
                 ),
                 ExpandedFrameText(
                   flex: 2,
-                  text: '未报工数',
+                  text: 'workshop_planning_unreported'.tr,
                   backgroundColor: Colors.green.shade100,
                   alignment: Alignment.center,
                   isBold: true,

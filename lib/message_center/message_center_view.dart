@@ -20,7 +20,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '消息中心',
+      title: 'message_center_title'.tr,
       actions: [
         IconButton(
           icon: const Icon(
@@ -28,7 +28,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
             color: Colors.red,
           ),
           onPressed: () => askDialog(
-            content: '确定要清空所有信息吗？',
+            content: 'message_center_clear_all_confirm'.tr,
             confirm: () => logic.cleanMessage(),
           ),
         ),
@@ -53,7 +53,7 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
                 subtitle: Text(state.messageList[i].getPushTime()),
                 trailing: IconButton(
                   onPressed: () => askDialog(
-                    content: '确定要删除该信息吗？',
+                    content: 'message_center_delete_confirm'.tr,
                     confirm: () => logic.deleteItem(i),
                   ),
                   icon: const Icon(

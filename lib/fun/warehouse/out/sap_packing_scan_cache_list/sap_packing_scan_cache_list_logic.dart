@@ -76,7 +76,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     var timeList = <String>[...selectedAbnormalItem().map((v) => v.date ?? '')];
     _findMaxDate(timeList);
     if (list.isEmpty) {
-      errorDialog(content: '没有可提交的数据!');
+      errorDialog(content: 'sap_packing_scan_no_submit_data'.tr);
       return;
     }
     callback.call(list, _findMaxDate(timeList));

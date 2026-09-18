@@ -19,7 +19,7 @@ class SapPackingScanCacheListState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取异常单信息...',
+      loading: 'sap_packing_scan_loading_get_abnormal'.tr,
       method: webApiSapGetAbnormalList,
       body: {
         'WERKS': factory,
@@ -53,7 +53,7 @@ class SapPackingScanCacheListState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交删除...',
+      loading: 'sap_packing_scan_loading_submit_delete'.tr,
       method: webApiSapSubmit,
       body: {
         'ITEM1': {},
@@ -85,7 +85,7 @@ class SapPackingScanCacheListState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交排柜信息...',
+      loading: 'sap_packing_scan_loading_submit_arrange'.tr,
       method: webApiSapSubmit,
       body: {
         'ITEM1': {

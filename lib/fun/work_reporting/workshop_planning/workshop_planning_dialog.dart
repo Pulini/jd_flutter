@@ -20,7 +20,7 @@ void materialDialog({
     }
   }
   if (showList.isEmpty){
-    errorDialog(content: '没有可添加的物料');
+    errorDialog(content: 'workshop_planning_no_material_to_add'.tr);
     return;
   }
   Get.dialog(
@@ -28,7 +28,7 @@ void materialDialog({
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: const Text('物料列表'),
+          title: Text('workshop_planning_material_list'.tr),
           content: SizedBox(
             width: 400,
             height: 300,
@@ -62,7 +62,7 @@ void materialDialog({
             TextButton(
               onPressed: () {
                 if (select.every((v) => !v)) {
-                  errorDialog(content: '请选择要添加的物料');
+                  errorDialog(content: 'workshop_planning_please_select_material'.tr);
                 } else {
                   var newList=<WorkshopPlanningMaterialInfo>[];
                   for (var i = 0; i < select.length; ++i) {

@@ -38,7 +38,7 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
     return pageBody(
       actions: [
         Obx(() => textSpan(
-            hint: '件数：',
+            hint: 'sap_packing_scan_piece_count_colon'.tr,
             text: state.reverseLabelList.isEmpty
                 ? '0'
                 : state.reverseLabelList
@@ -60,7 +60,7 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
             width: double.infinity,
             child: Obx(() => CombinationButton(
                   isEnabled: state.reverseLabelList.isNotEmpty,
-                  text: '冲销',
+                  text: 'sap_packing_scan_reverse'.tr,
                   click: () => logic.reverseLabel(),
                 )),
           ),
@@ -102,13 +102,13 @@ class _SapPackingScanReverseItem extends StatelessWidget {
             child: Row(
               children: [
                 expandedTextSpan(
-                  hint: '件ID：',
+                  hint: 'sap_packing_scan_piece_id_colon'.tr,
                   text: data.pieceId ?? '',
                   textColor: Colors.blue.shade900,
                 ),
                 IconButton(
                   onPressed: () => askDialog(
-                    content: '确定要删除该标签吗？',
+                    content: 'sap_packing_scan_confirm_delete_label'.tr,
                     confirm: () => logic.deleteReverseLabel(data),
                   ),
                   icon: const Icon(Icons.delete_forever, color: Colors.red),
@@ -123,14 +123,14 @@ class _SapPackingScanReverseItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 expandedTextSpan(
-                  hint: '物料：',
+                  hint: 'sap_packing_scan_material_colon'.tr,
                   text: '(${item.materialNumber})${item.materialName}'
                       .allowWordTruncation(),
                   maxLines: 3,
                 ),
                 const SizedBox(width: 10),
                 textSpan(
-                  hint: '数量：',
+                  hint: 'sap_packing_scan_qty_colon'.tr,
                   text: '${item.commonQty.toShowString()} ${item.commonUnit}',
                 )
               ],

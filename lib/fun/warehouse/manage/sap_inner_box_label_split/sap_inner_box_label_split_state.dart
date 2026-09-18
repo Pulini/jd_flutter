@@ -22,7 +22,7 @@ class SapInnerBoxLabelSplitState {
       if (response.resultCode == resultSuccess) {
         var label = SapPrintLabelInfo.fromJson(response.data[0]);
         if (label.isBoxLabel) {
-          error.call('请勿扫描外箱标签！');
+          error.call('sap_inner_box_label_split_no_outer_box_scan'.tr);
         } else {
           originalLabel = SapPrintLabelInfo.fromJson(response.data[0]);
         }

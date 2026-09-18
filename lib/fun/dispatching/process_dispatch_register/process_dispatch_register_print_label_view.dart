@@ -33,8 +33,8 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   Future<void> _printLabel(Barcode data) async {
     pu.printLabel(
       label: await logic.createLabel(data),
-      success: () => successDialog(content: '标签下发成功'),
-      failed: () => errorDialog(content: '标签下发失败'),
+      success: () => successDialog(content: 'dispatching_register_label_issue_success'.tr),
+      failed: () => errorDialog(content: 'dispatching_register_label_issue_fail'.tr),
     );
   }
 
@@ -53,8 +53,8 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
       ],
       finished: (success, fail) {
         successDialog(
-          title: '标签下发结束',
-          content: '完成${success.length}张, 失败${fail.length}张',
+          title: 'work_reporting_label_issue_finished'.tr,
+          content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
         );
       },
     );

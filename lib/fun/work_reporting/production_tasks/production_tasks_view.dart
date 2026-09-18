@@ -123,7 +123,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
           children: [
             ExpandedFrameText(
               flex: isPad()?13:14,
-              text: '打包区',
+              text: 'work_reporting_production_tasks_packing_area'.tr,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               isBold: true,
@@ -131,7 +131,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             ),
             ExpandedFrameText(
               flex: 6,
-              text: '产线',
+              text: 'work_reporting_production_tasks_line'.tr,
               backgroundColor: Colors.green.shade300,
               textColor: Colors.white,
               isBold: true,
@@ -387,7 +387,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              labelText: '国际装箱标准',
+              labelText: 'work_reporting_production_tasks_international_packing_standard'.tr,
               labelStyle: const TextStyle(color: Colors.black54),
               prefixIcon: IconButton(
                 onPressed: () => controller.clear(),
@@ -397,7 +397,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                 ),
               ),
               suffixIcon: CombinationButton(
-                text: '搜索',
+                text: 'work_reporting_production_tasks_search'.tr,
                 click: () {
                   hidKeyboard();
                   feishuViewCloudDocFiles(query: controller.text);
@@ -506,7 +506,7 @@ class _DailyTargetHeader extends StatelessWidget {
           Expanded(
             flex: 3,
             child: _MetricItem(
-              label: '日目标',
+              label: 'work_reporting_production_tasks_daily_target'.tr,
               value: todayTargetQty.toShowString(),
               icon: Icons.flag_rounded,
               color: Colors.white,
@@ -516,7 +516,7 @@ class _DailyTargetHeader extends StatelessWidget {
           Expanded(
             flex: 3,
             child: _MetricItem(
-              label: '日完成',
+              label: 'work_reporting_production_tasks_daily_completed'.tr,
               value: todayCompleteQty.toShowString(),
               icon: Icons.check_circle_rounded,
               color: todayTargetQty == todayCompleteQty
@@ -529,7 +529,7 @@ class _DailyTargetHeader extends StatelessWidget {
           Expanded(
             flex: 3,
             child: _RateItem(
-              label: '日达成率',
+              label: 'work_reporting_production_tasks_daily_achievement_rate'.tr,
               rate: todayCompleteQty.div(todayTargetQty).toFixed(2),
               rateStr:
                   '${todayCompleteQty.div(todayTargetQty).mul(100).toFixed(2).toShowString()}%',
@@ -541,7 +541,7 @@ class _DailyTargetHeader extends StatelessWidget {
           Expanded(
             flex: 2,
             child: _MetricItem(
-              label: '月完成',
+              label: 'work_reporting_production_tasks_monthly_completed'.tr,
               value: monthCompleteQty.toShowString(),
               icon: Icons.calendar_month_rounded,
               color: Colors.white,

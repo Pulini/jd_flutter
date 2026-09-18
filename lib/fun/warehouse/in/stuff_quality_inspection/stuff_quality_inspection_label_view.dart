@@ -45,14 +45,14 @@ class _StuffQualityInspectionLabelPageState
                   children: [
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '不合格数量',
+                      hint: 'stuff_quality_inspection_unqualified_qty'.tr,
                       max: data.boxQty,
                       initQty: data.unqualified,
                       onChanged: (d) => changeQty = d,
                     )),
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '短码',
+                      hint: 'stuff_quality_inspection_short_code'.tr,
                       initQty: data.short,
                       onChanged: (d) => changeShort = d,
                     ))
@@ -62,19 +62,19 @@ class _StuffQualityInspectionLabelPageState
                   children: [
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '体积',
+                      hint: 'stuff_quality_inspection_volume'.tr,
                       initQty: data.volume,
                       onChanged: (d) => changeVolume = d,
                     )),
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '毛重',
+                      hint: 'stuff_quality_inspection_gross_weight'.tr,
                       initQty: data.grossWeight,
                       onChanged: (d) => changeGrossWeight = d,
                     )),
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '净重',
+                      hint: 'stuff_quality_inspection_net_weight'.tr,
                       initQty: data.netWeight,
                       onChanged: (d) => changeNetWeight = d,
                     ))

@@ -36,7 +36,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
   void runTask() {
     var dio = Dio()
       ..interceptors.add(DioManager.simpleInterceptors);
-    loadingShow('正在获取标签信息...');
+    loadingShow('widget_getting_label_info'.tr);
     dio.post(
       isTestUrl()
           ? 'http://192.168.99.103:9095/m'
@@ -65,7 +65,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
       }
     }, onError: (e) {
       loadingDismiss();
-      errorDialog(content: '预览错误：${e.toString()}');
+      errorDialog(content: 'widget_preview_error'.trArgs([e.toString()]));
     });
   }
 
@@ -92,7 +92,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
   Future<void> printLabel() async {
     if (labelByteMap.isEmpty) {
       for (var i = 0; i < reImageList.length; ++i) {
-        loadingShow('正在生成标签数据( $i / ${reImageList.length} )...');
+        loadingShow('widget_generating_label_data'.trArgs([i.toString(), reImageList.length.toString()]));
         labelByteMap.add(mergeUint8List(
           await htmlImageToLabel({
             ...reImageList[i],
@@ -120,7 +120,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: const Text('打印标签预览'),
+            title: Text('widget_web_label_preview'.tr),
             actions: [
               htmlImages.length == labelList.length && labelList.isNotEmpty
                   ? IconButton(
@@ -145,7 +145,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印速度：'),
+                    Text('widget_print_speed'.tr),
                     Expanded(
                       child: Slider(
                         value: printSpeed.value,
@@ -169,7 +169,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印浓度：'),
+                    Text('widget_print_density'.tr),
                     Expanded(
                       child: Slider(
                         value: printDensity.value,

@@ -158,7 +158,9 @@ class PickingMaterialOrderState {
     }
 
     sapPost(
-      loading: isCreate ? '正在生成出门单' : '正在撤销出门单',
+      loading: isCreate
+          ? 'picking_material_order_loading_create_out_order'.tr
+          : 'picking_material_order_loading_revoke_out_order'.tr,
       method: webApiSapCreateOutTicket,
       body: {
         'GT_REQITEMS': [

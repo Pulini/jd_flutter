@@ -308,7 +308,7 @@ class OrderProductionTableState {
   }) {
     final hasScanQty = reportBoxList.any((data) => (data.thisScanQty ?? 0) > 0);
     if (!hasScanQty) {
-      errorDialog(content: '请先扫描尾数箱后再提交');
+      errorDialog(content: 'report_order_production_table_scan_tail'.tr);
       return;
     }
     httpPost(

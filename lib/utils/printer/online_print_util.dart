@@ -114,7 +114,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
       }
       printerList.value = list;
       if (printerList.isEmpty) {
-        return errorDialog(content: '当前打印类型没有设备可打印');
+        return errorDialog(content: 'utils_no_device_for_print'.tr);
       }
       departmentIndex.value =
           printerList.indexWhere((v) => v.departName == saveDepartmentName);
@@ -192,7 +192,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
         PopScope(
           canPop: false,
           child: AlertDialog(
-            title: const Text('选择打印机'),
+            title: Text('utils_select_printer'.tr),
             content: SizedBox(
               width: 400,
               child: Column(
@@ -200,12 +200,12 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
                 children: [
                   SelectView(
                     list: printerList,
-                    hint: '部门：',
+                    hint: 'utils_department'.tr,
                     select: (i) => departmentIndex.value = i,
                   ),
                   Obx(() => SelectView(
                         list: printerList[departmentIndex.value].devices!,
-                        hint: '打印机：',
+                        hint: 'utils_printer'.tr,
                         select: (i) => deviceIndex.value = i,
                       )),
                   Obx(() => printerList[departmentIndex.value]
@@ -216,7 +216,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
                           list: printerList[departmentIndex.value]
                               .devices![deviceIndex.value]
                               .paperTypes!,
-                          hint: '纸张类型',
+                          hint: 'utils_paper_type'.tr,
                           select: (i) => paperIndex.value = i,
                         )
                       : Container())
@@ -226,7 +226,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
             actions: <Widget>[
               TextButton(
                 onPressed: () => print(),
-                child: const Text('打印'),
+                child: Text('utils_print'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -250,7 +250,7 @@ void _getOnlinePrintDeviceList({
   required Function(List<PrinterInfo>) success,
   required Function(String) error,
 }) {
-  loadingShow('正在获取打印机列表...');
+  loadingShow('utils_getting_printer_list'.tr);
   printDio.post(
     isTestUrl() ? testPrintUrl : printUrl,
     queryParameters: {
@@ -284,7 +284,7 @@ void _printImg({
   required Function(String) success,
   required Function(String) error,
 }) {
-  loadingShow('正在发送打印命令...');
+  loadingShow('utils_sending_print_cmd'.tr);
   printDio
       .post(
     isTestUrl() ? testPrintUrl : printUrl,

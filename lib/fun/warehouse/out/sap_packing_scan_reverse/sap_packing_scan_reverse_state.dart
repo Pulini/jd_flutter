@@ -12,7 +12,7 @@ class SapPackingScanReverseState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'sap_packing_scan_loading_get_label'.tr,
       method: webApiSapGetReverseLabelInfo,
       body: {'BQID': code},
     ).then((response) {
@@ -30,7 +30,7 @@ class SapPackingScanReverseState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交冲销标签...',
+      loading: 'sap_packing_scan_loading_submit_reverse'.tr,
       method: webApiSapReverseLabel,
       body: {
         'ZBUDAT_MKPF': '',

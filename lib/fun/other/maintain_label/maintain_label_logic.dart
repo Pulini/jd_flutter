@@ -599,11 +599,11 @@ class MaintainLabelLogic extends GetxController {
         list: select,
         labelCommandPrint: (labelList) => pu.printLabelList(
           labelList: labelList,
-          start: () => loadingShow('正在下发标签...'),
-          progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+          start: () => loadingShow('work_reporting_label_issuing'.tr),
+          progress: (i, j) => loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()])),
           finished: (success, fail) => successDialog(
-            title: '标签下发结束',
-            content: '完成${success.length}张, 失败${fail.length}张',
+            title: 'work_reporting_label_issue_finished'.tr,
+            content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
           ),
         ),
       );
@@ -632,11 +632,11 @@ class MaintainLabelLogic extends GetxController {
             labelViewPreview: labelsCallback,
             labelCommandPrint: (labelList) => pu.printLabelList(
               labelList: labelList,
-              start: () => loadingShow('正在下发标签...'),
-              progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+              start: () => loadingShow('work_reporting_label_issuing'.tr),
+              progress: (i, j) => loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()])),
               finished: (success, fail) => successDialog(
-                title: '标签下发结束',
-                content: '完成${success.length}张, 失败${fail.length}张',
+                title: 'work_reporting_label_issue_finished'.tr,
+                content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               ),
             ),
           );
@@ -885,15 +885,15 @@ class MaintainLabelLogic extends GetxController {
       pu.printLabelList(
         labelList: labelList,
         start: () {
-          loadingShow('正在下发标签...');
+          loadingShow('work_reporting_label_issuing'.tr);
         },
         progress: (i, j) {
-          loadingShow('正在下发标签($i/$j)');
+          loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
         },
         finished: (success, fail) {
           successDialog(
-              title: '标签下发结束',
-              content: '完成${success.length}张, 失败${fail.length}张',
+              title: 'work_reporting_label_issue_finished'.tr,
+              content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               back: () {});
         },
       );
@@ -981,15 +981,15 @@ class MaintainLabelLogic extends GetxController {
       pu.printLabelList(
         labelList: labelList,
         start: () {
-          loadingShow('正在下发标签...');
+          loadingShow('work_reporting_label_issuing'.tr);
         },
         progress: (i, j) {
-          loadingShow('正在下发标签($i/$j)');
+          loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
         },
         finished: (success, fail) {
           successDialog(
-              title: '标签下发结束',
-              content: '完成${success.length}张, 失败${fail.length}张',
+              title: 'work_reporting_label_issue_finished'.tr,
+              content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               back: () {});
         },
       );
@@ -1044,8 +1044,8 @@ class MaintainLabelLogic extends GetxController {
             materialCode: data.subList!.first.materialCode ?? '',
             materialName: data.subList!.first.materialName ?? '',
             map: map,
-            titleText: '尺码',
-            totalText: '合计',
+            titleText: 'work_reporting_size'.tr,
+            totalText: 'work_reporting_subtotal'.tr,
             pageNumber: languageInfo.pageNumber ?? '',
             deliveryDate: languageInfo.deliveryDate ?? '',
           ));
@@ -1133,15 +1133,15 @@ class MaintainLabelLogic extends GetxController {
       pu.printLabelList(
         labelList: labelList,
         start: () {
-          loadingShow('正在下发标签...');
+          loadingShow('work_reporting_label_issuing'.tr);
         },
         progress: (i, j) {
-          loadingShow('正在下发标签($i/$j)');
+          loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
         },
         finished: (success, fail) {
           successDialog(
-              title: '标签下发结束',
-              content: '完成${success.length}张, 失败${fail.length}张',
+              title: 'work_reporting_label_issue_finished'.tr,
+              content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               back: () {});
         },
       );
@@ -1219,13 +1219,13 @@ class MaintainLabelLogic extends GetxController {
   // 返回 null 表示通过，否则返回具体的缺失信息（含单号）。
   String? _validateLabelRequiredFields(LabelInfo data) {
     final missing = <String>[];
-    if (data.grossWeight == 0.0) missing.add('毛重(GrossWeight)');
-    if (data.netWeight == 0.0) missing.add('净重(NetWeight)');
-    if (data.volume.isNullOrEmpty()) missing.add('体积(Volume)');
+    if (data.grossWeight == 0.0) missing.add('other_maintain_label_missing_gross_weight'.tr);
+    if (data.netWeight == 0.0) missing.add('other_maintain_label_missing_net_weight'.tr);
+    if (data.volume.isNullOrEmpty()) missing.add('other_maintain_label_missing_volume'.tr);
     // 仅在 subList 不为空时校验 meas；subList 为空不报错
     if (!data.subList.isNullOrEmpty() &&
         data.subList!.any((v) => v.meas.isNullOrEmpty())) {
-      missing.add('规格(Meas)');
+      missing.add('other_maintain_label_missing_meas'.tr);
     }
     if (missing.isEmpty) return null;
     return '${data.barCode ?? '未知单号'} 缺少必填项：${missing.join('、')}';
@@ -1339,22 +1339,22 @@ class MaintainLabelLogic extends GetxController {
     } else {
       var list = <List<Uint8List>>[];
       for (var i = 0; i < labelList2.length; ++i) {
-        loadingShow('正在生成标签(${i + 1}/${labelList2.length})');
+        loadingShow('other_maintain_label_generating'.trArgs([(i + 1).toString(), labelList2.length.toString()]));
         list.add(await labelList2[i]);
       }
       loadingDismiss();
       pu.printLabelList(
         labelList: list,
         start: () {
-          loadingShow('正在下发标签...');
+          loadingShow('work_reporting_label_issuing'.tr);
         },
         progress: (i, j) {
-          loadingShow('正在下发标签($i/$j)');
+          loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
         },
         finished: (success, fail) {
           successDialog(
-              title: '标签下发结束',
-              content: '完成${success.length}张, 失败${fail.length}张',
+              title: 'work_reporting_label_issue_finished'.tr,
+              content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               back: () {});
         },
       );
@@ -1473,22 +1473,22 @@ class MaintainLabelLogic extends GetxController {
     } else {
       var list = <List<Uint8List>>[];
       for (var i = 0; i < labelList2.length; ++i) {
-        loadingShow('正在生成标签(${i + 1}/${labelList2.length})');
+        loadingShow('other_maintain_label_generating'.trArgs([(i + 1).toString(), labelList2.length.toString()]));
         list.add(await labelList2[i]);
       }
       loadingDismiss();
       pu.printLabelList(
         labelList: list,
         start: () {
-          loadingShow('正在下发标签...');
+          loadingShow('work_reporting_label_issuing'.tr);
         },
         progress: (i, j) {
-          loadingShow('正在下发标签($i/$j)');
+          loadingShow('work_reporting_label_issuing_progress'.trArgs([i.toString(), j.toString()]));
         },
         finished: (success, fail) {
           successDialog(
-              title: '标签下发结束',
-              content: '完成${success.length}张, 失败${fail.length}张',
+              title: 'work_reporting_label_issue_finished'.tr,
+              content: 'work_reporting_label_issue_result'.trArgs([success.length.toString(), fail.length.toString()]),
               back: () {});
         },
       );
@@ -1771,18 +1771,21 @@ class MaintainLabelLogic extends GetxController {
 
     // 拼装提示文本：逐箱列出尺码+数量+每箱合计
     final mes = StringBuffer();
-    mes.writeln(
-        '混码箱容=$target，${controlSize ? '每箱最多 $maxSizesPerBox 个尺码' : '不限制每箱尺码数'}，共需 ${boxes.length} 箱：');
+    final perBoxLimit = controlSize
+        ? 'other_maintain_label_max_per_box'.trArgs([maxSizesPerBox.toString()])
+        : 'other_maintain_label_no_size_limit'.tr;
+    mes.writeln('other_maintain_label_mix_box_summary'.trArgs(
+        [target.toString(), perBoxLimit, boxes.length.toString()]));
     for (var b = 0; b < boxes.length; b++) {
       final box = boxes[b];
       final total =
           box.fold<double>(0.0, (s, idx) => s + items[idx].surplusGoods);
       final over = total > target + 1e-9;
-      mes.writeln(
-          '【第 ${b + 1} 箱】合计 ${total.toShowString()}${over ? ' ⚠超过箱容' : ''}');
+      mes.writeln('other_maintain_label_box_line'
+          .trArgs([(b + 1).toString(), total.toShowString(), over ? 'other_maintain_label_over_capacity'.tr : '']));
       for (final idx in box) {
-        mes.writeln(
-            '   尺码：${items[idx].size}　数量：${items[idx].surplusGoods.toShowString()}');
+        mes.writeln('other_maintain_label_item_line'
+            .trArgs([items[idx].size, items[idx].surplusGoods.toShowString()]));
       }
     }
 
@@ -1797,7 +1800,7 @@ class MaintainLabelLogic extends GetxController {
               );
             }
             successDialog(
-              content: '混码标签已全部生成',
+              content: 'other_maintain_label_all_generated'.tr,
               back: () => Get.back(result: true),
             );
           } catch (e) {

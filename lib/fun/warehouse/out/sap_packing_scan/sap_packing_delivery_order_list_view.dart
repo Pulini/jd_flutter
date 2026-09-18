@@ -30,14 +30,14 @@ class _SapPackingDeliveryOrderListPageState
       firstDate: postingDate,
       lastDate:
           DateTime(postingDate.year, postingDate.month + 1, postingDate.day),
-      buttonName: '过账日期',
+      buttonName: 'sap_packing_scan_posting_date'.tr,
     );
     Get.dialog(
       PopScope(
           canPop: true,
           child: AlertDialog(
             contentPadding: const EdgeInsets.only(left: 10, right: 10),
-            title: const Text('修改交货日期'),
+            title: Text('sap_packing_scan_modify_delivery_date'.tr),
             content: SizedBox(
               width: 300,
               child: Column(
@@ -47,7 +47,7 @@ class _SapPackingDeliveryOrderListPageState
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 10, top: 20, bottom: 10),
-                    child: textSpan(hint: '交货单号：', text: data.orderNo ?? ''),
+                    child: textSpan(hint: 'sap_packing_scan_delivery_no_colon'.tr, text: data.orderNo ?? ''),
                   ),
                   DatePicker(pickerController: epcDate),
                 ],
@@ -60,7 +60,7 @@ class _SapPackingDeliveryOrderListPageState
                   modifyDate: epcDate.getDateFormatYMD(),
                   callback: () => Get.back(),
                 ),
-                child: const Text('提交修改'),
+                child: Text('sap_packing_scan_submit_modify'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -77,7 +77,7 @@ class _SapPackingDeliveryOrderListPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '交货单列表',
+      title: 'sap_packing_scan_delivery_order_list'.tr,
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(children: [
@@ -86,7 +86,7 @@ class _SapPackingDeliveryOrderListPageState
               color: Colors.white54,
               borderRadius: BorderRadius.circular(20),
             ),
-            placeholder: '请输入交货单号或过账日期进行筛选',
+            placeholder: 'sap_packing_scan_delivery_search_placeholder'.tr,
             onChanged: (v) => state.deliveryOrderSearchText.value = v,
           ),
           const SizedBox(height: 10),
@@ -108,11 +108,11 @@ class _SapPackingDeliveryOrderListPageState
                     child: Row(
                       children: [
                         expandedTextSpan(
-                          hint: '交货单号：',
+                          hint: 'sap_packing_scan_delivery_no_colon'.tr,
                           text: showData[i].orderNo ?? '',
                         ),
                         textSpan(
-                          hint: '过账日期：',
+                          hint: 'sap_packing_scan_posting_date_colon'.tr,
                           text: showData[i].orderDate ?? '',
                         ),
                       ],

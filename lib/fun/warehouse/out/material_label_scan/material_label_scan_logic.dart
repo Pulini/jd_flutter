@@ -1,5 +1,6 @@
 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -79,7 +80,7 @@ class MaterialLabelScanLogic extends GetxController {
     if (hasScannedItems) {
       success?.call();
     } else {
-      showSnackBar(message: '没有可提交的条码信息');
+      showSnackBar(message: 'material_label_scan_detail_no_submit_barcode'.tr);
     }
   }
 
@@ -116,7 +117,7 @@ class MaterialLabelScanLogic extends GetxController {
 
     // 如果未找到对应的图片，显示提示
     if (!found && (state.dataDetail.picItems?.isNotEmpty ?? false)) {
-      showSnackBar(message: '未找到对应的图片信息');
+      showSnackBar(message: 'material_label_scan_detail_no_pic_found'.tr);
     }
   }
 }

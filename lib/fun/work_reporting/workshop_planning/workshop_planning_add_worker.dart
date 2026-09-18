@@ -42,10 +42,10 @@ class _WorkshopPlanningAddWorkerPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: state.worker == null ? '添加员工' : '修改员工',
+      title: state.worker == null ? 'workshop_planning_add_employee'.tr : 'workshop_planning_modify_employee'.tr,
       actions: [
         CombinationButton(
-          text: state.worker == null ? '添加' : '修改',
+          text: state.worker == null ? 'workshop_planning_add'.tr : 'workshop_planning_modify'.tr,
           click: () => logic.addOrModifyWorkerData(
             workerType: cWorkerType,
             workerNumber: tecWorkerNumber,
@@ -106,7 +106,7 @@ class _WorkshopPlanningAddWorkerPageState
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
                                   ),
-                                  labelText: '工号',
+                                  labelText: 'workshop_planning_employee_no'.tr,
                                   labelStyle:
                                       const TextStyle(color: Colors.black54),
                                 ),
@@ -142,7 +142,7 @@ class _WorkshopPlanningAddWorkerPageState
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
                                   ),
-                                  labelText: '工时',
+                                  labelText: 'workshop_planning_man_hours'.tr,
                                   labelStyle:
                                       const TextStyle(color: Colors.black54),
                                 ),
@@ -202,7 +202,7 @@ class _WorkshopPlanningAddWorkerPageState
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20)),
                                   ),
-                                  labelText: '基数',
+                                  labelText: 'workshop_planning_base'.tr,
                                   labelStyle:
                                       const TextStyle(color: Colors.black54),
                                 ),
@@ -226,7 +226,7 @@ class _WorkshopPlanningAddWorkerPageState
                   child:SelectView(
                         list: state.workTypeList,
                         controller: cWorkerType,
-                        hint: '选择工种',
+                        hint: 'workshop_planning_select_work_type'.tr,
                         select: (i) => logic.changeWorkerType(
                           coefficient: tecCoefficient,
                           index: i,

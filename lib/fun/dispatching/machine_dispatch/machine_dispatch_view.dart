@@ -262,7 +262,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               click: () {
                 if (logic.statusReportedAndGenerate()) {
                   msgDialog(
-                    content: '无法再次产量汇报',
+                    content: 'machine_dispatch_cannot_report_again'.tr,
                   );
                 } else {
                   showInputLastNumDialog(
@@ -483,7 +483,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   text: state.detailsInfo?.moldNo ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '建议模具数：',
+                  hint: 'machine_dispatch_suggest_mould'.tr,
                   text: (state.detailsInfo?.getProposalMoulds() ?? 0)
                       .toShowString(),
                   textColor: Colors.red,
@@ -638,11 +638,11 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                     click: () {
                       if (logic.statusReportedAndGenerate()) {
                         msgDialog(
-                          content: '请先进行员工确认！',
+                          content: 'machine_dispatch_confirm_worker_first'.tr,
                         );
                       } else {
                         askDialog(
-                          content: '确定要取消员工确认吗？',
+                          content: 'machine_dispatch_cancel_worker_confirm'.tr,
                           confirm: () => logic.cancelWorkerDispatchConfirmation(),
                         );
                       }
@@ -687,7 +687,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         actions: [
           Obx(() => state.hasDetails.value
               ? CombinationButton(
-                  text: '打印机设置',
+                  text: 'machine_dispatch_printer_setting'.tr,
                   click: () => printSetDialog(),
                   combination: Combination.left,
                 )

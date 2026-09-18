@@ -131,7 +131,7 @@ class MaterialLabelScanState {
 
     // 判断条码是否已扫描过
     if (isScan.contains(scanCode)) {
-      showSnackBar(message: '该条码已扫描过，不能重复扫描');
+      showSnackBar(message: 'material_label_scan_detail_barcode_scanned'.tr);
       return;
     }
 
@@ -190,7 +190,7 @@ class MaterialLabelScanState {
       dataDetailList.value = sortedMap;
     } else {
       // 统一提示一次未找到匹配项
-      showSnackBar(message: '未找到匹配的物料信息');
+      showSnackBar(message: 'material_label_scan_detail_no_match_material'.tr);
     }
   }
 

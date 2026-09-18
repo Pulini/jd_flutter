@@ -221,11 +221,11 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                     children: [
                       Expanded(
                         child: CombinationButton(
-                          text: '识别表盘',
+                          text: 'other_hydroelectric_recognize_dial'.tr,
                           combination: Combination.left,
                           click: () => logic.arkSendImage(
                             (d) {
-                              showSnackBar(message: '识别成功');
+                              showSnackBar(message: 'other_hydroelectric_recognize_success'.tr);
                               textThisTime.text = d;
                             },
                           ),

@@ -35,12 +35,12 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
   Widget build(BuildContext context) {
     var materialList = logic.getScannedMaterialsInfo();
     return pageBody(
-      title: '标签详情',
+      title: 'purchase_order_warehousing_label_detail_title'.tr,
       actions: [
         CombinationButton(
-          text: '确定提交',
+          text: 'purchase_order_warehousing_confirm_submit'.tr,
           click: () => askDialog(
-            content: '确定检查完标签要提交了吗？',
+            content: 'purchase_order_warehousing_confirm_submit_label_tips'.tr,
             confirm: () => Get.back(result: true),
           ),
         )
@@ -51,10 +51,10 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
           DatePicker(pickerController: postDate),
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
-            child: const Row(
+            child: Row(
               children: [
                 ExpandedFrameText(
-                  text: '物料',
+                  text: 'purchase_order_warehousing_material'.tr,
                   isBold: true,
                   textColor: Colors.white,
                   borderColor: Colors.black,
@@ -63,7 +63,7 @@ class _PurchaseOrderWarehousingBindingLabelDetailPageState
                 SizedBox(
                   width: 100,
                   child: FrameText(
-                    text: '数量',
+                    text: 'purchase_order_warehousing_quantity'.tr,
                     isBold: true,
                     textColor: Colors.white,
                     borderColor: Colors.black,

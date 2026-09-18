@@ -372,7 +372,7 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
                       onChanged: (c) {
                         state.isMachineModel.value = c;
                       },
-                      name: '机台派工'),
+                      name: 'dispatching_machine_dispatch_name'.tr),
                   const Spacer(),
                   CombinationButton(
                     combination: Combination.left,

@@ -21,7 +21,7 @@ class WorkshopPlanningLogic extends GetxController {
     required String processName,
   }) {
     if (productionOrderNo.isEmpty && processName.isEmpty) {
-      errorDialog(content: '请输入工单号或物料名称');
+      errorDialog(content: 'workshop_planning_enter_work_order_or_material'.tr);
     } else {
       state.getProcessPlanInfo(
         productionOrderNo: productionOrderNo,
@@ -213,15 +213,15 @@ class WorkshopPlanningLogic extends GetxController {
     required TextEditingController coefficient,
   }) {
     if (state.worker == null) {
-      errorDialog(content: '请填写工号或选择组员');
+      errorDialog(content: 'workshop_planning_enter_emp_no_or_member'.tr);
       return;
     }
     if (manHours.text.toDoubleTry() <= 0) {
-      errorDialog(content: '请填写正确的工时');
+      errorDialog(content: 'workshop_planning_enter_correct_hours'.tr);
       return;
     }
     if (coefficient.text.toDoubleTry() <= 0) {
-      errorDialog(content: '请填写正确的基数');
+      errorDialog(content: 'workshop_planning_enter_correct_base'.tr);
       return;
     }
     state.worker!.dayWorkTime = manHours.text.toDoubleTry();
@@ -299,7 +299,7 @@ class WorkshopPlanningLogic extends GetxController {
             state.isDayShift.value = state.reportDetailInfo!.workShift == 0;
             state.reportWorkerList.value =
                 state.reportDetailInfo!.empInfoReqList ?? [];
-            state.submitButtonName.value = '修改报工';
+            state.submitButtonName.value = 'workshop_planning_modify_report'.tr;
           } else if (state.hasDelete) {
             Get.back();
           }
@@ -335,11 +335,11 @@ class WorkshopPlanningLogic extends GetxController {
 
   void submitWorkersReport() {
     if (state.reportQuantity.value <= 0) {
-      errorDialog(content: '报工数不能为0');
+      errorDialog(content: 'workshop_planning_report_qty_not_zero'.tr);
       return;
     }
     if (state.reportWorkerList.isEmpty) {
-      errorDialog(content: '请添加报工人员');
+      errorDialog(content: 'workshop_planning_add_report_person'.tr);
       return;
     }
 
@@ -436,7 +436,7 @@ class WorkshopPlanningLogic extends GetxController {
           );
         }
       } on Error catch (_) {
-        errorDialog(content: '请扫描团件工单二维码');
+        errorDialog(content: 'workshop_planning_scan_group_qr'.tr);
       }
     }
   }
@@ -595,11 +595,11 @@ class WorkshopPlanningLogic extends GetxController {
 
   void submitLastProcessReport(String date) {
     if (state.reportQuantity.value == 0.0) {
-      errorDialog(content: '报工数不能为0');
+      errorDialog(content: 'workshop_planning_report_qty_not_zero'.tr);
       return;
     }
     if (state.reportWorkerList.isEmpty) {
-      errorDialog(content: '请添加报工人员');
+      errorDialog(content: 'workshop_planning_add_report_person'.tr);
       return;
     }
     state.submitGroupPay(
@@ -732,11 +732,11 @@ class WorkshopPlanningLogic extends GetxController {
 
   void modifyReportSubmit() {
     if (state.modifyReportReportQuantity.value == 0.0) {
-      errorDialog(content: '报工数不能为0');
+      errorDialog(content: 'workshop_planning_report_qty_not_zero'.tr);
       return;
     }
     if (state.modifyReportReportWorkerList.isEmpty) {
-      errorDialog(content: '请添加报工人员');
+      errorDialog(content: 'workshop_planning_add_report_person'.tr);
       return;
     }
     state.submitGroupPay(

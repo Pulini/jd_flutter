@@ -36,7 +36,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
 
   Future<void> printLabel() async {
     if (imageList.isEmpty) return;
-    loadingShow('正在生成标签...');
+    loadingShow('widget_generating_label'.tr);
     var labelList = <List<Uint8List>>[];
     for (var label in imageList) {
       labelList.add(await imageResizeToLabel({
@@ -60,7 +60,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
 
   Future<void> printLabelOnline() async {
     var list = <Uint8List>[];
-    loadingShow('正在生成标签...');
+    loadingShow('widget_generating_label'.tr);
     for (var image in imageList) {
       list.add(mergeUint8List(
         await imageResizeToLabel({
@@ -82,7 +82,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
       // 如果已经打开，则关闭当前重复的实例
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.back();
-        Get.snackbar('提示', '标签预览页面已经打开');
+        Get.snackbar('common_tip'.tr, 'widget_label_preview_opened'.tr);
       });
       return;
     }
@@ -144,7 +144,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印速度：'),
+                    Text('widget_print_speed'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -167,7 +167,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印浓度：'),
+                    Text('widget_print_density'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,

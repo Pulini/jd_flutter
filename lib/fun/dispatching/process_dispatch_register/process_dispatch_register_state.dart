@@ -132,7 +132,7 @@ class ProcessDispatchRegisterState {
   }) {
     httpPost(
       method: webApiReportLabelingBarcodeBatch,
-      loading: '正在提交报工...',
+      loading: 'dispatching_register_loading_submit'.tr,
       body: [
         for(var item in barCodeList)
           {

@@ -38,7 +38,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
 
   Future<void> printLabel() async {
     if (image.isEmpty) return;
-    loadingShow('正在生成标签...');
+    loadingShow('widget_generating_label'.tr);
     var label = await imageResizeToLabel({
       ...image,
       'isDynamic': widget.isDynamic,
@@ -49,15 +49,15 @@ class _PreviewLabelState extends State<PreviewLabel> {
     pu.printLabel(
       label: label,
       start: () {
-        loadingShow('正在下发标签...');
+        loadingShow('work_reporting_label_issuing'.tr);
       },
       success: () {
         loadingDismiss();
-        successDialog(content: '标签下发完成！');
+        successDialog(content: 'widget_label_issue_complete'.tr);
       },
       failed: () {
         loadingDismiss();
-        errorDialog(content: '标签下发失败！');
+        errorDialog(content: 'widget_label_issue_failed'.tr);
       },
     );
   }
@@ -68,7 +68,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
       // 如果已经打开，则关闭当前重复的实例
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.back();
-        Get.snackbar('提示', '标签预览页面已经打开');
+        Get.snackbar('common_tip'.tr, 'widget_label_preview_opened'.tr);
       });
       return;
     }
@@ -95,7 +95,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
   Widget build(BuildContext context) {
     return Obx(
       () => pageBody(
-          title: '标签预览',
+          title: 'widget_preview_label'.tr,
           actions: [
             image.isNotEmpty
                 ? Row(
@@ -124,7 +124,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印速度：'),
+                    Text('widget_print_speed'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -147,7 +147,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印浓度：'),
+                    Text('widget_print_density'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,

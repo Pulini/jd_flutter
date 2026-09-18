@@ -29,7 +29,7 @@ class SapPickingPostingLogic extends GetxController {
     Function()? finishedProduct,
   }) {
     if (code.isEmpty) {
-      errorDialog(content: "请扫描或输入半成品条码");
+      errorDialog(content: "sap_picking_posting_scan_semi_barcode".tr);
       return;
     }
     state.getPickingMaterialDetail(
@@ -49,7 +49,7 @@ class SapPickingPostingLogic extends GetxController {
   }) {
     if (data.rowType == 'I') {
       if (state.semiFinishedProductList.any((v) => v.isExists(data))) {
-        errorDialog(content: '该半成品标签已扫入!请勿重复扫码。');
+        errorDialog(content: 'sap_picking_posting_semi_label_scanned'.tr);
         return;
       }
       try {
@@ -66,15 +66,15 @@ class SapPickingPostingLogic extends GetxController {
     } else if (data.rowType == 'H') {
       if (state.finishedProductList.isNotEmpty) {
         if (state.finishedProductList.any((v) => v.label == data.label)) {
-          errorDialog(content: '该成品标签已扫入!请勿重复扫码。');
+          errorDialog(content: 'sap_picking_posting_finished_label_scanned'.tr);
           return;
         }
         if (state.finishedProductList.first.materialCode != data.materialCode) {
-          errorDialog(content: '成品拣配不同物料不允许同时操作！');
+          errorDialog(content: 'sap_picking_posting_diff_material_not_allowed'.tr);
           return;
         }
         if (state.finishedProductList.first.salesOrder != data.salesOrder) {
-          errorDialog(content: '成品拣配不同订单不允许同时操作！');
+          errorDialog(content: 'sap_picking_posting_diff_order_not_allowed'.tr);
           return;
         }
         state.finishedProductList.add(data);
@@ -86,7 +86,7 @@ class SapPickingPostingLogic extends GetxController {
     } else {
       errorDialog(
           content:
-              '物料：(${data.materialCode})${data.materialName}\r\n类型错误: ${data.rowType}!');
+              'sap_picking_posting_type_error'.trArgs(['(${data.materialCode})${data.materialName}', data.rowType.toString()]));
     }
   }
 

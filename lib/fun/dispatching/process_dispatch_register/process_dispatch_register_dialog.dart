@@ -405,7 +405,7 @@ void reportDialog(ProcessDispatchLabelInfo data, Function() refresh) {
           TextButton(
             onPressed: () {
               if (worker == null) {
-                errorDialog(content: '请填写员工');
+                errorDialog(content: 'dispatching_register_input_employee'.tr);
                 return;
               }
               data.empID = worker!.empID;

@@ -36,7 +36,7 @@ class _SapPackingScanCacheListPageState
       TextEditingController(text: spGet(spSavePackingScanActualCabinet) ?? '');
   var dpcDate = DatePickerController(
     PickerType.date,
-    buttonName: '计划船期',
+    buttonName: 'sap_packing_scan_planned_ship_date'.tr,
     saveKey: '${RouteConfig.sapPackingScanCacheList.name}${PickerType.date}',
   );
   var opcDestination = OptionsPickerController(
@@ -67,7 +67,7 @@ class _SapPackingScanCacheListPageState
 
     var dpcDate = DatePickerController(
       PickerType.date,
-      buttonName: '过账日期',
+      buttonName: 'sap_packing_scan_posting_date'.tr,
       initDate: postingDate.millisecondsSinceEpoch,
       firstDate:
           DateTime(postingDate.year, postingDate.month - 1, postingDate.day),
@@ -78,14 +78,14 @@ class _SapPackingScanCacheListPageState
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: const Text('重处理'),
+          title: Text('sap_packing_scan_reprocess'.tr),
           content: SizedBox(
             width: 300,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 EditText(
-                  hint: '实际柜号',
+                  hint: 'sap_packing_scan_actual_cabinet'.tr,
                   initStr: confirmActualCabinet,
                   onChanged: (v) => confirmActualCabinet = v,
                 ),
@@ -97,7 +97,7 @@ class _SapPackingScanCacheListPageState
             TextButton(
               onPressed: () {
                 if (confirmActualCabinet.isEmpty) {
-                  errorDialog(content: '请填写实际柜号');
+                  errorDialog(content: 'sap_packing_scan_please_fill_cabinet'.tr);
                 } else {
                   logic.reSubmit(
                     actualCabinet: confirmActualCabinet,
@@ -144,13 +144,13 @@ class _SapPackingScanCacheListPageState
           Row(
             children: [
               expandedTextSpan(
-                hint: '物料：',
+                hint: 'sap_packing_scan_material_colon'.tr,
                 text: list.first.materialId().allowWordTruncation(),
                 maxLines: 2,
               ),
               const SizedBox(width: 5),
               textSpan(
-                hint: '数量：',
+                hint: 'sap_packing_scan_qty_colon'.tr,
                 text: '${qty.toShowString()}${list.first.unit}',
               ),
               Obx(() => Checkbox(
@@ -171,14 +171,14 @@ class _SapPackingScanCacheListPageState
                   Expanded(
                     flex: 3,
                     child: Text(
-                      '件ID：${piece.pieceNumber}',
+                      '${'sap_packing_scan_piece_id_colon'.tr}${piece.pieceNumber}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   ),
                   Expanded(
                     flex: 2,
                     child: Text(
-                      '日期：${piece.date}',
+                      '${'sap_packing_scan_date_colon'.tr}${piece.date}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   ),
@@ -205,7 +205,7 @@ class _SapPackingScanCacheListPageState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 10),
-            EditText(hint: '实际柜号', controller: tecActualCabinet),
+            EditText(hint: 'sap_packing_scan_actual_cabinet'.tr, controller: tecActualCabinet),
             DatePicker(pickerController: dpcDate),
             OptionsPicker(pickerController: opcDestination),
             LinkOptionsPicker(pickerController: lopcFactoryAndWarehouse),
@@ -281,7 +281,7 @@ class _SapPackingScanCacheListPageState
                         color: Colors.white54,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
+                      placeholder: 'sap_packing_scan_search_placeholder'.tr,
                       onChanged: (v) => state.abnormalSearchText.value = v,
                     ),
                   ),
@@ -307,9 +307,9 @@ class _SapPackingScanCacheListPageState
                           combination: Combination.left,
                           backgroundColor: Colors.red,
                           isEnabled: logic.selectedAbnormalItem().isNotEmpty,
-                          text: '删除',
+                          text: 'sap_packing_scan_delete'.tr,
                           click: () => askDialog(
-                            content: '确定要删除所选标签吗？',
+                            content: 'sap_packing_scan_confirm_delete_selected_labels'.tr,
                             confirm: () => logic.deleteAbnormal(),
                           ),
                         )),
@@ -319,7 +319,7 @@ class _SapPackingScanCacheListPageState
                           combination: Combination.right,
                           backgroundColor: Colors.orange,
                           isEnabled: logic.selectedAbnormalItem().isNotEmpty,
-                          text: '重处理',
+                          text: 'sap_packing_scan_reprocess'.tr,
                           click: () => logic.getReSubmitData(
                             (list, maxDate) => reSubmitDataInput(
                               postingDate: maxDate,

@@ -148,7 +148,7 @@ class _ReprintLabelItem extends StatelessWidget {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '标签：',
+                  hint: 'sap_wms_reprint_labels_label_colon'.tr,
                   text: label.labelNumber ?? '',
                   isBold: false,
                   textColor: Colors.grey,

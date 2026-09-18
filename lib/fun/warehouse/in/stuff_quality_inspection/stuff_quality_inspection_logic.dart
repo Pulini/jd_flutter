@@ -48,7 +48,7 @@ class StuffQualityInspectionLogic extends GetxController {
   void addColor(String batch, String qty) {
     if (batch.isNotEmpty && qty.isNotEmpty) {
       if (state.inspectionColorList.any((data) => data.batch == batch)) {
-        showSnackBar(message: '不能添加相同分色');
+        showSnackBar(message: 'stuff_quality_inspection_cannot_add_same_color'.tr);
       } else {
         if (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry() >=
                 0 &&
@@ -172,7 +172,7 @@ class StuffQualityInspectionLogic extends GetxController {
               inspectionQuantityController.text.toDoubleTry() !=
                   shortQualifiedController.text.toDoubleTry())) {
         // 不同物料并且不是全部不合格或全部短码
-        errorDialog(content: '不允许不同物料进行全部不合格或全部短码以外的操作');
+        errorDialog(content: 'stuff_quality_inspection_not_allow_diff_material'.tr);
       } else {
         getLabelsForOrder(
             inspectionType: inspectionType,
@@ -241,21 +241,21 @@ class StuffQualityInspectionLogic extends GetxController {
     }
 
     if (upInspectionType == '无') {
-      showSnackBar(message: '请选择抽检方式');
+      showSnackBar(message: 'stuff_quality_inspection_please_select_sampling_method'.tr);
       return;
     }
     if (upType == '无') {
-      showSnackBar(message: '请选择类别');
+      showSnackBar(message: 'stuff_quality_inspection_please_select_category'.tr);
       return;
     }
     if (waitInspectionQuantityController.text.toDoubleTry() <= 0) {
-      showSnackBar(message: '抽检数量不能为零');
+      showSnackBar(message: 'stuff_quality_inspection_sampling_qty_not_zero'.tr);
       return;
     }
     if (unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
         shortQualifiedController.text.toDoubleTry() > 0) {
       if (upSubmitGroupType.isEmpty) {
-        showSnackBar(message: '有不合格或短码，请选择受理单位');
+        showSnackBar(message: 'stuff_quality_inspection_has_unqualified_please_select_unit'.tr);
         return;
       }
     }
@@ -263,7 +263,7 @@ class StuffQualityInspectionLogic extends GetxController {
         waitInspectionQuantityController.text.toDoubleTry() >
             inspectionQuantityController.text.toDoubleTry()) {
       if (upSubmitGroupType.isEmpty) {
-        showSnackBar(message: '抽检数量必须大于0且不能大于检验数量');
+        showSnackBar(message: 'stuff_quality_inspection_sampling_qty_greater_than_zero'.tr);
         return;
       }
     }
@@ -272,20 +272,20 @@ class StuffQualityInspectionLogic extends GetxController {
         (exceptionDescriptionController.text.isEmpty ||
             processingMethodController.text.isEmpty ||
             ngController.text.isEmpty)) {
-      showSnackBar(message: '请输入异常说明和处理方法,NG类型');
+      showSnackBar(message: 'stuff_quality_inspection_input_ng_exception'.tr);
       return;
     }
     if (shortQualifiedController.text.toDoubleTry() > 0 &&
         (exceptionDescriptionController.text.isEmpty ||
             processingMethodController.text.isEmpty ||
             ngController.text.isEmpty)) {
-      showSnackBar(message: '请输入异常说明和处理方法,NG类型');
+      showSnackBar(message: 'stuff_quality_inspection_input_ng_exception'.tr);
       return;
     }
     if ((unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
             shortQualifiedController.text.toDoubleTry() > 0) &&
         reviewerController.text.isEmpty) {
-      showSnackBar(message: '有不合格或短码件,审核人不能为空');
+      showSnackBar(message: 'stuff_quality_inspection_has_unqualified_auditor_required'.tr);
       return;
     }
 
@@ -1469,7 +1469,7 @@ class StuffQualityInspectionLogic extends GetxController {
   //提交要品检的贴标信息
   bool submitSelect() {
     if (state.labelData.none((data) => data.select)) {
-      showSnackBar(message: '请选中具体数据提交！');
+      showSnackBar(message: 'stuff_quality_inspection_please_select_data_submit'.tr);
       return false;
     } else {
       var list =
@@ -1484,7 +1484,7 @@ class StuffQualityInspectionLogic extends GetxController {
           .toStringAsFixed(3);
       if (allUnQty.toDoubleTry() != state.labelUnQty ||
           allShort.toDoubleTry() != state.labelShortQty) {
-        showSnackBar(message: '贴标不合格数量或短码数量与品检的不符合！');
+        showSnackBar(message: 'stuff_quality_inspection_label_qty_not_match'.tr);
         return false;
       } else {
         return true;

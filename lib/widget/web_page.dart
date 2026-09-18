@@ -158,7 +158,7 @@ class WebPage extends StatelessWidget {
           NavigationDelegate(
             onPageStarted: (String url) {
               debugPrint('onPageStarted------$url');
-              loadingShow('加载中');
+              loadingShow('report_view_instruction_loading'.tr);
             },
             onPageFinished: (String url) {
               debugPrint('onPageFinished------$url');
@@ -231,7 +231,7 @@ class _WebPrinterState extends State<WebPrinter> {
     var dio = Dio()
       ..interceptors.add(DioManager.simpleInterceptors);
 
-    loadingShow('正在生成物料清单预览...');
+    loadingShow('widget_generating_material_preview'.tr);
     ready.value = false;
     dio.post(
       isTestUrl()
@@ -286,7 +286,7 @@ class _WebPrinterState extends State<WebPrinter> {
           NavigationDelegate(
             onPageStarted: (String url) {
               debugPrint('onPageStarted------$url');
-              loadingShow('加载中');
+              loadingShow('report_view_instruction_loading'.tr);
             },
             onPageFinished: (String url) {
               debugPrint('onPageFinished------$url');
@@ -318,7 +318,7 @@ class _WebPrinterState extends State<WebPrinter> {
             backgroundColor: Colors.transparent,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
-              title: const Text('打印清单预览'),
+              title: Text('widget_print_list_preview'.tr),
               actions: [
                 Obx(() => ready.value
                     ? IconButton(
