@@ -156,7 +156,7 @@ class _WorkshopPlanningSalaryCountPageState
                 children: [
                   Text(
                     'workshop_planning_material_colon'.tr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),

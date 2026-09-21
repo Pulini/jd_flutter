@@ -342,7 +342,7 @@ class _GroupDispatchPageState extends State<GroupDispatchPage> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.grey.shade200,
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text('-'),
                       ),
                     ),

@@ -1202,7 +1202,7 @@ void showMachineInputDialog({
       canPop: false,
       child: AlertDialog(
         title: Text('machine_dispatch_enter_data'.tr,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 150,
@@ -1274,7 +1274,7 @@ void showInputDayReportDialog({
       canPop: false,
       child: AlertDialog(
         title: Text('machine_dispatch_enter_day_dispatch_qty'.tr,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,
@@ -1334,7 +1334,7 @@ void showInputCapacityDialog({
       canPop: false,
       child: AlertDialog(
         title: Text('machine_dispatch_enter_capacity'.tr,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,
@@ -1393,7 +1393,7 @@ void showInputLastNumDialog({
       canPop: false,
       child: AlertDialog(
         title: Text('machine_dispatch_enter_last_box'.tr,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         content: SizedBox(
           width: 300,
           height: 60,

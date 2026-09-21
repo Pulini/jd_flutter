@@ -46,7 +46,7 @@ class _MaterialLabelScanDetailPageState
             children: [
               Text(
                 'material_label_scan_detail_material_image'.tr,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -66,12 +66,12 @@ class _MaterialLabelScanDetailPageState
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.image_not_supported,
                                   size: 50,
                                   color: Colors.grey,
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Text('material_label_scan_detail_image_load_fail'.tr),
                               ],
                             ),
@@ -86,12 +86,12 @@ class _MaterialLabelScanDetailPageState
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.image,
                               size: 200,
                               color: Colors.grey,
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text('material_label_scan_detail_no_image'.tr),
                           ],
                         ),

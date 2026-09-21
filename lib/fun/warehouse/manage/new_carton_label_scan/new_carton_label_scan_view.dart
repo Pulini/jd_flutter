@@ -454,7 +454,7 @@ class _NewCartonLabelScanPageState extends State<NewCartonLabelScanPage> {
                       onPressed: () => Navigator.pop(ctx),
                       child: Text(
                         'dialog_default_cancel'.tr,
-                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                        style: const TextStyle(fontSize: 16, color: Colors.black87),
                       ),
                     ),
                   ),
