@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/message_center/message_center_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'home_logic.dart';
@@ -48,7 +51,7 @@ class _HomePageState extends State<HomePage>
                   height: 50,
                   color: Colors.blueAccent,
                 ),
-                title: Text(item.name,style: const TextStyle(fontSize: 18)),
+                title: Text(item.name, style: const TextStyle(fontSize: 18)),
                 subtitle: Text(item.description),
                 children: [
                   for (var item in item.functionGroup) ...[
@@ -109,12 +112,12 @@ class _HomePageState extends State<HomePage>
                   color: Colors.blueAccent,
                 ),
                 onPressed: () {
-                  // Get.to(()=>const ContainerLoadingStockUpPage());           if (isTestUrl()) {
-                  //                     Get.to(() => const TscLabelPreview());
-                  //                   } else {
-                  //                     Get.to(() => const MessageCenterPage());
-                  //                   }
-
+                  // Get.to(() => const ContainerLoadingStockUpPage());
+                  if (isTestUrl()) {
+                    Get.to(() => const TscLabelPreview());
+                  } else {
+                    Get.to(() => const MessageCenterPage());
+                  }
                 },
               ),
               title: CupertinoSearchTextField(
@@ -198,7 +201,6 @@ class HomeSubItem extends StatefulWidget {
 }
 
 class _HomeSubItemState extends State<HomeSubItem> {
-
   Color _color(HomeButton item) {
     return item.hasUpdate
         ? Colors.green[200]!
@@ -233,7 +235,8 @@ class _HomeSubItemState extends State<HomeSubItem> {
           color: _color(widget.item),
         ),
         title: Text(widget.item.name, style: const TextStyle(fontSize: 14)),
-        subtitle: Text(widget.item.description, style: const TextStyle(fontSize: 12)),
+        subtitle:
+            Text(widget.item.description, style: const TextStyle(fontSize: 12)),
         trailing: widget.item.hasUpdate
             ? Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,

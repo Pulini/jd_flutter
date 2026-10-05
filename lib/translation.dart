@@ -807,7 +807,7 @@ class Translation extends Translations {
           'production_dispatch_process_no_dispatch': '工序<%s_%s>没有派工',
           'production_dispatch_process_worker_dispatch_zero': '工序<%s_%s>员工 %s 计工数为0',
           'production_dispatch_process_less_report': '工序<%s_%s>少于汇报数 %s',
-          'production_dispatch_process_more_report': '工序<%s_%s>超过汇报数 %s',
+          'production_dispatch_process_morproduction_dispatch_process_more_reporte_report': '工序<%s_%s>超过汇报数 %s',
           'production_dispatch_dialog_last_dispatch': '上次派工',
           'production_dispatch_dialog_now_dispatch': '本次派工',
           'production_dispatch_dialog_recorded_working': '已计工数：',

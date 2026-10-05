@@ -46,7 +46,12 @@ class DatePicker extends StatelessWidget {
     return Container(
       height: height,
       margin: EdgeInsets.all(margin),
-      padding: const EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(
+        left: 10,
+        top: margin > 0 ? margin - 2 : 0,
+        bottom: margin > 0 ? margin - 2 : 0,
+        right: margin > 0 ? margin - 2 : 0,
+      ),
       decoration: BoxDecoration(
         color: bkgColor,
         borderRadius: BorderRadius.circular(50),
@@ -261,7 +266,7 @@ class LinkOptionsPicker extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           placeholder: 'picker_search'.tr,
-          onChanged: (String value){
+          onChanged: (String value) {
             controller1.jumpToItem(0);
             controller2.jumpToItem(0);
             pickerController.search(value);
@@ -433,8 +438,7 @@ class CheckBoxPicker extends StatefulWidget {
 }
 
 class _CheckBoxPickerState extends State<CheckBoxPicker> {
-  CheckBoxPickerController get checkBoxController =>
-      widget.checkBoxController;
+  CheckBoxPickerController get checkBoxController => widget.checkBoxController;
 
   @override
   void initState() {

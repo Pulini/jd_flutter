@@ -41,7 +41,7 @@ PackageInfo packageInfo() => AppInitService.to.packageInfo;
 
 bool hasFrontCamera() => AppInitService.to.hasFrontCamera();
 
-bool hasBackCamera() => AppInitService.to.hasFrontCamera();
+bool hasBackCamera() => AppInitService.to.hasBackCamera();
 
 double getDpi() => AppInitService.to.androidXDpi;
 

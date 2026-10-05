@@ -83,7 +83,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   bool haveCodeData() {
-    if (state.barCodeList.isNotEmpty) {
+    if (state.barCodeList.isNotEmpty&&billStockListController.selectedId.value.isNotEmpty) {
       return true;
     } else {
       return false;

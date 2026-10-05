@@ -71,6 +71,7 @@ import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_
 import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_container_loading_outbound/container_loading_stock_up/container_loading_stock_up_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_cache_list/sap_packing_scan_cache_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_reverse/sap_packing_scan_reverse_view.dart';
@@ -545,7 +546,7 @@ class RouteConfig {
   //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    212,
+    213,
     const TemporaryOrderPage(),
   );
 
@@ -624,6 +625,13 @@ class RouteConfig {
     '/sap_packing_scan_reverse',
     200,
     const SapPackingScanReversePage(),
+  );
+
+  //SAP装柜出库备货
+  static Routes containerLoadingStockUp = Routes(
+    '/container_loading_stock_up',
+    200,
+    const ContainerLoadingStockUpPage(),
   );
 
   //SAP外箱标绑定
