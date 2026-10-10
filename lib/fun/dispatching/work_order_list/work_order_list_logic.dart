@@ -38,7 +38,6 @@ class WorkOrderListLogic extends GetxController {
         qrCode: data.barCode ?? '',
         title: state.partDetail?.factoryType ?? '',
         subTitle: data.partName ?? '',
-        subTitleWrap: false,
         content: '',
         bottomLeftText1: '${data.size?? ''}码',
         bottomMiddleText1: getDateYMDHM(),

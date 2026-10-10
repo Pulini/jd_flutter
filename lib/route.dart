@@ -210,7 +210,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    212,
+    213,
     const WorkOrderListPage(),
   );
 
@@ -546,7 +546,7 @@ class RouteConfig {
   //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    213,
+    214,
     const TemporaryOrderPage(),
   );
 

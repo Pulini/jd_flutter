@@ -54,30 +54,56 @@ void testApplicationDialog({
     firstDate: now,
     lastDate: DateTime(now.year, now.month + 3, now.day),
   );
-  var line1 = Obx(() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('temporary_order_dialog_division'.tr),
-          CheckBox(
-            onChanged: (v) => select('001'),
-            name: 'DHM',
-            value: businessUnit.value == '001',
-          ),
-          CheckBox(
-            onChanged: (v) => v ? select('002') : select('001'),
-            name: 'PUMA',
-            value: businessUnit.value == '002',
-          ),
-          CheckBox(
-            onChanged: (v) => v ? select('003') : select('001'),
-            name: 'Other',
-            value: businessUnit.value == '003',
-          ),
-          Expanded(
-            child: DatePicker(pickerController: finishDate),
-          ),
-        ],
-      ));
+  var line1 = Obx(() => isPad()
+      ? Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('temporary_order_dialog_division'.tr),
+            CheckBox(
+              onChanged: (v) => select('001'),
+              name: 'DHM',
+              value: businessUnit.value == '001',
+            ),
+            CheckBox(
+              onChanged: (v) => v ? select('002') : select('001'),
+              name: 'PUMA',
+              value: businessUnit.value == '002',
+            ),
+            CheckBox(
+              onChanged: (v) => v ? select('003') : select('001'),
+              name: 'Other',
+              value: businessUnit.value == '003',
+            ),
+            Expanded(
+              child: DatePicker(pickerController: finishDate),
+            ),
+          ],
+        )
+      : Column(
+          children: [
+            Text('temporary_order_dialog_division'.tr),
+            Row(
+              children: [
+                CheckBox(
+                  onChanged: (v) => select('001'),
+                  name: 'DHM',
+                  value: businessUnit.value == '001',
+                ),
+                CheckBox(
+                  onChanged: (v) => v ? select('002') : select('001'),
+                  name: 'PUMA',
+                  value: businessUnit.value == '002',
+                ),
+                CheckBox(
+                  onChanged: (v) => v ? select('003') : select('001'),
+                  name: 'Other',
+                  value: businessUnit.value == '003',
+                ),
+              ],
+            ),
+            DatePicker(pickerController: finishDate)
+          ],
+        ));
   var line2 = Row(
     children: [
       Expanded(
@@ -152,18 +178,20 @@ void testApplicationDialog({
         title: Text('temporary_order_dialog_test_application'.tr),
         content: SizedBox(
           width: 600,
-          height: 240,
+          height: isPad()?240:340,
           child: ListView(children: [line1, line2, line3]),
         ),
         actions: [
           TextButton(
             onPressed: () {
               if (inspectionQty <= 0) {
-                errorDialog(content: 'temporary_order_dialog_inspection_qty_error'.tr);
+                errorDialog(
+                    content: 'temporary_order_dialog_inspection_qty_error'.tr);
                 return;
               }
               if (testStandardsList.isEmpty) {
-                errorDialog(content: 'temporary_order_dialog_standard_error'.tr);
+                errorDialog(
+                    content: 'temporary_order_dialog_standard_error'.tr);
                 return;
               }
               _createTestApplication(

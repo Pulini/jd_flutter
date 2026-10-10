@@ -294,7 +294,11 @@ class _LarkLoginWidgetState extends State<LarkLoginWidget> {
 
   @override
   void dispose() {
-    webViewController.clearLocalStorage();
+    // webViewController 仅在非 Web 平台初始化（Web 端走 iframe），
+    // 这里直接访问 late 字段会抛 LateInitializationError
+    if (!kIsWeb) {
+      webViewController.clearLocalStorage();
+    }
     super.dispose();
   }
 }

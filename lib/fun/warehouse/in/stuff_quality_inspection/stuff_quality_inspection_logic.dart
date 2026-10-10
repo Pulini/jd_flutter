@@ -59,7 +59,7 @@ class StuffQualityInspectionLogic extends GetxController {
           ));
           state.unColorQty.value =
               (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
-                  .toStringAsFixed(3);
+                  .toFixed(3).toShowString();
         }
       }
     }
@@ -69,7 +69,7 @@ class StuffQualityInspectionLogic extends GetxController {
   void removeColor(int position) {
     state.unColorQty.value = (state.unColorQty.toString().toDoubleTry() +
             state.inspectionColorList[position].qty.toDoubleTry())
-        .toStringAsFixed(3);
+        .toFixed(3).toShowString();
     state.inspectionColorList.removeAt(position);
   }
 
@@ -116,7 +116,7 @@ class StuffQualityInspectionLogic extends GetxController {
         unqualifiedQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     shortQualifiedController.text.toDoubleTry())
-                .toStringAsFixed(3);
+                .toFixed(3).toShowString();
       }
     }
 
@@ -124,7 +124,7 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toStringAsFixed(3);
+            .toFixed(3).toShowString();
   }
 
   //输入短码
@@ -144,7 +144,7 @@ class StuffQualityInspectionLogic extends GetxController {
         shortQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     unqualifiedQualifiedController.text.toDoubleTry())
-                .toStringAsFixed(3);
+                .toFixed(3).toShowString();
       }
     }
 
@@ -152,7 +152,7 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toStringAsFixed(3);
+            .toFixed(3).toShowString();
   }
 
   //确定提交品检
@@ -353,24 +353,20 @@ class StuffQualityInspectionLogic extends GetxController {
                             .toDoubleTry() /
                         waitInspectionQuantityController.text.toDoubleTry()) *
                     inspectionQuantityController.text.toDoubleTry())
-                .toStringAsFixed(3)
-                .toDoubleTry();
+                .toFixed(3);
 
             state.labelUnQty = ((unqualifiedQualifiedController.text
                             .toDoubleTry() /
                         waitInspectionQuantityController.text.toDoubleTry()) *
                     inspectionQuantityController.text.toDoubleTry())
-                .toStringAsFixed(3)
-                .toDoubleTry();
+                .toFixed(3);
           } else {
             state.labelShortQty = shortQualifiedController.text
                 .toDoubleTry()
-                .toStringAsFixed(3)
-                .toDoubleTry();
+                .toFixed(3);
             state.labelUnQty = unqualifiedQualifiedController.text
                 .toDoubleTry()
-                .toStringAsFixed(3)
-                .toDoubleTry();
+                .toFixed(3);
           }
 
           Get.to(() => const StuffQualityInspectionLabelPage())?.then((v) {
@@ -520,20 +516,17 @@ class StuffQualityInspectionLogic extends GetxController {
       countShortQuality = ((shortQualifiedController.text.toDoubleTry() /
                   waitInspectionQuantityController.text.toDoubleTry()) *
               inspectionQuantityController.text.toDoubleTry())
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
 
       countUnQuality = ((unqualifiedQualifiedController.text.toDoubleTry() /
                   waitInspectionQuantityController.text.toDoubleTry()) *
               inspectionQuantityController.text.toDoubleTry())
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
 
       countQuality = (inspectionQuantityController.text.toDoubleTry() -
               countShortQuality -
               countUnQuality)
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
     } else {
       countShortQuality = shortQualifiedController.text.toDoubleTry();
       countUnQuality = unqualifiedQualifiedController.text.toDoubleTry();
@@ -617,7 +610,7 @@ class StuffQualityInspectionLogic extends GetxController {
           } else {
             //合格数量=剩余可分配合格数量
             if (countQuality > 0) {
-              data.qualifiedQuantity = countQuality.toStringAsFixed(3);
+              data.qualifiedQuantity = countQuality.toFixed(3).toShowString();
               countQuality = 0.0;
             }
           }
@@ -638,7 +631,7 @@ class StuffQualityInspectionLogic extends GetxController {
           } else {
             //合格数量=剩余可分配合格数量
             if (countQuality > 0) {
-              data.qualifiedQuantity = countQuality.toStringAsFixed(3);
+              data.qualifiedQuantity = countQuality.toFixed(3).toShowString();
               countQuality = 0.0;
             }
           }
@@ -658,12 +651,12 @@ class StuffQualityInspectionLogic extends GetxController {
             if (countUnQuality >= lastQty) {
               //不合格数量大于可分配数量
               //不合格数量=可分配数量
-              data.unqualifiedQuantity = lastQty.toStringAsFixed(3);
+              data.unqualifiedQuantity = lastQty.toFixed(3).toShowString();
               //剩余不合格数量=不合格总数-剩余可分配数量
               countUnQuality = countUnQuality.sub(lastQty);
             } else {
               if (countUnQuality > 0) {
-                data.unqualifiedQuantity = countUnQuality.toStringAsFixed(3);
+                data.unqualifiedQuantity = countUnQuality.toFixed(3).toShowString();
                 countUnQuality = 0.0;
               }
             }
@@ -686,13 +679,13 @@ class StuffQualityInspectionLogic extends GetxController {
             //短码数量大于剩余可分配数量
             if (countShortQuality >= lastQty) {
               //本行短码数量=剩余可分配数量
-              data.shortCodesNumber = lastQty.toStringAsFixed(3);
+              data.shortCodesNumber = lastQty.toFixed(3).toShowString();
               //剩余短码数量=总短码数量-剩余可分配数量
               countShortQuality = countShortQuality.sub(lastQty);
             } else {
               //短码数量=剩余短码数量
               if (countShortQuality > 0) {
-                data.shortCodesNumber = countShortQuality.toStringAsFixed(3);
+                data.shortCodesNumber = countShortQuality.toFixed(3).toShowString();
                 countShortQuality = 0;
               }
             }
@@ -718,7 +711,7 @@ class StuffQualityInspectionLogic extends GetxController {
               countWaitQuality.sub(data.samplingQuantity.toDoubleTry());
         } else {
           //抽检数量=剩余抽检数量
-          data.samplingQuantity = countWaitQuality.toStringAsFixed(3);
+          data.samplingQuantity = countWaitQuality.toFixed(3).toShowString();
         }
       }
     }
@@ -735,7 +728,7 @@ class StuffQualityInspectionLogic extends GetxController {
               countInspectionQuality.sub(data.inspectionQuantity.toDoubleTry());
         } else {
           //检验数量=剩余检验数量
-          data.inspectionQuantity = countInspectionQuality.toStringAsFixed(3);
+          data.inspectionQuantity = countInspectionQuality.toFixed(3).toShowString();
         }
       }
     }
@@ -895,9 +888,9 @@ class StuffQualityInspectionLogic extends GetxController {
         name.add(c.materialCode.toString());
       }
     }
-    qualifiedController.text = qty.toStringAsFixed(3); //合格数量
-    inspectionQuantityController.text = qty.toStringAsFixed(3); //检验数量
-    waitInspectionQuantityController.text = qty.toStringAsFixed(3); //待检验数量
+    qualifiedController.text = qty.toFixed(3).toShowString(); //合格数量
+    inspectionQuantityController.text = qty.toFixed(3).toShowString(); //检验数量
+    waitInspectionQuantityController.text = qty.toFixed(3).toShowString(); //待检验数量
 
     state.isSameCode = name.length == 1; //是否同物料
     state.isShowTips.value = name.length > 1; //多种物料的时候提示
@@ -970,9 +963,9 @@ class StuffQualityInspectionLogic extends GetxController {
       state.isShowTips.value = false;
     }
 
-    inspectionQuantityController.text = waitQty.toStringAsFixed(3);
-    waitInspectionQuantityController.text = waitQty.toStringAsFixed(3);
-    qualifiedController.text = waitQty.toStringAsFixed(3);
+    inspectionQuantityController.text = waitQty.toFixed(3).toShowString();
+    waitInspectionQuantityController.text = waitQty.toFixed(3).toShowString();
+    qualifiedController.text = waitQty.toFixed(3).toShowString();
 
     if ((state.detailInfo!.receipt?[0].colorSeparation) == 'X') {
       state.inspectionType.value = '全检';
@@ -1116,20 +1109,17 @@ class StuffQualityInspectionLogic extends GetxController {
       countShortQuality = ((shortQualifiedController.text.toDoubleTry() /
                   waitInspectionQuantityController.text.toDoubleTry()) *
               inspectionQuantityController.text.toDoubleTry())
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
 
       countUnQuality = ((unqualifiedQualifiedController.text.toDoubleTry() /
                   waitInspectionQuantityController.text.toDoubleTry()) *
               inspectionQuantityController.text.toDoubleTry())
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
 
       countQuality = (inspectionQuantityController.text.toDoubleTry() -
               countShortQuality -
               countUnQuality)
-          .toStringAsFixed(3)
-          .toDoubleTry();
+          .toFixed(3);
     } else {
       countShortQuality = shortQualifiedController.text.toDoubleTry();
       countUnQuality = unqualifiedQualifiedController.text.toDoubleTry();
@@ -1477,13 +1467,13 @@ class StuffQualityInspectionLogic extends GetxController {
       var allUnQty = list
           .map((v) => v.unqualified ?? 0)
           .reduce((a, b) => a.add(b))
-          .toStringAsFixed(3);
+          .toFixed(3);
       var allShort = list
           .map((v) => v.short ?? 0)
           .reduce((a, b) => a.add(b))
-          .toStringAsFixed(3);
-      if (allUnQty.toDoubleTry() != state.labelUnQty ||
-          allShort.toDoubleTry() != state.labelShortQty) {
+          .toFixed(3);
+      if (allUnQty != state.labelUnQty ||
+          allShort != state.labelShortQty) {
         showSnackBar(message: 'stuff_quality_inspection_label_qty_not_match'.tr);
         return false;
       } else {
