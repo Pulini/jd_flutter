@@ -51,6 +51,7 @@ class TemporaryOrderInfo {
   String? model;
   String? distributionType;
   String? finalCustomer;
+  String? finishType;
   List<TemporarySize>? temporarySize;
 
   TemporaryOrderInfo(
@@ -73,6 +74,7 @@ class TemporaryOrderInfo {
       this.model,
       this.distributionType,
       this.finalCustomer,
+      this.finishType,
       this.temporarySize});
 
   TemporaryOrderInfo.fromJson(dynamic json) {
@@ -95,6 +97,7 @@ class TemporaryOrderInfo {
     model = JsonParse.str(json['Model']);
     distributionType = JsonParse.str(json['DistributionType']);
     finalCustomer = JsonParse.str(json['KunnrLast']);
+    finishType = JsonParse.str(json['FinishType']);
     temporarySize = JsonParse.list(json['TemporarySize'], TemporarySize.fromJson);
   }
 
@@ -109,6 +112,10 @@ class TemporaryOrderInfo {
         ? '${sum.toShowString()} $commUnit'
         : '${sum.toShowString()} $commUnit / ${baseSum.toShowString()} $baseUnit';
   }
+  int fromToday(){
+    return billDate.isNullOrEmpty() ? 999 : DateTime.now().difference(DateTime.parse(billDate!)).inDays;
+  }
+
 }
 
 //{

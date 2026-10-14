@@ -118,8 +118,6 @@ class MaintainLabelLogic extends GetxController {
           state.labelGroupList.value =
               groupBy(list, (v) => v.barCode).values.toList();
         }
-        debugPrint(
-            'isMaterialLabel=${state.isMaterialLabel.value} labelList=${state.labelList.length} labelGroupList=${state.labelGroupList.length}');
       },
       error: (msg) => errorDialog(content: msg),
     );

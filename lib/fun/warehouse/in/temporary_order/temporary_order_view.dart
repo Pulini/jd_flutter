@@ -306,6 +306,7 @@ class _TmpOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var group = state.temporaryOrderList[index];
+    var fromToday = group[0].fromToday();
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -313,7 +314,16 @@ class _TmpOrderItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
         gradient: LinearGradient(
-          colors: [Colors.blue.shade50, Colors.white],
+          colors: [
+            group[0].finishType == 'X'
+                ? Colors.blue.shade50
+                : fromToday >= 5
+                    ? Colors.red.shade200
+                    : fromToday == 4
+                        ? Colors.orange.shade100
+                        : Colors.blue.shade50,
+            Colors.white
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -457,6 +467,7 @@ class _TmpOrderPhoneItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var group = state.temporaryOrderList[index];
+    var fromToday = group[0].fromToday();
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -464,7 +475,16 @@ class _TmpOrderPhoneItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
         gradient: LinearGradient(
-          colors: [Colors.blue.shade50, Colors.white],
+          colors: [
+            group[0].finishType == 'X'
+                ? Colors.blue.shade50
+                : fromToday >= 5
+                    ? Colors.red.shade200
+                    : fromToday == 4
+                        ? Colors.orange.shade100
+                        : Colors.blue.shade50,
+            Colors.white
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -627,16 +647,15 @@ class _TmpOrderSubItem extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        textSpan(
+                        expandedTextSpan(
+                          flex: 3,
                           hint: 'temporary_order_type_body'.tr,
                           isBold: false,
                           hintColor: Colors.black54,
                           text: data.model.ifEmpty(data.distributionType ?? ''),
                           textColor: Colors.blue.shade900,
                         ),
-                        const SizedBox(width: 30),
                         expandedTextSpan(
-                          flex: 2,
                           hint: 'temporary_order_remark'.tr,
                           isBold: false,
                           hintColor: Colors.black54,
