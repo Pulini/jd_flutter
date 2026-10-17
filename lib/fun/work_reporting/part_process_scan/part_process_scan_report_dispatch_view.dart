@@ -307,7 +307,7 @@ class _PartProcessScanReportModifyPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '车间日报工',
+      title: 'part_process_scan_report_dispatch_day_report'.tr,
       body: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: TabBar(
@@ -320,8 +320,8 @@ class _PartProcessScanReportModifyPageState
           unselectedLabelColor: Colors.grey,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: [
-            Text('分配'),
-            Text('工序'),
+            Text('part_process_scan_report_tab_allocation'.tr),
+            Text('part_process_scan_report_tab_process'.tr),
           ],
         ),
         body: Obx(
