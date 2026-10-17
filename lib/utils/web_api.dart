@@ -830,6 +830,10 @@ const webApiPartProductionReportModify =
 const webApiGetPartProductionReportTable =
     'api/WetPrinting/GetPartProcessReport_Barcode';
 
+//贴标工序报工
+const  webApiBarCodeProcessReportSubmit =
+    'api/WetPrinting/BarCodeProcessReportSubmit';
+
 //获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
 

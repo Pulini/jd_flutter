@@ -6,6 +6,7 @@ import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_sca
 
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -124,144 +125,6 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  void _printLabelDialog(List<BarCodeInfo> dataList) {
-    var select = <RxBool>[];
-    var data = <BarCodeInfo>[].obs;
-    for (var v in dataList) {
-      select.add(false.obs);
-      data.add(v);
-    }
-    Get.dialog(
-      PopScope(
-        canPop: false,
-        child: Obx(() => AlertDialog(
-              title: Row(
-                children: [
-                  Expanded(child: Text('part_label_label_list_delete_tips'.tr)),
-                  GestureDetector(
-                    onTap: () {
-                      var isSelectAll = select.isNotEmpty &&
-                          select.where((v) => v.value).length == select.length;
-                      for (var s in select) {
-                        s.value = !isSelectAll;
-                      }
-                    },
-                    child: Text(
-                      'part_label_all'.tr,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Checkbox(
-                    value: select.isNotEmpty &&
-                        select.where((v) => v.value).length == select.length,
-                    onChanged: (c) {
-                      for (var s in select) {
-                        s.value = c!;
-                      }
-                    },
-                  ),
-                ],
-              ),
-              content: SizedBox(
-                width: getScreenSize().width * 0.8,
-                height: getScreenSize().height * 0.8,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onLongPress: () {
-                      if (checkUserPermission('1052504')) {
-                        askDialog(
-                          content: 'part_label_delete_tips'
-                              .trArgs([data[index].barCode ?? '']),
-                          confirm: () {
-                            logic.deleteLabel(
-                              data[index].barCode ?? '',
-                              () {
-                                data.removeAt(index);
-                                select.removeAt(index);
-                              },
-                            );
-                          },
-                        );
-                      } else {
-                        showSnackBar(
-                          message: 'part_label_no_delete_permission'.tr,
-                          isWarning: true,
-                        );
-                      }
-                    },
-                    onTap: () => select[index].value = !select[index].value,
-                    child: Card(
-                      color: select[index].value
-                          ? Colors.green.shade100
-                          : Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            textSpan(
-                                hint: 'part_label_label'.tr,
-                                text: data[index].barCode ?? '',
-                                textColor: Colors.green.shade700),
-                            Row(
-                              children: [
-                                expandedTextSpan(
-                                  hint: 'part_label_size'.tr,
-                                  text: data[index].size ?? '',
-                                ),
-                                expandedTextSpan(
-                                  hint: 'part_label_qty'.tr,
-                                  text: data[index].createQty.toShowString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                expandedTextSpan(
-                                  hint: 'part_label_worker'.tr,
-                                  text: data[index].getWorkerName(),
-                                ),
-                                expandedTextSpan(
-                                  hint: 'part_label_report_status'.tr,
-                                  text: (data[index].reported ?? false)
-                                      ? 'part_label_reported'.tr
-                                      : 'part_label_unreported'.tr,
-                                  textColor: (data[index].reported ?? false)
-                                      ? Colors.green
-                                      : Colors.redAccent,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'part_label_back'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => logic.printLabel(list: data),
-                  child: Text(
-                    'part_label_print'.tr,
-                  ),
-                ),
-              ],
-            )),
-      ),
-    );
-  }
-
   Padding _paddingText(String text) {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
@@ -370,20 +233,21 @@ class _PartLabelPageState extends State<PartLabelPage> {
     return pageBody(
       title: 'part_label_part_process_label'.tr,
       actions: [
-        if (state.partDetail?.barCodeList?.isNotEmpty == true)
-          CombinationButton(
-            text: 'part_label_print_label'.tr,
-            click: () {
-              if (checkUserPermission('1052501')) {
-                _printLabelDialog(state.partDetail?.barCodeList ?? []);
-              } else {
-                showSnackBar(
-                  message: 'part_label_no_label_operation_permission'.tr,
-                  isWarning: true,
-                );
-              }
-            },
-          ),
+        Obx(() => state.partDetail.value?.barCodeList?.isNotEmpty == true
+            ? CombinationButton(
+                text: 'part_label_print_label'.tr,
+                click: () {
+                  if (checkUserPermission('1052501')) {
+                    Get.to(() => const LabelListPage());
+                  } else {
+                    showSnackBar(
+                      message: 'part_label_no_label_operation_permission'.tr,
+                      isWarning: true,
+                    );
+                  }
+                },
+              )
+            : Container()),
         CombinationButton(
           text: 'part_label_process_scan'.tr,
           click: () {
@@ -399,7 +263,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
               hint: 'part_label_type_body'.tr,
-              text: state.partDetail?.factoryType ?? '',
+              text: state.partDetail.value?.factoryType ?? '',
               textColor: Colors.blueAccent,
             ),
           ),
@@ -407,7 +271,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
               hint: 'part_label_part'.tr,
-              text: state.partDetail?.partName ?? '',
+              text: state.partDetail.value?.partName ?? '',
               textColor: Colors.blueAccent,
             ),
           ),
@@ -415,7 +279,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
               hint: 'part_label_process'.tr,
-              text: state.partDetail?.processName ?? '',
+              text: state.partDetail.value?.processName ?? '',
               textColor: Colors.blueAccent,
             ),
           ),
@@ -428,7 +292,8 @@ class _PartLabelPageState extends State<PartLabelPage> {
                     : 0,
                 itemBuilder: (context, index) {
                   if (index == state.partDetailSizeList.length) {
-                    return _itemTotal(state.partDetail!.getSizeListTotal());
+                    return _itemTotal(
+                        state.partDetail.value!.getSizeListTotal());
                   } else {
                     return _item(state.partDetailSizeList[index]);
                   }
@@ -440,4 +305,140 @@ class _PartLabelPageState extends State<PartLabelPage> {
       ),
     );
   }
+}
+
+class LabelListPage extends StatefulWidget {
+  const LabelListPage({super.key});
+
+  @override
+  State<LabelListPage> createState() => _LabelListPageState();
+}
+
+class _LabelListPageState extends State<LabelListPage> {
+  final logic = Get.find<WorkOrderListLogic>();
+  final state = Get.find<WorkOrderListLogic>().state;
+  var select = <RxBool>[];
+  var data = <BarCodeInfo>[].obs;
+
+  @override
+  void initState() {
+    for (var v in state.partDetail.value?.barCodeList ?? []) {
+      select.add(false.obs);
+      data.add(v);
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      title: 'part_label_label_list_delete_tips'.tr,
+      actions: [
+        Obx(() => CheckBox(
+              onChanged: (v) {
+                for (var s in select) {
+                  s.value = v;
+                }
+              },
+              name: 'part_label_all'.tr,
+              value: select.isNotEmpty &&
+                  select.where((v) => v.value).length == select.length,
+            ))
+      ],
+      body: Column(
+        children: [
+          Obx(
+            () => Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: data.length,
+                itemBuilder: (context, index) => _item(index),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: CombinationButton(
+              text: 'part_label_print'.tr,
+              click: () => logic.printLabel(
+                list: data,
+                partName: state.partDetail.value?.partName ?? '',
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _item(int index) => GestureDetector(
+        onLongPress: () {
+          if (checkUserPermission('1052504')) {
+            askDialog(
+              content:
+                  'part_label_delete_tips'.trArgs([data[index].barCode ?? '']),
+              confirm: () {
+                logic.deleteLabel(
+                  data[index].barCode ?? '',
+                  () {
+                    data.removeAt(index);
+                    select.removeAt(index);
+                  },
+                );
+              },
+            );
+          } else {
+            showSnackBar(
+              message: 'part_label_no_delete_permission'.tr,
+              isWarning: true,
+            );
+          }
+        },
+        onTap: () => select[index].value = !select[index].value,
+        child: Obx(() => Card(
+              color: select[index].value ? Colors.green.shade100 : Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    textSpan(
+                        hint: 'part_label_label'.tr,
+                        text: data[index].barCode ?? '',
+                        textColor: Colors.green.shade700),
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          hint: 'part_label_size'.tr,
+                          text: data[index].size ?? '',
+                        ),
+                        expandedTextSpan(
+                          hint: 'part_label_qty'.tr,
+                          text: data[index].createQty.toShowString(),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                          hint: 'part_label_worker'.tr,
+                          text: data[index].getWorkerName(),
+                        ),
+                        expandedTextSpan(
+                          hint: 'part_label_report_status'.tr,
+                          text: (data[index].reported ?? false)
+                              ? 'part_label_reported'.tr
+                              : 'part_label_unreported'.tr,
+                          textColor: (data[index].reported ?? false)
+                              ? Colors.green
+                              : Colors.redAccent,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )),
+      );
 }

@@ -12,7 +12,7 @@ class WorkOrderListState {
   var isClosed = spGet('${Get.currentRoute}/isClosed') ?? false;
   var orderId = '';
   var partList = <PartInfo>[].obs;
-  PartDetailInfo? partDetail;
+  var partDetail = Rxn<PartDetailInfo>();
   var partDetailSizeList = <SizeInfo>[].obs;
 
   void query({
@@ -90,8 +90,8 @@ class WorkOrderListState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        partDetail = PartDetailInfo.fromJson(response.data);
-        partDetailSizeList.value = partDetail?.sizeList ?? [];
+        partDetail.value = PartDetailInfo.fromJson(response.data);
+        partDetailSizeList.value = partDetail.value?.sizeList ?? [];
       } else {
         error.call(response.message ?? '');
       }
@@ -119,7 +119,7 @@ class WorkOrderListState {
       loading: 'work_order_list_creating_label'.tr,
       body: {
         'BoxCapacity': boxCapacity,
-        'FID': partDetail?.fIDs ?? [],
+        'FID': partDetail.value?.fIDs ?? [],
         'Qty': qty,
         'Size': size,
         'UserID': userInfo?.userID,
@@ -129,8 +129,8 @@ class WorkOrderListState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        partDetail = PartDetailInfo.fromJson(response.data);
-        partDetailSizeList.value = partDetail?.sizeList ?? [];
+        partDetail.value = PartDetailInfo.fromJson(response.data);
+        partDetailSizeList.value = partDetail.value?.sizeList ?? [];
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? '');
@@ -153,9 +153,9 @@ class WorkOrderListState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        partDetail?.barCodeList?.removeAt(
-            partDetail?.barCodeList?.indexWhere((v) => v.barCode == barCode) ??
-                0);
+        partDetail.value?.barCodeList?.removeAt(partDetail.value?.barCodeList
+                ?.indexWhere((v) => v.barCode == barCode) ??
+            0);
         success.call();
       } else {
         error.call(response.message ?? '');

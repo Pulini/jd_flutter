@@ -5,110 +5,107 @@ import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_sca
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_quick_dispatch_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-class PartProcessScanReportPage extends StatefulWidget {
-  const PartProcessScanReportPage({super.key});
+class PartProcessScanReportDispatchView extends StatefulWidget {
+  const PartProcessScanReportDispatchView({super.key});
 
   @override
-  State<PartProcessScanReportPage> createState() =>
-      _PartProcessScanReportPageState();
+  State<PartProcessScanReportDispatchView> createState() =>
+      _PartProcessScanReportModifyPageState();
 }
 
-class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
+class _PartProcessScanReportModifyPageState
+    extends State<PartProcessScanReportDispatchView>
     with SingleTickerProviderStateMixin {
-  late TabController tabController = TabController(length: 3, vsync: this);
+  late TabController tabController = TabController(length: 2, vsync: this);
   final logic = Get.find<PartProcessScanLogic>();
   final state = Get.find<PartProcessScanLogic>().state;
 
   Obx _distributionItem(int index) {
-    ReportItemData data = state.modifyDistributionList[index];
+    ReportItemData data = state.distributionList[index];
     var style = const TextStyle(
       color: Colors.black87,
       fontWeight: FontWeight.bold,
     );
-    return Obx(() => Card(
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            title: Row(
-              children: [
-                Checkbox(
-                  value: data.isSelect.value,
-                  onChanged: (c) {
-                    data.isSelect.value = c!;
-                    logic.refreshSelectedAll(tabController.index);
-                  },
-                ),
-                expandedTextSpan(
-                  hint: 'part_process_scan_report_process'.tr,
-                  text: data.reportList[0].name ?? '',
-                  fontSize: 16,
-                )
-              ],
-            ),
-            subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  padding: const EdgeInsets.all(0),
-                  iconSize: 35,
-                  onPressed: (){
-                    if(data.getProcessMax().sub(data.getDistributionMax())>0){
-                      Get.to(
-                            () => const PartProcessScanDispatchPage(),
-                        arguments: {'Index': index},
-                      );
-                    }else{
-                      showSnackBar(message: 'work_reporting_no_remaining_qty'.tr);
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.note_alt_outlined,
-                    color: Colors.blue,
+
+    return Obx(() => Container(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  expandedTextSpan(
+                    hint: 'part_process_scan_report_process'.tr,
+                    text: data.reportList[0].name ?? '',
+                    fontSize: 16,
                   ),
-                ),
-                Text('part_process_scan_report_allocation_situation'.tr,
-                    style: style),
-                Expanded(
-                  child: PercentIndicator(
-                    max: data.getProcessMax(),
-                    value: data.getDistributionMax(),
+                  Checkbox(
+                    activeColor: Colors.blueAccent,
+                    value: data.isSelect.value,
+                    onChanged: (c) {
+                      data.isSelect.value = c!;
+                    },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Text(
-                    '${data.getDistributionMax().toShowString()} / ${data.getProcessMax().toShowString()}',
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'part_process_scan_report_allocation_situation'.tr,
                     style: style,
                   ),
-                ),
-              ],
-            ),
-            children: [
+                  Expanded(
+                    child: CustomProgressIndicator(
+                      max: data.getProcessMax(),
+                      value: data.getDistributionMax(),
+                    ),
+                  ),
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    iconSize: 35,
+                    onPressed: () {
+                      if (data.getProcessMax().sub(data.getDistributionMax()) >
+                          0) {
+                        Get.to(
+                          () => const PartProcessScanDispatchPage(),
+                          arguments: {'Index': index},
+                        );
+                      } else {
+                        showSnackBar(
+                            message: 'work_reporting_no_remaining_qty'.tr);
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.note_alt_outlined,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
               for (var worker in data.distribution)
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.green.shade100,
+                    color: Colors.orange.shade50,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
                   ),
                   margin: const EdgeInsets.only(
-                    left: 10,
-                    right: 10,
+                    left: 5,
+                    right: 5,
                     bottom: 10,
                   ),
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Row(
                     children: [
                       expandedTextSpan(
@@ -140,35 +137,45 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
 
   Row _reportItemTitle() => Row(children: [
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 20,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_title_process'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         ExpandedFrameText(
-          flex: 10,
+          padding: const EdgeInsets.all(0),
+          flex: 12,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_title_ins_number'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 5,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_title_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_title_ins_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_title_report_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
@@ -178,27 +185,37 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
 
   Row _reportItem1(ReportInfo item) => Row(children: [
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 20,
+          alignment: Alignment.center,
           text: item.name ?? '',
           backgroundColor: Colors.white,
         ),
         ExpandedFrameText(
-          flex: 10,
+          padding: const EdgeInsets.all(0),
+          flex: 12,
+          alignment: Alignment.center,
           text: item.instruction ?? '',
           backgroundColor: Colors.white,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 5,
+          alignment: Alignment.center,
           text: item.size ?? '',
           backgroundColor: Colors.white,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.white,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.qty.toShowString(),
           backgroundColor: Colors.white,
         ),
@@ -206,27 +223,37 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
 
   Row _reportItem2(ReportInfo item) => Row(children: [
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 20,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_ins_total'.tr,
           backgroundColor: Colors.orange.shade100,
         ),
         ExpandedFrameText(
-          flex: 10,
+          padding: const EdgeInsets.all(0),
+          flex: 12,
+          alignment: Alignment.center,
           text: item.instruction ?? '',
           backgroundColor: Colors.orange.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 5,
+          alignment: Alignment.center,
           text: '',
           backgroundColor: Colors.orange.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.orange.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.qty.toShowString(),
           backgroundColor: Colors.orange.shade100,
         ),
@@ -234,71 +261,45 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
 
   Row _reportItem3(ReportInfo item) => Row(children: [
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 20,
+          alignment: Alignment.center,
           text: 'part_process_scan_report_part_total'.tr,
           backgroundColor: Colors.greenAccent.shade100,
         ),
         ExpandedFrameText(
-          flex: 10,
+          padding: const EdgeInsets.all(0),
+          flex: 12,
           text: '',
+          alignment: Alignment.center,
           backgroundColor: Colors.greenAccent.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 5,
           text: '',
+          alignment: Alignment.center,
           backgroundColor: Colors.greenAccent.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.instructionQty.toShowString(),
           backgroundColor: Colors.greenAccent.shade100,
         ),
         ExpandedFrameText(
+          padding: const EdgeInsets.all(0),
           flex: 7,
+          alignment: Alignment.center,
           text: item.qty.toShowString(),
           backgroundColor: Colors.greenAccent.shade100,
         ),
       ]);
 
-  Obx _barCodeItem(BarCodeInfo bci) {
-    return Obx(() => Card(
-          child: ListTile(
-            title: textSpan(
-                hint: 'part_process_scan_report_process'.tr,
-                text: bci.processName ?? '',
-                fontSize: 18),
-            subtitle: Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'part_process_scan_report_bar_code'.tr,
-                  text: bci.barCode ?? '',
-                  textColor: Colors.grey,
-                ),
-                textSpan(
-                  hint: 'part_process_scan_report_quantity'.tr,
-                  text: bci.qty.toShowString(),
-                  textColor: Colors.grey,
-                ),
-              ],
-            ),
-            trailing: Checkbox(
-              onChanged: (c) {
-                state.modifyBarCodeList
-                    .where((v) => v.barCode == bci.barCode)
-                    .forEach((v) => v.isSelect.value = c!);
-                logic.refreshSelectedAll(tabController.index);
-              },
-              value: bci.isSelect.value,
-            ),
-          ),
-        ));
-  }
 
   @override
   void initState() {
-    tabController.addListener(() {
-      logic.refreshSelectedAll(tabController.index);
-    });
     state.reportViewGetWorkerList();
     super.initState();
   }
@@ -306,16 +307,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'part_process_scan_report_day_report'.tr,
-      actions: [
-        Obx(
-          () => CheckBox(
-            onChanged: (c) => logic.setSelectedAll(tabController.index, c),
-            name: 'part_process_scan_report_all'.tr,
-            value: state.isSelectAll.value,
-          ),
-        )
-      ],
+      title: '车间日报工',
       body: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: TabBar(
@@ -328,9 +320,8 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
           unselectedLabelColor: Colors.grey,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: [
-            Text('part_process_scan_report_tab_allocation'.tr),
-            Text('part_process_scan_report_tab_process'.tr),
-            Text('part_process_scan_report_tab_label'.tr),
+            Text('分配'),
+            Text('工序'),
           ],
         ),
         body: Obx(
@@ -342,7 +333,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.all(8),
-                      itemCount: state.modifyDistributionList.length,
+                      itemCount: state.distributionList.length,
                       itemBuilder: (context, index) => _distributionItem(index),
                     ),
                   ),
@@ -364,7 +355,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                           text: 'part_process_scan_report_submit'.tr,
                           click: () => askDialog(
                             content: 'part_process_scan_report_submit_tips'.tr,
-                            confirm: () => logic.reportModifySubmit(),
+                            confirm: () => logic.submitDispatch(),
                           ),
                           combination: Combination.right,
                         ),
@@ -375,10 +366,10 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                 ],
               ),
               ListView(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(5),
                 children: [
                   _reportItemTitle(),
-                  for (var item in state.modifyReportList)
+                  for (var item in state.reportList)
                     if (item.type == 0)
                       _reportItem1(item)
                     else if (item.type == 1)
@@ -387,12 +378,6 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                       _reportItem3(item)
                 ],
               ),
-              ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: state.modifyBarCodeList.length,
-                itemBuilder: (context, index) =>
-                    _barCodeItem(state.modifyBarCodeList[index]),
-              )
             ],
           ),
         ),

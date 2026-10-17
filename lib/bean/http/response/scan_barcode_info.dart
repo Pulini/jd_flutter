@@ -120,7 +120,7 @@ class BarCodeInfo {
   double? qty; //数量
   String? processName; //工序
 
-  RxBool isSelect=false.obs;
+  RxBool isSelect = true.obs;
 
   BarCodeInfo.fromJson(dynamic json) {
     barCode = JsonParse.str(json['BarCode']);
@@ -140,7 +140,13 @@ class BarCodeInfo {
 class ReportItemData {
   var reportList = <ReportInfo>[].obs;
   var distribution = <Distribution>[].obs;
-  var isSelect = false.obs;
+  var isSelect = true.obs;
+
+  Map toJson() => {
+        'reportList': reportList.map((v) => v.toJson()).toList(),
+        'distribution': distribution.map((v) => v.toJson()),
+        'isSelect': isSelect.value,
+      };
 
   ReportItemData.fromData({
     required List<EmpInfo> empList,
@@ -173,7 +179,7 @@ class ReportItemData {
   double getProcessMax() {
     var total = 0.0;
     for (var v1 in reportList) {
-      total = total.add(v1.qty??0);
+      total = total.add(v1.qty ?? 0);
     }
     return total;
   }

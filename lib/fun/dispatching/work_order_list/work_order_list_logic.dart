@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_label_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -21,27 +22,20 @@ class WorkOrderListLogic extends GetxController {
   //固定单码标
   void  printLabel({
     required List<BarCodeInfo> list,
+    required String partName,
   }) async {
     //不显示预览
     var labelList = <List<Uint8List>>[];
     for (var data in list) {
-
-      var instructions = '';
-      data.mtonoList?.forEach((c) {
-        instructions += '${c.mtono}(${c.createQty.toShowString()}),';
-      });
-      instructions = instructions.endsWith(',')
-          ? instructions.substring(0, instructions.length - 1)
-          : instructions;
-
+      debugPrint('Instructions=${data.getInstructions()}');
       labelList.add(await labelMultipurposeFixed(
         qrCode: data.barCode ?? '',
-        title: state.partDetail?.factoryType ?? '',
-        subTitle: data.partName ?? '',
-        content: '',
-        bottomLeftText1: '${data.size?? ''}码',
+        title: state.partDetail.value?.factoryType ?? '',
+        subTitle: partName,
+        content: data.getInstructions(),
+        bottomLeftText1: '${data.size?? ''}#',
         bottomMiddleText1: getDateYMDHM(),
-        bottomRightText1: data.createQty.toShowString()+(state.partDetail?.unit ?? ''),
+        bottomRightText1: data.createQty.toShowString()+(state.partDetail.value?.unit ?? ''),
         speed:  4.0,
         density:  10.0,
       ));

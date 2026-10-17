@@ -648,7 +648,7 @@ void changePasswordDialog({
     builder: (context) => AlertDialog(
       title: Text('change_password_dialog_title'.tr),
       content: SizedBox(
-        height: 150,
+        height: 160,
         width: 200,
         child: ListView(
           children: [

@@ -183,7 +183,6 @@ class MtonoInfo {
 
 class BarCodeInfo {
   BarCodeInfo({
-    this.partName,
     this.barCode,
     this.printTimes,
     this.size,
@@ -193,7 +192,6 @@ class BarCodeInfo {
   });
 
   BarCodeInfo.fromJson(dynamic json) {
-    partName = JsonParse.str(json['PartName']);
     barCode = JsonParse.str(json['BarCode']);
     printTimes = JsonParse.toInt(json['PrintTimes']);
     size = JsonParse.str(json['Size']);
@@ -202,7 +200,6 @@ class BarCodeInfo {
     mtonoList = JsonParse.list(json['MtonoList'], MtonoInfo.fromJson);
   }
 
-  String? partName;
   String? barCode;
   int? printTimes;
   String? size;
@@ -213,7 +210,6 @@ class BarCodeInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['PartName'] = partName;
     map['BarCode'] = barCode;
     map['PrintTimes'] = printTimes;
     map['Size'] = size;
@@ -233,6 +229,11 @@ class BarCodeInfo {
     });
     return list.join(',');
   }
+
+  String getInstructions(){
+    return mtonoList?.map((v)=>'${v.mtono}(${v.createQty.toShowString()})').join(',') ?? '';
+  }
+
 }
 
 // {

@@ -70,12 +70,12 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
           Expanded(
             child: Obx(
               () => ListView.builder(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(5),
                 itemCount: state.barCodeList.length,
                 itemBuilder: (context, index) => Card(
                   color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    padding: const EdgeInsets.only(left: 5),
                     child: Row(
                       children: [
                         Expanded(child: Text(state.barCodeList[index])),

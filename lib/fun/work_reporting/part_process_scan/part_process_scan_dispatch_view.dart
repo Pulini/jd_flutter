@@ -163,8 +163,8 @@ class _PartProcessScanDispatchPageState
 
   Column _workerItem(WorkerInfo wi) {
     var surplus =
-        state.modifyDistributionList[index].getSurplusQty(wi.empID ?? 0);
-    var dis = state.modifyDistributionList[index]
+        state.distributionList[index].getSurplusQty(wi.empID ?? 0);
+    var dis = state.distributionList[index]
         .getDistributionWorker(wi.empID ?? 0);
     return Column(
       children: [
@@ -172,17 +172,17 @@ class _PartProcessScanDispatchPageState
           onTap: () => setState(() {
             if (dis == null) {
               if (isSharing) {
-                state.modifyDistributionList[index].distribution
+                state.distributionList[index].distribution
                     .add(Distribution(
                   name: wi.empName ?? '',
                   number: wi.empCode ?? '',
                   empId: wi.empID ?? 0,
                   distributionQty: surplus,
                 ));
-                state.modifyDistributionList[index].sharingDistribution();
+                state.distributionList[index].sharingDistribution();
               } else {
                 if (surplus > 0) {
-                  state.modifyDistributionList[index].distribution
+                  state.distributionList[index].distribution
                       .add(Distribution(
                     name: wi.empName ?? '',
                     number: wi.empCode ?? '',
@@ -199,9 +199,9 @@ class _PartProcessScanDispatchPageState
                 }
               }
             } else {
-              state.modifyDistributionList[index].distribution.remove(dis);
+              state.distributionList[index].distribution.remove(dis);
               if (isSharing) {
-                state.modifyDistributionList[index].sharingDistribution();
+                state.distributionList[index].sharingDistribution();
               }
             }
           }),
@@ -248,7 +248,7 @@ class _PartProcessScanDispatchPageState
                                       setState(() {
                                         dis.distributionQty = d;
                                       });
-                                      state.modifyDistributionList[index]
+                                      state.distributionList[index]
                                           .reportList
                                           .refresh();
                                     },
@@ -281,38 +281,38 @@ class _PartProcessScanDispatchPageState
                 Expanded(
                   child: Slider(
                     value: (dis.distributionQty.div(state
-                            .modifyDistributionList[index]
+                            .distributionList[index]
                             .getProcessMax()))
                         .mul(100),
                     max: 100,
                     divisions: 1000,
                     label:
-                        '${(dis.distributionQty.div(state.modifyDistributionList[index].getProcessMax())).mul(10000).round().toDouble().div(100).toShowString()}%',
+                        '${(dis.distributionQty.div(state.distributionList[index].getProcessMax())).mul(10000).round().toDouble().div(100).toShowString()}%',
                     secondaryTrackValue: (surplus.div(state
-                            .modifyDistributionList[index]
+                            .distributionList[index]
                             .getProcessMax()))
                         .mul(100),
                     onChanged: (v) {
                       if (!isSharing) {}
                       setState(() {
                         var max = (surplus.div(state
-                                .modifyDistributionList[index]
+                                .distributionList[index]
                                 .getProcessMax()))
                             .mul(100);
                         dis.distributionQty = state
-                            .modifyDistributionList[index]
+                            .distributionList[index]
                             .getProcessMax()
                             .mul(v > max ? max : v)
                             .round()
                             .toDouble()
                             .div(100);
                       });
-                      state.modifyDistributionList[index].reportList.refresh();
+                      state.distributionList[index].reportList.refresh();
                     },
                   ),
                 ),
                 Text(
-                    '${(dis.distributionQty.div(state.modifyDistributionList[index].getProcessMax())).mul(10000).round().toDouble().div(100).toShowString()}%'),
+                    '${(dis.distributionQty.div(state.distributionList[index].getProcessMax())).mul(10000).round().toDouble().div(100).toShowString()}%'),
                 const SizedBox(width: 10)
               ],
             ),
@@ -341,7 +341,7 @@ class _PartProcessScanDispatchPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              state.modifyDistributionList[index].reportList[0].name ?? '',
+              state.distributionList[index].reportList[0].name ?? '',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -350,11 +350,11 @@ class _PartProcessScanDispatchPageState
             ),
             textSpan(
               hint: 'part_process_scan_dispatch_surplus_allocation_qty'.tr,
-              text: state.modifyDistributionList[index]
+              text: state.distributionList[index]
                   .getProcessSurplus()
                   .toShowString(),
               textColor:
-                  state.modifyDistributionList[index].getProcessSurplus() > 0
+                  state.distributionList[index].getProcessSurplus() > 0
                       ? Colors.green
                       : Colors.red,
             ),

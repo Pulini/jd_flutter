@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_report_view.dart';
+import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_report_dispatch_view.dart';
+import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_report_modify_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -15,7 +17,7 @@ class PartProcessScanLogic extends GetxController {
   final PartProcessScanState state = PartProcessScanState();
 
   void addBarCode({required String code, Function()? callback}) {
-    code ='67FF7DE2-0091-46F9-849C-7F9C408758DD';
+    // code = '67FF7DE2-0091-46F9-849C-7F9C408758DD';
     if (code.isEmpty) {
       showSnackBar(
         message: 'part_process_scan_report_input_label_tips'.tr,
@@ -42,7 +44,22 @@ class PartProcessScanLogic extends GetxController {
       );
     } else {
       state.getPartProcessReportedReport(
-        success: () => Get.to(() => const PartProcessScanReportPage()),
+        success: (data) {
+          state.reportList.value = data.reportList ?? [];
+          state.modifyBarCodeList.value = data.barCodeList ?? [];
+          groupBy(state.reportList.where((v) => v.type == 0), (v) => v.name)
+              .forEach((k, v) {
+            state.distributionList.add(
+              ReportItemData.fromData(
+                empList: data.empList!
+                    .where((v1) => v1.processName == v[0].name)
+                    .toList(),
+                reportList: v,
+              ),
+            );
+          });
+          Get.to(() => const PartProcessScanReportModifyPage());
+        },
         error: (msg) => errorDialog(content: msg),
       );
     }
@@ -63,12 +80,12 @@ class PartProcessScanLogic extends GetxController {
   }
 
   void setSelectedAll(int index, bool isAll) {
+    state.isShowCheckBox.value = index == 0 || index == 2;
     if (index == 0) {
-      for (var v in state.modifyDistributionList) {
+      for (var v in state.distributionList) {
         v.isSelect.value = isAll;
       }
     }
-    if (index == 1) {}
     if (index == 2) {
       for (var v in state.modifyBarCodeList) {
         v.isSelect.value = isAll;
@@ -80,10 +97,9 @@ class PartProcessScanLogic extends GetxController {
   void refreshSelectedAll(int index) {
     if (index == 0) {
       state.isSelectAll.value =
-          state.modifyDistributionList.where((v) => v.isSelect.value).length ==
-              state.modifyDistributionList.length;
+          state.distributionList.where((v) => v.isSelect.value).length ==
+              state.distributionList.length;
     }
-    if (index == 1) {}
     if (index == 2) {
       state.isSelectAll.value =
           state.modifyBarCodeList.where((v) => v.isSelect.value).length ==
@@ -95,8 +111,7 @@ class PartProcessScanLogic extends GetxController {
     var isMultiSelect = false;
     if (index == 0) {
       isMultiSelect =
-          state.modifyDistributionList.where((v) => v.isSelect.value).length >
-              1;
+          state.distributionList.where((v) => v.isSelect.value).length > 1;
     }
     if (index == 1) {}
     if (index == 2) {}
@@ -186,7 +201,7 @@ class PartProcessScanLogic extends GetxController {
   }
 
   void quickPercentage() {
-    state.modifyDistributionList.where((v) => v.isSelect.value).forEach((v) {
+    state.distributionList.where((v) => v.isSelect.value).forEach((v) {
       var total = 0.0;
       for (var r in v.reportList) {
         total = total.add(r.qty ?? 0);
@@ -213,16 +228,57 @@ class PartProcessScanLogic extends GetxController {
   }
 
   void reportModifySubmit() {
-    state.submitChangeReport(success: (s){
-
-    }, error: (e){
-
-    });
+    for (var item in state.distributionList) {
+      var qty =
+          item.reportList.map((v) => v.qty ?? 0).reduce((v1, v2) => v1.add(v2));
+      var disQty = item.distribution.isEmpty
+          ? 0.0
+          : item.distribution
+              .map((v) => v.distributionQty)
+              .reduce((v1, v2) => v1.add(v2));
+      if (disQty == 0 || qty - disQty != 0) {
+        showSnackBar(
+          message:
+              '<${item.reportList.first.name}>剩余${qty.sub(disQty).toShowString()}未分配！',
+          isWarning: true,
+        );
+        return;
+      }
+    }
+    state.submitChangeReport(
+      success: (s) => successDialog(
+          content: s,
+          back: () {
+            state.barCodeList.value = [];
+            Get.back();
+          }),
+      error: (e) => errorDialog(content: e),
+    );
   }
 
   void barCodeSubmit() {
     state.getPartProductionReportTable(
-      success: () {},
+      success: (list) {
+        state.reportList.value = list;
+        groupBy(list.where((v) => v.type == 0), (v) => v.name).forEach((k, v) {
+          state.distributionList.add(
+            ReportItemData.fromData(empList: [], reportList: v),
+          );
+        });
+        Get.to(() => const PartProcessScanReportDispatchView());
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  void submitDispatch() {
+    state.submitDispatch(
+      success: (s) => successDialog(
+          content: s,
+          back: () {
+            state.barCodeList.value = [];
+            Get.back();
+          }),
       error: (msg) => errorDialog(content: msg),
     );
   }

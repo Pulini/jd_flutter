@@ -210,14 +210,14 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    213,
+    214,
     const WorkOrderListPage(),
   );
 
   //部件工序扫码
   static Routes partProcessScan = Routes(
     '/part_process_scan',
-    200,
+    201,
     const PartProcessScanPage(),
   );
 

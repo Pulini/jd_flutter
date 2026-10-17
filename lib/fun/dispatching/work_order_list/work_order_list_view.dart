@@ -50,7 +50,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
   Card _item(WorkOrderInfo data) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -100,22 +100,25 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             ),
             const SizedBox(height: 10),
             for (var i = 0; i < data.mtonoInfos!.length; ++i)
-              Row(
-                children: [
-                  expandedTextSpan(
-                    hint: 'work_order_list_sales_order_no'.tr,
-                    text: data.mtonoInfos![i].planBill ?? '',
-                    textColor: Colors.green,
-                  ),
-                  expandedTextSpan(
-                    hint: 'work_order_list_qty'.tr,
-                    text: data.mtonoInfos![i].workNumberTotal
-                        .toDoubleTry()
-                        .toShowString(),
-                    textColor: Colors.green,
-                  )
-                ],
-              ),
+             ...[
+               const Divider(),
+               Row(
+                 children: [
+                   expandedTextSpan(
+                     hint: 'work_order_list_sales_order_no'.tr,
+                     text: data.mtonoInfos![i].planBill ?? '',
+                     textColor: Colors.green,
+                   ),
+                   expandedTextSpan(
+                     hint: 'work_order_list_qty'.tr,
+                     text: data.mtonoInfos![i].workNumberTotal
+                         .toDoubleTry()
+                         .toShowString(),
+                     textColor: Colors.green,
+                   )
+                 ],
+               )
+             ],
             const SizedBox(height: 20),
             Row(
               children: [
@@ -269,7 +272,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
       ],
       query: () =>_query(),
       body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(5),
             itemCount: state.dataList.length,
             itemBuilder: (context, index) => _item(state.dataList[index]),
           )),

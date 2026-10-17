@@ -5,7 +5,6 @@ import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_logic
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-
 class PartPickPage extends StatefulWidget {
   const PartPickPage({super.key});
 
@@ -26,7 +25,21 @@ class _PartPickPageState extends State<PartPickPage> {
     }
     return GestureDetector(
       onTap: () => showSnackBar(title: 'part_pick_part'.tr, message: name),
-      child: Card(
+      child: Container(
+        margin: const EdgeInsets.only(top: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            colors: [
+              data.linkPartName?.isNotEmpty == true
+                  ? Colors.orange.shade100
+                  : Colors.blue.shade50,
+              Colors.white
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Row(

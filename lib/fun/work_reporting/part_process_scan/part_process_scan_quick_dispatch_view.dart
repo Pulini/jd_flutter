@@ -27,53 +27,50 @@ class _PartProcessScanQuickDispatchPageState
   Column _workerItem(WorkerInfo wi, Distribution dis) {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
+        Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.blue.shade100,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
             ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child:avatarPhoto(wi.picUrl),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child:avatarPhoto(wi.picUrl),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          textSpan(
+                            hint: 'part_process_scan_quick_dispatch_worker'.tr,
+                            text: '${wi.empName}<${wi.empCode}>',
+                            textColor: Colors.blue.shade900,
+                            fontSize: 16,
+                          ),
+                          NumberDecimalEditText(
+                            initQty: dis.distributionQty.mul(100),
+                            max: logic.getWorkerPercentageMax(dis.empId),
+                            hint: 'part_process_scan_quick_dispatch_input_tips'.tr,
+                            onChanged: (d) => setState(() {
+                              dis.distributionQty = d.div(100);
+                            }),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            textSpan(
-                              hint: 'part_process_scan_quick_dispatch_worker'.tr,
-                              text: '${wi.empName}<${wi.empCode}>',
-                              textColor: Colors.blue.shade900,
-                              fontSize: 18,
-                            ),
-                            NumberDecimalEditText(
-                              initQty: dis.distributionQty.mul(100),
-                              max: logic.getWorkerPercentageMax(dis.empId),
-                              hint: 'part_process_scan_quick_dispatch_input_tips'.tr,
-                              onChanged: (d) => setState(() {
-                                dis.distributionQty = d.div(100);
-                              }),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         Container(
