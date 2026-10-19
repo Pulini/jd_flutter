@@ -27,7 +27,6 @@ class WorkOrderListLogic extends GetxController {
     //不显示预览
     var labelList = <List<Uint8List>>[];
     for (var data in list) {
-      debugPrint('Instructions=${data.getInstructions()}');
       labelList.add(await labelMultipurposeFixed(
         qrCode: data.barCode ?? '',
         title: state.partDetail.value?.factoryType ?? '',
@@ -116,6 +115,7 @@ class WorkOrderListLogic extends GetxController {
     double qty,
     String size,
     String empId,
+    String number,
   ) {
     if (boxCapacity <= 0) {
       showSnackBar(
@@ -138,6 +138,7 @@ class WorkOrderListLogic extends GetxController {
       );
       return;
     }
+    spSave('CreateLabelWorkerNumber', number);
     state.createPartLabel(
       boxCapacity: boxCapacity,
       qty: qty,

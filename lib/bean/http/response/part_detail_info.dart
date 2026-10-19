@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 // DeptName : "金帝裁断2组"
@@ -199,6 +200,8 @@ class BarCodeInfo {
     reported = JsonParse.toBool(json['Reported']);
     mtonoList = JsonParse.list(json['MtonoList'], MtonoInfo.fromJson);
   }
+
+  RxBool isSelect = false.obs;
 
   String? barCode;
   int? printTimes;

@@ -63,12 +63,16 @@ class _PartPickPageState extends State<PartPickPage> {
       ),
     );
   }
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       logic.queryPartList();
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return pageBody(
       title: 'part_pick_select_part'.tr,
       actions: [

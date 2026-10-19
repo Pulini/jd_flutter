@@ -63,6 +63,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     var boxCapacity = max;
     var createQty = max;
     var empID = '';
+    var number = spGet('CreateLabelWorkerNumber')??'';
     Get.dialog(
       PopScope(
         canPop: false,
@@ -89,11 +90,14 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 const SizedBox(height: 20),
                 WorkerCheck(
                   hint: 'part_label_dispatch_worker_number'.tr,
+                  init: number,
                   onChanged: (wi) {
                     if (wi != null) {
                       empID = wi.empID.toString();
+                      number = wi.empCode.toString();
                     } else {
                       empID = '';
+                      number = '';
                     }
                   },
                 ),
@@ -107,6 +111,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 createQty,
                 data.size ?? '',
                 empID,
+                number,
               ),
               child: Text(
                 'part_label_create'.tr,
@@ -317,13 +322,11 @@ class LabelListPage extends StatefulWidget {
 class _LabelListPageState extends State<LabelListPage> {
   final logic = Get.find<WorkOrderListLogic>();
   final state = Get.find<WorkOrderListLogic>().state;
-  var select = <RxBool>[];
   var data = <BarCodeInfo>[].obs;
 
   @override
   void initState() {
     for (var v in state.partDetail.value?.barCodeList ?? []) {
-      select.add(false.obs);
       data.add(v);
     }
     super.initState();
@@ -336,13 +339,12 @@ class _LabelListPageState extends State<LabelListPage> {
       actions: [
         Obx(() => CheckBox(
               onChanged: (v) {
-                for (var s in select) {
-                  s.value = v;
+                for (var s in data) {
+                  s.isSelect.value = v;
                 }
               },
               name: 'part_label_all'.tr,
-              value: select.isNotEmpty &&
-                  select.where((v) => v.value).length == select.length,
+              value: data.every((v) => v.isSelect.value),
             ))
       ],
       body: Column(
@@ -361,7 +363,7 @@ class _LabelListPageState extends State<LabelListPage> {
             child: CombinationButton(
               text: 'part_label_print'.tr,
               click: () => logic.printLabel(
-                list: data,
+                list: data.where((v) => v.isSelect.value).toList(),
                 partName: state.partDetail.value?.partName ?? '',
               ),
             ),
@@ -382,7 +384,6 @@ class _LabelListPageState extends State<LabelListPage> {
                   data[index].barCode ?? '',
                   () {
                     data.removeAt(index);
-                    select.removeAt(index);
                   },
                 );
               },
@@ -394,9 +395,11 @@ class _LabelListPageState extends State<LabelListPage> {
             );
           }
         },
-        onTap: () => select[index].value = !select[index].value,
+        onTap: () => data[index].isSelect.value = !data[index].isSelect.value,
         child: Obx(() => Card(
-              color: select[index].value ? Colors.green.shade100 : Colors.white,
+              color: data[index].isSelect.value
+                  ? Colors.green.shade100
+                  : Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(

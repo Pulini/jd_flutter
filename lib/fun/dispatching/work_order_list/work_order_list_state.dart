@@ -107,7 +107,7 @@ class WorkOrderListState {
     required Function(String msg) error,
   }) {
     var list = <String>[];
-    for (var data in partList) {
+    for (var data in partList.where((v)=>v.select)) {
       if (data.linkPartName?.isNotEmpty == true) {
         list.addAll(data.linkPartName!);
       } else {
