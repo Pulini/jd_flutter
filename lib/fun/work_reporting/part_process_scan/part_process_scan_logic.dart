@@ -113,8 +113,6 @@ class PartProcessScanLogic extends GetxController {
       isMultiSelect =
           state.distributionList.where((v) => v.isSelect.value).length > 1;
     }
-    if (index == 1) {}
-    if (index == 2) {}
     return isMultiSelect;
   }
 

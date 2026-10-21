@@ -75,7 +75,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
               ),
               Container(
                 margin: const EdgeInsets.all(5),
-                width: 240,
+                width: 220,
                 height: 40,
                 child: TextField(
                   controller: workerNumberController,
