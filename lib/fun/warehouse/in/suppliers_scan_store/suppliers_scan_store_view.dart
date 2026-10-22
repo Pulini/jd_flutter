@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_state.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
@@ -23,6 +25,20 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
   final SuppliersScanStoreLogic logic = Get.put(SuppliersScanStoreLogic());
   final SuppliersScanStoreState state =
       Get.find<SuppliersScanStoreLogic>().state;
+
+  //仓库选择器
+  var billStockListController = OptionsPickerController(
+    PickerType.mesBillStockList,
+    saveKey:
+        '${RouteConfig.suppliersScanStore.name}${PickerType.mesBillStockList}',
+  );
+
+  //日期选择器的控制器
+  var orderDate = DatePickerController(
+    buttonName: 'suppliers_scan_select_posting_date'.tr,
+    PickerType.endDate,
+    saveKey: '${RouteConfig.suppliersScanStore.name}${PickerType.endDate}',
+  );
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var tecCode = TextEditingController();
@@ -67,9 +83,8 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                         fontSize: 18),
                   ),
                   const SizedBox(height: 20),
-                  DatePicker(pickerController: logic.orderDate),
-                  OptionsPicker(
-                      pickerController: logic.billStockListController),
+                  DatePicker(pickerController: orderDate),
+                  OptionsPicker(pickerController: billStockListController),
                   Row(
                     children: [
                       Expanded(
@@ -79,7 +94,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                           controller: state.peopleNumber,
                           onChanged: (s) {
                             if (s.length >= 6) {
-                              logic.checkOrderInfo(number: s);
+                              state.checkWorker(s);
                             }
                             if (s.isEmpty) {
                               state.peopleName.value = '';
@@ -98,11 +113,14 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                         onPressed: () {
                           if (state.peopleNumber.text.isEmpty) {
                             showSnackBar(
-                                title: 'shack_bar_warm'.tr,
-                                message:
-                                    'suppliers_scan_input_operator'.tr);
+                              title: 'shack_bar_warm'.tr,
+                              message: 'suppliers_scan_input_operator'.tr,
+                            );
                           } else {
-                            logic.goReport();
+                            logic.goReport(
+                              postingDate: orderDate.getDateFormatSapYMD(),
+                              stockID: billStockListController.selectedId.value,
+                            );
                             Get.back();
                           }
                         },
@@ -150,7 +168,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       body: EasyRefresh(
         controller: refreshController,
         header: const MaterialHeader(),
-        onRefresh: () => logic.getBarCodeStatusByDepartmentID(refresh: () {
+        onRefresh: () => logic.getUsedBarCode(refresh: () {
           refreshController.finishRefresh();
           refreshController.resetFooter();
         }),
@@ -241,9 +259,8 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
 
   @override
   void initState() {
-    logic.getBarCodeStatusByDepartmentID(refresh: () {
-      refreshController.finishRefresh();
-      refreshController.resetFooter();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refreshController.callRefresh();
     });
     pdaScanner(scan: (code) {
       if (code.isNotEmpty) {

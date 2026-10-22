@@ -427,7 +427,7 @@ class RouteConfig {
   //供应商扫码入库
   static Routes suppliersScanStore = Routes(
     '/suppliers_scan_store',
-    203,
+    204,
     const SuppliersScanStorePage(),
   );
 
