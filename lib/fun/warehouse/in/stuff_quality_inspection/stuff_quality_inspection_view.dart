@@ -274,6 +274,11 @@ class _StuffQualityInspectionPageState
             name: 'quality_inspection_accepting_unit'.tr,
             text: state.groupType.value,
           ));
+    var defectRepairCount = Obx(() => NumberDecimalEditText(
+          max: state.defectRepairCountMax.value,
+          hint: 'quality_inspection_defect_repair_count'.tr,
+          controller: logic.defectRepairCountController,
+        ));
     var inspectionQuantity = Obx(() => NumberDecimalEditText(
           hint: 'quality_inspection_inspection_quantity'.tr,
           controller: logic.inspectionQuantityController,
@@ -396,6 +401,8 @@ class _StuffQualityInspectionPageState
                 Expanded(child: type),
                 const SizedBox(width: 20),
                 Expanded(child: groupType),
+                const SizedBox(width: 20),
+                Expanded(child: defectRepairCount),
               ],
             ),
             const SizedBox(height: 20),
@@ -434,7 +441,12 @@ class _StuffQualityInspectionPageState
                 Expanded(flex: 2, child: type),
               ],
             ),
-            groupType,
+            Row(
+              children: [
+                Expanded(child: groupType),
+                Expanded(child: defectRepairCount),
+              ],
+            ),
             Row(
               children: [
                 Expanded(child: inspectionQuantity),

@@ -170,6 +170,7 @@ Widget _labelContainer({double? labelHeight, required List<Widget> widgets}) =>
 Widget dynamicMaterialLabel1098({
   //缅甸标
   required String labelID, //标签ID
+  required String orderType, //单据类型
   required String myanmarApprovalDocument, //缅甸批文
   required String typeBody, //工厂型体
   required String trackNo, //跟踪号
@@ -191,7 +192,10 @@ Widget dynamicMaterialLabel1098({
       widgets: [
         _createRowText(
           title: 'Description:',
-          rw: [_paddingTextLeft(text: myanmarApprovalDocument, flex: 15)],
+          rw: [
+            _paddingTextLeft(text: myanmarApprovalDocument, flex: 10),
+            _paddingTextCenter(text: orderType, flex: 5),
+          ],
         ),
         _createRowText(
           title: 'Style:',

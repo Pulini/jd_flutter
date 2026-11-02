@@ -21,6 +21,7 @@ import 'package:jd_flutter/widget/spinner_widget.dart';
 class StuffQualityInspectionLogic extends GetxController {
   final StuffQualityInspectionState state = StuffQualityInspectionState();
 
+  var defectRepairCountController = TextEditingController(); //瑕疵折补数
   var inspectionQuantityController = TextEditingController(); //检验数量控制器
   var waitInspectionQuantityController = TextEditingController(); //待抽检数控制器
   var qualifiedController = TextEditingController(); //合格数控制器
@@ -48,7 +49,8 @@ class StuffQualityInspectionLogic extends GetxController {
   void addColor(String batch, String qty) {
     if (batch.isNotEmpty && qty.isNotEmpty) {
       if (state.inspectionColorList.any((data) => data.batch == batch)) {
-        showSnackBar(message: 'stuff_quality_inspection_cannot_add_same_color'.tr);
+        showSnackBar(
+            message: 'stuff_quality_inspection_cannot_add_same_color'.tr);
       } else {
         if (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry() >=
                 0 &&
@@ -59,7 +61,8 @@ class StuffQualityInspectionLogic extends GetxController {
           ));
           state.unColorQty.value =
               (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
-                  .toFixed(3).toShowString();
+                  .toFixed(3)
+                  .toShowString();
         }
       }
     }
@@ -69,7 +72,8 @@ class StuffQualityInspectionLogic extends GetxController {
   void removeColor(int position) {
     state.unColorQty.value = (state.unColorQty.toString().toDoubleTry() +
             state.inspectionColorList[position].qty.toDoubleTry())
-        .toFixed(3).toShowString();
+        .toFixed(3)
+        .toShowString();
     state.inspectionColorList.removeAt(position);
   }
 
@@ -116,7 +120,8 @@ class StuffQualityInspectionLogic extends GetxController {
         unqualifiedQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     shortQualifiedController.text.toDoubleTry())
-                .toFixed(3).toShowString();
+                .toFixed(3)
+                .toShowString();
       }
     }
 
@@ -124,7 +129,8 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toFixed(3).toShowString();
+            .toFixed(3)
+            .toShowString();
   }
 
   //输入短码
@@ -144,7 +150,8 @@ class StuffQualityInspectionLogic extends GetxController {
         shortQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     unqualifiedQualifiedController.text.toDoubleTry())
-                .toFixed(3).toShowString();
+                .toFixed(3)
+                .toShowString();
       }
     }
 
@@ -152,7 +159,8 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toFixed(3).toShowString();
+            .toFixed(3)
+            .toShowString();
   }
 
   //确定提交品检
@@ -172,7 +180,8 @@ class StuffQualityInspectionLogic extends GetxController {
               inspectionQuantityController.text.toDoubleTry() !=
                   shortQualifiedController.text.toDoubleTry())) {
         // 不同物料并且不是全部不合格或全部短码
-        errorDialog(content: 'stuff_quality_inspection_not_allow_diff_material'.tr);
+        errorDialog(
+            content: 'stuff_quality_inspection_not_allow_diff_material'.tr);
       } else {
         getLabelsForOrder(
             inspectionType: inspectionType,
@@ -241,21 +250,27 @@ class StuffQualityInspectionLogic extends GetxController {
     }
 
     if (upInspectionType == '无') {
-      showSnackBar(message: 'stuff_quality_inspection_please_select_sampling_method'.tr);
+      showSnackBar(
+          message: 'stuff_quality_inspection_please_select_sampling_method'.tr);
       return;
     }
     if (upType == '无') {
-      showSnackBar(message: 'stuff_quality_inspection_please_select_category'.tr);
+      showSnackBar(
+          message: 'stuff_quality_inspection_please_select_category'.tr);
       return;
     }
     if (waitInspectionQuantityController.text.toDoubleTry() <= 0) {
-      showSnackBar(message: 'stuff_quality_inspection_sampling_qty_not_zero'.tr);
+      showSnackBar(
+          message: 'stuff_quality_inspection_sampling_qty_not_zero'.tr);
       return;
     }
     if (unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
         shortQualifiedController.text.toDoubleTry() > 0) {
       if (upSubmitGroupType.isEmpty) {
-        showSnackBar(message: 'stuff_quality_inspection_has_unqualified_please_select_unit'.tr);
+        showSnackBar(
+            message:
+                'stuff_quality_inspection_has_unqualified_please_select_unit'
+                    .tr);
         return;
       }
     }
@@ -263,7 +278,9 @@ class StuffQualityInspectionLogic extends GetxController {
         waitInspectionQuantityController.text.toDoubleTry() >
             inspectionQuantityController.text.toDoubleTry()) {
       if (upSubmitGroupType.isEmpty) {
-        showSnackBar(message: 'stuff_quality_inspection_sampling_qty_greater_than_zero'.tr);
+        showSnackBar(
+            message:
+                'stuff_quality_inspection_sampling_qty_greater_than_zero'.tr);
         return;
       }
     }
@@ -285,7 +302,9 @@ class StuffQualityInspectionLogic extends GetxController {
     if ((unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
             shortQualifiedController.text.toDoubleTry() > 0) &&
         reviewerController.text.isEmpty) {
-      showSnackBar(message: 'stuff_quality_inspection_has_unqualified_auditor_required'.tr);
+      showSnackBar(
+          message:
+              'stuff_quality_inspection_has_unqualified_auditor_required'.tr);
       return;
     }
 
@@ -361,12 +380,10 @@ class StuffQualityInspectionLogic extends GetxController {
                     inspectionQuantityController.text.toDoubleTry())
                 .toFixed(3);
           } else {
-            state.labelShortQty = shortQualifiedController.text
-                .toDoubleTry()
-                .toFixed(3);
-            state.labelUnQty = unqualifiedQualifiedController.text
-                .toDoubleTry()
-                .toFixed(3);
+            state.labelShortQty =
+                shortQualifiedController.text.toDoubleTry().toFixed(3);
+            state.labelUnQty =
+                unqualifiedQualifiedController.text.toDoubleTry().toFixed(3);
           }
 
           Get.to(() => const StuffQualityInspectionLabelPage())?.then((v) {
@@ -656,7 +673,8 @@ class StuffQualityInspectionLogic extends GetxController {
               countUnQuality = countUnQuality.sub(lastQty);
             } else {
               if (countUnQuality > 0) {
-                data.unqualifiedQuantity = countUnQuality.toFixed(3).toShowString();
+                data.unqualifiedQuantity =
+                    countUnQuality.toFixed(3).toShowString();
                 countUnQuality = 0.0;
               }
             }
@@ -685,7 +703,8 @@ class StuffQualityInspectionLogic extends GetxController {
             } else {
               //短码数量=剩余短码数量
               if (countShortQuality > 0) {
-                data.shortCodesNumber = countShortQuality.toFixed(3).toShowString();
+                data.shortCodesNumber =
+                    countShortQuality.toFixed(3).toShowString();
                 countShortQuality = 0;
               }
             }
@@ -728,7 +747,8 @@ class StuffQualityInspectionLogic extends GetxController {
               countInspectionQuality.sub(data.inspectionQuantity.toDoubleTry());
         } else {
           //检验数量=剩余检验数量
-          data.inspectionQuantity = countInspectionQuality.toFixed(3).toShowString();
+          data.inspectionQuantity =
+              countInspectionQuality.toFixed(3).toShowString();
         }
       }
     }
@@ -743,6 +763,47 @@ class StuffQualityInspectionLogic extends GetxController {
     }
     reason = '$reason,${processingMethodController.text}';
 
+    var items = <Map>[];
+    var defectRepairCount = defectRepairCountController.text.toDoubleTry();
+    for (var item in state.inspectionsListData) {
+      var drc = 0.0;
+      if (defectRepairCount > item.inspectionQuantity.toDoubleTry()) {
+        drc = item.inspectionQuantity.toDoubleTry();
+        defectRepairCount = defectRepairCount.sub(drc);
+      } else {
+        drc = defectRepairCount;
+        defectRepairCount = 0.0;
+      }
+      items.add({
+        'BasicQuantity': '',
+        'BasicUnit': '',
+        'Coefficient': '',
+        'CommonUnits': '',
+        'DistributiveForm': '',
+        'FactoryType': '',
+        'InspectionMethod': upInspectionType,
+        'InspectionQuantity': item.inspectionQuantity,
+        'MaterialCode': '',
+        'PlanLineNumber': '',
+        'PurchaseDocumentItemNumber': '',
+        'PurchaseVoucherNo': '',
+        'QualifiedQuantity': item.qualifiedQuantity,
+        'Remarks': '',
+        'SalesAndDistributionVoucherNumber': '',
+        'SamplingQuantity': item.samplingQuantity,
+        'SamplingRatio': '0.0',
+        'ShortCodesNumber': item.shortCodesNumber,
+        'StorageQuantity': '',
+        'TemporaryCollectionBankNo': item.temporaryCollectionBankNo,
+        'TemporaryReceiptNo': item.temporaryNo, //暂收单号
+        'UnqualifiedQuantity': item.unqualifiedQuantity,
+        'DeleteReason': '',
+        'DeletedBy': '',
+        'InspectionLineNumber': item.inspectionLineNumber,
+        'InspectionOrderNo': item.inspectionOrderNo,
+        'ZdefQty': drc.toShowString(),
+      });
+    }
     httpPost(
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
@@ -763,37 +824,7 @@ class StuffQualityInspectionLogic extends GetxController {
             'InspectionOrderNo': state.inspectionsListData[0].inspectionOrderNo,
           }
         ],
-        'MES_Items': [
-          for (var item in state.inspectionsListData)
-            {
-              'BasicQuantity': '',
-              'BasicUnit': '',
-              'Coefficient': '',
-              'CommonUnits': '',
-              'DistributiveForm': '',
-              'FactoryType': '',
-              'InspectionMethod': upInspectionType,
-              'InspectionQuantity': item.inspectionQuantity,
-              'MaterialCode': '',
-              'PlanLineNumber': '',
-              'PurchaseDocumentItemNumber': '',
-              'PurchaseVoucherNo': '',
-              'QualifiedQuantity': item.qualifiedQuantity,
-              'Remarks': '',
-              'SalesAndDistributionVoucherNumber': '',
-              'SamplingQuantity': item.samplingQuantity,
-              'SamplingRatio': '0.0',
-              'ShortCodesNumber': item.shortCodesNumber,
-              'StorageQuantity': '',
-              'TemporaryCollectionBankNo': item.temporaryCollectionBankNo,
-              'TemporaryReceiptNo': item.temporaryNo, //暂收单号
-              'UnqualifiedQuantity': item.unqualifiedQuantity,
-              'DeleteReason': '',
-              'DeletedBy': '',
-              'InspectionLineNumber': item.inspectionLineNumber,
-              'InspectionOrderNo': item.inspectionOrderNo,
-            }
-        ],
+        'MES_Items': items,
         'MES_Items2': [
           for (var _ in state.inspectionsListData)
             {
@@ -890,7 +921,9 @@ class StuffQualityInspectionLogic extends GetxController {
     }
     qualifiedController.text = qty.toFixed(3).toShowString(); //合格数量
     inspectionQuantityController.text = qty.toFixed(3).toShowString(); //检验数量
-    waitInspectionQuantityController.text = qty.toFixed(3).toShowString(); //待检验数量
+    state.defectRepairCountMax.value = qty.toFixed(3);
+    waitInspectionQuantityController.text =
+        qty.toFixed(3).toShowString(); //待检验数量
 
     state.isSameCode = name.length == 1; //是否同物料
     state.isShowTips.value = name.length > 1; //多种物料的时候提示
@@ -964,6 +997,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
 
     inspectionQuantityController.text = waitQty.toFixed(3).toShowString();
+    state.defectRepairCountMax.value = waitQty.toFixed(3);
     waitInspectionQuantityController.text = waitQty.toFixed(3).toShowString();
     qualifiedController.text = waitQty.toFixed(3).toShowString();
 
@@ -1329,6 +1363,47 @@ class StuffQualityInspectionLogic extends GetxController {
     }
     reason = '$reason,${processingMethodController.text}';
 
+    var items = <Map>[];
+    var defectRepairCount = defectRepairCountController.text.toDoubleTry();
+    for (var item in detailList) {
+      var drc = 0.0;
+      if (defectRepairCount > (item.quantityTemporarilyReceived??0.0)) {
+        drc = (item.quantityTemporarilyReceived ?? 0.0);
+        defectRepairCount = defectRepairCount.sub(drc);
+      } else {
+        drc = defectRepairCount;
+        defectRepairCount = 0.0;
+      }
+      items.add({
+        'BasicQuantity': item.basicQuantity,
+        'BasicUnit': item.basicUnits,
+        'Coefficient': item.coefficient,
+        'CommonUnits': item.commonUnits,
+        'DistributiveForm': item.distributiveModel,
+        'FactoryType': item.factoryModel,
+        'InspectionMethod': upInspectionType,
+        'InspectionQuantity': item.quantityTemporarilyReceived,
+        'MaterialCode': item.materialCode,
+        'PlanLineNumber': item.planningLineNumber,
+        'PurchaseDocumentItemNumber': item.purchaseOrderLineNumber,
+        'PurchaseVoucherNo': item.contractNo,
+        'QualifiedQuantity': item.qualifiedQuantity,
+        'Remarks': item.remarks,
+        'SalesAndDistributionVoucherNumber': item.productionNumber,
+        'SamplingQuantity': item.quantityTemporarilyReceived,
+        'SamplingRatio': '',
+        'ShortCodesNumber': item.missingQuantity,
+        'StorageQuantity': '',
+        'TemporaryCollectionBankNo': item.temporaryLineNumber,
+        'TemporaryReceiptNo': state.detailInfo!.temporaryNumber, //暂收单号
+        'UnqualifiedQuantity': item.unqualifiedQuantity,
+        'DeleteReason': '',
+        'DeletedBy': '',
+        'InspectionLineNumber': '',
+        'InspectionOrderNo': '',
+        'ZdefQty': drc.toShowString(),
+      });
+    }
     httpPost(
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
@@ -1348,37 +1423,7 @@ class StuffQualityInspectionLogic extends GetxController {
             'InspectionOrderNo': '',
           }
         ],
-        'MES_Items': [
-          for (var item in detailList)
-            {
-              'BasicQuantity': item.basicQuantity,
-              'BasicUnit': item.basicUnits,
-              'Coefficient': item.coefficient,
-              'CommonUnits': item.commonUnits,
-              'DistributiveForm': item.distributiveModel,
-              'FactoryType': item.factoryModel,
-              'InspectionMethod': upInspectionType,
-              'InspectionQuantity': item.quantityTemporarilyReceived,
-              'MaterialCode': item.materialCode,
-              'PlanLineNumber': item.planningLineNumber,
-              'PurchaseDocumentItemNumber': item.purchaseOrderLineNumber,
-              'PurchaseVoucherNo': item.contractNo,
-              'QualifiedQuantity': item.qualifiedQuantity,
-              'Remarks': item.remarks,
-              'SalesAndDistributionVoucherNumber': item.productionNumber,
-              'SamplingQuantity': item.quantityTemporarilyReceived,
-              'SamplingRatio': '',
-              'ShortCodesNumber': item.missingQuantity,
-              'StorageQuantity': '',
-              'TemporaryCollectionBankNo': item.temporaryLineNumber,
-              'TemporaryReceiptNo': state.detailInfo!.temporaryNumber, //暂收单号
-              'UnqualifiedQuantity': item.unqualifiedQuantity,
-              'DeleteReason': '',
-              'DeletedBy': '',
-              'InspectionLineNumber': '',
-              'InspectionOrderNo': '',
-            }
-        ],
+        'MES_Items': items,
         'MES_Items2': [
           for (var _ in detailList)
             {
@@ -1459,7 +1504,8 @@ class StuffQualityInspectionLogic extends GetxController {
   //提交要品检的贴标信息
   bool submitSelect() {
     if (state.labelData.none((data) => data.select)) {
-      showSnackBar(message: 'stuff_quality_inspection_please_select_data_submit'.tr);
+      showSnackBar(
+          message: 'stuff_quality_inspection_please_select_data_submit'.tr);
       return false;
     } else {
       var list =
@@ -1468,13 +1514,11 @@ class StuffQualityInspectionLogic extends GetxController {
           .map((v) => v.unqualified ?? 0)
           .reduce((a, b) => a.add(b))
           .toFixed(3);
-      var allShort = list
-          .map((v) => v.short ?? 0)
-          .reduce((a, b) => a.add(b))
-          .toFixed(3);
-      if (allUnQty != state.labelUnQty ||
-          allShort != state.labelShortQty) {
-        showSnackBar(message: 'stuff_quality_inspection_label_qty_not_match'.tr);
+      var allShort =
+          list.map((v) => v.short ?? 0).reduce((a, b) => a.add(b)).toFixed(3);
+      if (allUnQty != state.labelUnQty || allShort != state.labelShortQty) {
+        showSnackBar(
+            message: 'stuff_quality_inspection_label_qty_not_match'.tr);
         return false;
       } else {
         return true;
@@ -1484,8 +1528,8 @@ class StuffQualityInspectionLogic extends GetxController {
 
   //全部不合格 / 全部短码（合计行除外）
   void selectAllUnqualified(bool isAll) {
-    var selectedData = state.labelData
-        .where((data) => data.select && data.barCode != '合计');
+    var selectedData =
+        state.labelData.where((data) => data.select && data.barCode != '合计');
     if (selectedData.isNotEmpty) {
       // 有勾选：只修改已勾选的非合计行
       for (var subData in selectedData) {

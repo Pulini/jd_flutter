@@ -18,6 +18,7 @@ class StuffQualityInspectionState {
   var inspectionTypeEnable = true.obs; //sp检验方式是否能点击
   var typeEnable = true.obs; //sp类别是否能点击
   var groupTypeEnable = false.obs; //sp受理单位是否能点击
+  var defectRepairCountMax = (0.0).obs; //折补数上限
 
   var inspectionEnable = true.obs; //检验数量输入框是否能点击
   var waitInputInspectionEnable = true.obs; //待检验数量输入框是否能点击

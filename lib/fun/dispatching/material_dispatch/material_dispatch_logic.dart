@@ -256,9 +256,18 @@ class MaterialDispatchLogic extends GetxController {
         );
       });
     }
-    // 正单 / 补单
-    String orderType() =>
-        data.billStyle == '0' ? '${data.factoryID} 正单' : '${data.factoryID} 补单';
+    String orderType() {
+      switch(data.billStyle){
+        case '0':
+          return '${data.factoryID} ${isChinese()?'正单':'Orig'}';
+        case '1':
+          return '${data.factoryID} ${isChinese()?'补单':'Supp'}';
+          case '2':
+            return '${data.factoryID} ${isChinese()?'预补':'Pre-s'}';
+        default:
+          return '${data.factoryID} ${isChinese()?'异常':'Error'}';
+      }
+    }
 
     // 国内小标（多处复用）
     domesticSmallLabel() => labelMultipurposeFixed(
@@ -367,6 +376,7 @@ class MaterialDispatchLogic extends GetxController {
         } else {
           previewLabel(dynamicMaterialLabel1098(
             labelID: guid,
+            orderType: orderType(),
             myanmarApprovalDocument: data.description ?? '',
             typeBody: data.productName ?? '',
             trackNo: '',
@@ -445,6 +455,7 @@ class MaterialDispatchLogic extends GetxController {
       //缅甸
       previewLabel(dynamicMaterialLabel1098(
         labelID: guid,
+        orderType: orderType(),
         myanmarApprovalDocument: data.description ?? '',
         typeBody: data.productName ?? '',
         trackNo: '',

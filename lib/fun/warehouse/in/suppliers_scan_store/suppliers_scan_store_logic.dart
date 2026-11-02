@@ -68,13 +68,6 @@ class SuppliersScanStoreLogic extends GetxController {
     }
   }
 
-  bool haveCodeData() {
-    if (state.barCodeList.isNotEmpty) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   //删除对应条码
   void deleteCode(BarCodeInfo barCodeList) {

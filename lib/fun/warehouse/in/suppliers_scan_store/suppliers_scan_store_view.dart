@@ -238,7 +238,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   child: CombinationButton(
                     text: 'suppliers_scan_submit'.tr,
                     click: () {
-                      if (logic.haveCodeData()) {
+                      if (state.barCodeList.isNotEmpty) {
                         showCustomPickerDialog(context);
                       } else {
                         showSnackBar(

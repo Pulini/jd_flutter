@@ -396,6 +396,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         '(110 x N)mm 1098 无尺码物料标',
         dynamicMaterialLabel1098(
           labelID: 'labelID',
+          orderType: 'orderType',
           myanmarApprovalDocument: 'myanmarApprovalDocument',
           typeBody: 'typeBody',
           trackNo: '8123456',

@@ -19,6 +19,7 @@ import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -959,3 +960,4 @@ String getDebugVCode() {
   }
   return vCode;
 }
+bool isChinese()=>Get.locale!.languageCode==localeChinese.languageCode;

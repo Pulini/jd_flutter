@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_label_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
