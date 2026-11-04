@@ -708,6 +708,7 @@ class MaintainLabelLogic extends GetxController {
     for (var data in list) {
       labelList.add(dynamicSizeMaterialLabel1098n1003(
         labelID: data.barCode ?? '',
+        orderType: orderType(data.customFactoryID ?? '', data.orderType ?? ''),
         myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
         typeBody: data.subList!.first.factoryType ?? '',
         trackNo: data.trackNo ?? '',
@@ -1214,6 +1215,7 @@ class MaintainLabelLogic extends GetxController {
       if (state.isShowPreview.value) {
         labelList.add(dynamicSizeMaterialLabel1098n1003(
           labelID: data.barCode ?? '',
+          orderType: orderType(data.customFactoryID??'',data.orderType??''),
           myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
           typeBody: data.subList!.first.factoryType ?? '',
           trackNo: data.trackNo ?? '',
@@ -1239,6 +1241,7 @@ class MaintainLabelLogic extends GetxController {
       } else {
         labelList2.add( fixedLabelMyanmar(
           labelID: data.barCode ?? '',
+          orderType: orderType(data.customFactoryID??'',data.orderType??''),
           myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
           typeBody: data.subList!.first.factoryType ?? '',
           trackNo: data.trackNo ?? '',

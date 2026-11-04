@@ -174,7 +174,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
           subtitle: Row(
             children: [
               expandedTextSpan(
-                hint: 'part_label_label'.tr,
+                hint: 'part_label_size'.tr,
                 text: data.size ?? '',
                 textColor: Colors.blue.shade900,
               ),

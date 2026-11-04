@@ -256,18 +256,6 @@ class MaterialDispatchLogic extends GetxController {
         );
       });
     }
-    String orderType() {
-      switch(data.billStyle){
-        case '0':
-          return '${data.factoryID} ${isChinese()?'正单':'Orig'}';
-        case '1':
-          return '${data.factoryID} ${isChinese()?'补单':'Supp'}';
-          case '2':
-            return '${data.factoryID} ${isChinese()?'预补':'Pre-s'}';
-        default:
-          return '${data.factoryID} ${isChinese()?'异常':'Error'}';
-      }
-    }
 
     // 国内小标（多处复用）
     domesticSmallLabel() => labelMultipurposeFixed(
@@ -357,7 +345,7 @@ class MaterialDispatchLogic extends GetxController {
         previewLabel(dynamicInBoxLabel1095n1096(
           haveSupplier: false,
           productName: data.description ?? '',
-          companyOrderType: orderType(),
+          companyOrderType: orderType(data.factoryID??'',data.billStyle??''),
           customsDeclarationType: data.cusdeclaraType ?? '',
           pieceNo: '1-1',
           qrCode: guid,
@@ -376,7 +364,7 @@ class MaterialDispatchLogic extends GetxController {
         } else {
           previewLabel(dynamicMaterialLabel1098(
             labelID: guid,
-            orderType: orderType(),
+            orderType: orderType(data.factoryID??'',data.billStyle??''),
             myanmarApprovalDocument: data.description ?? '',
             typeBody: data.productName ?? '',
             trackNo: '',
@@ -409,7 +397,7 @@ class MaterialDispatchLogic extends GetxController {
           previewLabel(dynamicSizeMaterialLabel1095n1096n1002(
             labelID: guid,
             productName: data.description ?? '',
-            orderType: orderType(),
+            orderType: orderType(data.factoryID??'',data.billStyle??''),
             typeBody: data.productName ?? '',
             trackNo: color,
             instructionNo: billNo,
@@ -438,7 +426,7 @@ class MaterialDispatchLogic extends GetxController {
       previewLabel(dynamicInBoxLabel1095n1096(
         haveSupplier: false,
         productName: data.description ?? '',
-        companyOrderType: orderType(),
+        companyOrderType: orderType(data.factoryID??'',data.billStyle??''),
         customsDeclarationType: data.cusdeclaraType ?? '',
         pieceNo: '1-1',
         qrCode: guid,
@@ -455,7 +443,7 @@ class MaterialDispatchLogic extends GetxController {
       //缅甸
       previewLabel(dynamicMaterialLabel1098(
         labelID: guid,
-        orderType: orderType(),
+        orderType: orderType(data.factoryID??'',data.billStyle??''),
         myanmarApprovalDocument: data.description ?? '',
         typeBody: data.productName ?? '',
         trackNo: '',

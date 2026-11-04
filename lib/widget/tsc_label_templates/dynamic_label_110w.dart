@@ -336,6 +336,7 @@ Widget dynamicMaterialLabel1098({
 ///物料列表格式 [['物料编码','物料规格'],['物料编码','物料规格'],['物料编码','物料规格']]
 Widget dynamicSizeMaterialLabel1098n1003({
   required String labelID, //标签ID
+  required String orderType, //工厂编号 订单类型
   required String myanmarApprovalDocument, //缅甸批文
   required String typeBody, //工厂型体
   required String trackNo, //跟踪号
@@ -364,7 +365,10 @@ Widget dynamicSizeMaterialLabel1098n1003({
       widgets: [
         _createRowText(
           title: 'Description:',
-          rw: [_paddingTextLeft(text: myanmarApprovalDocument, flex: 15)],
+          rw: [
+            _paddingTextLeft(text: myanmarApprovalDocument, flex: 10),
+            _paddingTextCenter(text: orderType, flex: 5),
+          ],
         ),
         _createRowText(
           title: 'Style:',

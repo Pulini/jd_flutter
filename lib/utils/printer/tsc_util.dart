@@ -2199,6 +2199,7 @@ Future<List<Uint8List>> fixedLabelIndonesia({
 /// 标签规格：100mm × 110mm，2mm 边距
 Future<List<Uint8List>> fixedLabelMyanmar({
   String labelID = '', // 标签ID（二维码内容）
+  String orderType='',//工厂编号/单据类型
   String myanmarApprovalDocument = '', // 缅甸批文
   String typeBody = '', // 工厂型体
   String trackNo = '', // 跟踪号
@@ -2256,6 +2257,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
   int vl5x= padding + 53;//竖线5x坐标
   int vl6x= padding + 67;//竖线6x坐标
   int vl7x= padding + 79;//竖线7x坐标
+  int vl8x= padding + 79;//竖线8x坐标
 
   int vl1y= padding ;//竖线1y坐标
   int vl2y= padding + headerHeight + sizeListH;//竖线2y坐标
@@ -2264,6 +2266,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
   int vl5y= padding + headerHeight + sizeListH + 42;//竖线5y坐标
   int vl6y= padding + headerHeight + sizeListH;//竖线6y坐标
   int vl7y= padding + headerHeight + sizeListH + 33;//竖线7y坐标
+  int vl8y= padding ;//竖线8y坐标
 
   int vl1w = 15;//竖线1高度
   int vl2w = 55;//竖线2高度
@@ -2272,6 +2275,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
   int vl5w = 9;//竖线5高度
   int vl6w = 42;//竖线6高度
   int vl7w = 18;//竖线7高度
+  int vl8w = 15;//竖线7高度
 
   int stw = padding + 18;//尺码列表第一列宽
   int shl1y = padding + 20;//尺码列表横线1y坐标
@@ -2294,6 +2298,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
 
   //标签提示文本 从上往下从左往右
   list.add(await _tscBitmapText((padding + 1) * _dpi, (padding + 1) * _dpi, 26,'Description:' ,isBold: false));
+
 
   list.add(await _tscBitmapText((padding + 1) * _dpi, (ul1y + 1) * _dpi, 26,'Style:' ,isBold: false));
 
@@ -2330,6 +2335,8 @@ Future<List<Uint8List>> fixedLabelMyanmar({
 
     //标签内容文本 从上往下从左往右
    if(myanmarApprovalDocument.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (padding+1) * _dpi, 26, myanmarApprovalDocument,isBold: false));
+
+   if(orderType.isNotEmpty) list.add(await _tscBitmapText((vl8x + 1) * _dpi, (padding + 1) * _dpi, 26,orderType ,isBold: false));
 
    if(typeBody.isNotEmpty) list.add(await _tscBitmapText((vl1x + 1) * _dpi, (ul1y + 1)  * _dpi, 26, typeBody ,isBold: false));
 
@@ -2410,6 +2417,7 @@ Future<List<Uint8List>> fixedLabelMyanmar({
    list.add(_tscLine(vl5x * _dpi, vl5y * _dpi, 2, vl5w * _dpi));
    list.add(_tscLine(vl6x * _dpi, vl6y * _dpi, 2, vl6w * _dpi));
    list.add(_tscLine(vl7x * _dpi, vl7y * _dpi, 2, vl7w * _dpi));
+   list.add(_tscLine(vl8x * _dpi, vl8y * _dpi, 2, vl8w * _dpi));
 
 
    list.add(_tscLine(padding * _dpi, (shl1y) * _dpi, ulw1 * _dpi, 2));

@@ -961,3 +961,15 @@ String getDebugVCode() {
   return vCode;
 }
 bool isChinese()=>Get.locale!.languageCode==localeChinese.languageCode;
+String orderType(String factory,String orderType) {
+  switch(orderType){
+    case '0':
+      return '$factory ${isChinese()?'正单':'Orig'}';
+    case '1':
+      return '$factory ${isChinese()?'补单':'Supp'}';
+    case '2':
+      return '$factory ${isChinese()?'预补':'Pre-s'}';
+    default:
+      return '$factory ${isChinese()?'异常':'Error'}';
+  }
+}
