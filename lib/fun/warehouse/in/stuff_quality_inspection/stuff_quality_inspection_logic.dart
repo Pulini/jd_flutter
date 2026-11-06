@@ -131,6 +131,10 @@ class StuffQualityInspectionLogic extends GetxController {
                 shortQualifiedController.text.toDoubleTry())
             .toFixed(3)
             .toShowString();
+    state.unqualifiedQuantity.value=qty;
+    if(qty==0){
+      ngController.text='';
+    }
   }
 
   //输入短码
@@ -1645,6 +1649,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   void getNgType() {
+    if(state.unqualifiedQuantity.value<=0)return;
     sapPost(
       loading: 'quality_inspection_handle_type'.tr,
       method: webApiForDivision,

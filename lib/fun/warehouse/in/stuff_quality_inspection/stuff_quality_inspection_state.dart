@@ -23,6 +23,8 @@ class StuffQualityInspectionState {
   var inspectionEnable = true.obs; //检验数量输入框是否能点击
   var waitInputInspectionEnable = true.obs; //待检验数量输入框是否能点击
   var unqualifiedQuantityEnable = true.obs; //不合格数量输入框是否能点击
+  var unqualifiedQuantity = (0.0).obs; //不合格数量
+
   var shortQuantityEnable = true.obs; //短码数量输入框是否能点击
   var abnormalExplanationEnable = true.obs; //异常说明
   var processingMethodEnable = true.obs; //处理方法

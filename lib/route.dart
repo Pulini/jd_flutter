@@ -182,7 +182,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    231,
+    232,
     const ProductionDispatchPage(),
   );
 
@@ -546,7 +546,7 @@ class RouteConfig {
   //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    215,
+    216,
     const TemporaryOrderPage(),
   );
 
@@ -588,7 +588,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    215,
+    216,
     const QualityInspectionListPage(),
   );
 

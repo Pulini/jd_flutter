@@ -312,13 +312,14 @@ class _StuffQualityInspectionPageState
       hint: 'quality_inspection_reviewer'.tr,
       controller: logic.reviewerController,
     );
-    var ngType = EditText(
+    var ngType = Obx(()=>EditText(
       readOnly: true,
+      isEnable: state.unqualifiedQuantity.value>0,
       hint: 'quality_inspection_ng_type'.tr,
       controller: logic.ngController,
       myIcon: const Icon(Icons.search),
       onIconTap: () => logic.getNgType(),
-    );
+    ));
     var exceptionDescription = Obx(() => EditText(
           isEnable: state.abnormalExplanationEnable.value,
           hint: 'quality_inspection_exception_description'.tr,
