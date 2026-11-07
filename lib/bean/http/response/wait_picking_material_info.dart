@@ -499,15 +499,15 @@ class WaitPickingMaterialOrderSubInfo {
   String getOrderType() {
     switch (documentType) {
       case '1':
-        return '正单';
+        return 'wait_picking_material_order_positive_order'.tr;
       case '2':
-        return '正单委外';
+        return 'wait_picking_material_order_positive_order_outsource'.tr;
       case '3':
-        return '补单';
+        return 'wait_picking_material_order_supplement_order'.tr;
       case '4':
-        return '补单委外';
+        return 'wait_picking_material_order_supplement_order_outsource'.tr;
       default:
-        return '所有';
+        return 'wait_picking_material_order_all'.tr;
     }
   }
 }

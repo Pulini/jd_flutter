@@ -95,10 +95,10 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
       case -1:
         {
           backColors = Colors.blue.shade200;
-          process = '工序';
+          process = 'part_process_scan_report_title_process'.tr;
           processColors = Colors.black;
-          instruction = '指令数';
-          qty = '数量';
+          instruction = 'part_process_scan_report_title_ins_qty'.tr;
+          qty = 'common_quantity'.tr;
           break;
         }
     }

@@ -668,7 +668,7 @@ class _RateItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  '已达标',
+                  'production_tasks_reached_target'.tr,
                   style: TextStyle(
                     fontSize: isPad() ? 12 : 10,
                     fontWeight: FontWeight.w700,

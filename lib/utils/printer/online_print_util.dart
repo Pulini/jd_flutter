@@ -270,7 +270,10 @@ void _getOnlinePrintDeviceList({
   }, onError: (e) {
     loadingDismiss();
     error.call(
-      '获取打印机列表失败：${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}',
+      'online_print_get_printer_list_failed'.trArgs([
+        '${(e as DioException).response?.statusCode}',
+        '${e.response?.statusMessage}',
+      ]),
     );
   });
 }
@@ -317,7 +320,10 @@ void _printImg({
   }, onError: (e) {
     loadingDismiss();
     error.call(
-      '发送打印命令失败：${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}',
+      'online_print_send_command_failed'.trArgs([
+        '${(e as DioException).response?.statusCode}',
+        '${e.response?.statusMessage}',
+      ]),
     );
   });
 }

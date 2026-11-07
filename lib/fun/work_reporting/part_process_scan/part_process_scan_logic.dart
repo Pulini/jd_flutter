@@ -237,7 +237,10 @@ class PartProcessScanLogic extends GetxController {
       if (disQty == 0 || qty - disQty != 0) {
         showSnackBar(
           message:
-              '<${item.reportList.first.name}>剩余${qty.sub(disQty).toShowString()}未分配！',
+              'part_process_scan_remaining_unallocated'.trArgs([
+                '${item.reportList.first.name}',
+                qty.sub(disQty).toShowString(),
+              ]),
           isWarning: true,
         );
         return;

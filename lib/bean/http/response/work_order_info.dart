@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
@@ -91,13 +92,13 @@ class WorkOrderInfo {
     var state = '';
     switch (_getState()) {
       case 1:
-        state = '未生成贴标';
+        state = 'work_order_label_not_generated'.tr;
         break;
       case 2:
-        state = '生成部分贴标';
+        state = 'work_order_label_partially_generated'.tr;
         break;
       default:
-        state = '已生成贴标';
+        state = 'work_order_label_generated'.tr;
         break;
     }
     return state;

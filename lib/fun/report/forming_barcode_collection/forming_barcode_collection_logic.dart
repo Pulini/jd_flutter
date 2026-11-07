@@ -207,8 +207,8 @@ class FormingBarcodeCollectionLogic extends GetxController {
     if (!hasMatchingItem) {
       try {
         Get.snackbar(
-          '提示',
-          '未找到匹配的工单',
+          'common_tip'.tr,
+          'forming_barcode_collection_no_matching_order'.tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.blueAccent,      // 背景颜色
           colorText: Colors.white,         // 文字颜色

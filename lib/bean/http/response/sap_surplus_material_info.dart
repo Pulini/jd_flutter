@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -119,11 +120,11 @@ class SurplusMaterialHistoryInfo {
   String stateText() {
     switch (messageType) {
       case 'S':
-        return '入库成功';
+        return 'sap_surplus_material_stock_in_success'.tr;
       case 'E':
-        return '入库失败';
+        return 'sap_surplus_material_stock_in_failed'.tr;
       default:
-        return '未知状态';
+        return 'sap_surplus_material_stock_in_unknown'.tr;
     }
   }
 

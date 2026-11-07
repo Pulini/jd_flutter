@@ -143,9 +143,9 @@ class _AppScannerState extends State<AppScanner> with WidgetsBindingObserver {
 }
 
 class Scanner extends StatefulWidget {
-  const Scanner({super.key, this.title = '扫描二维码'});
+  const Scanner({super.key, this.title});
 
-  final String title;
+  final String? title;
 
   String getClassName() => runtimeType.toString();
 
@@ -202,7 +202,7 @@ class _ScannerState extends State<Scanner> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: widget.title,
+      title: widget.title ?? 'widget_scan_qr_code'.tr,
       body: Center(
         child: AspectRatio(
           aspectRatio: 1 / 1,
@@ -220,7 +220,7 @@ class _ScannerState extends State<Scanner> {
 }
 
 void scannerDialog({
-  String title = '请扫描二维码',
+  String? title,
   required Function(String code) detect,
 }) {
   var detected = false;
@@ -242,7 +242,7 @@ void scannerDialog({
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title),
+            Text(title ?? 'widget_scan_qr_code_hint'.tr),
             IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(

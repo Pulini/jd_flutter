@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -85,18 +86,18 @@ class WorkCardTitle {
     return map;
   }
 
-  String getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
+  String getDispatchTotal() => 'dispatch_total_qty'.trArgs([dispatchingNumber.toShowString()]);
 
-  String getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
+  String getTodayGoal() => 'dispatch_today_goal'.trArgs([dayWorkCardPlanQty.toShowString()]);
 
-  String getReported() => '已汇报数：${qtyPass.toShowString()}';
+  String getReported() => 'dispatch_reported_qty'.trArgs([qtyPass.toShowString()]);
 
-  String getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
+  String getUnderCount() => 'dispatch_report_shortage'.trArgs([dispatchingNumber.sub(qtyPass!).toShowString()]);
 
-  String getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
+  String getAccumulateReportCount() => 'dispatch_accumulated_work'.trArgs([qtyProcessPass.toShowString()]);
 
   String getReportedCount() =>
-      '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
+      'dispatch_reported_not_worked'.trArgs([qtyPass.sub(qtyProcessPass!).toShowString()]);
 }
 
 // ID : 0
@@ -243,11 +244,11 @@ class WorkCardList {
     return total;
   }
 
-  String getTotalString() => '计工：${getTotal().toShowString()}';
+  String getTotalString() => 'dispatch_work_count'.trArgs([getTotal().toShowString()]);
 
-  String getFinishQtyString() => '已计工：${finishQty.toShowString()}';
+  String getFinishQtyString() => 'dispatch_worked_qty'.trArgs([finishQty.toShowString()]);
 
-  String getSurplusQtyString() => '剩余：${mustQty.toShowString()}';
+  String getSurplusQtyString() => 'dispatch_remaining_qty'.trArgs([mustQty.toShowString()]);
 
   bool isShowWarning() => getTotal() > mustQty!;
 

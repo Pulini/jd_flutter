@@ -383,9 +383,9 @@ void reportDialog(ProcessDispatchLabelInfo data, Function() refresh) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '1、输入员工二维码。\r\n2、填写合格数。',
-                style: TextStyle(color: Colors.green),
+              Text(
+                'process_dispatch_register_guide'.tr,
+                style: const TextStyle(color: Colors.green),
               ),
               WorkerCheck(
                 init: data.empNumber,

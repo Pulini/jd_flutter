@@ -118,7 +118,7 @@ class SizeInfo {
 
   String getSalesOrderNumber() {
     if (size?.isEmpty == true && mtonoList?.isEmpty == true) {
-      return '合计';
+      return 'work_reporting_subtotal'.tr;
     } else {
       var numbers = <String>[];
       mtonoList?.forEach((data) {

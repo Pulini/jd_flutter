@@ -100,7 +100,7 @@ class _WorkerCheckState extends State<WorkerCheck> {
               errorText: error.value.isNotEmpty ? error.value : null,
               labelText: widget.hint != null && widget.hint!.isNotEmpty
                   ? widget.hint
-                  : '请输入员工工号',
+                  : 'widget_input_employee_number'.tr,
               labelStyle: TextStyle(color:widget.hintColor?? Colors.black54),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),

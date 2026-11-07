@@ -51,8 +51,8 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
       labelList: labelList,
       finished: (success, fail) {
         successDialog(
-          title: '标签下发结束',
-          content: '完成${success.length}张, 失败${fail.length}张',
+          title: 'widget_label_send_finished'.tr,
+          content: 'widget_label_send_result'.trArgs(['${success.length}', '${fail.length}']),
         );
       },
     );

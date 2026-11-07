@@ -155,7 +155,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapSupplier(name: '全部', supplierNumber: '')
+          if (hasAll) PickerSapSupplier(name: 'common_all'.tr, supplierNumber: '')
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -203,7 +203,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapFactory(name: '全部', number: 0)
+          if (hasAll) PickerSapFactory(name: 'common_all'.tr, number: 0)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -228,7 +228,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapWorkCenter(name: '全部', number: '')
+          if (hasAll) PickerSapWorkCenter(name: 'common_all'.tr, number: '')
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -254,7 +254,7 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [
           if (hasAll)
-            PickerSapDepartment(name: '全部', departmentId: 0, number: '')
+            PickerSapDepartment(name: 'common_all'.tr, departmentId: 0, number: '')
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -280,7 +280,7 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [
           if (hasAll)
-            PickerMesWorkShop(name: '全部', number: '', processFlowId: 0)
+            PickerMesWorkShop(name: 'common_all'.tr, number: '', processFlowId: 0)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -309,7 +309,7 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [
           if (hasAll)
-            PickerMesDepartment(name: '全部', number: '', departmentId: 0)
+            PickerMesDepartment(name: 'common_all'.tr, number: '', departmentId: 0)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -336,7 +336,7 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll)
             PickerMesOrganization(
-                itemId: 0, code: '', name: '全部', number: '', adminOrganizeId: 0)
+                itemId: 0, code: '', name: 'common_all'.tr, number: '', adminOrganizeId: 0)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -361,7 +361,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapProcessFlow(name: '全部', number: '')
+          if (hasAll) PickerSapProcessFlow(name: 'common_all'.tr, number: '')
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -414,7 +414,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerMesProductionReportType(itemID: 0, itemName: '全部')
+          if (hasAll) PickerMesProductionReportType(itemID: 0, itemName: 'common_all'.tr)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -446,7 +446,7 @@ abstract class PickerController {
             PickerSapMachine(
               id: 0,
               number: '',
-              name: '全部',
+              name: 'common_all'.tr,
               sapNumber: '',
               sapCostCenterNumber: '',
               deptID: 0,
@@ -482,7 +482,7 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [
           if (hasAll)
-            PickerSapWorkCenterNew(name: '全部', number: '', departmentID: -1)
+            PickerSapWorkCenterNew(name: 'common_all'.tr, number: '', departmentID: -1)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -510,7 +510,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapGroup(name: '全部', itemId: 0)
+          if (hasAll) PickerSapGroup(name: 'common_all'.tr, itemId: 0)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -537,11 +537,11 @@ abstract class PickerController {
         List<LinkPickerItem> list = [
           if (hasAll)
             PickerSapFactoryAndWarehouse(
-              name: '全部',
+              name: 'common_all'.tr,
               number: '',
               warehouseList: [
                 PickerSapWarehouse(
-                  warehouseName: '全部',
+                  warehouseName: 'common_all'.tr,
                   warehouseNumber: '',
                   warehouseId: '',
                 )
@@ -560,7 +560,7 @@ abstract class PickerController {
           for (var v in list) {
             (v as PickerSapFactoryAndWarehouse).warehouseList = [
               PickerSapWarehouse(
-                warehouseName: '全部',
+                warehouseName: 'common_all'.tr,
                 warehouseNumber: '',
                 warehouseId: '',
               ),
@@ -584,7 +584,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerMesMoldingPackArea(id: 0, name: '全部')
+          if (hasAll) PickerMesMoldingPackArea(id: 0, name: 'common_all'.tr)
         ];
         list.addAll(await compute(
           parseJsonToList,
@@ -645,7 +645,7 @@ abstract class PickerController {
             PickerMesGroup(
               departmentID: 0,
               departmentNumber: '',
-              departmentName: '全部',
+              departmentName: 'common_all'.tr,
             )
         ];
         list.addAll(await compute(
@@ -676,8 +676,8 @@ abstract class PickerController {
           if (hasAll)
             MesStockInfo(
               itemID: -1,
-              name: '全部',
-              stockList: [StockItem(itemID: -1, name: '全部')],
+              name: 'common_all'.tr,
+              stockList: [StockItem(itemID: -1, name: 'common_all'.tr)],
             )
         ];
         list.addAll(await compute(
@@ -755,7 +755,7 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [
-          if (hasAll) PickerSapDivision(divisionId: '', divisionName: '无')
+          if (hasAll) PickerSapDivision(divisionId: '', divisionName: 'common_none'.tr)
         ];
         list.addAll(await compute(
           parseJsonToList,

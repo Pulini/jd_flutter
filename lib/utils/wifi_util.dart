@@ -16,7 +16,7 @@ class WiFiManager {
     try {
       bool permissionsGranted = await requestWifiPermissions();
       if (!permissionsGranted) {
-        throw Exception('缺少必要的权限');
+        throw Exception('wifi_permission_missing'.tr);
       }
 
       // 获取当前WiFi信息
@@ -54,7 +54,7 @@ class WiFiManager {
     try {
       bool permissionsGranted = await requestWifiPermissions();
       if (!permissionsGranted) {
-        throw Exception('缺少必要的权限');
+        throw Exception('wifi_permission_missing'.tr);
       }
 
       // 执行连接
@@ -76,7 +76,7 @@ class WiFiManager {
     try {
       bool permissionsGranted = await requestWifiPermissions();
       if (!permissionsGranted) {
-        throw Exception('缺少必要的权限');
+        throw Exception('wifi_permission_missing'.tr);
       }
 
       // 断开当前WiFi连接

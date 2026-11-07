@@ -513,10 +513,10 @@ class DeliveryOrderDetailItemInfo {
       deliveryDetailSizeItem?.every((v) => v.size?.isNotEmpty == true) == true;
 
   String size() {
-    var size = '非尺码物料';
+    var size = 'delivery_order_non_size_material'.tr;
     if (_hasSize()) {
       size = deliveryDetailSizeItem!
-          .map((v) => '<尺码：${v.size} / 数量：${v.qty}>')
+          .map((v) => 'delivery_order_size_qty'.trArgs(['${v.size}', '${v.qty}']))
           .join(' ');
     }
     return size;

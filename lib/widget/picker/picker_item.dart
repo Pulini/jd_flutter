@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 abstract class PickerItem {
   String pickerName();
@@ -589,12 +590,14 @@ class PickerSapWarehouseLocation extends PickerItem {
 
   @override
   String pickerName() {
-    return '$location - 剩余$noUsedNum';
+    return 'widget_picker_location_remain'
+        .trArgs([location ?? '', '${noUsedNum ?? ''}']);
   }
 
   @override
   String toShow() {
-    return '$location - 剩余$noUsedNum';
+    return 'widget_picker_location_remain'
+        .trArgs([location ?? '', '${noUsedNum ?? ''}']);
   }
 }
 

@@ -123,12 +123,12 @@ class _StuffQualityInspectionPageState
                   children: [
                     Expanded(
                         child: EditText(
-                      hint: '色系'.tr,
+                      hint: 'stuff_quality_inspection_color'.tr,
                       controller: colorController,
                     )),
                     Expanded(
                         child: NumberDecimalEditText(
-                      hint: '数量'.tr,
+                      hint: 'stuff_quality_inspection_quantity'.tr,
                       controller: qtyController,
                       onChanged: (qty) {
                         if (qty > state.unColorQty.value.toDoubleTry()) {
@@ -251,7 +251,7 @@ class _StuffQualityInspectionPageState
       fontSize: 16,
     );
     var people = Obx(() => textSpan(
-          hint: '默认审核人:'.tr,
+          hint: 'stuff_quality_inspection_default_approver'.tr,
           text:
               '${state.peoPleInfo.value.liableEmpName ?? ''}(${state.peoPleInfo.value.liableEmpCode ?? ''})',
         ));

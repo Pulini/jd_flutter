@@ -470,7 +470,7 @@ class _CheckBoxPickerState extends State<CheckBoxPicker> {
           if (checked.isEmpty) {
             showSnackBar(
                 title: checkBoxController.getButtonName(),
-                message: '请至少勾选一条选项');
+                message: 'widget_picker_select_at_least_one'.tr);
           } else {
             checkBoxController.select();
             Get.back();

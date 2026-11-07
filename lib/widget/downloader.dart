@@ -45,7 +45,7 @@ class Downloader {
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text('正在下载<$fileName>...'),
+                    Text('widget_downloading_file'.trArgs([fileName])),
                     const SizedBox(height: 15),
                     Obx(() => Row(
                           children: [
@@ -68,17 +68,17 @@ class Downloader {
                             if (!isDownloading.value)
                               TextButton(
                                 onPressed: () => completed.call(savePath),
-                                child: const Text(
-                                  '安装',
-                                  style: TextStyle(color: Colors.blue),
+                                child: Text(
+                                  'widget_install'.tr,
+                                  style: const TextStyle(color: Colors.blue),
                                 ),
                               ),
                             if (!isDownloading.value)
                               TextButton(
                                 onPressed: () => startDownload(),
-                                child: const Text(
-                                  '重新下载',
-                                  style: TextStyle(color: Colors.green),
+                                child: Text(
+                                  'widget_redownload'.tr,
+                                  style: const TextStyle(color: Colors.green),
                                 ),
                               ),
                             if (isShowCancel)
@@ -87,9 +87,9 @@ class Downloader {
                                   if (isDownloading.value) cancel.cancel();
                                   Get.back();
                                 },
-                                child: const Text(
-                                  '取消',
-                                  style: TextStyle(color: Colors.grey),
+                                child: Text(
+                                  'dialog_default_cancel'.tr,
+                                  style: const TextStyle(color: Colors.grey),
                                 ),
                               ),
                           ],

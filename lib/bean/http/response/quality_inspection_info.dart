@@ -97,15 +97,15 @@ class QualityInspectionOrderInfo {
     //1未质检、2质检中、3复检中、4质检完成
     switch (status) {
       case '1':
-        return '未质检';
+        return 'quality_status_not_inspected'.tr;
       case '2':
-        return '质检中';
+        return 'quality_status_inspecting'.tr;
       case '3':
-        return '复检中';
+        return 'quality_status_reinspection'.tr;
       case '4':
-        return '质检完成';
+        return 'quality_status_finished'.tr;
       default:
-        return '错误';
+        return 'snack_bar_default_wrong'.tr;
     }
   }
 }
@@ -380,13 +380,13 @@ class ReportAbnormalRecordsDetailInfo {
   String getAbnormalStatusText() {
     switch (abnormalStatus) {
       case 1:
-        return '未质检';
+        return 'quality_status_not_inspected'.tr;
       case 2:
-        return '质检中';
+        return 'quality_status_inspecting'.tr;
       case 3:
-        return '复检中';
+        return 'quality_status_reinspection'.tr;
       case 4:
-        return '质检完成';
+        return 'quality_status_finished'.tr;
       default:
         return '未知';
     }

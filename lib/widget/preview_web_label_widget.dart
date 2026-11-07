@@ -130,7 +130,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                   : Row(
                       children: [
                         Text(
-                            '正在生成标签：${htmlImages.length}/${labelList.length}   '),
+                            '${'widget_generating_label_progress'.trArgs(['${htmlImages.length}', '${labelList.length}'])}   '),
                         const CircularProgressIndicator(
                           color: Colors.green,
                         ),

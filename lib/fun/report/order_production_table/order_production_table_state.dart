@@ -230,7 +230,7 @@ class OrderProductionTableState {
       case 0:
         // 逾期：DaysDifference < 0 算一条（只统计当前 tab 数据）
         int ov = list0.where((e) => (e.daysDifference ?? 0) < 0).length;
-        msg = '共 ${list0.length} 个工单，其中 $ov 个已逾期';
+        msg = 'order_production_summary_overdue'.trArgs(['${list0.length}', '$ov']);
         break;
       case 1:
         int done = list1.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
@@ -241,7 +241,7 @@ class OrderProductionTableState {
             .where((e) =>
                 (e.daysDifference ?? 0) >= 0 && (e.daysDifference ?? 0) < 3)
             .length;
-        msg = '共 ${list1.length} 个工单，其中 $nd 个临期，$total / $done 双';
+        msg = 'order_production_summary_near_due'.trArgs(['${list1.length}', '$nd', '$total', '$done']);
         break;
       case 2:
         // 逾期：DaysDifference < 0 算一条（只统计当前 tab 数据）
@@ -249,12 +249,12 @@ class OrderProductionTableState {
         // 待清尾数量 = 未完工数量之和（只统计当前 tab 数据，没数据自然为 0）
         int remain =
             list2.fold<int>(0, (s, e) => s + (e.unFinishQty ?? 0).toInt());
-        msg = '共 ${list2.length} 个工单，其中 $ov 个已逾期，待清尾共 $remain 双';
+        msg = 'order_production_summary_tail'.trArgs(['${list2.length}', '$ov', '$remain']);
         break;
       case 3:
       default:
         int finished = list3.fold<int>(0, (s, e) => s + (e.scanQty ?? 0));
-        msg = '共 ${list3.length} 个工单，已结案 $finished 双';
+        msg = 'order_production_summary_closed'.trArgs(['${list3.length}', '$finished']);
         break;
     }
     message.value = msg;

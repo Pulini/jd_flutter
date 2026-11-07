@@ -57,7 +57,7 @@ class CameraCropPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    hintText ?? '拍照识别',
+                    hintText ?? 'camera_crop_take_photo'.tr,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white,
@@ -66,10 +66,11 @@ class CameraCropPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '请将目标内容对准框内',
+                  Text(
+                    'camera_crop_align_hint'.tr,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: const TextStyle(
+                        color: Colors.white70, fontSize: 14),
                   ),
                 ],
               ),
@@ -81,10 +82,10 @@ class CameraCropPage extends StatelessWidget {
               top: (MediaQuery.of(context).size.height - frameHeight) / 2,
               width: frameWidth,
               height: frameHeight,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  '此区域将被裁剪识别',
-                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                  'camera_crop_crop_hint'.tr,
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
                 ),
               ),
             ),
@@ -220,8 +221,8 @@ class CameraCropController extends GetxController {
     } catch (e) {
       debugPrint('拍照失败: $e');
       Get.snackbar(
-        '提示',
-        '拍照失败，请重试',
+        'common_tip'.tr,
+        'camera_crop_take_photo_failed'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.black54,
         colorText: Colors.white,
@@ -504,9 +505,9 @@ void cameraCropResultDialog({
                     color: Colors.orange,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    '拍照结果',
-                    style: TextStyle(
+                  Text(
+                    'camera_crop_result'.tr,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -552,7 +553,7 @@ void cameraCropResultDialog({
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '图片大小: $sizeKB KB',
+                            'camera_crop_image_size'.trArgs([sizeKB.toString()]),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey.shade600,
@@ -564,7 +565,7 @@ void cameraCropResultDialog({
                     Row(
                       children: [
                         Expanded(child: CombinationButton(
-                          text: '重拍',
+                          text: 'camera_crop_retake'.tr,
                           combination: Combination.left,
                           backgroundColor: Colors.orange,
                           click: () {
@@ -573,7 +574,7 @@ void cameraCropResultDialog({
                           },
                         )),
                         Expanded(child: CombinationButton(
-                          text: '识别',
+                          text: 'camera_crop_recognize'.tr,
                           combination: Combination.right,
                           click: () {
                             Get.back();

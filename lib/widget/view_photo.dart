@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -13,7 +14,7 @@ class ViewFilePhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '查看图片',
+      title: 'widget_view_photo'.tr,
       body: PhotoViewGallery.builder(
         backgroundDecoration: const BoxDecoration(
           color: Colors.transparent,
@@ -41,7 +42,7 @@ class ViewNetPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '查看图片',
+      title: 'widget_view_photo'.tr,
       body: PhotoViewGallery.builder(
         backgroundDecoration: const BoxDecoration(
           color: Colors.transparent,

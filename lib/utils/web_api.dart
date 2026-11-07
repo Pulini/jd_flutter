@@ -65,6 +65,14 @@ enum BaseUrl {
   final String type;
 
   const BaseUrl(this.name, this.value, this.type);
+
+  /// 环境名称：用于界面展示，跟随 App 语言；name 仍作为内部标识不做翻译
+  String get displayName => switch (this) {
+        BaseUrl.baseUrlMes => 'env_mes_production'.tr,
+        BaseUrl.baseUrlSpringBoot => 'env_spring_boot_production'.tr,
+        BaseUrl.baseUrlSap => 'env_sap_production'.tr,
+        _ => name,
+      };
 }
 
 const sfUser = 'PI_USER';

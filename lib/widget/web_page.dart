@@ -32,7 +32,7 @@ class WebPage extends StatelessWidget {
 
   void checkAuthorize() {
     httpPost(
-      loading: '正在查询授权信息...',
+      loading: 'web_page_querying_authorization'.tr,
       method: webApiCheckAuthorize,
       params: {'androidID': getDeviceID()},
     ).then((response) {
@@ -48,21 +48,21 @@ class WebPage extends StatelessWidget {
         if (response.data == '0') {
           reasonInputPopup(
             title: [
-              const Center(
+              Center(
                 child: Text(
-                  '授权申请',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  'web_page_authorization_application'.tr,
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               )
             ],
-            hintText: '请填写授权申请',
+            hintText: 'web_page_authorization_hint'.tr,
             isCanCancel: true,
             confirm: applyAuthorization,
             cancel: () => Get.back(),
           );
         } else {
           errorDialog(
-              content: response.message ?? '查询失败', back: () => Get.back());
+              content: response.message ?? 'web_page_query_failed'.tr, back: () => Get.back());
         }
       }
     });
@@ -70,7 +70,7 @@ class WebPage extends StatelessWidget {
 
   void applyAuthorization(String reason) {
     httpPost(
-      loading: '正在提交授权申请...',
+      loading: 'web_page_submitting_authorization'.tr,
       method: webApiAuthorizedApplication,
       body: {
         'Reason': reason,
@@ -86,7 +86,7 @@ class WebPage extends StatelessWidget {
         if (response.resultCode == resultSuccess) {
           successDialog(content: response.message, back: () => Get.back());
         } else {
-          errorDialog(content: response.message ?? '授权失败');
+          errorDialog(content: response.message ?? 'web_page_authorization_failed'.tr);
         }
       },
     );
@@ -363,7 +363,7 @@ class PdfPrintReview extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text('A4打印预览'),
+          title: Text('widget_a4_print_preview'.tr),
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(10),

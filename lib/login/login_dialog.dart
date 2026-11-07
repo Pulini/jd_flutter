@@ -40,7 +40,7 @@ void changeBaseUrlDialog() {
               ),
               SelectView(
                 controller: mesScrollController,
-                list: mesList.map((v) => v.name).toList(),
+                list: mesList.map((v) => v.displayName).toList(),
                 select: (i) => mesInputController.text = mesList[i].value,
                 errorMsg: '',
                 hint: 'MES BaseUrl :',
@@ -52,7 +52,7 @@ void changeBaseUrlDialog() {
               ),
               SelectView(
                 controller: sapScrollController,
-                list: sapList.map((v) => v.name).toList(),
+                list: sapList.map((v) => v.displayName).toList(),
                 select: (i) => sapInputController.text = sapList[i].value,
                 errorMsg: '',
                 hint: 'SAP BaseUrl :',

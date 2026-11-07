@@ -83,7 +83,7 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => pageBody(
-          title: 'A4打印预览',
+          title: 'widget_a4_print_preview'.tr,
           actions: [
             a4PaperBase64List.isNotEmpty
                 ? Row(

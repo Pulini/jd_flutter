@@ -100,7 +100,9 @@ class SapPickingInfo {
   }
 
   String orderHint() {
-    return dispatchNumber?.isEmpty == true ? '补料单号：' : '派工单号：';
+    return dispatchNumber?.isEmpty == true
+        ? 'sap_picking_supplement_order_no'.tr
+        : 'sap_picking_dispatch_order_no'.tr;
   }
 
   String orderNumber() {

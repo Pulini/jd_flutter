@@ -188,15 +188,15 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
               ),
             ],
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.published_with_changes_sharp,
+              const Icon(Icons.published_with_changes_sharp,
                   size: 14, color: Colors.white),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
               Text(
-                '外箱清尾',
-                style: TextStyle(
+                'order_production_clear_tail'.tr,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -507,7 +507,7 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
     Color dotColor;
 
     if (diff < 0) {
-      label = '已超${diff.abs()}天';
+      label = 'order_production_overdue_days'.trArgs(['${diff.abs()}']);
       bgColor = const Color(0xFFFFEBEE);
       dotColor = const Color(0xFFE53935);
     } else if (diff == 0) {
@@ -515,11 +515,11 @@ class _OrderProductionTablePageState extends State<OrderProductionTablePage> {
       bgColor = const Color(0xFFFFF3E0);
       dotColor = const Color(0xFFF2994A);
     } else if (diff <= 3) {
-      label = '剩$diff天';
+      label = 'order_production_remaining_days'.trArgs(['$diff']);
       bgColor = const Color(0xFFFFF3E0);
       dotColor = const Color(0xFFF2994A);
     } else {
-      label = '剩$diff天';
+      label = 'order_production_remaining_days'.trArgs(['$diff']);
       bgColor = const Color(0xFFF5F5F5);
       dotColor = const Color(0xFF9E9E9E);
     }
