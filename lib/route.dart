@@ -209,7 +209,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    216,
+    217,
     const WorkOrderListPage(),
   );
 
@@ -328,7 +328,7 @@ class RouteConfig {
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    203,
+    204,
     const SapPrintPickingPage(),
   );
 
@@ -587,7 +587,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    216,
+    217,
     const QualityInspectionListPage(),
   );
 

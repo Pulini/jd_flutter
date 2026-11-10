@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -70,6 +71,7 @@ class SapPrintPickingLogic extends GetxController {
       );
       return;
     }
+
     if (code.isLabel()) {
       try {
         var label =
@@ -128,7 +130,6 @@ class SapPrintPickingLogic extends GetxController {
 
       return;
     }
-
     if (code.isPallet()) {
       List<SapPickingDetailLabelInfo> pallet = state.orderDetailLabels
           .where((v) =>

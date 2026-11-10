@@ -165,6 +165,10 @@ class StuffQualityInspectionLogic extends GetxController {
                 shortQualifiedController.text.toDoubleTry())
             .toFixed(3)
             .toShowString();
+    state.shortQualifiedQty.value=qty;
+    if(qty==0){
+      ngController.text='';
+    }
   }
 
   //确定提交品检
@@ -925,7 +929,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
     qualifiedController.text = qty.toFixed(3).toShowString(); //合格数量
     inspectionQuantityController.text = qty.toFixed(3).toShowString(); //检验数量
-    state.defectRepairCountMax.value = qty.toFixed(3);
+    state.defectRepairQtyMax.value = qty.toFixed(3);
     waitInspectionQuantityController.text =
         qty.toFixed(3).toShowString(); //待检验数量
 
@@ -1001,7 +1005,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
 
     inspectionQuantityController.text = waitQty.toFixed(3).toShowString();
-    state.defectRepairCountMax.value = waitQty.toFixed(3);
+    state.defectRepairQtyMax.value = waitQty.toFixed(3);
     waitInspectionQuantityController.text = waitQty.toFixed(3).toShowString();
     qualifiedController.text = waitQty.toFixed(3).toShowString();
 
@@ -1649,7 +1653,6 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   void getNgType() {
-    if(state.unqualifiedQuantity.value<=0)return;
     sapPost(
       loading: 'quality_inspection_handle_type'.tr,
       method: webApiForDivision,
@@ -1752,5 +1755,12 @@ class StuffQualityInspectionLogic extends GetxController {
         errorDialog(content: response.message);
       }
     });
+  }
+
+  void inputDefectRepairQty(double qty) {
+    state.defectRepairQty.value=qty;
+    if(qty==0){
+      ngController.text='';
+    }
   }
 }

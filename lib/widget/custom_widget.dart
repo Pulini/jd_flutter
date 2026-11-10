@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' show ImageFilter;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
@@ -371,10 +372,55 @@ void showSnackBar({
   required String message,
   Duration duration = const Duration(seconds: 3), // 添加持续时间参数，默认3秒
 }) {
-  isWarning ??= false;
-  title ??= isWarning
-      ? 'snack_bar_default_wrong'.tr
-      : 'dialog_default_title_information'.tr;
+  var warn = isWarning == true;
+  var titleText = title ??
+      (warn
+          ? 'snack_bar_default_wrong'.tr
+          : 'dialog_default_title_information'.tr);
+  var backgroundColor =
+      warn ? Colors.redAccent.shade100 : Colors.greenAccent.shade100;
+  var colorText = warn ? Colors.white : Colors.blue.shade900;
+
+  //优先用当前页面的 ScaffoldMessenger 显示：
+  //GetX 的 snackbar 是全局单队列，且 instantInit=false 时要等下一帧才插入 overlay，
+  //前一条 snackbar 被 close(withAnimations:false) 时若尚未初始化会抛 Error，
+  //导致 GetQueue 卡死、后续提示一直排队（表现为扫码时没提示、关掉页面后才弹出来）。
+  var context = Get.context;
+  var messenger = context == null ? null : ScaffoldMessenger.maybeOf(context);
+  if (messenger != null) {
+    snackbarController = null;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                titleText,
+                style: TextStyle(fontWeight: FontWeight.bold, color: colorText),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                message,
+                style: TextStyle(fontSize: 14, color: colorText),
+              ),
+            ],
+          ),
+          backgroundColor: backgroundColor,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(10),
+          duration: duration, // 使用传入的持续时间
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    return;
+  }
+
+  //兜底：没有 Scaffold 的场景（如部分全屏路由）仍走 GetX
   if (Get.isSnackbarOpen) {
     try {
       snackbarController?.close(withAnimations: false);
@@ -384,15 +430,13 @@ void showSnackBar({
     }
   }
   snackbarController = Get.snackbar(
-    instantInit: false,
-    title,
+    instantInit: true,
+    titleText,
     message,
     margin: const EdgeInsets.all(10),
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: isWarning == true
-        ? Colors.redAccent.shade100
-        : Colors.greenAccent.shade100,
-    colorText: isWarning == true ? Colors.white : Colors.blue.shade900,
+    backgroundColor: backgroundColor,
+    colorText: colorText,
     snackbarStatus: (state) {
       snackbarStatus = state;
     },
@@ -400,38 +444,177 @@ void showSnackBar({
   );
 }
 
-//显示SnackBar
+/// 扫码计数提示当前插入的 OverlayEntry（同一时刻只保留一条）
+OverlayEntry? _scanTipsOverlay;
+
+//显示扫码计数提示（大号 +1）
 void showScanTips({
   String tips = '+1',
   Color color = Colors.blueAccent,
   Duration duration = const Duration(milliseconds: 300),
 }) {
-  if (Get.isSnackbarOpen) {
-    snackbarController?.close(withAnimations: false);
-  }
-  snackbarController = Get.snackbar(
-    '',
-    '',
-    messageText: Center(
-      child: AutoSizeText(
-        tips,
-        maxLines: 1,
-        minFontSize: 150,
-        maxFontSize: 200,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: color,
+  var context = Get.context;
+  var overlay =
+      context == null ? null : Overlay.maybeOf(context, rootOverlay: true);
+
+  //兜底：拿不到 Overlay 时仍走 GetX
+  if (overlay == null) {
+    if (Get.isSnackbarOpen) {
+      try {
+        snackbarController?.close(withAnimations: false);
+      } catch (e) {
+        debugPrint('Snackbar already disposed: $e');
+      }
+    }
+    snackbarController = Get.snackbar(
+      instantInit: true,
+      '',
+      '',
+      messageText: Center(
+        child: AutoSizeText(
+          tips,
+          maxLines: 1,
+          minFontSize: 150,
+          maxFontSize: 200,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
       ),
+      duration: duration,
+      // margin: const EdgeInsets.all(10),
+      overlayBlur: 5,
+      barBlur: 0,
+      overlayColor: Colors.transparent,
+      reverseAnimationCurve: Curves.easeInOut,
+      backgroundColor: Colors.transparent,
+    );
+    return;
+  }
+
+  //直接插入 overlay：立即显示、不经过 GetX 队列，连续扫码也不会叠加
+  _removeScanTips();
+  late OverlayEntry entry;
+  entry = OverlayEntry(
+    builder: (_) => _ScanTipsOverlay(
+      tips: tips,
+      color: color,
+      duration: duration,
+      onFinished: () {
+        if (identical(_scanTipsOverlay, entry)) _removeScanTips();
+      },
     ),
-    duration: duration,
-    // margin: const EdgeInsets.all(10),
-    overlayBlur: 5,
-    barBlur: 0,
-    overlayColor: Colors.transparent,
-    reverseAnimationCurve: Curves.easeInOut,
-    backgroundColor: Colors.transparent,
   );
+  _scanTipsOverlay = entry;
+  overlay.insert(entry);
+}
+
+void _removeScanTips() {
+  try {
+    _scanTipsOverlay?.remove();
+  } catch (e) {
+    debugPrint('ScanTips overlay already removed: $e');
+  }
+  _scanTipsOverlay = null;
+}
+
+/// 扫码计数提示：从顶部滑入 + 淡入，停留后淡出移除
+class _ScanTipsOverlay extends StatefulWidget {
+  const _ScanTipsOverlay({
+    required this.tips,
+    required this.color,
+    required this.duration,
+    required this.onFinished,
+  });
+
+  final String tips;
+  final Color color;
+  final Duration duration;
+  final VoidCallback onFinished;
+
+  @override
+  State<_ScanTipsOverlay> createState() => _ScanTipsOverlayState();
+}
+
+class _ScanTipsOverlayState extends State<_ScanTipsOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+  );
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOut,
+  );
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: const Offset(0, -0.6),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOutBack,
+  ));
+
+  @override
+  void initState() {
+    super.initState();
+    _play();
+  }
+
+  Future<void> _play() async {
+    await _controller.forward();
+    await Future.delayed(widget.duration);
+    if (!mounted) return;
+    await _controller.reverse();
+    if (!mounted) return;
+    widget.onFinished();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: const SizedBox.expand(),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + 60,
+              ),
+              child: SlideTransition(
+                position: _slide,
+                child: FadeTransition(
+                  opacity: _fade,
+                  child: AutoSizeText(
+                    widget.tips,
+                    maxLines: 1,
+                    minFontSize: 150,
+                    maxFontSize: 200,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: widget.color,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 //选择器

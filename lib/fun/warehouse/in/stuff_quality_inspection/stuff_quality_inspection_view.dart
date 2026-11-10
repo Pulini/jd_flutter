@@ -274,10 +274,11 @@ class _StuffQualityInspectionPageState
             name: 'quality_inspection_accepting_unit'.tr,
             text: state.groupType.value,
           ));
-    var defectRepairCount = Obx(() => NumberDecimalEditText(
-          max: state.defectRepairCountMax.value,
+    var defectRepairQty = Obx(() => NumberDecimalEditText(
+          max: state.defectRepairQtyMax.value,
           hint: 'quality_inspection_defect_repair_count'.tr,
           controller: logic.defectRepairCountController,
+          onChanged: (d) => logic.inputDefectRepairQty(d),
         ));
     var inspectionQuantity = Obx(() => NumberDecimalEditText(
           hint: 'quality_inspection_inspection_quantity'.tr,
@@ -312,14 +313,16 @@ class _StuffQualityInspectionPageState
       hint: 'quality_inspection_reviewer'.tr,
       controller: logic.reviewerController,
     );
-    var ngType = Obx(()=>EditText(
-      readOnly: true,
-      isEnable: state.unqualifiedQuantity.value>0,
-      hint: 'quality_inspection_ng_type'.tr,
-      controller: logic.ngController,
-      myIcon: const Icon(Icons.search),
-      onIconTap: () => logic.getNgType(),
-    ));
+    var ngType = Obx(() => EditText(
+          readOnly: true,
+          isEnable: state.unqualifiedQuantity.value > 0 ||
+              state.shortQualifiedQty.value > 0 ||
+              state.defectRepairQty.value > 0,
+          hint: 'quality_inspection_ng_type'.tr,
+          controller: logic.ngController,
+          myIcon: const Icon(Icons.search),
+          onIconTap: () => logic.getNgType(),
+        ));
     var exceptionDescription = Obx(() => EditText(
           isEnable: state.abnormalExplanationEnable.value,
           hint: 'quality_inspection_exception_description'.tr,
@@ -403,7 +406,7 @@ class _StuffQualityInspectionPageState
                 const SizedBox(width: 20),
                 Expanded(child: groupType),
                 const SizedBox(width: 20),
-                Expanded(child: defectRepairCount),
+                Expanded(child: defectRepairQty),
               ],
             ),
             const SizedBox(height: 20),
@@ -445,7 +448,7 @@ class _StuffQualityInspectionPageState
             Row(
               children: [
                 Expanded(child: groupType),
-                Expanded(child: defectRepairCount),
+                Expanded(child: defectRepairQty),
               ],
             ),
             Row(

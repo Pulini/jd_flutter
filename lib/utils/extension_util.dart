@@ -168,6 +168,15 @@ extension StringExt on String? {
       return true;
     }
 
+    //新标签格式：纯数字/纯数字，不限长度，如 6249166677627/0022
+    if (parts.length == 2 &&
+        parts[0].isNotEmpty &&
+        parts[1].isNotEmpty &&
+        RegExp(r'^\d+$').hasMatch(parts[0]) &&
+        RegExp(r'^\d+$').hasMatch(parts[1])) {
+      return true;
+    }
+
     if ((this ?? '').length == 32) {
       return true;
     }

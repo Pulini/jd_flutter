@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/route.dart';
@@ -110,6 +110,12 @@ Future<BaseData> _doHttp({
 
   try {
     debugPrint('SnackbarStatus=$snackbarStatus');
+    //提示现在由当前页面的 ScaffoldMessenger 展示，请求开始前先收起
+    var context = Get.context;
+    if (context != null) {
+      ScaffoldMessenger.maybeOf(context)?.hideCurrentSnackBar();
+    }
+    //兜底：仍在使用 GetX snackbar 的场景
     if (Get.isSnackbarOpen) {
       snackbarController?.close(withAnimations: false);
     }
