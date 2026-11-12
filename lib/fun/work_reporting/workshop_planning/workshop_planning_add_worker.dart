@@ -78,7 +78,8 @@ class _WorkshopPlanningAddWorkerPageState
                                   FilteringTextInputFormatter.digitsOnly
                                 ],
                                 controller: tecWorkerNumber,
-                                onChanged: (v) => logic.getWorkerInfo(
+                                textInputAction: TextInputAction.search,
+                                onSubmitted: (v)=> logic.getWorkerInfo(
                                   flowProcessID: flowProcessID,
                                   number: v,
                                   date: date,
